@@ -111,7 +111,9 @@
     return !overLimit || Boolean(cloudInput?.value.trim());
   };
 
+  // Ogni campo mantiene i file già scelti: selezioni successive vengono aggiunte, non sostituite.
   fileInputs.forEach(input => {
+    let storedFiles = [...(input.files || [])];
     let selected = input.parentElement?.querySelector('.selected-files');
     if (!selected) {
       selected = document.createElement('div');
@@ -120,12 +122,19 @@
       input.insertAdjacentElement('afterend', selected);
     }
 
+    const fileKey = file => `${file.name}__${file.size}__${file.lastModified}`;
+
+    const syncInputFiles = () => {
+      const dt = new DataTransfer();
+      storedFiles.forEach(file => dt.items.add(file));
+      input.files = dt.files;
+    };
+
     const renderFiles = () => {
       selected.innerHTML = '';
-      const files = [...(input.files || [])];
-      if (!files.length) return;
+      if (!storedFiles.length) return;
 
-      files.forEach((file, index) => {
+      storedFiles.forEach((file, index) => {
         const chip = document.createElement('div');
         chip.className = 'selected-file';
 
@@ -157,10 +166,8 @@
         remove.title = 'Rimuovi file';
         remove.textContent = '×';
         remove.addEventListener('click', () => {
-          const currentFiles = [...(input.files || [])];
-          const dt = new DataTransfer();
-          currentFiles.forEach((f, i) => { if (i !== index) dt.items.add(f); });
-          input.files = dt.files;
+          storedFiles.splice(index, 1);
+          syncInputFiles();
           renderFiles();
           updateCloudFallback();
         });
@@ -171,13 +178,57 @@
     };
 
     input.addEventListener('change', () => {
+      const incoming = [...(input.files || [])];
+      const existingKeys = new Set(storedFiles.map(fileKey));
+      incoming.forEach(file => {
+        const key = fileKey(file);
+        if (!existingKeys.has(key)) {
+          storedFiles.push(file);
+          existingKeys.add(key);
+        }
+      });
+      syncInputFiles();
       renderFiles();
       updateCloudFallback();
     });
+
+    input._clearStoredFiles = () => {
+      storedFiles = [];
+      syncInputFiles();
+      renderFiles();
+    };
   });
 
   cloudInput?.addEventListener('input', () => {
     if (fileTotal() > maxBytes && cloudInput.value.trim()) setNotice('Link cloud inserito. La richiesta verrà inviata senza allegare direttamente i file superiori al limite.', 'info');
+  });
+
+  // FAQ visibile + dati strutturati SEO sul limite allegati.
+  const faqWrap = document.querySelector('#faq .wrap');
+  if (faqWrap && !document.getElementById('faq-upload-limit')) {
+    const details = document.createElement('details');
+    details.id = 'faq-upload-limit';
+    details.innerHTML = `
+      <summary>Qual è il limite di caricamento dei file?</summary>
+      <p>Gli allegati inviati direttamente dal modulo possono arrivare fino a <strong>10 MB complessivi</strong>. Se il materiale supera questo limite, puoi caricarlo su Google Drive, Dropbox, OneDrive, WeTransfer o un altro servizio cloud e inserire nel modulo il link condiviso. In alternativa puoi inviarmi il materiale direttamente via email a <a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a> oppure tramite WhatsApp/Telegram al <a href="tel:+393337240544">+39 333 724 0544</a>.</p>`;
+    faqWrap.appendChild(details);
+  }
+
+  document.querySelectorAll('script[type="application/ld+json"]').forEach(node => {
+    try {
+      const data = JSON.parse(node.textContent || '{}');
+      if (data['@type'] === 'FAQPage' && Array.isArray(data.mainEntity) && !data.mainEntity.some(q => q.name === 'Qual è il limite di caricamento dei file?')) {
+        data.mainEntity.push({
+          '@type': 'Question',
+          name: 'Qual è il limite di caricamento dei file?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Gli allegati inviati direttamente dal modulo possono arrivare fino a 10 MB complessivi. Se il materiale supera il limite, può essere fornito tramite link cloud Google Drive, Dropbox, OneDrive, WeTransfer o altro servizio. In alternativa può essere inviato via email a andrea.giaqui@gmail.com oppure via WhatsApp/Telegram al +39 333 724 0544.'
+          }
+        });
+        node.textContent = JSON.stringify(data);
+      }
+    } catch (_) {}
   });
 
   if (form) {
@@ -241,12 +292,12 @@
           success.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         form.reset();
-        document.querySelectorAll('.selected-files').forEach(el => { el.innerHTML = ''; });
+        fileInputs.forEach(input => input._clearStoredFiles?.());
         if (cloudBox) cloudBox.hidden = true;
         if (cloudInput) cloudInput.required = false;
       } catch (error) {
         console.error(error);
-        setNotice('Non è stato possibile completare l’invio automatico. I dati inseriti sono ancora nel modulo: puoi riprovare oppure contattarmi direttamente via email o WhatsApp senza perdere ciò che hai compilato.', 'error');
+        setNotice('Non è stato possibile completare l’invio automatico. I dati inseriti sono ancora nel modulo: puoi riprovare oppure contattarmi direttamente via email o WhatsApp/Telegram senza perdere ciò che hai compilato.', 'error');
         if (warning && !warning.querySelector('.submit-fallback')) {
           const fallback = document.createElement('div');
           fallback.className = 'submit-fallback';
