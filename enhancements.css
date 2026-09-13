@@ -1,4 +1,7 @@
 /* Visual refinements: 2026-09-13 */
+.brand{font-size:0!important}
+.brand::before{content:"Disegnatore AutoCAD e Revit";display:block;color:#0b2a46;font-weight:850;font-size:20px;line-height:1}
+.brand span{font-size:10px!important}
 .visual-showcase{background:linear-gradient(180deg,#eef6fc 0%,#f8fbfe 100%)}
 .visual-heading{max-width:900px}
 .visual-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
@@ -21,4 +24,4 @@
 .price-includes{margin-top:18px;padding:14px 16px;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.09);color:#fff!important;font-size:16px!important}
 .price-includes strong{color:#fff}
 @media(max-width:850px){.visual-grid{grid-template-columns:1fr}.visual-card img{aspect-ratio:4/3!important;padding:10px!important}.form-visual{grid-template-columns:1fr}.hero-card img{aspect-ratio:auto;object-fit:contain}}
-@media(max-width:576px){.form-step{padding:20px 16px}.step-title{margin:-20px -16px 18px;padding:15px 16px 14px;font-size:20px;flex-wrap:wrap}.step-title span{font-size:13px}.form-visual-copy{padding:20px}.form-visual-copy strong{font-size:21px}.hero-card{border-radius:14px}.visual-card{border-radius:14px}.visual-card img{padding:8px!important}}
+@media(max-width:576px){.brand::before{font-size:17px}.form-step{padding:20px 16px}.step-title{margin:-20px -16px 18px;padding:15px 16px 14px;font-size:20px;flex-wrap:wrap}.step-title span{font-size:13px}.form-visual-copy{padding:20px}.form-visual-copy strong{font-size:21px}.hero-card{border-radius:14px}.visual-card{border-radius:14px}.visual-card img{padding:8px!important}}
