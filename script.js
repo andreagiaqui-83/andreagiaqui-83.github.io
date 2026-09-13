@@ -204,6 +204,29 @@
   });
 
   const faqWrap = document.querySelector('#faq .wrap');
+  if (faqWrap) {
+    const materialDetails = [...faqWrap.querySelectorAll('details')].find(details =>
+      details.querySelector('summary')?.textContent.trim() === 'Quale materiale posso inviare?'
+    );
+    if (materialDetails) {
+      const answer = materialDetails.querySelector('p');
+      if (answer) answer.textContent = 'Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e, più in generale, qualsiasi file relativo al progetto in qualsiasi formato. Per le nuvole di punti è previsto un link cloud.';
+    }
+  }
+
+  document.querySelectorAll('script[type="application/ld+json"]').forEach(node => {
+    try {
+      const data = JSON.parse(node.textContent || '{}');
+      if (data['@type'] === 'FAQPage' && Array.isArray(data.mainEntity)) {
+        const q = data.mainEntity.find(item => item.name === 'Quale materiale posso inviare per un lavoro CAD o BIM?');
+        if (q?.acceptedAnswer) {
+          q.acceptedAnswer.text = 'Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e qualsiasi altro file relativo al progetto, in qualsiasi formato. Per le nuvole di punti è previsto un link cloud.';
+          node.textContent = JSON.stringify(data);
+        }
+      }
+    } catch (_) {}
+  });
+
   if (faqWrap && !document.getElementById('faq-upload-limit')) {
     const details = document.createElement('details');
     details.id = 'faq-upload-limit';
