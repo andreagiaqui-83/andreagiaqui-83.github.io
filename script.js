@@ -213,12 +213,13 @@
       if (answer) answer.textContent = 'Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e, più in generale, qualsiasi file relativo al progetto in qualsiasi formato. Per le nuvole di punti è previsto un link cloud.';
     }
 
-    const pointCloudDetails = [...faqWrap.querySelectorAll('details')].find(details =>
-      details.querySelector('summary')?.textContent.trim() === 'Posso chiedere un modello Revit da una nuvola di punti?'
-    );
-    if (pointCloudDetails) {
-      const answer = pointCloudDetails.querySelector('p');
-      if (answer) answer.textContent = 'Sì. La nuvola di punti può essere fornita tramite link cloud nei formati disponibili, ad esempio LAS, LAZ, E57, RCP o RCS. È preferibile inviare insieme anche foto dei prospetti dell’edificio o del fabbricato, eventuali planimetrie disponibili, l’indirizzo fisico preciso e qualsiasi altro materiale utile a comprendere meglio la nuvola di punti e ricostruire il modello con maggiore accuratezza.';
+    const revitPointCloudDetails = [...faqWrap.querySelectorAll('details')].find(details => {
+      const text = details.querySelector('summary')?.textContent.trim() || '';
+      return text === 'Posso richiedere un modello Revit da LAS, LAZ o E57?' || text.includes('modello Revit') && (text.includes('LAS') || text.includes('nuvola'));
+    });
+    if (revitPointCloudDetails) {
+      const answer = revitPointCloudDetails.querySelector('p');
+      if (answer) answer.textContent = 'Sì. Puoi inviare il collegamento cloud alla nuvola di punti. Per ottenere una ricostruzione più accurata è preferibile allegare anche le foto dei prospetti dell’edificio o del fabbricato, eventuali planimetrie disponibili, l’indirizzo fisico preciso e qualsiasi altro materiale utile a comprendere meglio la nuvola di punti, gli spazi, i livelli e gli elementi architettonici presenti.';
     }
   }
 
@@ -226,13 +227,13 @@
     try {
       const data = JSON.parse(node.textContent || '{}');
       if (data['@type'] === 'FAQPage' && Array.isArray(data.mainEntity)) {
-        const qMaterial = data.mainEntity.find(item => item.name === 'Quale materiale posso inviare per un lavoro CAD o BIM?');
-        if (qMaterial?.acceptedAnswer) {
-          qMaterial.acceptedAnswer.text = 'Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e qualsiasi altro file relativo al progetto, in qualsiasi formato. Per le nuvole di punti è previsto un link cloud.';
+        const materialQ = data.mainEntity.find(item => item.name === 'Quale materiale posso inviare per un lavoro CAD o BIM?');
+        if (materialQ?.acceptedAnswer) {
+          materialQ.acceptedAnswer.text = 'Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e qualsiasi altro file relativo al progetto, in qualsiasi formato. Per le nuvole di punti è previsto un link cloud.';
         }
-        const qCloud = data.mainEntity.find(item => item.name === 'Posso chiedere un modello Revit da una nuvola di punti?');
-        if (qCloud?.acceptedAnswer) {
-          qCloud.acceptedAnswer.text = 'Sì. La nuvola di punti può essere fornita tramite link cloud nei formati disponibili, ad esempio LAS, LAZ, E57, RCP o RCS. È preferibile inviare insieme anche foto dei prospetti dell’edificio o del fabbricato, eventuali planimetrie disponibili, l’indirizzo fisico preciso e qualsiasi altro materiale utile a comprendere meglio la nuvola di punti e ricostruire il modello con maggiore accuratezza.';
+        const revitQ = data.mainEntity.find(item => item.name === 'Posso chiedere un modello Revit da una nuvola di punti?');
+        if (revitQ?.acceptedAnswer) {
+          revitQ.acceptedAnswer.text = 'Sì. La nuvola di punti può essere fornita tramite link cloud nei formati disponibili, ad esempio LAS, LAZ, E57, RCP o RCS. Per una ricostruzione più accurata è preferibile inviare anche foto dei prospetti dell’edificio o del fabbricato, eventuali planimetrie disponibili, l’indirizzo fisico preciso e qualsiasi altro materiale utile a interpretare meglio la nuvola di punti e gli elementi architettonici.';
         }
         node.textContent = JSON.stringify(data);
       }
