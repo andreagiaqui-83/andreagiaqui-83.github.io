@@ -24,7 +24,6 @@
   const fileInputs = form ? [...form.querySelectorAll('input[type="file"]')] : [];
   const submitButton = form ? form.querySelector('button[type="submit"]') : null;
 
-  // Testi e spaziatura della sezione allegati.
   const photoInput = form?.querySelector('input[name="Foto_immagini_fabbricato[]"]');
   if (photoInput) {
     const label = photoInput.closest('label');
@@ -42,6 +41,34 @@
     if (help) help.textContent = 'PDF, scansioni, immagini, DWG/DXF, file Revit, IFC, PLY, OBJ e altra documentazione tecnica, in qualsiasi formato.';
   }
 
+  const micro = form?.querySelector('.micro');
+  if (micro) micro.textContent = 'Gli allegati possono essere inviati direttamente fino a 10 MB complessivi. Se superano 10 MB comparirà automaticamente l’opzione per inviare tutto tramite link cloud.';
+
+  let cloudBox = null;
+  let cloudInput = null;
+  if (form && warning) {
+    cloudBox = document.createElement('div');
+    cloudBox.className = 'cloud-upload-box';
+    cloudBox.hidden = true;
+    cloudBox.innerHTML = `
+      <div class="cloud-upload-head">
+        <strong>Materiale superiore a 10 MB</strong>
+        <span>Carica tutti i file su un servizio cloud e incolla qui sotto il link condiviso.</span>
+      </div>
+      <div class="cloud-services" aria-label="Servizi cloud suggeriti">
+        <a href="https://drive.google.com/" target="_blank" rel="noopener">Google Drive</a>
+        <a href="https://www.dropbox.com/" target="_blank" rel="noopener">Dropbox</a>
+        <a href="https://onedrive.live.com/" target="_blank" rel="noopener">OneDrive</a>
+        <a href="https://wetransfer.com/" target="_blank" rel="noopener">WeTransfer</a>
+      </div>
+      <label>Link cloud al materiale completo
+        <input type="url" name="Link_cloud_materiale_completo" placeholder="https://..." inputmode="url">
+      </label>
+      <small>Assicurati che il collegamento sia accessibile a chi possiede il link. Quando usi questa opzione, gli allegati selezionati qui sopra non vengono inviati direttamente via email.</small>`;
+    warning.insertAdjacentElement('beforebegin', cloudBox);
+    cloudInput = cloudBox.querySelector('input[name="Link_cloud_materiale_completo"]');
+  }
+
   const formatBytes = bytes => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -51,6 +78,8 @@
   const fileTotal = () => fileInputs.reduce((sum, input) => {
     return sum + [...(input.files || [])].reduce((s, f) => s + f.size, 0);
   }, 0);
+
+  const selectedFileNames = () => fileInputs.flatMap(input => [...(input.files || [])].map(file => `${file.name} (${formatBytes(file.size)})`));
 
   const setNotice = (message = '', type = 'warning') => {
     if (!warning) return;
@@ -65,17 +94,23 @@
     warning.className = `notice notice-${type}`;
   };
 
-  const validateFiles = () => {
+  const updateCloudFallback = () => {
     const total = fileTotal();
-    if (total > maxBytes) {
-      setNotice(`Gli allegati selezionati pesano ${formatBytes(total)}. Il limite complessivo per l'invio diretto è 10 MB. Rimuovi uno o più file oppure indica nelle note che vuoi inviare il materiale separatamente.`, 'warning');
-      return false;
+    const overLimit = total > maxBytes;
+    if (cloudBox) cloudBox.hidden = !overLimit;
+    if (cloudInput) cloudInput.required = overLimit;
+    if (overLimit) {
+      setNotice(`Gli allegati selezionati pesano ${formatBytes(total)}. Per evitare limiti di invio, caricali su uno dei servizi cloud indicati e incolla il link condiviso.`, 'info');
+    } else {
+      if (cloudInput) {
+        cloudInput.required = false;
+        cloudInput.value = '';
+      }
+      setNotice();
     }
-    setNotice();
-    return true;
+    return !overLimit || Boolean(cloudInput?.value.trim());
   };
 
-  // Mostra sempre i file scelti con anteprima, nome, peso e rimozione singola.
   fileInputs.forEach(input => {
     let selected = input.parentElement?.querySelector('.selected-files');
     if (!selected) {
@@ -127,7 +162,7 @@
           currentFiles.forEach((f, i) => { if (i !== index) dt.items.add(f); });
           input.files = dt.files;
           renderFiles();
-          validateFiles();
+          updateCloudFallback();
         });
 
         chip.append(preview, meta, remove);
@@ -137,8 +172,12 @@
 
     input.addEventListener('change', () => {
       renderFiles();
-      validateFiles();
+      updateCloudFallback();
     });
+  });
+
+  cloudInput?.addEventListener('input', () => {
+    if (fileTotal() > maxBytes && cloudInput.value.trim()) setNotice('Link cloud inserito. La richiesta verrà inviata senza allegare direttamente i file superiori al limite.', 'info');
   });
 
   if (form) {
@@ -151,7 +190,15 @@
         outputs[0]?.focus();
         return;
       }
-      if (!validateFiles()) return;
+
+      const total = fileTotal();
+      const overLimit = total > maxBytes;
+      if (overLimit && !cloudInput?.value.trim()) {
+        updateCloudFallback();
+        cloudInput?.focus();
+        setNotice('Gli allegati superano 10 MB. Carica il materiale su un cloud e incolla il link condiviso prima di inviare la richiesta.', 'warning');
+        return;
+      }
       if (!form.reportValidity()) return;
 
       const originalLabel = submitButton?.innerHTML;
@@ -167,6 +214,13 @@
         data.set('_template', 'table');
         data.set('_captcha', 'true');
         data.set('_url', location.href.split('?')[0]);
+
+        if (overLimit) {
+          fileInputs.forEach(input => data.delete(input.name));
+          data.set('Allegati_non_inviati_direttamente', selectedFileNames().join(' | '));
+          data.set('Dimensione_totale_allegati', formatBytes(total));
+          data.set('Modalita_materiale', 'Materiale completo tramite link cloud');
+        }
 
         const response = await fetch(submitEndpoint, {
           method: 'POST',
@@ -188,6 +242,8 @@
         }
         form.reset();
         document.querySelectorAll('.selected-files').forEach(el => { el.innerHTML = ''; });
+        if (cloudBox) cloudBox.hidden = true;
+        if (cloudInput) cloudInput.required = false;
       } catch (error) {
         console.error(error);
         setNotice('Non è stato possibile completare l’invio automatico. I dati inseriti sono ancora nel modulo: puoi riprovare oppure contattarmi direttamente via email o WhatsApp senza perdere ciò che hai compilato.', 'error');
