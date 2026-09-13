@@ -1,7 +1,7 @@
 (() => {
+  const APP_VERSION = '20260913k';
+  document.documentElement.dataset.appVersion = APP_VERSION;
   const heroUrl = 'https://drive.google.com/thumbnail?id=1SdyG3fAIzvyOfmTzvx0NTRr1UEjWJqYx&sz=w2000&v=20260913c';
-  const autocadUrl = 'https://drive.google.com/thumbnail?id=1ZLHpD-KR3HZx47eoMglPhQRWCnR0JRdn&sz=w1600&v=20260913h';
-  const revitUrl = 'https://drive.google.com/thumbnail?id=1oxeTkAUGxvlykUHbijB6IK55uBZJBZKK&sz=w1600&v=20260913h';
   const submitEndpoint = 'https://formsubmit.co/ajax/andrea.giaqui@gmail.com';
 
   document.title = 'Disegnatore AutoCAD e Revit Online | Preventivo Gratuito';
@@ -57,20 +57,30 @@
     return true;
   };
 
-  // Mostra i file scelti con anteprima, nome, peso e pulsante di rimozione.
-  fileInputs.forEach(input => {
+  const enhanceFileInput = input => {
     const host = input.parentElement;
-    if (!host || host.querySelector('.selected-files')) return;
-
-    const selected = document.createElement('div');
-    selected.className = 'selected-files';
-    selected.setAttribute('aria-live', 'polite');
-    input.insertAdjacentElement('afterend', selected);
+    if (!host) return;
+    let selected = host.querySelector('.selected-files');
+    if (!selected) {
+      selected = document.createElement('div');
+      selected.className = 'selected-files';
+      selected.setAttribute('aria-live', 'polite');
+      input.insertAdjacentElement('afterend', selected);
+    }
 
     const renderFiles = () => {
       selected.innerHTML = '';
       const files = [...(input.files || [])];
       if (!files.length) return;
+
+      const title = document.createElement('div');
+      title.className = 'selected-files-title';
+      title.textContent = files.length === 1 ? '1 file selezionato' : `${files.length} file selezionati`;
+      selected.appendChild(title);
+
+      const list = document.createElement('div');
+      list.className = 'selected-files-list';
+      selected.appendChild(list);
 
       files.forEach((file, index) => {
         const chip = document.createElement('div');
@@ -104,15 +114,19 @@
         remove.title = 'Rimuovi file';
         remove.textContent = '×';
         remove.addEventListener('click', () => {
-          const dt = new DataTransfer();
-          files.forEach((f, i) => { if (i !== index) dt.items.add(f); });
-          input.files = dt.files;
+          try {
+            const dt = new DataTransfer();
+            files.forEach((f, i) => { if (i !== index) dt.items.add(f); });
+            input.files = dt.files;
+          } catch (_) {
+            input.value = '';
+          }
           renderFiles();
           validateFiles();
         });
 
         chip.append(preview, meta, remove);
-        selected.appendChild(chip);
+        list.appendChild(chip);
       });
     };
 
@@ -120,13 +134,14 @@
       renderFiles();
       validateFiles();
     });
-  });
+    renderFiles();
+  };
+
+  fileInputs.forEach(enhanceFileInput);
 
   if (form) {
-    // Evita che il browser venga portato sul dominio del servizio esterno.
     form.addEventListener('submit', async e => {
       e.preventDefault();
-
       const outputs = [...form.querySelectorAll('input[name="Output[]"]')];
       if (!outputs.some(i => i.checked)) {
         setNotice('Seleziona almeno un risultato finale che desideri ricevere.', 'warning');
@@ -150,17 +165,10 @@
         data.set('_captcha', 'true');
         data.set('_url', location.href.split('?')[0]);
 
-        const response = await fetch(submitEndpoint, {
-          method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
-        });
-
+        const response = await fetch(submitEndpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
         let payload = {};
         try { payload = await response.json(); } catch (_) {}
-        if (!response.ok || payload.success === false) {
-          throw new Error(payload.message || `Errore ${response.status}`);
-        }
+        if (!response.ok || payload.success === false) throw new Error(payload.message || `Errore ${response.status}`);
 
         setNotice();
         if (success) {
@@ -173,7 +181,7 @@
       } catch (error) {
         console.error(error);
         setNotice('Non è stato possibile completare l’invio automatico. I dati inseriti sono ancora nel modulo: puoi riprovare oppure contattarmi direttamente via email o WhatsApp senza perdere ciò che hai compilato.', 'error');
-        if (warning) {
+        if (warning && !warning.querySelector('.submit-fallback')) {
           const fallback = document.createElement('div');
           fallback.className = 'submit-fallback';
           fallback.innerHTML = '<a href="mailto:andrea.giaqui@gmail.com">Invia email</a><a href="https://wa.me/393337240544" target="_blank" rel="noopener">Apri WhatsApp</a>';
