@@ -2,20 +2,12 @@
   const heroUrl = 'https://drive.google.com/thumbnail?id=1SdyG3fAIzvyOfmTzvx0NTRr1UEjWJqYx&sz=w2000&v=20260913c';
   const autocadUrl = 'https://drive.google.com/thumbnail?id=1ZLHpD-KR3HZx47eoMglPhQRWCnR0JRdn&sz=w1600&v=20260913h';
   const revitUrl = 'https://drive.google.com/thumbnail?id=1oxeTkAUGxvlykUHbijB6IK55uBZJBZKK&sz=w1600&v=20260913h';
+  const submitEndpoint = 'https://formsubmit.co/ajax/andrea.giaqui@gmail.com';
 
-  // Branding coerente in tutta la pagina.
   document.title = 'Disegnatore AutoCAD e Revit Online | Preventivo Gratuito';
   document.querySelectorAll('a[href*="facebook.com/disegnatoreautocadonline"]').forEach(link => {
     if (link.closest('footer')) link.textContent = 'Facebook · Disegnatore AutoCAD e Revit';
   });
-
-  // Load visual refinements without changing the core stylesheet.
-  if (!document.querySelector('link[href^="enhancements.css"]')) {
-    const extraCss = document.createElement('link');
-    extraCss.rel = 'stylesheet';
-    extraCss.href = 'enhancements.css?v=20260913h';
-    document.head.appendChild(extraCss);
-  }
 
   const heroImg = document.querySelector('.hero-card img');
   if (heroImg) {
@@ -25,98 +17,177 @@
     heroImg.alt = 'Andrea Giaquinto - Disegnatore AutoCAD e Revit, servizi CAD BIM con preventivo gratuito';
   }
 
-  const services = document.getElementById('servizi');
-  const price = document.getElementById('preventivo');
-  if (services && price && !document.querySelector('.visual-showcase')) {
-    const showcase = document.createElement('section');
-    showcase.className = 'section visual-showcase';
-    showcase.setAttribute('aria-label', 'Esempi grafici AutoCAD e Revit BIM');
-    showcase.innerHTML = `
-      <div class="wrap">
-        <div class="section-heading visual-heading">
-          <p class="eyebrow">DAL 2D AL MODELLO BIM</p>
-          <h2>Disegno tecnico, modellazione e ricostruzione 3D</h2>
-          <p>AutoCAD 2D/3D, Revit e modellazione BIM possono partire da foto, planimetrie, PDF e nuvole di punti e convergere in un unico processo coordinato.</p>
-        </div>
-        <div class="visual-grid">
-          <figure class="visual-card">
-            <img src="${autocadUrl}" alt="Esempio professionale di disegno AutoCAD 2D e 3D" loading="lazy">
-            <figcaption><strong>AutoCAD 2D / 3D</strong><span>Piante, prospetti, sezioni, documentazione tecnica e modellazione tridimensionale.</span></figcaption>
-          </figure>
-          <figure class="visual-card">
-            <img src="${revitUrl}" alt="Esempio professionale di modellazione Revit BIM 3D" loading="lazy">
-            <figcaption><strong>Revit / BIM</strong><span>Ricostruzione 3D da rilievi, immagini e nuvole di punti.</span></figcaption>
-          </figure>
-        </div>
-      </div>`;
-    price.parentNode.insertBefore(showcase, price);
-  }
-
   const form = document.getElementById('quoteForm');
-  if (form) {
-    const fieldsets = [...form.querySelectorAll('fieldset')];
-    if (fieldsets[2] && fieldsets[3] && !form.querySelector('.form-visual')) {
-      const visual = document.createElement('aside');
-      visual.className = 'form-visual';
-      visual.setAttribute('aria-label', 'Esempio di modellazione AutoCAD Revit BIM');
-      visual.innerHTML = `
-        <div class="form-visual-copy">
-          <span class="mini-eyebrow">ELABORAZIONE MULTIMODALE</span>
-          <strong>Foto, disegni e rilievi possono lavorare insieme.</strong>
-          <p>Non serve avere una documentazione perfetta o completa: il materiale disponibile viene valutato nel suo insieme per costruire il risultato richiesto.</p>
-        </div>
-        <img src="${revitUrl}" alt="Modellazione Revit BIM da materiale tecnico" loading="lazy">`;
-      form.insertBefore(visual, fieldsets[3]);
-    }
-  }
-
   const warning = document.getElementById('fileWarning');
+  const success = document.getElementById('grazie');
   const maxBytes = 10 * 1024 * 1024;
   const fileInputs = form ? [...form.querySelectorAll('input[type="file"]')] : [];
+  const submitButton = form ? form.querySelector('button[type="submit"]') : null;
+
+  const formatBytes = bytes => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  };
 
   const fileTotal = () => fileInputs.reduce((sum, input) => {
     return sum + [...(input.files || [])].reduce((s, f) => s + f.size, 0);
   }, 0);
 
+  const setNotice = (message = '', type = 'warning') => {
+    if (!warning) return;
+    if (!message) {
+      warning.hidden = true;
+      warning.textContent = '';
+      warning.className = 'notice';
+      return;
+    }
+    warning.hidden = false;
+    warning.textContent = message;
+    warning.className = `notice notice-${type}`;
+  };
+
   const validateFiles = () => {
-    if (!warning) return true;
     const total = fileTotal();
     if (total > maxBytes) {
-      warning.hidden = false;
-      warning.textContent = `Gli allegati selezionati pesano ${(total/1024/1024).toFixed(1)} MB. Il limite complessivo per l'invio diretto è 10 MB. Riduci gli allegati oppure indica nelle note che vuoi inviare il materiale separatamente.`;
+      setNotice(`Gli allegati selezionati pesano ${formatBytes(total)}. Il limite complessivo per l'invio diretto è 10 MB. Rimuovi uno o più file oppure indica nelle note che vuoi inviare il materiale separatamente.`, 'warning');
       return false;
     }
-    warning.hidden = true;
-    warning.textContent = '';
+    setNotice();
     return true;
   };
 
-  fileInputs.forEach(i => i.addEventListener('change', validateFiles));
+  // Mostra i file scelti con anteprima, nome, peso e pulsante di rimozione.
+  fileInputs.forEach(input => {
+    const host = input.parentElement;
+    if (!host || host.querySelector('.selected-files')) return;
+
+    const selected = document.createElement('div');
+    selected.className = 'selected-files';
+    selected.setAttribute('aria-live', 'polite');
+    input.insertAdjacentElement('afterend', selected);
+
+    const renderFiles = () => {
+      selected.innerHTML = '';
+      const files = [...(input.files || [])];
+      if (!files.length) return;
+
+      files.forEach((file, index) => {
+        const chip = document.createElement('div');
+        chip.className = 'selected-file';
+
+        const preview = document.createElement('div');
+        preview.className = 'file-preview';
+        if (file.type && file.type.startsWith('image/')) {
+          const img = document.createElement('img');
+          img.alt = '';
+          const objectUrl = URL.createObjectURL(file);
+          img.src = objectUrl;
+          img.onload = () => URL.revokeObjectURL(objectUrl);
+          preview.appendChild(img);
+        } else {
+          preview.textContent = (file.name.split('.').pop() || 'FILE').toUpperCase();
+        }
+
+        const meta = document.createElement('div');
+        meta.className = 'file-meta';
+        const name = document.createElement('strong');
+        name.textContent = file.name;
+        const size = document.createElement('span');
+        size.textContent = formatBytes(file.size);
+        meta.append(name, size);
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'file-remove';
+        remove.setAttribute('aria-label', `Rimuovi ${file.name}`);
+        remove.title = 'Rimuovi file';
+        remove.textContent = '×';
+        remove.addEventListener('click', () => {
+          const dt = new DataTransfer();
+          files.forEach((f, i) => { if (i !== index) dt.items.add(f); });
+          input.files = dt.files;
+          renderFiles();
+          validateFiles();
+        });
+
+        chip.append(preview, meta, remove);
+        selected.appendChild(chip);
+      });
+    };
+
+    input.addEventListener('change', () => {
+      renderFiles();
+      validateFiles();
+    });
+  });
+
   if (form) {
-    form.addEventListener('submit', e => {
+    // Evita che il browser venga portato sul dominio del servizio esterno.
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+
       const outputs = [...form.querySelectorAll('input[name="Output[]"]')];
-      const outputOk = outputs.some(i => i.checked);
-      if (!validateFiles() || !outputOk) {
-        e.preventDefault();
-        if (!outputOk && outputs[0]) {
-          outputs[0].focus();
-          if (warning) {
-            warning.hidden = false;
-            warning.textContent = 'Seleziona almeno un risultato finale che desideri ricevere.';
-          }
+      if (!outputs.some(i => i.checked)) {
+        setNotice('Seleziona almeno un risultato finale che desideri ricevere.', 'warning');
+        outputs[0]?.focus();
+        return;
+      }
+      if (!validateFiles()) return;
+      if (!form.reportValidity()) return;
+
+      const originalLabel = submitButton?.innerHTML;
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = 'INVIO IN CORSO…';
+      }
+      setNotice('Invio della richiesta in corso…', 'info');
+
+      try {
+        const data = new FormData(form);
+        data.set('_subject', 'Nuova richiesta preventivo AutoCAD / Revit dal sito');
+        data.set('_template', 'table');
+        data.set('_captcha', 'true');
+        data.set('_url', location.href.split('?')[0]);
+
+        const response = await fetch(submitEndpoint, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        let payload = {};
+        try { payload = await response.json(); } catch (_) {}
+        if (!response.ok || payload.success === false) {
+          throw new Error(payload.message || `Errore ${response.status}`);
+        }
+
+        setNotice();
+        if (success) {
+          success.hidden = false;
+          success.innerHTML = '<h3>Richiesta inviata correttamente ✓</h3><p>Grazie. Ho ricevuto la tua richiesta di preventivo. Esaminerò personalmente il materiale e ti ricontatterò appena possibile. Non è necessario compilare nuovamente il modulo.</p>';
+          success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        form.reset();
+        document.querySelectorAll('.selected-files').forEach(el => { el.innerHTML = ''; });
+      } catch (error) {
+        console.error(error);
+        setNotice('Non è stato possibile completare l’invio automatico. I dati inseriti sono ancora nel modulo: puoi riprovare oppure contattarmi direttamente via email o WhatsApp senza perdere ciò che hai compilato.', 'error');
+        if (warning) {
+          const fallback = document.createElement('div');
+          fallback.className = 'submit-fallback';
+          fallback.innerHTML = '<a href="mailto:andrea.giaqui@gmail.com">Invia email</a><a href="https://wa.me/393337240544" target="_blank" rel="noopener">Apri WhatsApp</a>';
+          warning.appendChild(fallback);
+        }
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalLabel || 'RICHIEDI IL PREVENTIVO GRATUITO →';
         }
       }
     });
   }
 
-  const params = new URLSearchParams(location.search);
-  if (params.get('inviato') === '1') {
-    const success = document.getElementById('grazie');
-    if (success) {
-      success.hidden = false;
-      setTimeout(() => success.scrollIntoView({behavior:'smooth', block:'center'}), 150);
-    }
-  }
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 })();
