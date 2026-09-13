@@ -1,0 +1,49 @@
+name: Test Cloudflare quote backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/test-cloudflare-backend.yml'
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Health check
+        run: |
+          set -euo pipefail
+          curl -fsS https://cad-bim-preventivi.andrea-giaqui.workers.dev/health | tee health.json
+          grep -q '"ok":true' health.json
+
+      - name: Session, upload, delete and submit test
+        run: |
+          set -euo pipefail
+          BASE='https://cad-bim-preventivi.andrea-giaqui.workers.dev'
+          SESSION=$(curl -fsS -X POST "$BASE/api/session" -H 'Origin: https://andreagiaqui-83.github.io')
+          echo "$SESSION" | tee session.json
+          ID=$(python -c 'import json; print(json.load(open("session.json"))["sessionId"])')
+          TOKEN=$(python -c 'import json; print(json.load(open("session.json"))["token"])')
+          printf 'test backend preventivo' > test.txt
+          UPLOAD=$(curl -fsS -X PUT "$BASE/api/upload/$ID" \
+            -H 'Origin: https://andreagiaqui-83.github.io' \
+            -H "X-Session-Token: $TOKEN" \
+            -H 'X-File-Name: test.txt' \
+            -H 'X-Field-Name: Test' \
+            -H 'X-File-Size: 22' \
+            -H 'Content-Type: text/plain' \
+            --data-binary @test.txt)
+          echo "$UPLOAD" | tee upload.json
+          grep -q '"ok":true' upload.json
+          KEY=$(python -c 'import json; print(json.load(open("upload.json"))["file"]["key"])')
+          SUBMIT=$(curl -fsS -X POST "$BASE/api/submit" \
+            -H 'Origin: https://andreagiaqui-83.github.io' \
+            -H 'Content-Type: application/json' \
+            --data-binary "{\"sessionId\":\"$ID\",\"token\":\"$TOKEN\",\"fields\":{\"Nome\":\"Test automatico\",\"Email\":\"andrea.giaqui@gmail.com\",\"Indicazioni_lavoro\":\"Test tecnico automatico del nuovo backend.\"}}")
+          echo "$SUBMIT" | tee submit.json
+          grep -q '"ok":true' submit.json
+          curl -fsS -X DELETE "$BASE/api/upload/$ID" \
+            -H 'Origin: https://andreagiaqui-83.github.io' \
+            -H "X-Session-Token: $TOKEN" \
+            -H 'Content-Type: application/json' \
+            --data-binary "{\"key\":\"$KEY\"}" | tee delete.json
