@@ -1,7 +1,7 @@
 (() => {
-  const APP_VERSION = '20260913k';
-  document.documentElement.dataset.appVersion = APP_VERSION;
   const heroUrl = 'https://drive.google.com/thumbnail?id=1SdyG3fAIzvyOfmTzvx0NTRr1UEjWJqYx&sz=w2000&v=20260913c';
+  const autocadUrl = 'https://drive.google.com/thumbnail?id=1ZLHpD-KR3HZx47eoMglPhQRWCnR0JRdn&sz=w1600&v=20260913h';
+  const revitUrl = 'https://drive.google.com/thumbnail?id=1oxeTkAUGxvlykUHbijB6IK55uBZJBZKK&sz=w1600&v=20260913h';
   const submitEndpoint = 'https://formsubmit.co/ajax/andrea.giaqui@gmail.com';
 
   document.title = 'Disegnatore AutoCAD e Revit Online | Preventivo Gratuito';
@@ -23,6 +23,24 @@
   const maxBytes = 10 * 1024 * 1024;
   const fileInputs = form ? [...form.querySelectorAll('input[type="file"]')] : [];
   const submitButton = form ? form.querySelector('button[type="submit"]') : null;
+
+  // Testi e spaziatura della sezione allegati.
+  const photoInput = form?.querySelector('input[name="Foto_immagini_fabbricato[]"]');
+  if (photoInput) {
+    const label = photoInput.closest('label');
+    label?.classList.add('upload-label', 'photo-upload-label');
+    const help = label?.querySelector('small');
+    if (help) help.textContent = 'Esterni, interni, viste dall’alto, dettagli costruttivi o altre immagini utili, in qualsiasi formato immagine.';
+  }
+
+  const docsInput = form?.querySelector('input[name="Disegni_documentazione[]"]');
+  if (docsInput) {
+    docsInput.removeAttribute('accept');
+    const label = docsInput.closest('label');
+    label?.classList.add('upload-label', 'docs-upload-label');
+    const help = label?.querySelector('small');
+    if (help) help.textContent = 'PDF, scansioni, immagini, DWG/DXF, file Revit, IFC, PLY, OBJ e altra documentazione tecnica, in qualsiasi formato.';
+  }
 
   const formatBytes = bytes => {
     if (bytes < 1024) return `${bytes} B`;
@@ -57,10 +75,9 @@
     return true;
   };
 
-  const enhanceFileInput = input => {
-    const host = input.parentElement;
-    if (!host) return;
-    let selected = host.querySelector('.selected-files');
+  // Mostra sempre i file scelti con anteprima, nome, peso e rimozione singola.
+  fileInputs.forEach(input => {
+    let selected = input.parentElement?.querySelector('.selected-files');
     if (!selected) {
       selected = document.createElement('div');
       selected.className = 'selected-files';
@@ -72,15 +89,6 @@
       selected.innerHTML = '';
       const files = [...(input.files || [])];
       if (!files.length) return;
-
-      const title = document.createElement('div');
-      title.className = 'selected-files-title';
-      title.textContent = files.length === 1 ? '1 file selezionato' : `${files.length} file selezionati`;
-      selected.appendChild(title);
-
-      const list = document.createElement('div');
-      list.className = 'selected-files-list';
-      selected.appendChild(list);
 
       files.forEach((file, index) => {
         const chip = document.createElement('div');
@@ -114,19 +122,16 @@
         remove.title = 'Rimuovi file';
         remove.textContent = '×';
         remove.addEventListener('click', () => {
-          try {
-            const dt = new DataTransfer();
-            files.forEach((f, i) => { if (i !== index) dt.items.add(f); });
-            input.files = dt.files;
-          } catch (_) {
-            input.value = '';
-          }
+          const currentFiles = [...(input.files || [])];
+          const dt = new DataTransfer();
+          currentFiles.forEach((f, i) => { if (i !== index) dt.items.add(f); });
+          input.files = dt.files;
           renderFiles();
           validateFiles();
         });
 
         chip.append(preview, meta, remove);
-        list.appendChild(chip);
+        selected.appendChild(chip);
       });
     };
 
@@ -134,14 +139,12 @@
       renderFiles();
       validateFiles();
     });
-    renderFiles();
-  };
-
-  fileInputs.forEach(enhanceFileInput);
+  });
 
   if (form) {
     form.addEventListener('submit', async e => {
       e.preventDefault();
+
       const outputs = [...form.querySelectorAll('input[name="Output[]"]')];
       if (!outputs.some(i => i.checked)) {
         setNotice('Seleziona almeno un risultato finale che desideri ricevere.', 'warning');
@@ -165,10 +168,17 @@
         data.set('_captcha', 'true');
         data.set('_url', location.href.split('?')[0]);
 
-        const response = await fetch(submitEndpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        const response = await fetch(submitEndpoint, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
         let payload = {};
         try { payload = await response.json(); } catch (_) {}
-        if (!response.ok || payload.success === false) throw new Error(payload.message || `Errore ${response.status}`);
+        if (!response.ok || payload.success === false) {
+          throw new Error(payload.message || `Errore ${response.status}`);
+        }
 
         setNotice();
         if (success) {
