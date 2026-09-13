@@ -1,9 +1,9 @@
 /* Visual refinements: 2026-09-13 */
 .visual-showcase{background:linear-gradient(180deg,#eef6fc 0%,#f8fbfe 100%)}
 .visual-heading{max-width:900px}
-.visual-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.visual-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
 .visual-card{margin:0;background:#fff;border:1px solid #d7e2ec;border-radius:18px;overflow:hidden;box-shadow:0 14px 36px rgba(11,58,91,.09)}
-.visual-card img{display:block;width:100%;height:310px;object-fit:cover}
+.visual-card img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;background:#fff}
 .visual-card figcaption{display:grid;gap:5px;padding:18px 20px}
 .visual-card figcaption strong{font-size:20px;color:#0b2a46}
 .visual-card figcaption span{color:#5e7185}
@@ -15,8 +15,10 @@
 .form-visual-copy strong{display:block;margin:7px 0 8px;font-size:25px;line-height:1.18}
 .form-visual-copy p{margin:0;color:#d8edf9}
 .visual-kicker{font-size:11px;font-weight:900;letter-spacing:.16em;color:#7fd8ff}
-.form-visual img{width:100%;height:100%;min-height:220px;object-fit:cover}
+.form-visual img{width:100%;height:auto;max-height:none;object-fit:contain;background:#fff}
 .hero-card img{aspect-ratio:3/1;object-fit:cover}
 .hero-card{border:1px solid rgba(11,58,91,.08)}
-@media(max-width:850px){.visual-grid{grid-template-columns:1fr}.visual-card img{height:auto}.form-visual{grid-template-columns:1fr}.form-visual img{max-height:300px}.hero-card img{aspect-ratio:auto;object-fit:contain}}
+.price-includes{margin-top:18px;padding:14px 16px;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.09);color:#fff!important;font-size:16px!important}
+.price-includes strong{color:#fff}
+@media(max-width:850px){.visual-grid{grid-template-columns:1fr}.form-visual{grid-template-columns:1fr}.hero-card img{aspect-ratio:auto;object-fit:contain}}
 @media(max-width:576px){.form-step{padding:20px 16px}.step-title{margin:-20px -16px 18px;padding:15px 16px 14px;font-size:20px;flex-wrap:wrap}.step-title span{font-size:13px}.form-visual-copy{padding:20px}.form-visual-copy strong{font-size:21px}.hero-card{border-radius:14px}.visual-card{border-radius:14px}}
