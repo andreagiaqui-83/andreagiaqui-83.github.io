@@ -5,34 +5,47 @@ const DOWNLOAD_TTL_SECONDS = 60 * 60 * 24 * 30;
 
 const encoder = new TextEncoder();
 
+const FIELD_LABELS = {
+  Nuvola_di_punti_link_cloud: 'Nuvola di punti (link cloud)',
+  Google_Maps_Earth: 'Google Maps / Earth',
+  Indirizzo_fabbricato: 'Indirizzo del fabbricato',
+  Coordinate_geografiche: 'Coordinate geografiche',
+  Indicazioni_lavoro: 'Indicazioni sul lavoro',
+  'Output[]': 'Output richiesti',
+  Output: 'Output richiesti',
+  Indicazioni_output: 'Indicazioni sull’output',
+  Data_indicativa_consegna: 'Data indicativa di consegna',
+  Professione: 'Professione',
+  Note_conclusive: 'Note conclusive',
+  Nome_cognome: 'Nome e cognome',
+  Nome: 'Nome e cognome',
+  Studio_societa: 'Studio / società',
+  email: 'Email',
+  Email: 'Email',
+  Telefono_WhatsApp: 'Telefono / WhatsApp',
+  Contatto_preferito: 'Contatto preferito',
+  Consenso_privacy: 'Consenso privacy',
+  Link_cloud_materiale_completo: 'Link cloud al materiale completo',
+  Template_AutoCAD: 'Template AutoCAD',
+  Template_Revit: 'Template Revit',
+};
+
 function corsHeaders(origin, env) {
   const allowed = env.ALLOWED_ORIGIN || 'https://andreagiaqui-83.github.io';
   return {
     'Access-Control-Allow-Origin': origin === allowed ? allowed : allowed,
-    'Access-Control-Allow-Methods': 'GET,POST,PUT,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, X-Session-Token, X-File-Name, X-Field-Name, X-File-Size',
     'Access-Control-Max-Age': '86400',
-    'Vary': 'Origin',
+    Vary: 'Origin',
   };
 }
 
 function json(data, status, origin, env) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      ...corsHeaders(origin, env),
-    },
+    headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders(origin, env) },
   });
-}
-
-function sanitizeFileName(name = 'file') {
-  return name
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-zA-Z0-9._-]+/g, '_')
-    .replace(/_+/g, '_')
-    .slice(0, 140) || 'file';
 }
 
 function escapeHtml(value = '') {
@@ -44,6 +57,15 @@ function escapeHtml(value = '') {
     .replaceAll("'", '&#039;');
 }
 
+function sanitizeFileName(name = 'file') {
+  return name
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9._-]+/g, '_')
+    .replace(/_+/g, '_')
+    .slice(0, 140) || 'file';
+}
+
 function base64Url(bytes) {
   let binary = '';
   for (const b of bytes) binary += String.fromCharCode(b);
@@ -52,18 +74,13 @@ function base64Url(bytes) {
 
 async function hmac(secret, message) {
   const key = await crypto.subtle.importKey(
-    'raw',
-    encoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
+    'raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
   );
   return base64Url(new Uint8Array(await crypto.subtle.sign('HMAC', key, encoder.encode(message))));
 }
 
 async function makeToken(env, subject, exp) {
-  const sig = await hmac(env.SIGNING_SECRET, `${subject}|${exp}`);
-  return `${exp}.${sig}`;
+  return `${exp}.${await hmac(env.SIGNING_SECRET, `${subject}|${exp}`)}`;
 }
 
 async function verifyToken(env, subject, token) {
@@ -71,30 +88,12 @@ async function verifyToken(env, subject, token) {
   const [expRaw, sig] = token.split('.', 2);
   const exp = Number(expRaw);
   if (!Number.isFinite(exp) || exp < Math.floor(Date.now() / 1000)) return false;
-  const expected = await hmac(env.SIGNING_SECRET, `${subject}|${exp}`);
-  return sig === expected;
-}
-
-async function createSession(request, env, origin) {
-  const sessionId = crypto.randomUUID();
-  const exp = Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS;
-  const token = await makeToken(env, sessionId, exp);
-  const meta = {
-    sessionId,
-    createdAt: new Date().toISOString(),
-    totalBytes: 0,
-    files: [],
-  };
-  await env.QUOTE_FILES.put(`sessions/${sessionId}.json`, JSON.stringify(meta), {
-    httpMetadata: { contentType: 'application/json' },
-  });
-  return json({ ok: true, sessionId, token, maxFileBytes: MAX_FILE_BYTES, maxTotalBytes: MAX_TOTAL_BYTES }, 200, origin, env);
+  return sig === await hmac(env.SIGNING_SECRET, `${subject}|${exp}`);
 }
 
 async function readSession(env, sessionId) {
   const obj = await env.QUOTE_FILES.get(`sessions/${sessionId}.json`);
-  if (!obj) return null;
-  return await obj.json();
+  return obj ? await obj.json() : null;
 }
 
 async function writeSession(env, session) {
@@ -103,17 +102,26 @@ async function writeSession(env, session) {
   });
 }
 
+async function createSession(_request, env, origin) {
+  const sessionId = crypto.randomUUID();
+  const exp = Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS;
+  const token = await makeToken(env, sessionId, exp);
+  const meta = { sessionId, createdAt: new Date().toISOString(), totalBytes: 0, files: [] };
+  await writeSession(env, meta);
+  return json({ ok: true, sessionId, token, maxFileBytes: MAX_FILE_BYTES, maxTotalBytes: MAX_TOTAL_BYTES }, 200, origin, env);
+}
+
 async function uploadFile(request, env, origin, sessionId) {
   const token = request.headers.get('X-Session-Token') || '';
-  if (!(await verifyToken(env, sessionId, token))) return json({ ok: false, error: 'Sessione non valida o scaduta.' }, 401, origin, env);
+  if (!(await verifyToken(env, sessionId, token))) {
+    return json({ ok: false, error: 'Sessione non valida o scaduta.' }, 401, origin, env);
+  }
 
   const rawName = decodeURIComponent(request.headers.get('X-File-Name') || 'file');
   const fieldName = request.headers.get('X-Field-Name') || 'Allegato';
   const declaredSize = Number(request.headers.get('X-File-Size') || request.headers.get('Content-Length') || 0);
   if (!declaredSize || declaredSize < 0) return json({ ok: false, error: 'Dimensione file non valida.' }, 400, origin, env);
-  if (declaredSize > MAX_FILE_BYTES) {
-    return json({ ok: false, error: 'Il singolo file supera 90 MB. Usa un link cloud per questo file.' }, 413, origin, env);
-  }
+  if (declaredSize > MAX_FILE_BYTES) return json({ ok: false, error: 'Il singolo file supera 90 MB. Usa un link cloud per questo file.' }, 413, origin, env);
 
   const session = await readSession(env, sessionId);
   if (!session) return json({ ok: false, error: 'Sessione non trovata.' }, 404, origin, env);
@@ -122,18 +130,13 @@ async function uploadFile(request, env, origin, sessionId) {
   }
 
   const safeName = sanitizeFileName(rawName);
-  const fileId = crypto.randomUUID();
-  const key = `quotes/${sessionId}/files/${fileId}-${safeName}`;
+  const key = `quotes/${sessionId}/files/${crypto.randomUUID()}-${safeName}`;
   await env.QUOTE_FILES.put(key, request.body, {
     httpMetadata: {
       contentType: request.headers.get('Content-Type') || 'application/octet-stream',
       contentDisposition: `attachment; filename="${safeName}"`,
     },
-    customMetadata: {
-      originalName: rawName.slice(0, 300),
-      fieldName: fieldName.slice(0, 120),
-      sessionId,
-    },
+    customMetadata: { originalName: rawName.slice(0, 300), fieldName: fieldName.slice(0, 120), sessionId },
   });
 
   const entry = { key, name: rawName, fieldName, size: declaredSize, uploadedAt: new Date().toISOString() };
@@ -141,7 +144,6 @@ async function uploadFile(request, env, origin, sessionId) {
   session.files.push(entry);
   session.totalBytes = (session.totalBytes || 0) + declaredSize;
   await writeSession(env, session);
-
   return json({ ok: true, file: entry, totalBytes: session.totalBytes }, 200, origin, env);
 }
 
@@ -176,8 +178,7 @@ async function downloadFile(request, env) {
   const exp = Number(url.searchParams.get('exp') || 0);
   const sig = url.searchParams.get('sig') || '';
   if (!key.startsWith('quotes/') || !Number.isFinite(exp) || exp < Math.floor(Date.now() / 1000)) return new Response('Link non valido o scaduto.', { status: 403 });
-  const expected = await hmac(env.SIGNING_SECRET, `${key}|${exp}`);
-  if (sig !== expected) return new Response('Link non valido.', { status: 403 });
+  if (sig !== await hmac(env.SIGNING_SECRET, `${key}|${exp}`)) return new Response('Link non valido.', { status: 403 });
   const obj = await env.QUOTE_FILES.get(key);
   if (!obj) return new Response('File non trovato.', { status: 404 });
   const headers = new Headers();
@@ -185,26 +186,67 @@ async function downloadFile(request, env) {
   headers.set('etag', obj.httpEtag);
   headers.set('Cache-Control', 'private, no-store');
   if (!headers.get('Content-Disposition')) {
-    const fallback = sanitizeFileName(obj.customMetadata?.originalName || key.split('/').pop());
-    headers.set('Content-Disposition', `attachment; filename="${fallback}"`);
+    headers.set('Content-Disposition', `attachment; filename="${sanitizeFileName(obj.customMetadata?.originalName || key.split('/').pop())}"`);
   }
   return new Response(obj.body, { headers });
 }
 
-function rowsFromFields(fields) {
+function normalizeFieldValue(value) {
+  if (Array.isArray(value)) return value.map(v => String(v).trim()).filter(Boolean).join(', ');
+  return String(value ?? '').trim();
+}
+
+function prettifyFieldName(key) {
+  if (FIELD_LABELS[key]) return FIELD_LABELS[key];
+  return key.replace(/\[\]$/, '').replaceAll('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function rowsFromFields(fields, { includePrivacy = true } = {}) {
   return Object.entries(fields || {})
-    .filter(([key]) => !key.startsWith('_'))
-    .map(([key, value]) => `<tr><td style="padding:8px;border-bottom:1px solid #ddd"><strong>${escapeHtml(key)}</strong></td><td style="padding:8px;border-bottom:1px solid #ddd">${escapeHtml(Array.isArray(value) ? value.join(', ') : value ?? '')}</td></tr>`)
+    .filter(([key, value]) => {
+      if (key.startsWith('_')) return false;
+      if (!includePrivacy && key === 'Consenso_privacy') return false;
+      return normalizeFieldValue(value) !== '';
+    })
+    .map(([key, value]) => {
+      const label = prettifyFieldName(key);
+      const text = normalizeFieldValue(value);
+      const isEmail = label === 'Email' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
+      const isPhone = label === 'Telefono / WhatsApp' && /^[+\d][\d\s().-]{5,}$/.test(text);
+      const isUrl = /^https?:\/\//i.test(text);
+      let rendered = escapeHtml(text);
+      if (isEmail) rendered = `<a href="mailto:${escapeHtml(text)}">${escapeHtml(text)}</a>`;
+      else if (isPhone) rendered = `<a href="tel:${escapeHtml(text.replace(/[^+\d]/g, ''))}">${escapeHtml(text)}</a>`;
+      else if (isUrl) rendered = `<a href="${escapeHtml(text)}">${escapeHtml(text)}</a>`;
+      return `<tr><td style="padding:9px 12px;border-bottom:1px solid #e2e8f0;width:34%;vertical-align:top"><strong>${escapeHtml(label)}</strong></td><td style="padding:9px 12px;border-bottom:1px solid #e2e8f0">${rendered}</td></tr>`;
+    })
     .join('');
+}
+
+function formatFileSize(bytes) {
+  const mb = bytes / 1024 / 1024;
+  if (mb >= 1) return `${mb.toFixed(mb >= 10 ? 1 : 2)} MB`;
+  const kb = bytes / 1024;
+  return `${Math.max(1, Math.round(kb))} KB`;
+}
+
+function attachmentList(uploads) {
+  if (!uploads.length) return '<p style="margin:6px 0 0;color:#64748b">Nessun allegato caricato direttamente.</p>';
+  return `<table style="border-collapse:collapse;width:100%;max-width:900px">${uploads.map(f => `
+    <tr>
+      <td style="padding:9px 12px;border-bottom:1px solid #e2e8f0"><strong>${escapeHtml(f.name)}</strong><br><span style="color:#64748b;font-size:13px">${escapeHtml(formatFileSize(f.size))}</span></td>
+      <td style="padding:9px 12px;border-bottom:1px solid #e2e8f0;text-align:right"><a href="${escapeHtml(f.downloadUrl)}" style="display:inline-block;padding:8px 13px;border-radius:6px;background:#0b4a6f;color:#fff;text-decoration:none;font-weight:700">Scarica</a></td>
+    </tr>`).join('')}</table>`;
+}
+
+function getCustomerEmail(fields) {
+  return String(fields?.email || fields?.Email || '').trim();
 }
 
 async function sendEmail(env, payload) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
   const result = await response.json().catch(() => ({}));
@@ -223,46 +265,51 @@ async function submitQuote(request, env, origin) {
   if (!session) return json({ ok: false, error: 'Sessione non trovata.' }, 404, origin, env);
   const fields = body.fields || {};
   const uploads = [];
-  for (const file of session.files || []) {
-    uploads.push({ ...file, downloadUrl: await makeDownloadUrl(request, env, file.key) });
-  }
+  for (const file of session.files || []) uploads.push({ ...file, downloadUrl: await makeDownloadUrl(request, env, file.key) });
 
   const cloudLink = String(fields.Link_cloud_materiale_completo || '').trim();
-  const fileRows = uploads.length
-    ? uploads.map(f => `<li><a href="${escapeHtml(f.downloadUrl)}">${escapeHtml(f.name)}</a> — ${Math.round(f.size / 1024)} KB (${escapeHtml(f.fieldName)})</li>`).join('')
-    : '<li>Nessun allegato caricato direttamente.</li>';
-
   const ownerHtml = `
-    <h2>Nuova richiesta preventivo AutoCAD / Revit</h2>
-    <table style="border-collapse:collapse;width:100%;max-width:900px">${rowsFromFields(fields)}</table>
-    <h3>Allegati</h3><ul>${fileRows}</ul>
-    ${cloudLink ? `<p><strong>Link cloud:</strong> <a href="${escapeHtml(cloudLink)}">${escapeHtml(cloudLink)}</a></p>` : ''}
-    <p>I link agli allegati scadono dopo 30 giorni.</p>`;
+    <div style="font-family:Arial,sans-serif;color:#172033;line-height:1.5">
+      <h2 style="margin:0 0 18px">Nuova richiesta preventivo AutoCAD / Revit</h2>
+      <table style="border-collapse:collapse;width:100%;max-width:900px">${rowsFromFields(fields)}</table>
+      <h3 style="margin:24px 0 8px">Allegati</h3>
+      ${attachmentList(uploads)}
+      ${cloudLink ? `<p style="margin-top:16px"><strong>Link cloud al materiale completo:</strong><br><a href="${escapeHtml(cloudLink)}">${escapeHtml(cloudLink)}</a></p>` : ''}
+      ${uploads.length ? '<p style="color:#64748b;font-size:13px">I link agli allegati scadono dopo 30 giorni.</p>' : ''}
+    </div>`;
 
+  const customerEmail = getCustomerEmail(fields);
   await sendEmail(env, {
     from: env.EMAIL_FROM,
     to: [env.EMAIL_TO],
-    reply_to: fields.Email || undefined,
+    reply_to: customerEmail || undefined,
     subject: 'Nuova richiesta preventivo AutoCAD / Revit dal sito',
     html: ownerHtml,
   });
 
-  const customerEmail = String(fields.Email || '').trim();
+  let customerCopySent = false;
   if (customerEmail && env.SEND_CUSTOMER_COPY === 'true') {
     const customerHtml = `
-      <h2>Richiesta di preventivo ricevuta</h2>
-      <p>Grazie. La richiesta è stata ricevuta correttamente e verrà valutata personalmente.</p>
-      <p>Se servono informazioni aggiuntive verrai ricontattato senza dover compilare nuovamente il modulo.</p>
-      <h3>Riepilogo</h3>
-      <table style="border-collapse:collapse;width:100%;max-width:900px">${rowsFromFields(fields)}</table>
-      <p>Andrea Giaquinto · CAD | BIM | CONSULENZA<br>+39 333 724 0544 · WhatsApp / Telegram<br>andrea.giaqui@gmail.com</p>`;
+      <div style="font-family:Arial,sans-serif;color:#172033;line-height:1.5">
+        <h2 style="margin:0 0 14px">Richiesta di preventivo ricevuta</h2>
+        <p>Grazie. La tua richiesta è stata ricevuta correttamente.</p>
+        <p>Esaminerò personalmente il materiale e ti ricontatterò appena possibile. Non è necessario compilare nuovamente il modulo.</p>
+        <h3 style="margin:24px 0 8px">Riepilogo della richiesta</h3>
+        <table style="border-collapse:collapse;width:100%;max-width:900px">${rowsFromFields(fields, { includePrivacy: false })}</table>
+        <h3 style="margin:24px 0 8px">Materiale inviato</h3>
+        <p>${uploads.length ? `${uploads.length} file caricati correttamente (${escapeHtml(formatFileSize(uploads.reduce((s, f) => s + Number(f.size || 0), 0)))} complessivi).` : 'Nessun file caricato direttamente dal modulo.'}</p>
+        ${cloudLink ? `<p><strong>Link cloud indicato:</strong><br><a href="${escapeHtml(cloudLink)}">${escapeHtml(cloudLink)}</a></p>` : ''}
+        <p style="margin-top:26px"><strong>Andrea Giaquinto</strong><br>Disegnatore AutoCAD e Revit · CAD | BIM | CONSULENZA<br><a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a><br><a href="tel:+393337240544">+39 333 724 0544</a> · WhatsApp / Telegram</p>
+      </div>`;
     try {
       await sendEmail(env, {
         from: env.EMAIL_FROM,
         to: [customerEmail],
-        subject: 'Copia della richiesta di preventivo CAD / BIM',
+        reply_to: env.EMAIL_TO,
+        subject: 'Conferma richiesta di preventivo AutoCAD / Revit',
         html: customerHtml,
       });
+      customerCopySent = true;
     } catch (error) {
       console.error('Customer confirmation email failed', error);
     }
@@ -274,9 +321,10 @@ async function submitQuote(request, env, origin) {
     fields,
     files: session.files || [],
     cloudLink,
+    customerCopySent,
   }), { httpMetadata: { contentType: 'application/json' } });
 
-  return json({ ok: true }, 200, origin, env);
+  return json({ ok: true, customerCopySent }, 200, origin, env);
 }
 
 async function cleanup(env) {
