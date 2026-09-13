@@ -35,7 +35,6 @@
   const micro = form.querySelector('.micro');
   if (micro) micro.textContent = 'Gli allegati possono essere inviati direttamente fino a 10 MB complessivi. Oltre 10 MB puoi usare un link cloud oppure inviare il materiale via email o WhatsApp/Telegram.';
 
-  // Tutti i pulsanti Sfoglia sono additivi: nuove selezioni si sommano sempre alle precedenti.
   fileInputs.forEach(input => input.setAttribute('multiple', ''));
 
   const fileStore = new Map();
@@ -164,8 +163,6 @@
 
   fileInputs.forEach(input => {
     let beforePicker = [];
-
-    // Salva esplicitamente lo stato prima che il browser apra il selettore file.
     const snapshot = () => {
       beforePicker = [...(fileStore.get(input) || [])];
     };
@@ -272,11 +269,11 @@
       if (cloudInput) cloudInput.required = false;
     } catch (error) {
       console.error(error);
-      setNotice('Non è stato possibile completare l’invio automatico. I dati inseriti sono ancora nel modulo: puoi riprovare oppure contattarmi via email o WhatsApp/Telegram.', 'error');
+      setNotice('Non è stato possibile completare l’invio automatico. I dati inseriti sono ancora nel modulo: puoi riprovare oppure inviare direttamente il materiale via email a andrea.giaqui@gmail.com oppure tramite WhatsApp/Telegram al +39 333 724 0544.', 'error');
       if (warning && !warning.querySelector('.submit-fallback')) {
         const fallback = document.createElement('div');
         fallback.className = 'submit-fallback';
-        fallback.innerHTML = '<a href="mailto:andrea.giaqui@gmail.com">Invia email</a><a href="https://wa.me/393337240544" target="_blank" rel="noopener">Apri WhatsApp</a>';
+        fallback.innerHTML = '<a href="mailto:andrea.giaqui@gmail.com">Invia email a andrea.giaqui@gmail.com</a><a href="https://wa.me/393337240544" target="_blank" rel="noopener">WhatsApp / Telegram: +39 333 724 0544</a>';
         warning.appendChild(fallback);
       }
     } finally {
