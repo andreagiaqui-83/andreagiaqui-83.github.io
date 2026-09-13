@@ -1,6 +1,7 @@
 (() => {
-  const submitEndpoint = 'https://formsubmit.co/ajax/andrea.giaqui@gmail.com';
-  const maxBytes = 10 * 1024 * 1024;
+  const backendBase = 'https://cad-bim-preventivi.andrea-giaqui.workers.dev';
+  const maxFileBytes = 90 * 1024 * 1024;
+  const maxTotalBytes = 500 * 1024 * 1024;
 
   document.title = 'Disegnatore AutoCAD e Revit Online | Preventivo Gratuito';
   document.querySelectorAll('a[href*="facebook.com/disegnatoreautocadonline"]').forEach(link => {
@@ -14,6 +15,10 @@
   const success = document.getElementById('grazie');
   const submitButton = form.querySelector('button[type="submit"]');
   const fileInputs = [...form.querySelectorAll('input[type="file"]')];
+
+  // Il backend è gestito dal Worker Cloudflare: impedisce qualunque fallback nativo verso FormSubmit.
+  form.removeAttribute('action');
+  form.removeAttribute('enctype');
 
   const photoInput = form.querySelector('input[name="Foto_immagini_fabbricato[]"]');
   if (photoInput) {
@@ -33,8 +38,11 @@
   }
 
   const micro = form.querySelector('.micro');
-  if (micro) micro.textContent = 'Gli allegati possono essere inviati direttamente fino a 10 MB complessivi. Oltre 10 MB puoi usare un link cloud oppure inviare il materiale via email o WhatsApp/Telegram.';
+  if (micro) {
+    micro.textContent = 'Gli allegati possono essere caricati direttamente fino a 90 MB per singolo file e 500 MB complessivi. Per materiale più grande puoi usare un link cloud oppure inviarlo via email o WhatsApp/Telegram.';
+  }
 
+  // Ogni pulsante Sfoglia è additivo: nuove selezioni si sommano sempre alle precedenti.
   fileInputs.forEach(input => input.setAttribute('multiple', ''));
 
   const fileStore = new Map();
@@ -48,21 +56,34 @@
   };
 
   const syncNativeInput = input => {
-    const dt = new DataTransfer();
-    (fileStore.get(input) || []).forEach(file => dt.items.add(file));
-    input.files = dt.files;
+    try {
+      const dt = new DataTransfer();
+      (fileStore.get(input) || []).forEach(file => dt.items.add(file));
+      input.files = dt.files;
+    } catch (_) {
+      // Lo store JavaScript resta comunque la fonte autorevole dei file selezionati.
+    }
   };
 
-  const fileTotal = () => [...fileStore.values()].flat().reduce((sum, file) => sum + file.size, 0);
-  const selectedFileNames = () => [...fileStore.entries()].flatMap(([input, files]) =>
-    files.map(file => `${input.name}: ${file.name} (${formatBytes(file.size)})`)
+  const allFiles = () => [...fileStore.entries()].flatMap(([input, files]) =>
+    files.map(file => ({ input, file }))
   );
+  const fileTotal = () => allFiles().reduce((sum, item) => sum + item.file.size, 0);
+  const hasOversizeFile = () => allFiles().some(item => item.file.size > maxFileBytes);
 
   const setNotice = (message = '', type = 'warning') => {
     if (!warning) return;
     warning.hidden = !message;
     warning.className = message ? `notice notice-${type}` : 'notice';
     warning.textContent = message;
+  };
+
+  const addFallbackContacts = () => {
+    if (!warning || warning.querySelector('.submit-fallback')) return;
+    const fallback = document.createElement('div');
+    fallback.className = 'submit-fallback';
+    fallback.innerHTML = '<a href="mailto:andrea.giaqui@gmail.com">Invia email a andrea.giaqui@gmail.com</a><a href="https://wa.me/393337240544" target="_blank" rel="noopener">WhatsApp / Telegram: +39 333 724 0544</a>';
+    warning.appendChild(fallback);
   };
 
   let cloudBox = null;
@@ -72,7 +93,7 @@
     cloudBox.className = 'cloud-upload-box';
     cloudBox.hidden = true;
     cloudBox.innerHTML = `
-      <div class="cloud-upload-head"><strong>Materiale superiore a 10 MB</strong><span>Carica tutti i file su un servizio cloud e incolla qui sotto il link condiviso.</span></div>
+      <div class="cloud-upload-head"><strong>Materiale oltre i limiti di caricamento diretto</strong><span>Carica tutti i file su un servizio cloud e incolla qui sotto il link condiviso.</span></div>
       <div class="cloud-services" aria-label="Servizi cloud suggeriti">
         <a href="https://drive.google.com/" target="_blank" rel="noopener">Google Drive</a>
         <a href="https://www.dropbox.com/" target="_blank" rel="noopener">Dropbox</a>
@@ -85,13 +106,22 @@
     cloudInput = cloudBox.querySelector('input[name="Link_cloud_materiale_completo"]');
   }
 
+  const directUploadAllowed = () => !hasOversizeFile() && fileTotal() <= maxTotalBytes;
+
   const updateCloudFallback = () => {
     const total = fileTotal();
-    const overLimit = total > maxBytes;
-    if (cloudBox) cloudBox.hidden = !overLimit;
-    if (cloudInput) cloudInput.required = overLimit;
-    if (overLimit) {
-      setNotice(`Gli allegati selezionati pesano ${formatBytes(total)}. Caricali su un cloud e incolla il link condiviso, oppure inviali a andrea.giaqui@gmail.com / WhatsApp-Telegram +39 333 724 0544.`, 'info');
+    const oversize = hasOversizeFile();
+    const overTotal = total > maxTotalBytes;
+    const needsCloud = oversize || overTotal;
+
+    if (cloudBox) cloudBox.hidden = !needsCloud;
+    if (cloudInput) cloudInput.required = needsCloud;
+
+    if (needsCloud) {
+      const reason = oversize
+        ? 'Almeno un file supera 90 MB'
+        : `Gli allegati selezionati pesano ${formatBytes(total)} e superano 500 MB complessivi`;
+      setNotice(`${reason}. Carica il materiale su un cloud e incolla il link condiviso, oppure invialo a andrea.giaqui@gmail.com / WhatsApp-Telegram +39 333 724 0544.`, 'info');
     } else {
       if (cloudInput) {
         cloudInput.required = false;
@@ -99,6 +129,7 @@
       }
       setNotice();
     }
+    return !needsCloud || Boolean(cloudInput?.value.trim());
   };
 
   const ensureSelectedContainer = input => {
@@ -116,6 +147,7 @@
     const selected = ensureSelectedContainer(input);
     const files = fileStore.get(input) || [];
     selected.innerHTML = '';
+
     files.forEach((file, index) => {
       const chip = document.createElement('div');
       chip.className = 'selected-file';
@@ -163,10 +195,12 @@
 
   fileInputs.forEach(input => {
     let beforePicker = [];
+
     const snapshot = () => {
       beforePicker = [...(fileStore.get(input) || [])];
     };
     input.addEventListener('pointerdown', snapshot);
+    input.addEventListener('click', snapshot);
     input.addEventListener('keydown', event => {
       if (event.key === 'Enter' || event.key === ' ') snapshot();
     });
@@ -176,6 +210,7 @@
       const base = beforePicker.length ? beforePicker : [...(fileStore.get(input) || [])];
       const merged = [...base];
       const keys = new Set(base.map(fileKey));
+
       incoming.forEach(file => {
         const key = fileKey(file);
         if (!keys.has(key)) {
@@ -183,6 +218,7 @@
           keys.add(key);
         }
       });
+
       fileStore.set(input, merged);
       syncNativeInput(input);
       renderFiles(input);
@@ -198,8 +234,8 @@
   });
 
   cloudInput?.addEventListener('input', () => {
-    if (fileTotal() > maxBytes && cloudInput.value.trim()) {
-      setNotice('Link cloud inserito. La richiesta verrà inviata senza allegare direttamente i file superiori al limite.', 'info');
+    if (!directUploadAllowed() && cloudInput.value.trim()) {
+      setNotice('Link cloud inserito. La richiesta verrà inviata senza caricare direttamente i file che superano i limiti.', 'info');
     }
   });
 
@@ -215,7 +251,7 @@
 
     const revitPointCloudDetails = [...faqWrap.querySelectorAll('details')].find(details => {
       const text = details.querySelector('summary')?.textContent.trim() || '';
-      return text === 'Posso richiedere un modello Revit da LAS, LAZ o E57?' || text.includes('modello Revit') && (text.includes('LAS') || text.includes('nuvola'));
+      return text === 'Posso richiedere un modello Revit da LAS, LAZ o E57?' || (text.includes('modello Revit') && (text.includes('LAS') || text.includes('nuvola')));
     });
     if (revitPointCloudDetails) {
       const answer = revitPointCloudDetails.querySelector('p');
@@ -235,6 +271,10 @@
         if (revitQ?.acceptedAnswer) {
           revitQ.acceptedAnswer.text = 'Sì. La nuvola di punti può essere fornita tramite link cloud nei formati disponibili, ad esempio LAS, LAZ, E57, RCP o RCS. Per una ricostruzione più accurata è preferibile inviare anche foto dei prospetti dell’edificio o del fabbricato, eventuali planimetrie disponibili, l’indirizzo fisico preciso e qualsiasi altro materiale utile a interpretare meglio la nuvola di punti e gli elementi architettonici.';
         }
+        const limitQ = data.mainEntity.find(item => item.name === 'Qual è il limite di caricamento dei file?');
+        if (limitQ?.acceptedAnswer) {
+          limitQ.acceptedAnswer.text = 'Gli allegati possono essere caricati direttamente fino a 90 MB per singolo file e 500 MB complessivi. Per materiale più grande è possibile usare un link cloud Google Drive, Dropbox, OneDrive, WeTransfer o altro servizio, oppure inviarlo via email a andrea.giaqui@gmail.com o via WhatsApp/Telegram al +39 333 724 0544.';
+        }
         node.textContent = JSON.stringify(data);
       }
     } catch (_) {}
@@ -243,55 +283,113 @@
   if (faqWrap && !document.getElementById('faq-upload-limit')) {
     const details = document.createElement('details');
     details.id = 'faq-upload-limit';
-    details.innerHTML = `<summary>Qual è il limite di caricamento dei file?</summary><p>Gli allegati inviati direttamente dal modulo possono arrivare fino a <strong>10 MB complessivi</strong>. Se il materiale supera questo limite, puoi caricarlo su Google Drive, Dropbox, OneDrive, WeTransfer o un altro servizio cloud e inserire nel modulo il link condiviso. In alternativa puoi inviarmi tutto direttamente via email a <a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a> oppure tramite WhatsApp/Telegram al <a href="tel:+393337240544">+39 333 724 0544</a>.</p>`;
+    details.innerHTML = `<summary>Qual è il limite di caricamento dei file?</summary><p>Gli allegati possono essere caricati direttamente fino a <strong>90 MB per singolo file</strong> e <strong>500 MB complessivi</strong>. Se il materiale supera uno di questi limiti, puoi caricarlo su Google Drive, Dropbox, OneDrive, WeTransfer o un altro servizio cloud e inserire nel modulo il link condiviso. In alternativa puoi inviarmi tutto direttamente via email a <a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a> oppure tramite WhatsApp/Telegram al <a href="tel:+393337240544">+39 333 724 0544</a>.</p>`;
     faqWrap.appendChild(details);
+  } else if (faqWrap) {
+    const limitDetails = document.getElementById('faq-upload-limit');
+    const p = limitDetails?.querySelector('p');
+    if (p) p.innerHTML = 'Gli allegati possono essere caricati direttamente fino a <strong>90 MB per singolo file</strong> e <strong>500 MB complessivi</strong>. Se il materiale supera uno di questi limiti, puoi caricarlo su Google Drive, Dropbox, OneDrive, WeTransfer o un altro servizio cloud e inserire nel modulo il link condiviso. In alternativa puoi inviarmi tutto direttamente via email a <a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a> oppure tramite WhatsApp/Telegram al <a href="tel:+393337240544">+39 333 724 0544</a>.';
   }
+
+  const collectFields = () => {
+    const fields = {};
+    const data = new FormData(form);
+    for (const [key, value] of data.entries()) {
+      if (value instanceof File || key.startsWith('_')) continue;
+      if (fields[key] === undefined) {
+        fields[key] = value;
+      } else if (Array.isArray(fields[key])) {
+        fields[key].push(value);
+      } else {
+        fields[key] = [fields[key], value];
+      }
+    }
+    return fields;
+  };
+
+  const apiJson = async (path, options = {}) => {
+    const response = await fetch(`${backendBase}${path}`, options);
+    let payload = {};
+    try { payload = await response.json(); } catch (_) {}
+    if (!response.ok || payload.ok === false) {
+      throw new Error(payload.error || `Errore ${response.status}`);
+    }
+    return payload;
+  };
+
+  const uploadFiles = async (sessionId, token) => {
+    const items = allFiles();
+    for (let i = 0; i < items.length; i += 1) {
+      const { input, file } = items[i];
+      if (submitButton) submitButton.innerHTML = `CARICAMENTO ALLEGATI ${i + 1}/${items.length}…`;
+      setNotice(`Caricamento ${i + 1} di ${items.length}: ${file.name}`, 'info');
+      await apiJson(`/api/upload/${encodeURIComponent(sessionId)}`, {
+        method: 'PUT',
+        headers: {
+          'X-Session-Token': token,
+          'X-File-Name': encodeURIComponent(file.name),
+          'X-Field-Name': input.name,
+          'X-File-Size': String(file.size),
+          'Content-Type': file.type || 'application/octet-stream'
+        },
+        body: file
+      });
+    }
+  };
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
 
     const outputs = [...form.querySelectorAll('input[name="Output[]"]')];
-    if (!outputs.some(i => i.checked)) {
+    if (!outputs.some(input => input.checked)) {
       setNotice('Seleziona almeno un risultato finale che desideri ricevere.', 'warning');
       outputs[0]?.focus();
       return;
     }
 
-    const total = fileTotal();
-    const overLimit = total > maxBytes;
-    if (overLimit && !cloudInput?.value.trim()) {
+    const needsCloud = !directUploadAllowed();
+    if (needsCloud && !cloudInput?.value.trim()) {
       updateCloudFallback();
       cloudInput?.focus();
-      setNotice('Gli allegati superano 10 MB. Inserisci un link cloud al materiale prima di inviare la richiesta.', 'warning');
+      setNotice('Il materiale supera i limiti di caricamento diretto. Inserisci un link cloud al materiale prima di inviare la richiesta.', 'warning');
       return;
     }
+
     if (!form.reportValidity()) return;
 
     const originalLabel = submitButton?.innerHTML;
     if (submitButton) {
       submitButton.disabled = true;
-      submitButton.innerHTML = 'INVIO IN CORSO…';
+      submitButton.innerHTML = 'PREPARAZIONE INVIO…';
     }
-    setNotice('Invio della richiesta in corso…', 'info');
+    setNotice('Preparazione della richiesta…', 'info');
 
     try {
-      const data = new FormData(form);
-      data.set('_subject', 'Nuova richiesta preventivo AutoCAD / Revit dal sito');
-      data.set('_template', 'table');
-      data.set('_captcha', 'true');
-      data.set('_url', location.href.split('?')[0]);
-
-      if (overLimit) {
-        fileInputs.forEach(input => data.delete(input.name));
-        data.set('Allegati_non_inviati_direttamente', selectedFileNames().join(' | '));
-        data.set('Dimensione_totale_allegati', formatBytes(total));
-        data.set('Modalita_materiale', 'Materiale completo tramite link cloud');
+      const fields = collectFields();
+      if (needsCloud) {
+        fields.Allegati_non_caricati_direttamente = allFiles().map(({ input, file }) => `${input.name}: ${file.name} (${formatBytes(file.size)})`);
+        fields.Dimensione_totale_allegati = formatBytes(fileTotal());
+        fields.Modalita_materiale = 'Materiale completo tramite link cloud';
       }
 
-      const response = await fetch(submitEndpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
-      let payload = {};
-      try { payload = await response.json(); } catch (_) {}
-      if (!response.ok || payload.success === false) throw new Error(payload.message || `Errore ${response.status}`);
+      const session = await apiJson('/api/session', { method: 'POST' });
+
+      if (!needsCloud && allFiles().length) {
+        await uploadFiles(session.sessionId, session.token);
+      }
+
+      if (submitButton) submitButton.innerHTML = 'INVIO RICHIESTA…';
+      setNotice('Invio della richiesta in corso…', 'info');
+
+      await apiJson('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: session.sessionId,
+          token: session.token,
+          fields
+        })
+      });
 
       setNotice();
       if (success) {
@@ -299,19 +397,18 @@
         success.innerHTML = '<h3>Richiesta inviata correttamente ✓</h3><p>Grazie. Ho ricevuto la tua richiesta di preventivo. Esaminerò personalmente il materiale e ti ricontatterò appena possibile. Non è necessario compilare nuovamente il modulo.</p>';
         success.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
+
       form.reset();
       fileInputs.forEach(input => input._clearStoredFiles?.());
       if (cloudBox) cloudBox.hidden = true;
-      if (cloudInput) cloudInput.required = false;
+      if (cloudInput) {
+        cloudInput.required = false;
+        cloudInput.value = '';
+      }
     } catch (error) {
       console.error(error);
-      setNotice('Non è stato possibile completare l’invio automatico. I dati inseriti sono ancora nel modulo: puoi riprovare oppure inviare direttamente il materiale via email a andrea.giaqui@gmail.com oppure tramite WhatsApp/Telegram al +39 333 724 0544.', 'error');
-      if (warning && !warning.querySelector('.submit-fallback')) {
-        const fallback = document.createElement('div');
-        fallback.className = 'submit-fallback';
-        fallback.innerHTML = '<a href="mailto:andrea.giaqui@gmail.com">Invia email a andrea.giaqui@gmail.com</a><a href="https://wa.me/393337240544" target="_blank" rel="noopener">WhatsApp / Telegram: +39 333 724 0544</a>';
-        warning.appendChild(fallback);
-      }
+      setNotice(`Non è stato possibile completare l’invio automatico (${error.message || 'errore di connessione'}). I dati inseriti sono ancora nel modulo: puoi riprovare oppure inviare direttamente il materiale via email a andrea.giaqui@gmail.com oppure tramite WhatsApp/Telegram al +39 333 724 0544.`, 'error');
+      addFallbackContacts();
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
