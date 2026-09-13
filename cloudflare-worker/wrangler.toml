@@ -4,7 +4,7 @@ compatibility_date = "2026-09-13"
 workers_dev = true
 
 [vars]
-ALLOWED_ORIGIN = "https://andreagiaqui-83.github.io"
+ALLOWED_ORIGIN = "https://andreagiaquinto.it"
 EMAIL_TO = "andrea.giaqui@gmail.com"
 EMAIL_FROM = "Preventivi CAD BIM <onboarding@resend.dev>"
 SEND_CUSTOMER_COPY = "false"
