@@ -1,0 +1,261 @@
+name: Add live reviews carousel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/add-live-reviews.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Update landing, frontend and Worker
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          # --- index.html ---
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old_heading = '<div class="section-heading"><p class="eyebrow">RECENSIONI E COMMENTI</p><h2>Cosa dicono i clienti</h2><p>In questa sezione vengono raccolti brevi commenti e recensioni reali dei clienti sui lavori AutoCAD, Revit/BIM e di disegno tecnico svolti.</p></div>'
+          new_heading = '<div class="section-heading"><p class="eyebrow">RECENSIONI E COMMENTI</p><h2>Cosa dicono i clienti</h2><p>Commenti reali dei clienti sui lavori AutoCAD, Revit/BIM e di disegno tecnico. Le recensioni scorrono automaticamente e puoi pubblicare anche la tua.</p></div>'
+          s = s.replace(old_heading, new_heading)
+          s = s.replace('<div class="reviews-grid" aria-live="polite">', '<div class="reviews-carousel" id="reviewsCarousel" tabindex="0" aria-label="Recensioni clienti"><div class="reviews-grid" id="reviewsGrid" aria-live="polite">', 1)
+          # close carousel after six review articles if not already present
+          marker = '<article class="review-card"><div class="review-mark" aria-hidden="true">“</div><p>Ricostruzione oggetto 3D in AutoCAD ottimo. Rapido ed economico. Super consigliato!</p><span>Massimo V. · AutoCAD 3D</span></article>\n          </div>'
+          repl = '<article class="review-card"><div class="review-mark" aria-hidden="true">“</div><p>Ricostruzione oggetto 3D in AutoCAD ottimo. Rapido ed economico. Super consigliato!</p><span>Massimo V. · AutoCAD 3D</span></article>\n          </div></div>'
+          s = s.replace(marker, repl)
+          if 'id="reviewForm"' not in s:
+            insert_after = '</div></div></section>'
+            idx = s.find(insert_after, s.find('id="recensioni"'))
+            if idx != -1:
+              idx += len(insert_after)
+              form = '''<section class="review-submit-section"><div class="wrap"><div class="review-submit-card"><div><p class="eyebrow">LA TUA ESPERIENZA</p><h3>Lascia una recensione</h3><p>Inserisci nome e cognome: sul sito verranno mostrati soltanto il nome e l’iniziale del cognome, ad esempio <strong>Mario R.</strong></p></div><form id="reviewForm" class="review-form"><input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true"><div class="grid-2"><label>Nome e cognome<input type="text" name="name" maxlength="80" required autocomplete="name" placeholder="Mario Rossi"></label><label>Tipo di lavoro <span class="optional">facoltativo</span><input type="text" name="service" maxlength="80" placeholder="AutoCAD 2D, Revit/BIM, disegno meccanico..."></label></div><label>Recensione<textarea name="text" rows="4" minlength="8" maxlength="600" required placeholder="Racconta brevemente la tua esperienza..."></textarea></label><label class="review-consent"><input type="checkbox" name="consent" required><span>Autorizzo la pubblicazione della recensione con il mio nome e la sola iniziale del cognome.</span></label><button class="button primary" type="submit">Pubblica recensione</button><p id="reviewStatus" class="review-status" role="status" aria-live="polite"></p></form></div></div></section>'''
+              s = s[:idx] + form + s[idx:]
+          p.write_text(s, encoding='utf-8')
+
+          # --- enhancements.css ---
+          p = Path('enhancements.css')
+          css = p.read_text(encoding='utf-8')
+          add = r'''
+/* Carousel recensioni e invio recensione */
+.reviews-carousel{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;cursor:grab;padding:4px 0 10px;scroll-behavior:smooth}
+.reviews-carousel::-webkit-scrollbar{display:none}
+.reviews-carousel:active{cursor:grabbing}
+.reviews-carousel .reviews-grid{display:flex;gap:18px;width:max-content;margin-top:26px}
+.reviews-carousel .review-card{flex:0 0 min(360px,82vw);width:min(360px,82vw);min-height:190px}
+.review-submit-section{padding:0 0 70px;background:linear-gradient(180deg,#eef6fc 0%,#fff 100%)}
+.review-submit-card{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(320px,1.2fr);gap:34px;padding:28px;border:1px solid #d7e2ec;border-radius:18px;background:#fff;box-shadow:0 12px 32px rgba(11,58,91,.07)}
+.review-submit-card h3{margin:5px 0 8px;font-size:27px;color:#0b2a46}
+.review-submit-card p{color:#587086;line-height:1.55}
+.review-form{display:grid;gap:15px}
+.review-form label{display:grid;gap:7px;font-weight:800;color:#17344e}
+.review-form input[type="text"],.review-form textarea{width:100%;box-sizing:border-box}
+.review-consent{grid-template-columns:auto 1fr!important;align-items:start;gap:10px!important;font-weight:500!important;font-size:14px;line-height:1.45}
+.review-consent input{margin-top:3px}
+.review-status{min-height:1.3em;margin:0!important;font-size:14px;font-weight:700}
+.review-status.is-success{color:#17653b}.review-status.is-error{color:#a52929}
+@media(max-width:850px){.review-submit-card{grid-template-columns:1fr}.reviews-carousel .review-card{flex-basis:min(340px,86vw);width:min(340px,86vw)}}
+@media(max-width:576px){.review-submit-card{padding:20px 16px;border-radius:14px}.review-submit-card h3{font-size:23px}.review-submit-section{padding-bottom:45px}}
+@media(prefers-reduced-motion:reduce){.reviews-carousel{scroll-behavior:auto}}
+'''
+          if '/* Carousel recensioni e invio recensione */' not in css:
+            css += add
+          p.write_text(css, encoding='utf-8')
+
+          # --- script.js ---
+          p = Path('script.js')
+          js = p.read_text(encoding='utf-8')
+          addon = r'''
+
+  // Recensioni: caricamento dinamico, pubblicazione e scorrimento orizzontale automatico.
+  const reviewsCarousel = document.getElementById('reviewsCarousel');
+  const reviewsGrid = document.getElementById('reviewsGrid');
+  const reviewForm = document.getElementById('reviewForm');
+  const reviewStatus = document.getElementById('reviewStatus');
+
+  const createReviewCard = review => {
+    const article = document.createElement('article');
+    article.className = 'review-card';
+    const mark = document.createElement('div');
+    mark.className = 'review-mark';
+    mark.setAttribute('aria-hidden', 'true');
+    mark.textContent = '“';
+    const text = document.createElement('p');
+    text.textContent = review.text || '';
+    const meta = document.createElement('span');
+    meta.textContent = [review.displayName || 'Cliente', review.service || 'Recensione cliente'].filter(Boolean).join(' · ');
+    article.append(mark, text, meta);
+    return article;
+  };
+
+  const loadLiveReviews = async () => {
+    if (!reviewsGrid) return;
+    try {
+      const response = await fetch(`${backendBase}/api/reviews`, { method: 'GET' });
+      if (!response.ok) return;
+      const data = await response.json();
+      (data.reviews || []).reverse().forEach(review => reviewsGrid.appendChild(createReviewCard(review)));
+    } catch (_) {}
+  };
+
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const button = reviewForm.querySelector('button[type="submit"]');
+      const fd = new FormData(reviewForm);
+      const payload = {
+        name: String(fd.get('name') || '').trim(),
+        service: String(fd.get('service') || '').trim(),
+        text: String(fd.get('text') || '').trim(),
+        website: String(fd.get('website') || '').trim(),
+      };
+      if (reviewStatus) { reviewStatus.textContent = 'Pubblicazione in corso…'; reviewStatus.className = 'review-status'; }
+      if (button) button.disabled = true;
+      try {
+        const response = await fetch(`${backendBase}/api/reviews`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.ok) throw new Error(data.error || 'Invio non riuscito.');
+        reviewsGrid?.prepend(createReviewCard(data.review));
+        reviewForm.reset();
+        if (reviewStatus) { reviewStatus.textContent = `Grazie! La recensione è stata pubblicata come ${data.review.displayName}.`; reviewStatus.className = 'review-status is-success'; }
+      } catch (error) {
+        if (reviewStatus) { reviewStatus.textContent = error.message || 'Non è stato possibile pubblicare la recensione.'; reviewStatus.className = 'review-status is-error'; }
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  }
+
+  let reviewAutoTimer = null;
+  const startReviewAutoScroll = () => {
+    if (!reviewsCarousel || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    stopReviewAutoScroll();
+    reviewAutoTimer = window.setInterval(() => {
+      const max = reviewsCarousel.scrollWidth - reviewsCarousel.clientWidth;
+      if (max <= 4) return;
+      if (reviewsCarousel.scrollLeft >= max - 2) reviewsCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+      else reviewsCarousel.scrollBy({ left: 1, behavior: 'auto' });
+    }, 28);
+  };
+  const stopReviewAutoScroll = () => { if (reviewAutoTimer) { clearInterval(reviewAutoTimer); reviewAutoTimer = null; } };
+  if (reviewsCarousel) {
+    reviewsCarousel.addEventListener('mouseenter', stopReviewAutoScroll);
+    reviewsCarousel.addEventListener('mouseleave', startReviewAutoScroll);
+    reviewsCarousel.addEventListener('touchstart', stopReviewAutoScroll, { passive: true });
+    reviewsCarousel.addEventListener('touchend', () => setTimeout(startReviewAutoScroll, 1400), { passive: true });
+    reviewsCarousel.addEventListener('focusin', stopReviewAutoScroll);
+    reviewsCarousel.addEventListener('focusout', startReviewAutoScroll);
+  }
+  loadLiveReviews().finally(startReviewAutoScroll);
+'''
+          # insert before final IIFE close
+          if '// Recensioni: caricamento dinamico' not in js:
+            pos = js.rfind('})();')
+            if pos == -1:
+              raise SystemExit('script.js IIFE terminator not found')
+            js = js[:pos] + addon + '\n' + js[pos:]
+          p.write_text(js, encoding='utf-8')
+
+          # --- Cloudflare Worker ---
+          p = Path('cloudflare-worker/src/index.js')
+          w = p.read_text(encoding='utf-8')
+          functions = r'''
+
+function publicReviewName(fullName = '') {
+  const parts = String(fullName).trim().replace(/\s+/g, ' ').split(' ').filter(Boolean);
+  if (parts.length < 2) return '';
+  const first = parts[0].slice(0, 40);
+  const initial = parts[parts.length - 1].charAt(0).toUpperCase();
+  return `${first} ${initial}.`;
+}
+
+function cleanReviewText(value = '', max = 600) {
+  return String(value).replace(/[\u0000-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+async function reviewRateLimited(request, env) {
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const hour = new Date().toISOString().slice(0, 13);
+  const hash = await hmac(env.SIGNING_SECRET, `review-rate|${ip}`);
+  const prefix = `review-rate/${hash}/${hour}/`;
+  const list = await env.QUOTE_FILES.list({ prefix, limit: 4 });
+  if ((list.objects || []).length >= 3) return true;
+  await env.QUOTE_FILES.put(`${prefix}${crypto.randomUUID()}`, '1', { customMetadata: { createdAt: new Date().toISOString() } });
+  return false;
+}
+
+async function listReviews(_request, env, origin) {
+  const listed = await env.QUOTE_FILES.list({ prefix: 'reviews/', limit: 100 });
+  const keys = (listed.objects || []).map(o => o.key).sort().slice(-50);
+  const reviews = [];
+  for (const key of keys) {
+    const obj = await env.QUOTE_FILES.get(key);
+    if (!obj) continue;
+    const review = await obj.json().catch(() => null);
+    if (review?.displayName && review?.text) reviews.push(review);
+  }
+  reviews.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  return json({ ok: true, reviews }, 200, origin, env);
+}
+
+async function submitReview(request, env, origin) {
+  const body = await request.json().catch(() => null);
+  if (!body) return json({ ok: false, error: 'Recensione non valida.' }, 400, origin, env);
+  if (String(body.website || '').trim()) return json({ ok: true, review: null }, 200, origin, env);
+  const displayName = publicReviewName(body.name);
+  const text = cleanReviewText(body.text, 600);
+  const service = cleanReviewText(body.service, 80);
+  if (!displayName) return json({ ok: false, error: 'Inserisci nome e cognome.' }, 400, origin, env);
+  if (text.length < 8) return json({ ok: false, error: 'Scrivi una recensione un po’ più completa.' }, 400, origin, env);
+  if ((text.match(/https?:\/\//gi) || []).length > 0) return json({ ok: false, error: 'Non inserire link nella recensione.' }, 400, origin, env);
+  if (await reviewRateLimited(request, env)) return json({ ok: false, error: 'Hai inviato troppe recensioni in poco tempo. Riprova più tardi.' }, 429, origin, env);
+
+  const review = { id: crypto.randomUUID(), displayName, service, text, createdAt: new Date().toISOString() };
+  const key = `reviews/${review.createdAt.replace(/[:.]/g, '-')}-${review.id}.json`;
+  await env.QUOTE_FILES.put(key, JSON.stringify(review), { httpMetadata: { contentType: 'application/json' } });
+
+  if (env.RESEND_API_KEY && env.EMAIL_TO) {
+    const ownerHtml = `<div style="font-family:Arial,sans-serif;color:#172033;line-height:1.5"><h2>Nuova recensione pubblicata</h2><p><strong>${escapeHtml(displayName)}</strong>${service ? ` · ${escapeHtml(service)}` : ''}</p><p>${escapeHtml(text)}</p><p style="color:#64748b;font-size:13px">Il cognome completo non viene pubblicato né salvato nella recensione pubblica.</p></div>`;
+    try {
+      await sendEmail(env, { from: env.EMAIL_FROM || 'Preventivi CAD BIM <onboarding@resend.dev>', to: [env.EMAIL_TO], subject: `Nuova recensione da ${displayName}`, html: ownerHtml });
+    } catch (_) {}
+  }
+  return json({ ok: true, review }, 200, origin, env);
+}
+'''
+          if 'async function submitReview' not in w:
+            anchor = 'export default {'
+            if anchor not in w:
+              raise SystemExit('Worker export anchor not found')
+            w = w.replace(anchor, functions + '\n' + anchor, 1)
+          route_anchor = "if (url.pathname === '/api/submit' && request.method === 'POST') return submitQuote(request, env, origin);"
+          route_repl = route_anchor + "\n    if (url.pathname === '/api/reviews' && request.method === 'GET') return listReviews(request, env, origin);\n    if (url.pathname === '/api/reviews' && request.method === 'POST') return submitReview(request, env, origin);"
+          if "'/api/reviews'" not in w:
+            if route_anchor not in w:
+              raise SystemExit('Worker route anchor not found')
+            w = w.replace(route_anchor, route_repl, 1)
+          p.write_text(w, encoding='utf-8')
+          PY
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html enhancements.css script.js cloudflare-worker/src/index.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Add scrolling live customer reviews"
+            git push
+          fi
