@@ -1,0 +1,13 @@
+{
+  "name": "cad-bim-preventivi-worker",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "create-bucket": "wrangler r2 bucket create cad-bim-preventivi"
+  },
+  "devDependencies": {
+    "wrangler": "^4.38.0"
+  }
+}
