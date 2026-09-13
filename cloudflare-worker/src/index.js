@@ -346,6 +346,34 @@ async function cleanup(env) {
   } while (sessionCursor);
 }
 
+
+
+function publicReviewName(fullName = '') {
+  const parts = String(fullName).trim().replace(/\s+/g, ' ').split(' ').filter(Boolean);
+  if (parts.length < 2) return '';
+  const first = parts[0].slice(0, 40);
+  const initial = parts[parts.length - 1].charAt(0).toUpperCase();
+  return `${first} ${initial}.`;
+}
+function cleanReviewText(value = '', max = 600) { return String(value).replace(/\s+/g, ' ').trim().slice(0, max); }
+async function reviewRateLimited(request, env) {
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown'; const hour = new Date().toISOString().slice(0, 13); const hash = await hmac(env.SIGNING_SECRET, `review-rate|${ip}`); const prefix = `review-rate/${hash}/${hour}/`; const list = await env.QUOTE_FILES.list({prefix,limit:4});
+  if ((list.objects || []).length >= 3) return true; await env.QUOTE_FILES.put(`${prefix}${crypto.randomUUID()}`, '1'); return false;
+}
+async function listReviews(_request, env, origin) {
+  const listed = await env.QUOTE_FILES.list({prefix:'reviews/',limit:100}); const keys=(listed.objects||[]).map(o=>o.key).sort().slice(-50); const reviews=[];
+  for(const key of keys){const obj=await env.QUOTE_FILES.get(key);if(!obj)continue;const review=await obj.json().catch(()=>null);if(review?.displayName&&review?.text)reviews.push(review);}
+  reviews.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt))); return json({ok:true,reviews},200,origin,env);
+}
+async function submitReview(request, env, origin) {
+  const body=await request.json().catch(()=>null); if(!body)return json({ok:false,error:'Recensione non valida.'},400,origin,env); if(String(body.website||'').trim())return json({ok:true,review:null},200,origin,env);
+  const displayName=publicReviewName(body.name); const text=cleanReviewText(body.text,600); const service=cleanReviewText(body.service,80);
+  if(!displayName)return json({ok:false,error:'Inserisci nome e cognome.'},400,origin,env); if(text.length<8)return json({ok:false,error:'Scrivi una recensione un po’ più completa.'},400,origin,env); if(/https?:\/\//i.test(text))return json({ok:false,error:'Non inserire link nella recensione.'},400,origin,env); if(await reviewRateLimited(request,env))return json({ok:false,error:'Hai inviato troppe recensioni in poco tempo. Riprova più tardi.'},429,origin,env);
+  const review={id:crypto.randomUUID(),displayName,service,text,createdAt:new Date().toISOString()}; const key=`reviews/${review.createdAt.replace(/[:.]/g,'-')}-${review.id}.json`; await env.QUOTE_FILES.put(key,JSON.stringify(review),{httpMetadata:{contentType:'application/json'}});
+  if(env.RESEND_API_KEY&&env.EMAIL_TO){try{await sendEmail(env,{from:env.EMAIL_FROM||'Preventivi CAD BIM <onboarding@resend.dev>',to:[env.EMAIL_TO],subject:`Nuova recensione da ${displayName}`,html:`<div style="font-family:Arial,sans-serif"><h2>Nuova recensione pubblicata</h2><p><strong>${escapeHtml(displayName)}</strong>${service?` · ${escapeHtml(service)}`:''}</p><p>${escapeHtml(text)}</p></div>`});}catch(_){}}
+  return json({ok:true,review},200,origin,env);
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
@@ -359,6 +387,8 @@ export default {
     if (url.pathname.startsWith('/api/upload/') && request.method === 'PUT') return uploadFile(request, env, origin, url.pathname.split('/').pop());
     if (url.pathname.startsWith('/api/upload/') && request.method === 'DELETE') return deleteUploadedFile(request, env, origin, url.pathname.split('/').pop());
     if (url.pathname === '/api/submit' && request.method === 'POST') return submitQuote(request, env, origin);
+    if (url.pathname === '/api/reviews' && request.method === 'GET') return listReviews(request, env, origin);
+    if (url.pathname === '/api/reviews' && request.method === 'POST') return submitReview(request, env, origin);
     if (url.pathname === '/api/download' && request.method === 'GET') return downloadFile(request, env);
     return json({ ok: false, error: 'Endpoint non trovato.' }, 404, origin, env);
   },

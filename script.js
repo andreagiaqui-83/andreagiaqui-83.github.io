@@ -428,4 +428,33 @@
 
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
+
+
+  const reviewsCarousel = document.getElementById('reviewsCarousel');
+  const reviewsGrid = document.getElementById('reviewsGrid');
+  const reviewForm = document.getElementById('reviewForm');
+  const reviewStatus = document.getElementById('reviewStatus');
+  const createReviewCard = review => {
+    const article = document.createElement('article'); article.className = 'review-card';
+    const mark = document.createElement('div'); mark.className = 'review-mark'; mark.setAttribute('aria-hidden','true'); mark.textContent = '“';
+    const text = document.createElement('p'); text.textContent = review.text || '';
+    const meta = document.createElement('span'); meta.textContent = [review.displayName || 'Cliente', review.service || 'Recensione cliente'].filter(Boolean).join(' · ');
+    article.append(mark,text,meta); return article;
+  };
+  const loadLiveReviews = async () => {
+    if (!reviewsGrid) return;
+    try { const r = await fetch(`${backendBase}/api/reviews`); if (!r.ok) return; const d = await r.json(); (d.reviews || []).slice().reverse().forEach(x => reviewsGrid.appendChild(createReviewCard(x))); } catch (_) {}
+  };
+  if (reviewForm) reviewForm.addEventListener('submit', async event => {
+    event.preventDefault(); const button = reviewForm.querySelector('button[type="submit"]'); const fd = new FormData(reviewForm);
+    const payload = {name:String(fd.get('name')||'').trim(),service:String(fd.get('service')||'').trim(),text:String(fd.get('text')||'').trim(),website:String(fd.get('website')||'').trim()};
+    if (reviewStatus) { reviewStatus.textContent='Pubblicazione in corso…'; reviewStatus.className='review-status'; } if (button) button.disabled=true;
+    try { const r=await fetch(`${backendBase}/api/reviews`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json().catch(()=>({})); if(!r.ok||!d.ok) throw new Error(d.error||'Invio non riuscito.'); if(d.review) reviewsGrid?.prepend(createReviewCard(d.review)); reviewForm.reset(); if(reviewStatus){reviewStatus.textContent=`Grazie! La recensione è stata pubblicata come ${d.review.displayName}.`;reviewStatus.className='review-status is-success';} }
+    catch(error){if(reviewStatus){reviewStatus.textContent=error.message||'Non è stato possibile pubblicare la recensione.';reviewStatus.className='review-status is-error';}} finally{if(button)button.disabled=false;}
+  });
+  let reviewAutoTimer=null; const stopReviewAutoScroll=()=>{if(reviewAutoTimer){clearInterval(reviewAutoTimer);reviewAutoTimer=null;}};
+  const startReviewAutoScroll=()=>{if(!reviewsCarousel||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;stopReviewAutoScroll();reviewAutoTimer=setInterval(()=>{const max=reviewsCarousel.scrollWidth-reviewsCarousel.clientWidth;if(max<=4)return;if(reviewsCarousel.scrollLeft>=max-2)reviewsCarousel.scrollTo({left:0,behavior:'smooth'});else reviewsCarousel.scrollBy({left:1,behavior:'auto'});},28);};
+  if(reviewsCarousel){reviewsCarousel.addEventListener('mouseenter',stopReviewAutoScroll);reviewsCarousel.addEventListener('mouseleave',startReviewAutoScroll);reviewsCarousel.addEventListener('touchstart',stopReviewAutoScroll,{passive:true});reviewsCarousel.addEventListener('touchend',()=>setTimeout(startReviewAutoScroll,1400),{passive:true});reviewsCarousel.addEventListener('focusin',stopReviewAutoScroll);reviewsCarousel.addEventListener('focusout',startReviewAutoScroll);}
+  loadLiveReviews().finally(startReviewAutoScroll);
+
 })();
