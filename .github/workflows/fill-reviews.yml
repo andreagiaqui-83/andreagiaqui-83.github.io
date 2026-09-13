@@ -1,0 +1,51 @@
+name: Fill customer reviews
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fill-reviews.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Insert customer reviews
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = '<div class="reviews-grid" aria-live="polite"><article class="review-card review-empty"><div class="review-mark" aria-hidden="true">“</div><p>Le recensioni dei clienti verranno pubblicate qui in forma sintetica, utilizzando solo commenti reali e autorizzati.</p><span>Recensioni clienti</span></article></div>'
+          new = '''<div class="reviews-grid" aria-live="polite">
+          <article class="review-card"><div class="review-mark" aria-hidden="true">“</div><p>Velocissimo Andrea, tutto ok mi sono trovato bene, e ottimo prezzo! Disegni AutoCAD perfetti.</p><span>Stefano B. · Disegni AutoCAD</span></article>
+          <article class="review-card"><div class="review-mark" aria-hidden="true">“</div><p>Disegno meccanico in poche ore e a prezzo stracciato. Super efficiente.</p><span>Dario M. · Disegno meccanico</span></article>
+          <article class="review-card"><div class="review-mark" aria-hidden="true">“</div><p>Ottimo lavoro, sezioni molto precise, bel template creato. Consigliato.</p><span>Carmela M. · Sezioni e template</span></article>
+          <article class="review-card"><div class="review-mark" aria-hidden="true">“</div><p>Mi ha creato una riproduzione in CAD della mia chitarra. Buona qualità e ottimo rapporto qualità/prezzo.</p><span>Marco M. · Riproduzione CAD</span></article>
+          <article class="review-card"><div class="review-mark" aria-hidden="true">“</div><p>Piante, prospetti e planovolumetrico ottimo, ha seguito bene il mio template, tempi rapidi. Consigliatissimo!</p><span>Francesca L. · Elaborati architettonici</span></article>
+          <article class="review-card"><div class="review-mark" aria-hidden="true">“</div><p>Ricostruzione oggetto 3D in AutoCAD ottimo. Rapido ed economico. Super consigliato!</p><span>Massimo V. · AutoCAD 3D</span></article>
+          </div>'''
+          if old in s:
+              s = s.replace(old, new)
+          else:
+              raise SystemExit('Reviews placeholder not found')
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Add recent customer reviews"
+            git push
+          fi
