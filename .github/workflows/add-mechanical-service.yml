@@ -1,0 +1,99 @@
+name: Add mechanical drawing service
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/add-mechanical-service.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Update landing and form
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          s = s.replace(
+            '<title>Disegnatore AutoCAD e Revit BIM Online | Andrea Giaquinto</title>',
+            '<title>Disegnatore AutoCAD 2D/3D, Revit BIM e Disegno Meccanico | Andrea Giaquinto</title>'
+          )
+          s = s.replace(
+            'Servizi CAD e BIM online: AutoCAD 2D/3D, planimetrie DOCFA, modelli Revit/BIM da nuvole di punti, foto, PDF, piante, prospetti e sezioni. Preventivo gratuito e senza impegno.',
+            'Servizi CAD e BIM online: AutoCAD 2D/3D, disegno meccanico da schizzo o disegno esistente, planimetrie DOCFA e modelli Revit/BIM da nuvole di punti, foto, PDF e documentazione tecnica. Preventivo gratuito.'
+          )
+          s = s.replace(
+            '<meta property="og:title" content="CAD / BIM Online — Preventivo gratuito e senza impegno">',
+            '<meta property="og:title" content="AutoCAD 2D/3D, Revit BIM e Disegno Meccanico — Preventivo gratuito">'
+          )
+          s = s.replace(
+            'AutoCAD 2D/3D, DOCFA e Revit/BIM da foto, PDF, planimetrie e nuvole di punti. Invia ciò che hai e indica cosa vuoi ottenere.',
+            'AutoCAD 2D/3D, disegno meccanico, DOCFA e Revit/BIM da schizzi, foto, PDF, planimetrie, nuvole di punti e altra documentazione. Invia ciò che hai.'
+          )
+          s = s.replace(
+            '"description":"Servizi CAD e BIM online per professionisti, studi tecnici, imprese e privati: AutoCAD 2D e 3D, planimetrie DOCFA e modellazione Revit/BIM da nuvole di punti, immagini, foto e disegni tecnici.","knowsAbout":["AutoCAD 2D","AutoCAD 3D","Revit","BIM","Scan to BIM","Nuvole di punti","LAS","LAZ","E57","Planimetrie DOCFA","Vettorializzazione CAD"]',
+            '"description":"Servizi CAD e BIM online per professionisti, studi tecnici, imprese e privati: AutoCAD 2D e 3D, disegno meccanico da schizzi e documentazione esistente, planimetrie DOCFA e modellazione Revit/BIM da nuvole di punti, immagini e disegni tecnici.","knowsAbout":["AutoCAD 2D","AutoCAD 3D","Disegno meccanico","Disegno tecnico meccanico","Modellazione meccanica 3D","Revit","BIM","Scan to BIM","Nuvole di punti","LAS","LAZ","E57","Planimetrie DOCFA","Vettorializzazione CAD"]'
+          )
+          s = s.replace(
+            '<p class="eyebrow">CAD · BIM · MODELLAZIONE DA RILIEVO</p><h1>Disegni AutoCAD e modelli Revit/BIM da foto, planimetrie e nuvole di punti</h1><p class="lead">Carica ciò che hai. Dimmi cosa vuoi ottenere. Al resto penso io. Il materiale disponibile viene valutato insieme per ricostruire elaborati CAD 2D/3D, planimetrie DOCFA e modelli Revit/BIM.</p>',
+            '<p class="eyebrow">CAD · BIM · DISEGNO MECCANICO · MODELLAZIONE DA RILIEVO</p><h1>Disegni AutoCAD 2D/3D, disegno meccanico e modelli Revit/BIM</h1><p class="lead">Carica ciò che hai: schizzi, disegni, foto, planimetrie, PDF o nuvole di punti. Il materiale disponibile viene valutato per creare elaborati AutoCAD 2D/3D, disegni meccanici, planimetrie DOCFA e modelli Revit/BIM.</p>'
+          )
+          s = s.replace(
+            '<article class="card"><span>04</span><h3>Revit / BIM</h3><p>Modello 3D Revit/BIM da rilievi, nuvole di punti, immagini e documentazione tecnica.</p></article>',
+            '<article class="card"><span>04</span><h3>Revit / BIM</h3><p>Modello 3D Revit/BIM da rilievi, nuvole di punti, immagini e documentazione tecnica.</p></article><article class="card"><span>05</span><h3>Disegno meccanico</h3><p>Disegni tecnici meccanici AutoCAD 2D o modelli 3D ricostruiti da schizzi, fotografie, PDF, scansioni, quote o altri riferimenti disponibili.</p></article>'
+          )
+          s = s.replace(
+            '<label>Piante, prospetti, sezioni o altri disegni<input type="file" name="Disegni_documentazione[]" accept="image/*,.pdf,.dwg,.dxf" multiple><small>PDF, scansioni, immagini, DWG/DXF o altra documentazione tecnica disponibile.</small></label>',
+            '<label>Piante, prospetti, sezioni o altri disegni<input type="file" name="Disegni_documentazione[]" accept="image/*,.pdf,.dwg,.dxf" multiple><small>PDF, scansioni, immagini, DWG/DXF o altra documentazione tecnica disponibile.</small></label><label>Schizzi e documentazione per disegno meccanico<input type="file" name="Disegni_meccanici[]" multiple><small>Schizzi a mano, fotografie, immagini, PDF, scansioni, DWG/DXF, quote, particolari, assiemi o qualsiasi altro riferimento utile per ricostruire il disegno meccanico 2D o 3D.</small></label>'
+          )
+          s = s.replace(
+            '<p class="price-includes"><strong>Compresi nel prezzo:</strong> piante dei piani, pianta di copertura, prospetti e sezioni.</p>',
+            '<p class="price-includes"><strong>Compresi nel prezzo:</strong> piante dei piani, pianta di copertura, prospetti e sezioni.</p><p>Per i disegni meccanici il prezzo viene valutato separatamente in base a complessità, quantità di particolari, livello di dettaglio e output AutoCAD 2D o 3D richiesto.</p>'
+          )
+          s = s.replace(
+            '<p class="field-help">Puoi selezionare uno o più risultati finali.</p>',
+            '<p class="field-help">Puoi selezionare uno o più risultati finali. Per un lavoro meccanico seleziona AutoCAD 2D e/o AutoCAD 3D.</p>'
+          )
+          s = s.replace(
+            '<details><summary>Il preventivo è davvero senza impegno?</summary><p>Sì. La richiesta è gratuita e non comporta alcun obbligo. Se serve una precisazione, verrai contattato direttamente.</p></details>',
+            '<details><summary>Il preventivo è davvero senza impegno?</summary><p>Sì. La richiesta è gratuita e non comporta alcun obbligo. Se serve una precisazione, verrai contattato direttamente.</p></details><details><summary>Posso richiedere un disegno meccanico AutoCAD da uno schizzo o da un disegno esistente?</summary><p>Sì. Puoi inviare schizzi a mano, fotografie, scansioni, PDF, immagini, DWG/DXF, quote o altri riferimenti disponibili. Il materiale viene valutato per realizzare un disegno tecnico AutoCAD 2D oppure, quando richiesto, una ricostruzione o modellazione AutoCAD 3D.</p></details>'
+          )
+          s = s.replace(
+            '{"@type":"Question","name":"Il preventivo è gratuito?","acceptedAnswer":{"@type":"Answer","text":"Sì. La richiesta di preventivo è gratuita e senza impegno. Se manca qualche informazione utile, verrai ricontattato senza dover compilare nuovamente il modulo."}}]}',
+            '{"@type":"Question","name":"Il preventivo è gratuito?","acceptedAnswer":{"@type":"Answer","text":"Sì. La richiesta di preventivo è gratuita e senza impegno. Se manca qualche informazione utile, verrai ricontattato senza dover compilare nuovamente il modulo."}},{"@type":"Question","name":"Posso richiedere un disegno meccanico AutoCAD da uno schizzo o da un disegno esistente?","acceptedAnswer":{"@type":"Answer","text":"Sì. Puoi inviare schizzi a mano, fotografie, scansioni, PDF, immagini, DWG/DXF, quote o altri riferimenti disponibili. Il materiale viene valutato per realizzare un disegno tecnico AutoCAD 2D oppure una ricostruzione o modellazione AutoCAD 3D."}}]}'
+          )
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('script.js')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace(
+            "document.title = 'Disegnatore AutoCAD e Revit Online | Preventivo Gratuito';",
+            "document.title = 'Disegnatore AutoCAD 2D/3D, Revit BIM e Disegno Meccanico | Preventivo Gratuito';"
+          )
+          marker = "  const docsInput = form.querySelector('input[name=\"Disegni_documentazione[]\"]');\n"
+          insert = "  const mechanicalInput = form.querySelector('input[name=\"Disegni_meccanici[]\"]');\n  if (mechanicalInput) {\n    mechanicalInput.removeAttribute('accept');\n    const label = mechanicalInput.closest('label');\n    label?.classList.add('upload-label', 'mechanical-upload-label');\n    const help = label?.querySelector('small');\n    if (help) help.textContent = 'Schizzi a mano, fotografie, immagini, PDF, scansioni, DWG/DXF, quote, particolari, assiemi o qualsiasi altro riferimento utile, in qualsiasi formato.';\n  }\n\n"
+          if 'mechanical-upload-label' not in s and marker in s:
+            s = s.replace(marker, insert + marker)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html script.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Add mechanical drawing service and SEO"
+            git push
+          fi
