@@ -1,0 +1,17 @@
+name = "cad-bim-preventivi"
+main = "src/index.js"
+compatibility_date = "2026-09-13"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGIN = "https://andreagiaqui-83.github.io"
+EMAIL_TO = "andrea.giaqui@gmail.com"
+EMAIL_FROM = "Preventivi CAD BIM <onboarding@resend.dev>"
+SEND_CUSTOMER_COPY = "false"
+
+[[r2_buckets]]
+binding = "QUOTE_FILES"
+bucket_name = "cad-bim-preventivi"
+
+[triggers]
+crons = ["17 3 * * *"]
