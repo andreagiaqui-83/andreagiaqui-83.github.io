@@ -452,9 +452,26 @@
     try { const r=await fetch(`${backendBase}/api/reviews`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json().catch(()=>({})); if(!r.ok||!d.ok) throw new Error(d.error||'Invio non riuscito.'); if(d.review) reviewsGrid?.prepend(createReviewCard(d.review)); reviewForm.reset(); if(reviewStatus){reviewStatus.textContent=`Grazie! La recensione è stata pubblicata come ${d.review.displayName}.`;reviewStatus.className='review-status is-success';} }
     catch(error){if(reviewStatus){reviewStatus.textContent=error.message||'Non è stato possibile pubblicare la recensione.';reviewStatus.className='review-status is-error';}} finally{if(button)button.disabled=false;}
   });
-  let reviewAutoTimer=null; const stopReviewAutoScroll=()=>{if(reviewAutoTimer){clearInterval(reviewAutoTimer);reviewAutoTimer=null;}};
-  const startReviewAutoScroll=()=>{if(!reviewsCarousel||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;stopReviewAutoScroll();reviewAutoTimer=setInterval(()=>{const max=reviewsCarousel.scrollWidth-reviewsCarousel.clientWidth;if(max<=4)return;if(reviewsCarousel.scrollLeft>=max-2)reviewsCarousel.scrollTo({left:0,behavior:'smooth'});else reviewsCarousel.scrollBy({left:1,behavior:'auto'});},28);};
-  if(reviewsCarousel){reviewsCarousel.addEventListener('mouseenter',stopReviewAutoScroll);reviewsCarousel.addEventListener('mouseleave',startReviewAutoScroll);reviewsCarousel.addEventListener('touchstart',stopReviewAutoScroll,{passive:true});reviewsCarousel.addEventListener('touchend',()=>setTimeout(startReviewAutoScroll,1400),{passive:true});reviewsCarousel.addEventListener('focusin',stopReviewAutoScroll);reviewsCarousel.addEventListener('focusout',startReviewAutoScroll);}
-  loadLiveReviews().finally(startReviewAutoScroll);
+  let reviewAutoTimer=null;
+  const stopReviewAutoScroll=()=>{if(reviewAutoTimer){clearInterval(reviewAutoTimer);reviewAutoTimer=null;}};
+  const prepareInfiniteReviews=()=>{
+    if(!reviewsCarousel||!reviewsGrid||reviewsGrid.dataset.loopReady==='1')return;
+    const originals=[...reviewsGrid.children].filter(el=>!el.dataset.reviewClone);
+    if(originals.length<2)return;
+    originals.forEach(card=>{const clone=card.cloneNode(true);clone.dataset.reviewClone='1';clone.setAttribute('aria-hidden','true');clone.setAttribute('tabindex','-1');reviewsGrid.appendChild(clone);});
+    reviewsGrid.dataset.loopReady='1';
+  };
+  const normalizeReviewLoop=()=>{
+    if(!reviewsCarousel||!reviewsGrid||reviewsGrid.dataset.loopReady!=='1')return;
+    const half=reviewsGrid.scrollWidth/2;
+    if(half>0&&reviewsCarousel.scrollLeft>=half)reviewsCarousel.scrollLeft-=half;
+  };
+  const startReviewAutoScroll=()=>{
+    if(!reviewsCarousel||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    prepareInfiniteReviews(); stopReviewAutoScroll();
+    reviewAutoTimer=setInterval(()=>{normalizeReviewLoop();reviewsCarousel.scrollLeft+=1;normalizeReviewLoop();},28);
+  };
+  if(reviewsCarousel){reviewsCarousel.addEventListener('scroll',normalizeReviewLoop,{passive:true});reviewsCarousel.addEventListener('mouseenter',stopReviewAutoScroll);reviewsCarousel.addEventListener('mouseleave',startReviewAutoScroll);reviewsCarousel.addEventListener('touchstart',stopReviewAutoScroll,{passive:true});reviewsCarousel.addEventListener('touchend',()=>setTimeout(startReviewAutoScroll,1400),{passive:true});reviewsCarousel.addEventListener('focusin',stopReviewAutoScroll);reviewsCarousel.addEventListener('focusout',startReviewAutoScroll);}
+  loadLiveReviews().finally(()=>{prepareInfiniteReviews();startReviewAutoScroll();});
 
 })();
