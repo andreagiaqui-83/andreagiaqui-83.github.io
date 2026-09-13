@@ -1,0 +1,26 @@
+name: Test landing JavaScript
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'script.js'
+      - '.github/workflows/test-landing-js.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: node --check script.js
+      - name: Verify Cloudflare backend is configured
+        run: |
+          grep -q 'cad-bim-preventivi.andrea-giaqui.workers.dev' script.js
+          if grep -q 'formsubmit.co' script.js; then
+            echo 'FormSubmit reference still present in script.js'
+            exit 1
+          fi
