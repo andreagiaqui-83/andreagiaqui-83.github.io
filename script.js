@@ -3,7 +3,7 @@
   const maxFileBytes = 90 * 1024 * 1024;
   const maxTotalBytes = 500 * 1024 * 1024;
 
-  document.title = 'Disegnatore AutoCAD e Revit Online | Preventivo Gratuito';
+  document.title = 'Disegnatore AutoCAD 2D/3D, Revit BIM e Disegno Meccanico | Preventivo Gratuito';
   document.querySelectorAll('a[href*="facebook.com/disegnatoreautocadonline"]').forEach(link => {
     if (link.closest('footer')) link.textContent = 'Facebook · Disegnatore AutoCAD e Revit';
   });
@@ -26,6 +26,15 @@
     label?.classList.add('upload-label', 'photo-upload-label');
     const help = label?.querySelector('small');
     if (help) help.textContent = 'Esterni, interni, viste dall’alto, dettagli costruttivi o altre immagini utili, in qualsiasi formato immagine.';
+  }
+
+  const mechanicalInput = form.querySelector('input[name="Disegni_meccanici[]"]');
+  if (mechanicalInput) {
+    mechanicalInput.removeAttribute('accept');
+    const label = mechanicalInput.closest('label');
+    label?.classList.add('upload-label', 'mechanical-upload-label');
+    const help = label?.querySelector('small');
+    if (help) help.textContent = 'Schizzi a mano, fotografie, immagini, PDF, scansioni, DWG/DXF, quote, particolari, assiemi o qualsiasi altro riferimento utile, in qualsiasi formato.';
   }
 
   const docsInput = form.querySelector('input[name="Disegni_documentazione[]"]');
