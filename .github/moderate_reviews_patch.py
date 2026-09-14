@@ -135,12 +135,13 @@ p.write_text(s, encoding='utf-8')
 # --- Frontend: messaggio corretto, nessuna pubblicazione immediata ---
 p = Path('script.js')
 s = p.read_text(encoding='utf-8')
-old_re = re.compile(r"try \{ const r=await fetch\(`\$\{backendBase\}/api/reviews`,\{method:'POST',headers:\{'Content-Type':'application/json'\},body:JSON\.stringify\(payload\)\}\); const d=await r\.json\(\)\.catch\(\(\)=>\(\{\}\)\); if\(!r\.ok\|\|!d\.ok\) throw new Error\(d\.error\|\|'Invio non riuscito\.'\);.*?\} \n    catch\(error\)", re.S)
-replacement = "try { const r=await fetch(`${backendBase}/api/reviews`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json().catch(()=>({})); if(!r.ok||!d.ok) throw new Error(d.error||'Invio non riuscito.'); reviewForm.reset(); if(reviewStatus){reviewStatus.textContent=`Grazie ${d.displayName||''}! La recensione è stata inviata e sarà pubblicata dopo l’approvazione.`.replace(/\\s+/g,' ').trim();reviewStatus.className='review-status is-success';} }\n    catch(error)"
-s2, n = old_re.subn(lambda _: replacement, s, count=1)
-if n != 1:
-    raise SystemExit(f'review frontend submit block replacement count={n}')
-s = s2
+old = """    try { const r=await fetch(`${backendBase}/api/reviews`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json().catch(()=>({})); if(!r.ok||!d.ok) throw new Error(d.error||'Invio non riuscito.'); if(d.review) addReviewCard(d.review); reviewForm.reset(); if(reviewStatus){reviewStatus.textContent=`Grazie! La recensione è stata pubblicata come ${d.review.displayName}.`;reviewStatus.className='review-status is-success';} }
+    catch(error){if(reviewStatus){reviewStatus.textContent=error.message||'Non è stato possibile pubblicare la recensione.';reviewStatus.className='review-status is-error';}} finally{if(button)button.disabled=false;}"""
+new = """    try { const r=await fetch(`${backendBase}/api/reviews`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json().catch(()=>({})); if(!r.ok||!d.ok) throw new Error(d.error||'Invio non riuscito.'); reviewForm.reset(); if(reviewStatus){reviewStatus.textContent=`Grazie ${d.displayName||''}! La recensione è stata inviata e sarà pubblicata dopo l’approvazione.`.replace(/\\s+/g,' ').trim();reviewStatus.className='review-status is-success';} }
+    catch(error){if(reviewStatus){reviewStatus.textContent=error.message||'Non è stato possibile inviare la recensione.';reviewStatus.className='review-status is-error';}} finally{if(button)button.disabled=false;}"""
+if old not in s:
+    raise SystemExit('exact review frontend block not found')
+s = s.replace(old, new, 1)
 p.write_text(s, encoding='utf-8')
 
 # Cache bust JS.
