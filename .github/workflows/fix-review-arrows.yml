@@ -1,0 +1,108 @@
+name: Fix review carousel arrows
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-review-arrows.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch carousel markup and assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          old='<div class="reviews-carousel" id="reviewsCarousel" tabindex="0" aria-label="Recensioni clienti"><div class="reviews-grid" id="reviewsGrid" aria-live="polite">'
+          new='<div class="reviews-carousel" id="reviewsCarousel" tabindex="0" aria-label="Recensioni clienti"><button type="button" id="reviewsPrev" class="reviews-fixed-arrow reviews-fixed-prev" aria-label="Recensione precedente">&#10094;</button><button type="button" id="reviewsNext" class="reviews-fixed-arrow reviews-fixed-next" aria-label="Recensione successiva">&#10095;</button><div class="reviews-grid" id="reviewsGrid" aria-live="polite">'
+          if old in s:
+              s=s.replace(old,new,1)
+          s=s.replace('Le recensioni scorrono automaticamente e puoi pubblicare anche la tua.','Puoi sfogliare le recensioni con le frecce a destra e sinistra e pubblicare anche la tua.',1)
+          # force fresh dedicated assets
+          if 'reviews-fixed.css?v=20260914-2' not in s:
+              s=s.replace('</head>','<link rel="stylesheet" href="reviews-fixed.css?v=20260914-2"></head>',1)
+          if 'reviews-fixed.js?v=20260914-2' not in s:
+              s=s.replace('</body>','<script src="reviews-fixed.js?v=20260914-2" defer></script></body>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          cat > reviews-fixed.css <<'CSS'
+          .reviews-carousel{position:relative!important;overflow:hidden!important;padding-left:52px!important;padding-right:52px!important;touch-action:pan-y!important}
+          .reviews-carousel .reviews-grid,.reviews-carousel .reviews-grid.reviews-marquee-track{animation:none!important;transform:none;will-change:auto}
+          .reviews-fixed-arrow{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;z-index:50!important;width:44px!important;height:44px!important;border:2px solid #0b4a6f!important;border-radius:50%!important;background:#fff!important;color:#0b4a6f!important;box-shadow:0 6px 18px rgba(11,58,91,.22)!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:26px!important;font-weight:900!important;line-height:1!important;padding:0!important;cursor:pointer!important;visibility:visible!important;opacity:1!important}
+          .reviews-fixed-prev{left:4px!important}.reviews-fixed-next{right:4px!important}
+          .reviews-fixed-arrow:focus-visible{outline:3px solid #63b7e6!important;outline-offset:2px!important}
+          @media(max-width:576px){.reviews-carousel{padding-left:46px!important;padding-right:46px!important}.reviews-fixed-arrow{width:38px!important;height:38px!important;font-size:22px!important}.reviews-fixed-prev{left:3px!important}.reviews-fixed-next{right:3px!important}}
+          CSS
+          cat > reviews-fixed.js <<'JS'
+          (() => {
+            const init = () => {
+              const carousel=document.getElementById('reviewsCarousel');
+              const track=document.getElementById('reviewsGrid');
+              const prev=document.getElementById('reviewsPrev');
+              const next=document.getElementById('reviewsNext');
+              if(!carousel||!track||!prev||!next) return;
+              // remove legacy controls to avoid duplicates/conflicts
+              carousel.querySelectorAll('.review-nav,.reviews-carousel-controls').forEach(el=>el.remove());
+              track.classList.remove('reviews-marquee-track');
+              track.style.animation='none';
+              track.style.transition='none';
+              track.style.transform='translate3d(0,0,0)';
+              const flatten=()=>{
+                const group=track.querySelector('.reviews-loop-group');
+                if(group){
+                  const cards=[...group.children].filter(el=>el.classList.contains('review-card'));
+                  if(cards.length) track.replaceChildren(...cards);
+                }
+                return [...track.children].filter(el=>el.classList.contains('review-card'));
+              };
+              let busy=false;
+              const step=dir=>{
+                if(busy) return;
+                const cards=flatten();
+                if(cards.length<2) return;
+                const first=cards[0];
+                const gap=parseFloat(getComputedStyle(track).gap||'18')||18;
+                const d=first.getBoundingClientRect().width+gap;
+                busy=true;
+                if(dir>0){
+                  track.style.transition='transform 300ms ease';
+                  requestAnimationFrame(()=>track.style.transform=`translate3d(-${d}px,0,0)`);
+                  setTimeout(()=>{
+                    const now=flatten(); if(now.length>1) track.appendChild(now[0]);
+                    track.style.transition='none';track.style.transform='translate3d(0,0,0)';busy=false;
+                  },330);
+                }else{
+                  const last=cards[cards.length-1];
+                  track.insertBefore(last,cards[0]);
+                  track.style.transition='none';track.style.transform=`translate3d(-${d}px,0,0)`;
+                  void track.offsetWidth;
+                  track.style.transition='transform 300ms ease';
+                  requestAnimationFrame(()=>track.style.transform='translate3d(0,0,0)');
+                  setTimeout(()=>{track.style.transition='none';busy=false;},330);
+                }
+              };
+              prev.onclick=()=>step(-1);
+              next.onclick=()=>step(1);
+              const update=()=>{const disabled=flatten().length<2;prev.hidden=disabled;next.hidden=disabled;};
+              update();
+              new MutationObserver(()=>{if(!busy) update();}).observe(track,{childList:true,subtree:true});
+            };
+            if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+          })();
+          JS
+      - name: Validate dedicated JavaScript
+        run: node --check reviews-fixed.js
+      - name: Commit changes
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html reviews-fixed.css reviews-fixed.js
+          git commit -m "Fix visible cyclic review arrows" || exit 0
+          git push
