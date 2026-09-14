@@ -1,0 +1,35 @@
+name: Make review arrows static and visible
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/static-review-arrows.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Move review arrows outside carousel in static HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          old='<div class="reviews-carousel" id="reviewsCarousel" tabindex="0" aria-label="Recensioni clienti"><button type="button" id="reviewsPrev" class="reviews-fixed-arrow reviews-fixed-prev" aria-label="Recensione precedente">&#10094;</button><button type="button" id="reviewsNext" class="reviews-fixed-arrow reviews-fixed-next" aria-label="Recensione successiva">&#10095;</button><div class="reviews-grid" id="reviewsGrid" aria-live="polite">'
+          new='<div class="reviews-external-nav" aria-label="Navigazione recensioni"><button type="button" id="reviewsPrev" class="reviews-external-arrow reviews-external-prev" aria-label="Recensione precedente">&#10094;</button><button type="button" id="reviewsNext" class="reviews-external-arrow reviews-external-next" aria-label="Recensione successiva">&#10095;</button></div><div class="reviews-carousel" id="reviewsCarousel" tabindex="0" aria-label="Recensioni clienti"><div class="reviews-grid" id="reviewsGrid" aria-live="polite">'
+          if old not in s:
+              raise SystemExit('review carousel markup not found')
+          s=s.replace(old,new,1)
+          s=s.replace('reviews-fixed.css?v=20260914-3','reviews-fixed.css?v=20260914-4')
+          s=s.replace('reviews-fixed.js?v=20260914-3','reviews-fixed.js?v=20260914-4')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html
+          git commit -m "Make both review arrows statically visible" || exit 0
+          git push
