@@ -19,6 +19,8 @@ jobs:
           dig +short AAAA andreagiaquinto.it
           echo '=== CNAME www ==='
           dig +short CNAME www.andreagiaquinto.it
+          echo '=== CAA ==='
+          dig +short CAA andreagiaquinto.it
       - name: HTTPS certificate
         run: |
           echo | openssl s_client -connect andreagiaquinto.it:443 -servername andreagiaquinto.it 2>/dev/null | openssl x509 -noout -subject -issuer -dates -ext subjectAltName || true
