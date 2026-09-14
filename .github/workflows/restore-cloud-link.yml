@@ -1,0 +1,35 @@
+name: Preserve cloud link in unified upload
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/restore-cloud-link.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore cloud link field
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          needle='<p class="field-help material-intro">Carica in un unico punto tutto il materiale utile. Puoi selezionare più file insieme oppure trascinarli direttamente nell’area di caricamento. Più riferimenti fornisci, più è semplice comprendere correttamente il lavoro.</p>'
+          insert=needle+'<label class="unified-cloud-link">Nuvola di punti o materiale molto grande — link cloud <span class="optional">facoltativo</span><input type="url" name="Nuvola_di_punti_link_cloud" placeholder="Google Drive, Dropbox, OneDrive, WeTransfer…"><small>Per nuvole di punti e raccolte molto grandi puoi inserire qui un collegamento condiviso. Formati tipici: LAS, LAZ, E57, RCP, RCS o altri formati disponibili.</small></label>'
+          if 'name="Nuvola_di_punti_link_cloud"' not in s:
+              if needle not in s: raise SystemExit('Unified material intro not found')
+              s=s.replace(needle,insert,1)
+              p.write_text(s,encoding='utf-8')
+          PY
+      - name: Verify
+        run: grep -q 'name="Nuvola_di_punti_link_cloud"' index.html
+      - name: Commit changes
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html
+          git commit -m "Keep cloud link with unified project upload" || exit 0
+          git push
