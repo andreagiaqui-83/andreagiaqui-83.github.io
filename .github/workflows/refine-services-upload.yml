@@ -1,0 +1,132 @@
+name: Refine services and unified upload
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/refine-services-upload.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Refine landing layout and uploads
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Replace only the first material-upload step with one unified upload area.
+          pattern = re.compile(r'<section class="form-step"><h3 class="step-title">1\. Materiale disponibile <span>facoltativo</span></h3>.*?</section>', re.S)
+          replacement = '''<section class="form-step unified-material-step"><h3 class="step-title">1. Materiale disponibile <span>facoltativo</span></h3><p class="field-help material-intro">Carica in un unico punto tutto il materiale utile. Puoi selezionare più file insieme oppure trascinarli direttamente nell’area di caricamento. Più riferimenti fornisci, più è semplice comprendere correttamente il lavoro.</p><div class="material-guide" aria-label="Materiale consigliato"><div class="material-guide-item"><strong>Foto / immagini esterne</strong><span>Foto o immagini di tutti i prospetti, dettagli costruttivi e, se disponibili, viste dall’alto. Più immagini esterne ci sono, meglio si comprende il fabbricato.</span></div><div class="material-guide-item"><strong>Foto / immagini interne</strong><span>Ambienti, collegamenti, scale, dettagli e viste interne in qualsiasi formato immagine. Anche qui, più materiale è disponibile, migliore sarà la comprensione degli spazi.</span></div><div class="material-guide-item"><strong>Piante, prospetti, sezioni e planovolumetrici</strong><span>Preferibilmente PDF, immagini oppure formati CAD/BIM compatibili, ad esempio DWG, DXF, DGN, RVT, RFA o RTE.</span></div><div class="material-guide-item"><strong>Disegni tecnici di qualsiasi disciplina</strong><span>File architettonici, ingegneristici, strutturali, impiantistici o meccanici; schizzi, tavole, particolari e assiemi in qualsiasi formato disponibile.</span></div><div class="material-guide-item"><strong>File di interscambio</strong><span>Ad esempio IFC, BCF, STEP/STP, IGES/IGS e altri formati utili allo scambio di geometrie o informazioni tecniche.</span></div><div class="material-guide-item"><strong>Mesh e modelli 3D</strong><span>Ad esempio PLY, OBJ, STL, FBX, GLB/GLTF e altri formati mesh o tridimensionali.</span></div></div><label class="upload-label unified-upload-label">Materiale del progetto<input type="file" name="Materiale_progetto[]" multiple><small>Accetto qualsiasi formato. Esempi: JPG, JPEG, PNG, TIFF, WEBP, HEIC, PDF, DWG, DXF, DGN, RVT, RFA, RTE, IFC, BCF, STEP/STP, IGES/IGS, PLY, OBJ, STL, FBX, GLB/GLTF, ZIP e altri file tecnici. Per nuvole di punti molto grandi (LAS, LAZ, E57, RCP, RCS) resta preferibile usare il link cloud dedicato.</small></label></section>'''
+          s, n = pattern.subn(replacement, s, count=1)
+          if n != 1:
+              raise SystemExit('Material step replacement failed')
+
+          # Static FAQ copy aligned with the new single-upload workflow.
+          s = s.replace('Foto, immagini, piante, prospetti, sezioni, PDF, scansioni e altri disegni tecnici. Per le nuvole di punti è previsto un link cloud.', 'Puoi caricare in un unico punto foto esterne e interne, piante, prospetti, sezioni, planovolumetrici, PDF, immagini, DWG/DXF/DGN, file Revit, IFC/BCF, STEP/IGES, mesh come PLY/OBJ/STL/FBX/GLB e qualsiasi altro file tecnico disponibile. Per nuvole di punti molto grandi è previsto il link cloud.', 1)
+
+          # Dedicated versioned assets.
+          if 'landing-upload-v2.css?v=20260914-1' not in s:
+              s = s.replace('</head>', '<link rel="stylesheet" href="landing-upload-v2.css?v=20260914-1"></head>', 1)
+          if 'dragdrop-upload.js?v=20260914-1' not in s:
+              s = s.replace('</body>', '<script src="dragdrop-upload.js?v=20260914-1" defer></script></body>', 1)
+          p.write_text(s, encoding='utf-8')
+
+          # Update runtime FAQ/SEO wording in the existing script without touching upload logic.
+          sp = Path('script.js')
+          js = sp.read_text(encoding='utf-8')
+          old1 = "Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e, più in generale, qualsiasi file relativo al progetto in qualsiasi formato. Per le nuvole di punti è previsto un link cloud."
+          new1 = "Puoi caricare in un unico punto foto e immagini esterne e interne, piante, prospetti, sezioni, planovolumetrici, PDF, scansioni, DWG/DXF/DGN, file Revit, file di interscambio come IFC o BCF, formati tecnici come STEP/STP e IGES/IGS, mesh e modelli 3D come PLY, OBJ, STL, FBX o GLB/GLTF e qualsiasi altro file utile al progetto. Per nuvole di punti molto grandi resta preferibile il link cloud."
+          js = js.replace(old1, new1)
+          old2 = "Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e qualsiasi altro file relativo al progetto, in qualsiasi formato. Per le nuvole di punti è previsto un link cloud."
+          new2 = "Puoi caricare in un unico punto foto e immagini esterne e interne, piante, prospetti, sezioni, planovolumetrici, PDF, scansioni, DWG/DXF/DGN, file Revit, IFC/BCF, STEP/STP, IGES/IGS, mesh e modelli 3D come PLY, OBJ, STL, FBX o GLB/GLTF e qualsiasi altro file tecnico disponibile. Per nuvole di punti molto grandi resta preferibile il link cloud."
+          js = js.replace(old2, new2)
+          sp.write_text(js, encoding='utf-8')
+          PY
+
+          cat > landing-upload-v2.css <<'CSS'
+          /* Servizi: 3 sopra + 2 centrati sotto su desktop */
+          @media (min-width: 901px){
+            #servizi .cards{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:20px!important}
+            #servizi .cards>.card{grid-column:span 2!important;min-width:0!important}
+            #servizi .cards>.card:nth-child(4){grid-column:2/span 2!important}
+            #servizi .cards>.card:nth-child(5){grid-column:4/span 2!important}
+          }
+          @media (min-width: 601px) and (max-width: 900px){#servizi .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+          @media (max-width: 600px){#servizi .cards{grid-template-columns:1fr!important}}
+
+          /* Guida materiale */
+          .material-intro{margin:0 0 18px!important;color:#526f86!important;line-height:1.55!important}
+          .material-guide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 20px}
+          .material-guide-item{padding:14px 15px;border:1px solid #d5e3ee;border-radius:12px;background:#f8fbfe;display:grid;gap:5px}
+          .material-guide-item strong{color:#0b2a46;font-size:15px}
+          .material-guide-item span{color:#5d7387;font-size:13px;line-height:1.45}
+          .unified-upload-label{margin-top:4px!important}
+          @media(max-width:700px){.material-guide{grid-template-columns:1fr}}
+
+          /* Tutti i file input diventano aree di trascinamento */
+          .file-dropzone{position:relative!important;display:grid!important;gap:8px!important;padding:16px!important;border:2px dashed #a8c7dd!important;border-radius:14px!important;background:linear-gradient(180deg,#fbfdff,#f3f9fd)!important;transition:border-color .16s ease,background .16s ease,box-shadow .16s ease!important}
+          .file-dropzone::before{content:'Trascina qui i file oppure usa “Scegli file”';display:block;font-size:13px;font-weight:800;color:#0b4a6f;letter-spacing:.01em}
+          .file-dropzone.is-dragover{border-color:#128bc5!important;background:#eaf7ff!important;box-shadow:0 0 0 4px rgba(18,139,197,.10)!important}
+          .file-dropzone input[type="file"]{width:100%!important;box-sizing:border-box!important;cursor:pointer!important}
+          .file-dropzone small{margin-top:2px!important;color:#5f7689!important;line-height:1.45!important}
+          .file-dropzone .selected-files{margin-top:8px!important}
+          CSS
+
+          cat > dragdrop-upload.js <<'JS'
+          (() => {
+            const init = () => {
+              document.querySelectorAll('input[type="file"]').forEach(input => {
+                const label = input.closest('label');
+                if (!label || label.dataset.dropReady === '1') return;
+                label.dataset.dropReady = '1';
+                label.classList.add('file-dropzone');
+                input.setAttribute('multiple','');
+
+                const stop = event => { event.preventDefault(); event.stopPropagation(); };
+                ['dragenter','dragover'].forEach(type => label.addEventListener(type, event => {
+                  stop(event); label.classList.add('is-dragover');
+                }));
+                ['dragleave','drop'].forEach(type => label.addEventListener(type, event => {
+                  stop(event); label.classList.remove('is-dragover');
+                }));
+                label.addEventListener('drop', event => {
+                  const files = [...(event.dataTransfer?.files || [])];
+                  if (!files.length) return;
+                  try {
+                    const dt = new DataTransfer();
+                    files.forEach(file => dt.items.add(file));
+                    input.files = dt.files;
+                  } catch (_) { return; }
+                  input.dispatchEvent(new Event('change', { bubbles:true }));
+                });
+              });
+            };
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
+            else init();
+          })();
+          JS
+
+      - name: Validate JavaScript
+        run: |
+          node --check script.js
+          node --check dragdrop-upload.js
+      - name: Verify patched HTML
+        run: |
+          grep -q 'Materiale_progetto\[\]' index.html
+          grep -q 'landing-upload-v2.css?v=20260914-1' index.html
+          grep -q 'dragdrop-upload.js?v=20260914-1' index.html
+      - name: Commit changes
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html script.js landing-upload-v2.css dragdrop-upload.js
+          git commit -m "Simplify project uploads and refine service cards" || exit 0
+          git push
