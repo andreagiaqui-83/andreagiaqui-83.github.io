@@ -449,8 +449,8 @@
     event.preventDefault(); const button = reviewForm.querySelector('button[type="submit"]'); const fd = new FormData(reviewForm);
     const payload = {name:String(fd.get('name')||'').trim(),service:String(fd.get('service')||'').trim(),text:String(fd.get('text')||'').trim(),website:String(fd.get('website')||'').trim()};
     if (reviewStatus) { reviewStatus.textContent='Pubblicazione in corso…'; reviewStatus.className='review-status'; } if (button) button.disabled=true;
-    try { const r=await fetch(`${backendBase}/api/reviews`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json().catch(()=>({})); if(!r.ok||!d.ok) throw new Error(d.error||'Invio non riuscito.'); if(d.review) addReviewCard(d.review); reviewForm.reset(); if(reviewStatus){reviewStatus.textContent=`Grazie! La recensione è stata pubblicata come ${d.review.displayName}.`;reviewStatus.className='review-status is-success';} }
-    catch(error){if(reviewStatus){reviewStatus.textContent=error.message||'Non è stato possibile pubblicare la recensione.';reviewStatus.className='review-status is-error';}} finally{if(button)button.disabled=false;}
+    try { const r=await fetch(`${backendBase}/api/reviews`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json().catch(()=>({})); if(!r.ok||!d.ok) throw new Error(d.error||'Invio non riuscito.'); reviewForm.reset(); if(reviewStatus){reviewStatus.textContent=`Grazie ${d.displayName||''}! La recensione è stata inviata e sarà pubblicata dopo l’approvazione.`.replace(/\s+/g,' ').trim();reviewStatus.className='review-status is-success';} }
+    catch(error){if(reviewStatus){reviewStatus.textContent=error.message||'Non è stato possibile inviare la recensione.';reviewStatus.className='review-status is-error';}} finally{if(button)button.disabled=false;}
   });
   const unwrapReviewGroups = () => {
     if (!reviewsGrid) return [];
