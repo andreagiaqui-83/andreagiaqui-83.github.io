@@ -70,11 +70,13 @@
 @media(max-width:576px){.reviews-grid{grid-template-columns:1fr}.review-card{padding:20px;border-radius:14px}}
 
 /* Carousel recensioni live */
-.reviews-carousel{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;cursor:grab;padding:4px 0 10px;scroll-behavior:smooth}
-.reviews-carousel::-webkit-scrollbar{display:none}
-.reviews-carousel:active{cursor:grabbing}
+.reviews-carousel{overflow:hidden;padding:4px 0 10px;touch-action:pan-y;overscroll-behavior-x:none}
 .reviews-carousel .reviews-grid{display:flex;gap:18px;width:max-content;margin-top:26px}
+.reviews-carousel .reviews-grid.reviews-marquee-track{animation:reviewsMarquee 48s linear infinite;will-change:transform}
+.reviews-loop-group{display:flex;gap:18px;flex:none;width:max-content}
 .reviews-carousel .review-card{flex:0 0 min(360px,82vw);width:min(360px,82vw);min-height:190px}
+@keyframes reviewsMarquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(calc(-50% - 9px),0,0)}}
+@media(hover:hover){.reviews-carousel:hover .reviews-marquee-track{animation-play-state:paused}}
 .review-submit-section{padding:0 0 70px;background:linear-gradient(180deg,#eef6fc 0%,#fff 100%)}
 .review-submit-card{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(320px,1.2fr);gap:34px;padding:28px;border:1px solid #d7e2ec;border-radius:18px;background:#fff;box-shadow:0 12px 32px rgba(11,58,91,.07)}
 .review-submit-card h3{margin:5px 0 8px;font-size:27px;color:#0b2a46}
@@ -84,4 +86,4 @@
 .review-status{min-height:1.3em;margin:0!important;font-size:14px;font-weight:700}.review-status.is-success{color:#17653b}.review-status.is-error{color:#a52929}
 @media(max-width:850px){.review-submit-card{grid-template-columns:1fr}.reviews-carousel .review-card{flex-basis:min(340px,86vw);width:min(340px,86vw)}}
 @media(max-width:576px){.review-submit-card{padding:20px 16px;border-radius:14px}.review-submit-card h3{font-size:23px}.review-submit-section{padding-bottom:45px}}
-@media(prefers-reduced-motion:reduce){.reviews-carousel{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){.reviews-carousel .reviews-marquee-track{animation:none!important;transform:none!important}}
