@@ -8,7 +8,6 @@ s = p.read_text(encoding='utf-8')
 start = s.find('async function submitReview(request, env, origin) {')
 if start < 0:
     raise SystemExit('submitReview start not found')
-# find next top-level function/export marker after submitReview
 m = re.search(r'\n(?:async function |function |export default)', s[start+1:])
 if not m:
     raise SystemExit('submitReview end not found')
@@ -136,10 +135,9 @@ p.write_text(s, encoding='utf-8')
 # --- Frontend: messaggio corretto, nessuna pubblicazione immediata ---
 p = Path('script.js')
 s = p.read_text(encoding='utf-8')
-# robustly replace the whole try body line used by the review form
 old_re = re.compile(r"try \{ const r=await fetch\(`\$\{backendBase\}/api/reviews`,\{method:'POST',headers:\{'Content-Type':'application/json'\},body:JSON\.stringify\(payload\)\}\); const d=await r\.json\(\)\.catch\(\(\)=>\(\{\}\)\); if\(!r\.ok\|\|!d\.ok\) throw new Error\(d\.error\|\|'Invio non riuscito\.'\);.*?\} \n    catch\(error\)", re.S)
 replacement = "try { const r=await fetch(`${backendBase}/api/reviews`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json().catch(()=>({})); if(!r.ok||!d.ok) throw new Error(d.error||'Invio non riuscito.'); reviewForm.reset(); if(reviewStatus){reviewStatus.textContent=`Grazie ${d.displayName||''}! La recensione è stata inviata e sarà pubblicata dopo l’approvazione.`.replace(/\\s+/g,' ').trim();reviewStatus.className='review-status is-success';} }\n    catch(error)"
-s2, n = old_re.subn(replacement, s, count=1)
+s2, n = old_re.subn(lambda _: replacement, s, count=1)
 if n != 1:
     raise SystemExit(f'review frontend submit block replacement count={n}')
 s = s2
