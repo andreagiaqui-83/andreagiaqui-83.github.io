@@ -255,7 +255,7 @@
     );
     if (materialDetails) {
       const answer = materialDetails.querySelector('p');
-      if (answer) answer.textContent = 'Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e, più in generale, qualsiasi file relativo al progetto in qualsiasi formato. Per le nuvole di punti è previsto un link cloud.';
+      if (answer) answer.textContent = 'Puoi caricare in un unico punto foto e immagini esterne e interne, piante, prospetti, sezioni, planovolumetrici, PDF, scansioni, DWG/DXF/DGN, file Revit, file di interscambio come IFC o BCF, formati tecnici come STEP/STP e IGES/IGS, mesh e modelli 3D come PLY, OBJ, STL, FBX o GLB/GLTF e qualsiasi altro file utile al progetto. Per nuvole di punti molto grandi resta preferibile il link cloud.';
     }
 
     const revitPointCloudDetails = [...faqWrap.querySelectorAll('details')].find(details => {
@@ -274,7 +274,7 @@
       if (data['@type'] === 'FAQPage' && Array.isArray(data.mainEntity)) {
         const materialQ = data.mainEntity.find(item => item.name === 'Quale materiale posso inviare per un lavoro CAD o BIM?');
         if (materialQ?.acceptedAnswer) {
-          materialQ.acceptedAnswer.text = 'Puoi inviare foto, immagini, piante, prospetti, sezioni, PDF, scansioni, DWG/DXF, file Revit, file di interscambio come IFC, file mesh come OBJ o PLY e qualsiasi altro file relativo al progetto, in qualsiasi formato. Per le nuvole di punti è previsto un link cloud.';
+          materialQ.acceptedAnswer.text = 'Puoi caricare in un unico punto foto e immagini esterne e interne, piante, prospetti, sezioni, planovolumetrici, PDF, scansioni, DWG/DXF/DGN, file Revit, IFC/BCF, STEP/STP, IGES/IGS, mesh e modelli 3D come PLY, OBJ, STL, FBX o GLB/GLTF e qualsiasi altro file tecnico disponibile. Per nuvole di punti molto grandi resta preferibile il link cloud.';
         }
         const revitQ = data.mainEntity.find(item => item.name === 'Posso chiedere un modello Revit da una nuvola di punti?');
         if (revitQ?.acceptedAnswer) {

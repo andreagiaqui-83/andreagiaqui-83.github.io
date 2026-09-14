@@ -1,0 +1,26 @@
+/* Servizi: 3 sopra + 2 centrati sotto su desktop */
+@media (min-width: 901px){
+  #servizi .cards{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:20px!important}
+  #servizi .cards>.card{grid-column:span 2!important;min-width:0!important}
+  #servizi .cards>.card:nth-child(4){grid-column:2/span 2!important}
+  #servizi .cards>.card:nth-child(5){grid-column:4/span 2!important}
+}
+@media (min-width: 601px) and (max-width: 900px){#servizi .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width: 600px){#servizi .cards{grid-template-columns:1fr!important}}
+
+/* Guida materiale */
+.material-intro{margin:0 0 18px!important;color:#526f86!important;line-height:1.55!important}
+.material-guide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 20px}
+.material-guide-item{padding:14px 15px;border:1px solid #d5e3ee;border-radius:12px;background:#f8fbfe;display:grid;gap:5px}
+.material-guide-item strong{color:#0b2a46;font-size:15px}
+.material-guide-item span{color:#5d7387;font-size:13px;line-height:1.45}
+.unified-upload-label{margin-top:4px!important}
+@media(max-width:700px){.material-guide{grid-template-columns:1fr}}
+
+/* Tutti i file input diventano aree di trascinamento */
+.file-dropzone{position:relative!important;display:grid!important;gap:8px!important;padding:16px!important;border:2px dashed #a8c7dd!important;border-radius:14px!important;background:linear-gradient(180deg,#fbfdff,#f3f9fd)!important;transition:border-color .16s ease,background .16s ease,box-shadow .16s ease!important}
+.file-dropzone::before{content:'Trascina qui i file oppure usa “Scegli file”';display:block;font-size:13px;font-weight:800;color:#0b4a6f;letter-spacing:.01em}
+.file-dropzone.is-dragover{border-color:#128bc5!important;background:#eaf7ff!important;box-shadow:0 0 0 4px rgba(18,139,197,.10)!important}
+.file-dropzone input[type="file"]{width:100%!important;box-sizing:border-box!important;cursor:pointer!important}
+.file-dropzone small{margin-top:2px!important;color:#5f7689!important;line-height:1.45!important}
+.file-dropzone .selected-files{margin-top:8px!important}
