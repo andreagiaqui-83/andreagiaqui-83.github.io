@@ -1,0 +1,32 @@
+name: Apply manual review carousel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-manual-reviews.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch index
+        run: python .github/add_manual_reviews.py
+      - name: Validate JavaScript
+        run: node --check reviews-manual.js
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Switch reviews to manual cyclic navigation"
+            git push
+          fi
