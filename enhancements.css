@@ -69,14 +69,17 @@
 @media(max-width:850px){.reviews-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:576px){.reviews-grid{grid-template-columns:1fr}.review-card{padding:20px;border-radius:14px}}
 
-/* Carousel recensioni live */
-.reviews-carousel{overflow:hidden;padding:4px 0 10px;touch-action:pan-y;overscroll-behavior-x:none}
-.reviews-carousel .reviews-grid{display:flex;gap:18px;width:max-content;margin-top:26px}
-.reviews-carousel .reviews-grid.reviews-marquee-track{animation:reviewsMarquee 48s linear infinite;will-change:transform}
-.reviews-loop-group{display:flex;gap:18px;flex:none;width:max-content}
+/* Carousel recensioni: navigazione manuale ciclica */
+.reviews-carousel{position:relative;overflow:hidden;padding:4px 0 10px;touch-action:pan-y;overscroll-behavior-x:none;scroll-behavior:smooth}
+.reviews-carousel .reviews-grid{display:flex;gap:18px;width:max-content;margin-top:26px;transform:none!important;animation:none!important;will-change:auto}
+.reviews-loop-group{display:contents}
 .reviews-carousel .review-card{flex:0 0 min(360px,82vw);width:min(360px,82vw);min-height:190px}
-@keyframes reviewsMarquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(calc(-50% - 9px),0,0)}}
-@media(hover:hover){.reviews-carousel:hover .reviews-marquee-track{animation-play-state:paused}}
+.review-nav{position:absolute;top:50%;z-index:5;width:46px;height:46px;border:1px solid #c5d9e7;border-radius:50%;background:rgba(255,255,255,.96);color:#0b4a6f;box-shadow:0 7px 22px rgba(11,58,91,.18);display:flex;align-items:center;justify-content:center;font-size:27px;line-height:1;cursor:pointer;transform:translateY(-50%);transition:transform .16s ease,background .16s ease,box-shadow .16s ease}
+.review-nav:hover{background:#f0f8fd;box-shadow:0 9px 26px rgba(11,58,91,.23);transform:translateY(-50%) scale(1.05)}
+.review-nav:focus-visible{outline:3px solid #63b7e6;outline-offset:2px}
+.review-nav-prev{left:8px}.review-nav-next{right:8px}
+.review-nav[hidden]{display:none!important}
+@media(max-width:576px){.review-nav{width:40px;height:40px;font-size:23px}.review-nav-prev{left:5px}.review-nav-next{right:5px}}
 .review-submit-section{padding:0 0 70px;background:linear-gradient(180deg,#eef6fc 0%,#fff 100%)}
 .review-submit-card{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(320px,1.2fr);gap:34px;padding:28px;border:1px solid #d7e2ec;border-radius:18px;background:#fff;box-shadow:0 12px 32px rgba(11,58,91,.07)}
 .review-submit-card h3{margin:5px 0 8px;font-size:27px;color:#0b2a46}

@@ -462,36 +462,80 @@
     return originals;
   };
 
-  const setupReviewMarquee = () => {
-    if (!reviewsGrid) return;
-    const originals = unwrapReviewGroups();
-    if (originals.length < 2) return;
+  let reviewIndex = 0;
 
-    const groupA = document.createElement('div');
-    groupA.className = 'reviews-loop-group';
-    originals.forEach(card => groupA.appendChild(card));
+  const getReviewCards = () => unwrapReviewGroups();
 
-    const groupB = document.createElement('div');
-    groupB.className = 'reviews-loop-group';
-    groupB.setAttribute('aria-hidden', 'true');
-    originals.forEach(card => {
-      const clone = card.cloneNode(true);
-      clone.tabIndex = -1;
-      groupB.appendChild(clone);
-    });
+  const ensureReviewControls = () => {
+    if (!reviewsCarousel) return;
+    let prev = reviewsCarousel.querySelector('.review-nav-prev');
+    let next = reviewsCarousel.querySelector('.review-nav-next');
 
-    reviewsGrid.replaceChildren(groupA, groupB);
-    reviewsGrid.classList.add('reviews-marquee-track');
+    if (!prev) {
+      prev = document.createElement('button');
+      prev.type = 'button';
+      prev.className = 'review-nav review-nav-prev';
+      prev.setAttribute('aria-label', 'Recensione precedente');
+      prev.innerHTML = '&#10094;';
+      reviewsCarousel.appendChild(prev);
+    }
+    if (!next) {
+      next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'review-nav review-nav-next';
+      next.setAttribute('aria-label', 'Recensione successiva');
+      next.innerHTML = '&#10095;';
+      reviewsCarousel.appendChild(next);
+    }
+
+    if (!prev.dataset.bound) {
+      prev.dataset.bound = '1';
+      prev.addEventListener('click', () => moveReview(-1));
+    }
+    if (!next.dataset.bound) {
+      next.dataset.bound = '1';
+      next.addEventListener('click', () => moveReview(1));
+    }
+  };
+
+  const scrollReviewTo = (index, smooth = true) => {
+    if (!reviewsCarousel || !reviewsGrid) return;
+    const cards = getReviewCards();
+    if (!cards.length) return;
+    reviewIndex = ((index % cards.length) + cards.length) % cards.length;
+    const target = cards[reviewIndex];
+    const carouselRect = reviewsCarousel.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const left = reviewsCarousel.scrollLeft + targetRect.left - carouselRect.left - 2;
+    reviewsCarousel.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
+  };
+
+  const moveReview = direction => {
+    const cards = getReviewCards();
+    if (!cards.length) return;
+    scrollReviewTo(reviewIndex + direction, true);
+  };
+
+  const setupReviewCarousel = () => {
+    if (!reviewsCarousel || !reviewsGrid) return;
+    const cards = getReviewCards();
+    reviewsGrid.classList.remove('reviews-marquee-track');
+    ensureReviewControls();
+    const controls = reviewsCarousel.querySelectorAll('.review-nav');
+    controls.forEach(button => { button.hidden = cards.length < 2; });
+    if (cards.length) scrollReviewTo(Math.min(reviewIndex, cards.length - 1), false);
   };
 
   const addReviewCard = review => {
     if (!reviewsGrid || !review) return;
-    const originals = unwrapReviewGroups();
+    const originals = getReviewCards();
     originals.unshift(createReviewCard(review));
     reviewsGrid.replaceChildren(...originals);
-    setupReviewMarquee();
+    reviewIndex = 0;
+    setupReviewCarousel();
   };
 
-  loadLiveReviews().finally(setupReviewMarquee);
+  window.addEventListener('resize', () => scrollReviewTo(reviewIndex, false), { passive: true });
+  loadLiveReviews().finally(setupReviewCarousel);
 
 })();
