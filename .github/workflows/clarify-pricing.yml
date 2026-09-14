@@ -1,0 +1,40 @@
+name: Clarify pricing section
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clarify-pricing.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clarify pricing copy
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace(
+            'La tariffa indicativa si riferisce alle elaborazioni CAD/BIM standard. Il preventivo definitivo dipende dal materiale disponibile, dalla complessità e dall’output richiesto.',
+            'La tariffa indicativa si calcola esclusivamente sui metri quadrati lordi delle piante dei singoli piani. Il preventivo definitivo dipende comunque dal materiale disponibile, dalla complessità e dall’output richiesto.'
+          )
+          s=s.replace(
+            '<p class="price-includes"><strong>Compresi nel prezzo:</strong> piante dei piani, pianta di copertura, prospetti e sezioni.</p>',
+            '<p class="price-includes"><strong>Il prezzo si basa solo sui m² lordi delle piante.</strong> Se nello stesso incarico richiedi anche pianta di copertura, prospetti, sezioni e planovolumetrico, questi elaborati sono inclusi nel prezzo e non comportano ulteriori maggiorazioni legate ai m².</p>'
+          )
+          s=s.replace(
+            '<small>La valutazione finale viene sempre verificata sul lavoro richiesto.</small>',
+            '<small>Nell’esempio, anche richiedendo insieme copertura, prospetti, sezioni e planovolumetrico, il calcolo resta basato sui 300 m² lordi delle sole piante.</small>'
+          )
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html
+          git commit -m "Clarify floor-area pricing inclusions" || exit 0
+          git push
