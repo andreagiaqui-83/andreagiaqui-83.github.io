@@ -1,0 +1,95 @@
+name: Apply render service update
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-render-service.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch landing page and SEO
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,re
+          p=Path('index.html'); s=p.read_text(encoding='utf-8')
+          # Terminologia richiesta
+          s=s.replace('planovolumetrici','inquadramenti territoriali').replace('planovolumetrico','inquadramento territoriale')
+          # SEO base
+          s=re.sub(r'<title>.*?</title>','<title>Disegnatore AutoCAD 2D/3D, Revit BIM, Render e Disegno Meccanico | Andrea Giaquinto</title>',s,count=1)
+          s=re.sub(r'<meta name="description" content="[^"]*">','<meta name="description" content="Servizi CAD, BIM e visualizzazione 3D online: AutoCAD 2D/3D, disegno meccanico, render fotorealistici da foto, immagini, nuvole di punti ed elaborati tecnici, DOCFA e modelli Revit/BIM. Preventivo gratuito.">',s,count=1)
+          s=re.sub(r'<meta property="og:title" content="[^"]*">','<meta property="og:title" content="AutoCAD 2D/3D, Revit BIM, Render e Disegno Meccanico — Preventivo gratuito">',s,count=1)
+          s=re.sub(r'<meta property="og:description" content="[^"]*">','<meta property="og:description" content="CAD/BIM, disegno meccanico e render fotorealistici da foto, nuvole di punti ed elaborati tecnici, con viste prospettiche e visualizzazioni orbitali 360°.">',s,count=1)
+          if 'render-section.css?v=20260915-1' not in s:
+              s=s.replace('</head>','<link rel="stylesheet" href="render-section.css?v=20260915-1"></head>',1)
+          # JSON-LD
+          def patch_json(m):
+              raw=m.group(1)
+              try: d=json.loads(raw)
+              except Exception: return m.group(0)
+              if d.get('@type')=='ProfessionalService':
+                  d['description']='Servizi CAD, BIM e visualizzazione 3D online per professionisti, studi tecnici, imprese e privati: AutoCAD 2D/3D, disegno meccanico, render fotorealistici e visualizzazioni 3D da foto, immagini, nuvole di punti ed elaborati tecnici, DOCFA e modellazione Revit/BIM.'
+                  k=d.setdefault('knowsAbout',[])
+                  for x in ['Render fotorealistici','Visualizzazione architettonica','Visualizzazione 3D','Viste prospettiche','Visualizzazioni orbitali 360°']:
+                      if x not in k:k.append(x)
+              if d.get('@type')=='FAQPage' and isinstance(d.get('mainEntity'),list):
+                  q='Posso richiedere render da foto, immagini, nuvole di punti o elaborati tecnici?'
+                  if not any(i.get('name')==q for i in d['mainEntity'] if isinstance(i,dict)):
+                      d['mainEntity'].append({'@type':'Question','name':q,'acceptedAnswer':{'@type':'Answer','text':'Sì. È possibile sviluppare render fotorealistici e visualizzazioni 3D a partire da fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, modelli CAD/BIM e altri elaborati tecnici. Gli output possono comprendere immagini prospettiche statiche e visualizzazioni orbitali o sequenze 360° attorno al fabbricato o all’oggetto.'}})
+              return '<script type="application/ld+json">'+json.dumps(d,ensure_ascii=False,separators=(',',':'))+'</script>'
+          s=re.sub(r'<script type="application/ld\+json">(.*?)</script>',patch_json,s,flags=re.S)
+          # Hero
+          s=s.replace('CAD · BIM · DISEGNO MECCANICO · MODELLAZIONE DA RILIEVO','CAD · BIM · RENDER · DISEGNO MECCANICO · MODELLAZIONE DA RILIEVO')
+          s=s.replace('Disegni AutoCAD 2D/3D, disegno meccanico e modelli Revit/BIM','Disegni AutoCAD 2D/3D, Revit/BIM, disegno meccanico e render')
+          s=s.replace('Carica ciò che hai: schizzi, disegni, foto, planimetrie, PDF o nuvole di punti. Il materiale disponibile viene valutato per creare elaborati AutoCAD 2D/3D, disegni meccanici, planimetrie DOCFA e modelli Revit/BIM.','Carica ciò che hai: schizzi, disegni, foto, planimetrie, PDF, modelli 3D o nuvole di punti. Il materiale disponibile viene valutato per creare elaborati AutoCAD 2D/3D, disegni meccanici, modelli Revit/BIM, planimetrie DOCFA e render fotorealistici con viste prospettiche o visualizzazioni orbitali 360°.')
+          # Card servizio render
+          marker='<article class="card"><span>05</span><h3>Disegno meccanico</h3><p>Disegni tecnici meccanici AutoCAD 2D o modelli 3D ricostruiti da schizzi, fotografie, PDF, scansioni, quote o altri riferimenti disponibili.</p></article>'
+          if '<span>06</span><h3>Render e visualizzazione 3D</h3>' not in s and marker in s:
+              s=s.replace(marker,marker+'<article class="card"><span>06</span><h3>Render e visualizzazione 3D</h3><p>Render fotorealistici e visualizzazioni professionali ricavati da foto, immagini, nuvole di punti, modelli e documentazione tecnica, con viste prospettiche statiche o orbitali 360°.</p></article>',1)
+          # Sezione render dedicata
+          render='''<section id="render" class="section render-section"><div class="wrap render-wrap"><div class="render-copy"><p class="eyebrow">VISUALIZZAZIONE ARCHITETTONICA E DI PRODOTTO</p><h2>Render fotorealistici da rilievi, immagini e documentazione tecnica</h2><p>Trasformo il materiale disponibile in visualizzazioni 3D professionali per comunicare in modo chiaro l’aspetto finale di un fabbricato, di un ambiente o di un oggetto. Possono essere utilizzati fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, file CAD/BIM, mesh e altri elaborati tecnici in qualsiasi formato utile.</p><ul class="render-points"><li>Immagini prospettiche fotorealistiche per esterni, interni e oggetti</li><li>Visualizzazioni orbitali e sequenze 360° attorno al soggetto</li><li>Ricostruzione visiva da nuvole di punti, foto e modelli CAD/BIM</li><li>Materiali, luci, inquadrature e ambientazione calibrati sul progetto</li></ul><div class="render-actions"><a class="button primary" href="#modulo">Richiedi un render</a></div></div><figure class="render-visual"><img src="assets/render-architettonico.webp" width="959" height="540" loading="lazy" alt="Esempio professionale di render fotorealistico da foto, nuvola di punti ed elaborati tecnici con vista prospettica e orbitale"><figcaption>Dai dati alla visualizzazione: dal rilievo e dagli elaborati tecnici a viste prospettiche e orbitali professionali.</figcaption></figure></div></section>'''
+          if 'id="render"' not in s:
+              s=s.replace('</div></div></section><section id="preventivo"', '</div></div></section>'+render+'<section id="preventivo"',1)
+          # Prezzi render separati
+          mech='<p>Per i disegni meccanici il prezzo viene valutato separatamente in base a complessità, quantità di particolari, livello di dettaglio e output AutoCAD 2D o 3D richiesto.</p>'
+          if 'Per i render e le visualizzazioni 3D' not in s and mech in s:
+              s=s.replace(mech,mech+'<p>Per i render e le visualizzazioni 3D il prezzo viene valutato separatamente in base a numero di viste, livello di fotorealismo, materiali, illuminazione, ambientazione e richiesta di visualizzazioni orbitali o sequenze 360°.</p>',1)
+          # Output render nel modulo
+          revit='<label class="choice"><input type="checkbox" name="Output[]" value="Modello Revit / BIM 3D"><span>Modello Revit / BIM 3D</span></label>'
+          if 'Render fotorealistici / viste prospettiche' not in s and revit in s:
+              s=s.replace(revit,revit+'<label class="choice"><input type="checkbox" name="Output[]" value="Render fotorealistici / viste prospettiche"><span>Render fotorealistici / viste prospettiche</span></label><label class="choice"><input type="checkbox" name="Output[]" value="Visualizzazioni orbitali 360°"><span>Visualizzazioni orbitali 360°</span></label>',1)
+          s=s.replace('Puoi selezionare uno o più risultati finali. Per un lavoro meccanico seleziona AutoCAD 2D e/o AutoCAD 3D.','Puoi selezionare uno o più risultati finali. Per un lavoro meccanico seleziona AutoCAD 2D e/o AutoCAD 3D; per la visualizzazione scegli render prospettici e/o viste orbitali 360°.')
+          # FAQ visibile
+          faq_anchor='<details><summary>Posso richiedere un disegno meccanico AutoCAD da uno schizzo o da un disegno esistente?</summary><p>Sì. Puoi inviare schizzi a mano, fotografie, scansioni, PDF, immagini, DWG/DXF, quote o altri riferimenti disponibili. Il materiale viene valutato per realizzare un disegno tecnico AutoCAD 2D oppure, quando richiesto, una ricostruzione o modellazione AutoCAD 3D.</p></details>'
+          if 'Posso richiedere render da foto, immagini, nuvole di punti o elaborati tecnici?' not in s and faq_anchor in s:
+              s=s.replace(faq_anchor,faq_anchor+'<details><summary>Posso richiedere render da foto, immagini, nuvole di punti o elaborati tecnici?</summary><p>Sì. Posso sviluppare render fotorealistici e visualizzazioni 3D partendo da fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, modelli CAD/BIM, mesh e altri elaborati tecnici. Puoi richiedere immagini prospettiche statiche oppure visualizzazioni orbitali e sequenze 360° attorno al fabbricato o all’oggetto.</p></details>',1)
+          s=s.replace('<h2>CAD, Revit, nuvole di punti e documentazione</h2>','<h2>CAD, Revit, render, nuvole di punti e documentazione</h2>')
+          p.write_text(s,encoding='utf-8')
+
+          # Runtime JS: titolo e terminologia, per evitare regressioni dopo il caricamento
+          p=Path('script.js'); j=p.read_text(encoding='utf-8')
+          j=j.replace('planovolumetrici','inquadramenti territoriali').replace('planovolumetrico','inquadramento territoriale')
+          j=j.replace("document.title = 'Disegnatore AutoCAD 2D/3D, Revit BIM e Disegno Meccanico | Preventivo Gratuito';","document.title = 'Disegnatore AutoCAD 2D/3D, Revit BIM, Render e Disegno Meccanico | Preventivo Gratuito';")
+          p.write_text(j,encoding='utf-8')
+          PY
+      - name: Validate
+        run: |
+          node --check script.js
+          grep -q 'id="render"' index.html
+          grep -q 'Render fotorealistici / viste prospettiche' index.html
+          ! grep -qi 'planovolumetrico' index.html
+          ! grep -qi 'planovolumetrico' script.js
+      - name: Commit changes
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html script.js
+          git commit -m "Add render visualization service and SEO" || exit 0
+          git push
