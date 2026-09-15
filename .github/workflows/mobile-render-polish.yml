@@ -1,0 +1,44 @@
+name: Mobile render polish
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mobile-render-polish.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refine mobile render and services presentation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('landing-stable-20260915.css?v=20260915-1315','landing-stable-20260915.css?v=20260915-1505')
+          s=s.replace('data-build="20260915-1315"','data-build="20260915-1505"')
+          s=s.replace('assets/render-visual-professionale.svg?v=20260915-1315','assets/render-model-to-reality-panel.webp?v=20260915-1505')
+          s=s.replace('width="1200" height="675" loading="lazy" decoding="async" alt="Trasformazione da nuvola di punti e modello tecnico CAD BIM a visualizzazione architettonica renderizzata"','width="1100" height="992" loading="lazy" decoding="async" alt="Confronto tra modello tecnico 3D e render fotorealistico di una villa moderna"')
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('landing-stable-20260915.css')
+          css=p.read_text(encoding='utf-8')
+          css += '''\n\n/* Mobile refinement 2026-09-15 15:05 */\n.render-pro-figure img{object-fit:cover!important;object-position:center!important}\n@media(max-width:640px){\n  .render-section{padding:52px 0 56px!important}\n  .render-pro-layout{gap:22px!important}\n  .render-copy h2{font-size:clamp(30px,9vw,40px)!important;line-height:1.08!important}\n  .render-copy>p{font-size:16px!important;line-height:1.62!important}\n  .render-points{grid-template-columns:1fr!important;gap:10px!important;margin:20px 0!important}\n  .render-points li{padding:13px 13px 13px 38px!important;font-size:15px!important}\n  .render-location-note{margin:16px 0 18px!important;padding:14px 15px!important;font-size:14px!important}\n  .render-actions{margin:0!important;justify-content:flex-start!important}\n  .render-actions .button.primary{width:auto!important;min-width:0!important;max-width:none!important;padding:13px 18px!important;border-radius:12px!important;font-size:16px!important;background:#fff!important;color:#0b3658!important}\n  .render-pro-figure{margin-top:2px!important}\n  .render-pro-figure img{width:100%!important;height:auto!important;aspect-ratio:auto!important;object-fit:contain!important;background:#dcecf5!important}\n  .render-pro-figure figcaption{padding:15px 16px!important}\n  .render-pro-figure figcaption strong{font-size:16px!important;line-height:1.3!important}\n  .render-pro-figure figcaption span{font-size:13px!important;line-height:1.5!important}\n  .price-section{padding-top:56px!important}\n  .price-section h2{font-size:clamp(34px,10vw,46px)!important;line-height:1.08!important}\n}\n'''
+          p.write_text(css,encoding='utf-8')
+          PY
+      - name: Validate
+        run: |
+          grep -q 'data-build="20260915-1505"' index.html
+          grep -q 'render-model-to-reality-panel.webp?v=20260915-1505' index.html
+          grep -q 'Mobile refinement 2026-09-15 15:05' landing-stable-20260915.css
+          node --check script.js
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html landing-stable-20260915.css
+          git commit -m "Polish mobile render section" || exit 0
+          git push
