@@ -1,4 +1,4 @@
-name: Publish render visual v2
+name: Publish balanced render section
 on:
   push:
     branches: [main]
@@ -11,47 +11,101 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Rebuild render section
+      - name: Rebuild balanced render section
         run: |
           python - <<'PY'
           from pathlib import Path
-          import base64, re
-          build = '20260915-1835'
-          css_b64 = 'Ci8qIFJFTkRFUiBWSVNVQUwgVjIgMjAyNi0wOS0xNSAxODozNQogICBLZWVwIHRoZSA3MjBweCBzb3VyY2UgbmVhciBuYXRpdmUgc2l6ZTsgbW92ZSBhbGwgaW5mb3JtYXRpb24gdG8gcmVhbCBIVE1MLiAqLwoucmVuZGVyLXByby1tZWRpYXtib3gtc2l6aW5nOmJvcmRlci1ib3g7bWluLXdpZHRoOjA7d2lkdGg6MTAwJTtkaXNwbGF5OmdyaWQ7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOm1pbm1heCgwLDFmcikgbWlubWF4KDI1MHB4LDMwMHB4KTtnYXA6MTRweDthbGlnbi1pdGVtczpzdHJldGNofQoucmVuZGVyLW1haW4tc2hvdHtwb3NpdGlvbjpyZWxhdGl2ZTtib3gtc2l6aW5nOmJvcmRlci1ib3g7bWFyZ2luOjA7bWluLXdpZHRoOjA7b3ZlcmZsb3c6aGlkZGVuO2JvcmRlci1yYWRpdXM6MjBweDtib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjIwKTtiYWNrZ3JvdW5kOiMxMDJmNDk7Ym94LXNoYWRvdzowIDI0cHggNThweCByZ2JhKDAsMCwwLC4yNil9Ci5yZW5kZXItbWFpbi1zaG90IGltZ3tkaXNwbGF5OmJsb2NrO3dpZHRoOjEwMCU7bWF4LXdpZHRoOjcyMHB4O2hlaWdodDoxMDAlO21pbi1oZWlnaHQ6MTAwJTttYXJnaW4taW5saW5lOmF1dG87b2JqZWN0LWZpdDpjb250YWluO29iamVjdC1wb3NpdGlvbjpjZW50ZXI7YmFja2dyb3VuZDojMTAyZjQ5O3Zpc2liaWxpdHk6dmlzaWJsZTtvcGFjaXR5OjF9Ci5yZW5kZXItbWFpbi1zaG90OjphZnRlcntjb250ZW50OiJJbW1hZ2luZSBkaSBlc2VtcGlvIMK3IGlsIGZsdXNzbyDDqCBzcGllZ2F0byBxdWkgYWNjYW50byI7cG9zaXRpb246YWJzb2x1dGU7bGVmdDoxNHB4O2JvdHRvbToxNHB4O21heC13aWR0aDpjYWxjKDEwMCUgLSAyOHB4KTtwYWRkaW5nOjhweCAxMXB4O2JvcmRlci1yYWRpdXM6OTk5cHg7YmFja2dyb3VuZDpyZ2JhKDUsMzAsNTEsLjg2KTtib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjE4KTtjb2xvcjojZmZmO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtd2VpZ2h0OjgwMDtsaW5lLWhlaWdodDoxLjI7YmFja2Ryb3AtZmlsdGVyOmJsdXIoNnB4KX0KLnJlbmRlci1mbG93e2Rpc3BsYXk6Z3JpZDtncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyO2dhcDoxMHB4O2FsaWduLWNvbnRlbnQ6c3RyZXRjaH0KLnJlbmRlci1mbG93LXN0ZXB7ZGlzcGxheTpncmlkO2dyaWQtdGVtcGxhdGUtY29sdW1uczozOHB4IG1pbm1heCgwLDFmcik7Z2FwOjExcHg7YWxpZ24taXRlbXM6c3RhcnQ7cGFkZGluZzoxNHB4O2JvcmRlci1yYWRpdXM6MTZweDtib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjE1KTtiYWNrZ3JvdW5kOnJnYmEoMjU1LDI1NSwyNTUsLjA3NSk7Ym94LXNoYWRvdzppbnNldCAwIDFweCAwIHJnYmEoMjU1LDI1NSwyNTUsLjA0KX0KLnJlbmRlci1mbG93LW51bXtkaXNwbGF5OmlubGluZS1mbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyO3dpZHRoOjM4cHg7aGVpZ2h0OjM4cHg7Ym9yZGVyLXJhZGl1czo5OTlweDtiYWNrZ3JvdW5kOiNmZmY7Y29sb3I6IzBiMzY1ODtmb250LXNpemU6MTNweDtmb250LXdlaWdodDo5MDA7bGluZS1oZWlnaHQ6MX0KLnJlbmRlci1mbG93LXN0ZXAgc3Ryb25ne2Rpc3BsYXk6YmxvY2s7bWFyZ2luOjFweCAwIDRweDtjb2xvcjojZmZmO2ZvbnQtc2l6ZToxNnB4O2xpbmUtaGVpZ2h0OjEuMjJ9Ci5yZW5kZXItZmxvdy1zdGVwIHB7bWFyZ2luOjA7Y29sb3I6I2Q3ZTlmNDtmb250LXNpemU6MTMuNXB4O2xpbmUtaGVpZ2h0OjEuNDV9Ci5yZW5kZXItZmxvdy1mb290e3BhZGRpbmc6MTNweCAxNHB4O2JvcmRlci1yYWRpdXM6MTZweDtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxMzVkZWcscmdiYSg0MiwxNjcsMjI0LC4yMCkscmdiYSgyNTUsMjU1LDI1NSwuMDcpKTtib3JkZXI6MXB4IHNvbGlkIHJnYmEoMTI3LDIxNiwyNTUsLjI1KTtjb2xvcjojZWFmN2ZkO2ZvbnQtc2l6ZToxMy41cHg7bGluZS1oZWlnaHQ6MS40NX0KLnJlbmRlci1mbG93LWZvb3Qgc3Ryb25ne2Rpc3BsYXk6YmxvY2s7bWFyZ2luLWJvdHRvbTozcHg7Y29sb3I6I2ZmZjtmb250LXNpemU6MTVweH0KCkBtZWRpYShtaW4td2lkdGg6MTE4MHB4KXsKICAucmVuZGVyLXByby1sYXlvdXR7d2lkdGg6bWluKDE0MDBweCxjYWxjKDEwMCUgLSA1NnB4KSkhaW1wb3J0YW50O2dyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoMTIsbWlubWF4KDAsMWZyKSkhaW1wb3J0YW50O2dyaWQtdGVtcGxhdGUtcm93czphdXRvIGF1dG8gYXV0byBhdXRvIGF1dG8haW1wb3J0YW50O2NvbHVtbi1nYXA6MjhweCFpbXBvcnRhbnQ7cm93LWdhcDoyMnB4IWltcG9ydGFudDthbGlnbi1pdGVtczpzdGFydCFpbXBvcnRhbnR9CiAgLnJlbmRlci1jb3B5e2Rpc3BsYXk6Y29udGVudHMhaW1wb3J0YW50fQogIC5yZW5kZXItY29weT4uZXllYnJvd3tncmlkLWNvbHVtbjoxLzUhaW1wb3J0YW50O2dyaWQtcm93OjEhaW1wb3J0YW50O21hcmdpbjowIDAgMnB4IWltcG9ydGFudDthbGlnbi1zZWxmOmVuZCFpbXBvcnRhbnR9CiAgLnJlbmRlci1jb3B5Pmgye2dyaWQtY29sdW1uOjEvNSFpbXBvcnRhbnQ7Z3JpZC1yb3c6MiFpbXBvcnRhbnQ7bWFyZ2luOjAhaW1wb3J0YW50O21heC13aWR0aDo1MjBweCFpbXBvcnRhbnQ7Zm9udC1zaXplOmNsYW1wKDM4cHgsMy4wNXZ3LDUycHgpIWltcG9ydGFudDtsaW5lLWhlaWdodDoxLjA2IWltcG9ydGFudDtsZXR0ZXItc3BhY2luZzotLjAyOGVtIWltcG9ydGFudH0KICAucmVuZGVyLWNvcHk+cHtncmlkLWNvbHVtbjoxLzUhaW1wb3J0YW50O2dyaWQtcm93OjMhaW1wb3J0YW50O21hcmdpbjowIWltcG9ydGFudDttYXgtd2lkdGg6NTIwcHghaW1wb3J0YW50O2ZvbnQtc2l6ZToxN3B4IWltcG9ydGFudDtsaW5lLWhlaWdodDoxLjU4IWltcG9ydGFudDtjb2xvcjojZDZlN2YzIWltcG9ydGFudH0KICAucmVuZGVyLXByby1tZWRpYXtncmlkLWNvbHVtbjo1Ly0xIWltcG9ydGFudDtncmlkLXJvdzoxLzQhaW1wb3J0YW50O2FsaWduLXNlbGY6c3RhcnQhaW1wb3J0YW50O2dyaWQtdGVtcGxhdGUtY29sdW1uczptaW5tYXgoMCw2NTBweCkgbWlubWF4KDI2MHB4LDFmcikhaW1wb3J0YW50O2p1c3RpZnktY29udGVudDplbmQhaW1wb3J0YW50O2dhcDoxNnB4IWltcG9ydGFudH0KICAucmVuZGVyLW1haW4tc2hvdHttaW4taGVpZ2h0OjAhaW1wb3J0YW50fQogIC5yZW5kZXItbWFpbi1zaG90IGltZ3t3aWR0aDoxMDAlIWltcG9ydGFudDttYXgtd2lkdGg6NjUwcHghaW1wb3J0YW50O2hlaWdodDphdXRvIWltcG9ydGFudDttaW4taGVpZ2h0OjAhaW1wb3J0YW50O2FzcGVjdC1yYXRpbzoxNi85IWltcG9ydGFudDtvYmplY3QtZml0OmNvbnRhaW4haW1wb3J0YW50fQogIC5yZW5kZXItcG9pbnRze2dyaWQtY29sdW1uOjEvLTEhaW1wb3J0YW50O2dyaWQtcm93OjQhaW1wb3J0YW50O2Rpc3BsYXk6Z3JpZCFpbXBvcnRhbnQ7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOnJlcGVhdCg0LG1pbm1heCgwLDFmcikpIWltcG9ydGFudDtnYXA6MTRweCFpbXBvcnRhbnQ7bWFyZ2luOjZweCAwIDAhaW1wb3J0YW50O3BhZGRpbmc6MCFpbXBvcnRhbnR9CiAgLnJlbmRlci1wb2ludHMgbGl7bWluLWhlaWdodDo4NnB4IWltcG9ydGFudDtkaXNwbGF5OmZsZXghaW1wb3J0YW50O2FsaWduLWl0ZW1zOmNlbnRlciFpbXBvcnRhbnQ7bWFyZ2luOjAhaW1wb3J0YW50O3BhZGRpbmc6MTZweCAxNnB4IDE2cHggNDZweCFpbXBvcnRhbnQ7Zm9udC1zaXplOjE2cHghaW1wb3J0YW50O2xpbmUtaGVpZ2h0OjEuNDIhaW1wb3J0YW50O2JvcmRlci1yYWRpdXM6MTRweCFpbXBvcnRhbnR9CiAgLnJlbmRlci1wb2ludHMgbGk6OmJlZm9yZXtsZWZ0OjE2cHghaW1wb3J0YW50O3RvcDo1MCUhaW1wb3J0YW50O3RyYW5zZm9ybTp0cmFuc2xhdGVZKC01MCUpIWltcG9ydGFudDtmb250LXNpemU6MjBweCFpbXBvcnRhbnR9CiAgLnJlbmRlci1sb2NhdGlvbi1ub3Rle2dyaWQtY29sdW1uOjEvMTEhaW1wb3J0YW50O2dyaWQtcm93OjUhaW1wb3J0YW50O21hcmdpbjowIWltcG9ydGFudDtwYWRkaW5nOjE2cHggMjBweCFpbXBvcnRhbnQ7YWxpZ24tc2VsZjpzdHJldGNoIWltcG9ydGFudDtmb250LXNpemU6MTVweCFpbXBvcnRhbnQ7bGluZS1oZWlnaHQ6MS41NSFpbXBvcnRhbnR9CiAgLnJlbmRlci1sb2NhdGlvbi1ub3RlIHN0cm9uZ3tkaXNwbGF5OmlubGluZSFpbXBvcnRhbnQ7bWFyZ2luOjAgOHB4IDAgMCFpbXBvcnRhbnR9CiAgLnJlbmRlci1sb2NhdGlvbi1ub3RlIHNwYW57ZGlzcGxheTppbmxpbmUhaW1wb3J0YW50fQogIC5yZW5kZXItYWN0aW9uc3tncmlkLWNvbHVtbjoxMS8tMSFpbXBvcnRhbnQ7Z3JpZC1yb3c6NSFpbXBvcnRhbnQ7bWFyZ2luOjAhaW1wb3J0YW50O2FsaWduLXNlbGY6Y2VudGVyIWltcG9ydGFudDtqdXN0aWZ5LXNlbGY6c3RyZXRjaCFpbXBvcnRhbnQ7ZGlzcGxheTpmbGV4IWltcG9ydGFudDtqdXN0aWZ5LWNvbnRlbnQ6ZmxleC1lbmQhaW1wb3J0YW50fQogIC5yZW5kZXItYWN0aW9ucyAuYnV0dG9uLnByaW1hcnl7d2lkdGg6MTAwJSFpbXBvcnRhbnQ7bWF4LXdpZHRoOjI0MHB4IWltcG9ydGFudDtqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyIWltcG9ydGFudDt0ZXh0LWFsaWduOmNlbnRlciFpbXBvcnRhbnQ7cGFkZGluZzoxNXB4IDE4cHghaW1wb3J0YW50fQp9CgpAbWVkaWEobWF4LXdpZHRoOjExNzlweCl7CiAgLnJlbmRlci1wcm8tbWVkaWF7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOm1pbm1heCgwLDFmcikgbWlubWF4KDI0MHB4LDMwMHB4KX0KfQpAbWVkaWEobWF4LXdpZHRoOjkwMHB4KXsKICAucmVuZGVyLXByby1tZWRpYXtncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyfQogIC5yZW5kZXItbWFpbi1zaG90IGltZ3toZWlnaHQ6YXV0bzttaW4taGVpZ2h0OjA7YXNwZWN0LXJhdGlvOjE2Lzk7b2JqZWN0LWZpdDpjb250YWlufQogIC5yZW5kZXItZmxvd3tncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KDMsbWlubWF4KDAsMWZyKSl9CiAgLnJlbmRlci1mbG93LWZvb3R7Z3JpZC1jb2x1bW46MS8tMX0KfQpAbWVkaWEobWF4LXdpZHRoOjY0MHB4KXsKICAucmVuZGVyLXByby1tZWRpYXtnYXA6MTJweH0KICAucmVuZGVyLW1haW4tc2hvdHtib3JkZXItcmFkaXVzOjE2cHh9CiAgLnJlbmRlci1tYWluLXNob3Q6OmFmdGVye2xlZnQ6MTBweDtyaWdodDoxMHB4O2JvdHRvbToxMHB4O21heC13aWR0aDpub25lO2JvcmRlci1yYWRpdXM6MTJweDt0ZXh0LWFsaWduOmNlbnRlcjtmb250LXNpemU6MTEuNXB4fQogIC5yZW5kZXItZmxvd3tncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyO2dhcDo5cHh9CiAgLnJlbmRlci1mbG93LXN0ZXB7cGFkZGluZzoxMnB4IDEzcHh9CiAgLnJlbmRlci1mbG93LWZvb3R7Z3JpZC1jb2x1bW46YXV0bztwYWRkaW5nOjEycHggMTNweH0KfQo='
-          html_b64 = 'PGRpdiBjbGFzcz0icmVuZGVyLXByby1tZWRpYSIgYXJpYS1sYWJlbD0iRGFsIHJpbGlldm8gZSBkYWwgbW9kZWxsbyB0ZWNuaWNvIGFsIHJlbmRlciBmb3RvcmVhbGlzdGljbyI+PGZpZ3VyZSBjbGFzcz0icmVuZGVyLW1haW4tc2hvdCI+PGltZyBzcmM9ImFzc2V0cy9yZW5kZXItZmluYWwtcGMtMjAyNjA5MTUuanBnP3Y9MjAyNjA5MTUtMTcyNSIgd2lkdGg9IjcyMCIgaGVpZ2h0PSI0MDUiIGxvYWRpbmc9ImVhZ2VyIiBkZWNvZGluZz0iYXN5bmMiIGFsdD0iRXNlbXBpbyBkaSB0cmFzZm9ybWF6aW9uZSBkYSByaWxpZXZvIGUgbW9kZWxsbyB0ZWNuaWNvIGEgcmVuZGVyIGZvdG9yZWFsaXN0aWNvIj48L2ZpZ3VyZT48ZGl2IGNsYXNzPSJyZW5kZXItZmxvdyIgYXJpYS1sYWJlbD0iRmx1c3NvIGRpIGxhdm9ybyByZW5kZXIiPjxhcnRpY2xlIGNsYXNzPSJyZW5kZXItZmxvdy1zdGVwIj48c3BhbiBjbGFzcz0icmVuZGVyLWZsb3ctbnVtIj4wMTwvc3Bhbj48ZGl2PjxzdHJvbmc+RGF0aSBkaSBwYXJ0ZW56YTwvc3Ryb25nPjxwPkZvdG8sIHJpbGlldmksIG51dm9sZSBkaSBwdW50aSBlZCBlbGFib3JhdGkgdGVjbmljaS48L3A+PC9kaXY+PC9hcnRpY2xlPjxhcnRpY2xlIGNsYXNzPSJyZW5kZXItZmxvdy1zdGVwIj48c3BhbiBjbGFzcz0icmVuZGVyLWZsb3ctbnVtIj4wMjwvc3Bhbj48ZGl2PjxzdHJvbmc+TW9kZWxsbyAzRDwvc3Ryb25nPjxwPkdlb21ldHJpYSwgbWF0ZXJpYWxpLCBwcm9wb3J6aW9uaSBlIG90dGltaXp6YXppb25lLjwvcD48L2Rpdj48L2FydGljbGU+PGFydGljbGUgY2xhc3M9InJlbmRlci1mbG93LXN0ZXAiPjxzcGFuIGNsYXNzPSJyZW5kZXItZmxvdy1udW0iPjAzPC9zcGFuPjxkaXY+PHN0cm9uZz5SZW5kZXIgZm90b3JlYWxpc3RpY288L3N0cm9uZz48cD5MdWNpLCBhdG1vc2ZlcmEsIGlucXVhZHJhdHVyYSBlIHJlc2EgZmluYWxlLjwvcD48L2Rpdj48L2FydGljbGU+PGRpdiBjbGFzcz0icmVuZGVyLWZsb3ctZm9vdCI+PHN0cm9uZz5JbmZvcm1hemlvbmkgc2VtcHJlIGxlZ2dpYmlsaTwvc3Ryb25nPklsIHByb2Nlc3NvIG5vbiBkaXBlbmRlIHBpw7kgZGFsIHRlc3RvIGluY29ycG9yYXRvIG5lbGzigJlpbW1hZ2luZTogaSBjb250ZW51dGkgcHJpbmNpcGFsaSBzb25vIHRlc3RvIEhUTUwgbml0aWRvIGEgcXVhbHNpYXNpIHJpc29sdXppb25lLjwvZGl2PjwvZGl2PjwvZGl2Pg=='
-          css_append = base64.b64decode(css_b64).decode('utf-8')
-          replacement = base64.b64decode(html_b64).decode('utf-8')
-          source_css = Path('landing-render-reflow-20260915.css')
-          fresh_css = Path('landing-render-visual-v2-20260915.css')
-          fresh_css.write_text(source_css.read_text(encoding='utf-8') + css_append, encoding='utf-8')
+          import re
+
+          build = '20260915-2359'
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          s, n = re.subn(r'<figure class="render-pro-figure"[^>]*>.*?</figure>', replacement, s, count=1, flags=re.S)
+
+          source_css = Path('landing-render-visual-v2-20260915.css')
+          if not source_css.exists():
+              source_css = Path('landing-render-reflow-20260915.css')
+          css = source_css.read_text(encoding='utf-8')
+          css += r'''
+
+/* FINAL BALANCED RENDER SECTION 2026-09-15 23:59 */
+.render-section{padding:72px 0!important}
+.render-pro-layout{width:min(1120px,calc(100% - 36px))!important;margin:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(420px,500px)!important;grid-template-rows:auto auto auto!important;column-gap:32px!important;row-gap:24px!important;align-items:start!important}
+.render-copy{display:block!important;grid-column:1!important;grid-row:1!important;min-width:0!important}
+.render-copy>.eyebrow{margin:0 0 10px!important;color:#7fd8ff!important}
+.render-copy>h2{margin:0 0 18px!important;max-width:600px!important;color:#fff!important;font-size:clamp(36px,3.6vw,48px)!important;line-height:1.08!important;letter-spacing:-.035em!important}
+.render-copy>p{margin:0!important;max-width:610px!important;color:#d6e7f3!important;font-size:18px!important;line-height:1.65!important}
+.render-visual{grid-column:2!important;grid-row:1!important;margin:0!important;min-width:0!important;width:100%!important;overflow:hidden!important;border-radius:20px!important;border:1px solid rgba(255,255,255,.18)!important;background:#0e2f49!important;box-shadow:0 20px 46px rgba(0,0,0,.22)!important}
+.render-visual img{display:block!important;width:100%!important;max-width:none!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;background:#0e2f49!important;visibility:visible!important;opacity:1!important}
+.render-benefits{grid-column:1/-1!important;grid-row:2!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;margin:0!important;padding:0!important;list-style:none!important}
+.render-benefits li{position:relative!important;display:flex!important;align-items:center!important;min-height:82px!important;margin:0!important;padding:16px 18px 16px 48px!important;border-radius:16px!important;border:1px solid rgba(255,255,255,.14)!important;background:rgba(255,255,255,.075)!important;color:#f4fbff!important;font-size:16px!important;line-height:1.45!important}
+.render-benefits li::before{content:'✓'!important;position:absolute!important;left:17px!important;top:50%!important;transform:translateY(-50%)!important;color:#72d3ff!important;font-size:22px!important;font-weight:900!important}
+.render-bottom{grid-column:1/-1!important;grid-row:3!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:18px!important;align-items:center!important}
+.render-location-note{margin:0!important;padding:16px 18px!important;border-radius:14px!important;border:1px solid rgba(127,216,255,.28)!important;background:rgba(255,255,255,.075)!important;color:#d8ebf6!important;font-size:14.5px!important;line-height:1.55!important}
+.render-location-note strong{display:block!important;margin:0 0 5px!important;color:#fff!important;font-size:16px!important}
+.render-location-note span{color:#d8ebf6!important}
+.render-actions{margin:0!important;display:flex!important;justify-content:flex-end!important;align-items:center!important}
+.render-actions .button.primary{min-width:210px!important;width:auto!important;max-width:none!important;padding:14px 20px!important;background:#fff!important;color:#0b3658!important;border-color:#fff!important;box-shadow:0 10px 24px rgba(0,0,0,.16)!important}
+
+@media(max-width:1000px){
+  .render-section{padding:58px 0!important}
+  .render-pro-layout{grid-template-columns:1fr!important;grid-template-rows:auto!important;gap:22px!important}
+  .render-copy,.render-visual,.render-benefits,.render-bottom{grid-column:1!important;grid-row:auto!important}
+  .render-copy>h2{max-width:760px!important}
+  .render-copy>p{max-width:800px!important}
+  .render-visual{max-width:760px!important}
+  .render-benefits{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .render-bottom{grid-template-columns:1fr!important}
+  .render-actions{justify-content:flex-start!important}
+}
+
+@media(max-width:640px){
+  .render-section{padding:48px 0 52px!important}
+  .render-pro-layout{width:min(100% - 24px,1120px)!important;gap:18px!important}
+  .render-copy>h2{font-size:clamp(30px,8.8vw,38px)!important;line-height:1.08!important;margin-bottom:14px!important}
+  .render-copy>p{font-size:16px!important;line-height:1.6!important}
+  .render-visual{border-radius:15px!important}
+  .render-benefits{grid-template-columns:1fr!important;gap:10px!important}
+  .render-benefits li{min-height:0!important;padding:14px 14px 14px 42px!important;font-size:15px!important;border-radius:13px!important}
+  .render-benefits li::before{left:14px!important;font-size:19px!important}
+  .render-location-note{padding:14px 15px!important;font-size:14px!important;border-radius:13px!important}
+  .render-location-note strong{font-size:15px!important}
+  .render-actions .button.primary{min-width:0!important;width:auto!important;padding:13px 18px!important}
+}
+'''
+          fresh_css = Path('landing-render-balanced-20260915.css')
+          fresh_css.write_text(css, encoding='utf-8')
+
+          render_section = f'''<section id="render" class="section render-section"><div class="wrap render-pro-layout"><div class="render-copy"><p class="eyebrow">VISUALIZZAZIONE ARCHITETTONICA E DI PRODOTTO</p><h2>Render fotorealistici da rilievi, immagini e documentazione tecnica</h2><p>Trasformo il materiale disponibile in visualizzazioni 3D professionali per comunicare in modo chiaro l’aspetto finale di un fabbricato, di un ambiente o di un oggetto. Possono essere utilizzati fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, file CAD/BIM, mesh e altri elaborati tecnici in qualsiasi formato utile.</p></div><figure class="render-visual" aria-label="Esempio di render architettonico fotorealistico"><img src="assets/render-architettonico.webp?v={build}" width="959" height="540" loading="lazy" decoding="async" alt="Render architettonico fotorealistico di un edificio moderno"></figure><ul class="render-benefits"><li>Immagini prospettiche fotorealistiche per esterni, interni e oggetti</li><li>Visualizzazioni orbitali e sequenze 360° attorno al soggetto</li><li>Ricostruzione visiva da nuvole di punti, foto e modelli CAD/BIM</li><li>Materiali, luci, inquadrature e ambientazione calibrati sul progetto</li></ul><div class="render-bottom"><div class="render-location-note"><strong>Per render di fabbricati reali</strong><span>È consigliabile indicare la posizione esatta dell’immobile tramite indirizzo completo, coordinate geografiche e/o link Google Maps / Google Earth, oltre a fornire il maggior numero possibile di fotografie del fabbricato, del contesto e di elaborati tecnici pertinenti. Una documentazione più completa consente di impostare viste, ambientazione e proporzioni con maggiore coerenza rispetto al contesto reale.</span></div><div class="render-actions"><a class="button primary" href="#modulo">Richiedi un render</a></div></div></div></section>'''
+
+          pattern = re.compile(r'<section id="render" class="section render-section">.*?</section>(?=<section id="preventivo")', re.S)
+          s, n = pattern.subn(render_section, s, count=1)
           if n != 1:
-              raise SystemExit(f'Expected one render-pro-figure, found {n}')
-          new_link = f'<link rel="stylesheet" href="landing-render-visual-v2-20260915.css?v={build}">'
-          s, n = re.subn(r'<link rel="stylesheet" href="landing-render-reflow-20260915\.css\?v=[^"]+">', new_link, s, count=1)
+              raise SystemExit(f'Expected exactly one render section, found {n}')
+
+          new_link = f'<link rel="stylesheet" href="landing-render-balanced-20260915.css?v={build}">'
+          s, n = re.subn(r'<link rel="stylesheet" href="landing-render-(?:visual-v2|reflow|balanced)-20260915\.css\?v=[^"]+">', new_link, s, count=1)
           if n == 0:
-              s, n = re.subn(r'<link rel="stylesheet" href="landing-stable-20260915\.css\?v=[^"]+">', new_link, s, count=1)
-          if n == 0 and 'landing-render-visual-v2-20260915.css' not in s:
               s = s.replace('</head>', new_link + '</head>', 1)
+
           s, n = re.subn(r'data-build="[^"]+"', f'data-build="{build}"', s, count=1)
           if n == 0:
               s = s.replace('<body>', f'<body data-build="{build}">', 1)
+
           p.write_text(s, encoding='utf-8')
           PY
-      - name: Validate render v2
+      - name: Validate balanced render section
         run: |
-          grep -q 'landing-render-visual-v2-20260915.css?v=20260915-1835' index.html
-          grep -q 'data-build="20260915-1835"' index.html
-          grep -q 'render-pro-media' index.html
-          grep -q 'Informazioni sempre leggibili' index.html
-          grep -q 'RENDER VISUAL V2 2026-09-15 18:35' landing-render-visual-v2-20260915.css
-          grep -q 'max-width:650px!important' landing-render-visual-v2-20260915.css
-      - name: Commit render visual v2
+          grep -q 'landing-render-balanced-20260915.css?v=20260915-2359' index.html
+          grep -q 'data-build="20260915-2359"' index.html
+          grep -q 'assets/render-architettonico.webp?v=20260915-2359' index.html
+          grep -q 'render-benefits' index.html
+          grep -q 'FINAL BALANCED RENDER SECTION 2026-09-15 23:59' landing-render-balanced-20260915.css
+          grep -q 'width:min(1120px,calc(100% - 36px))!important' landing-render-balanced-20260915.css
+          if grep -q 'render-flow-step' index.html; then exit 1; fi
+      - name: Commit balanced render section
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add index.html landing-render-visual-v2-20260915.css
-          git commit -m "Rebuild render visual for readability" || exit 0
+          git add index.html landing-render-balanced-20260915.css
+          git commit -m "Balance render section to page standard" || exit 0
           git push
