@@ -11,54 +11,74 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Decode and install final render visual
+      - name: Assemble and install final render visual
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
-          import base64, re
+          import base64, hashlib, re
 
-          payload = Path('assets/render-hero-final-20260915.webp.base64.txt')
-          if not payload.exists():
-              raise SystemExit('Missing staged image payload')
-          raw = base64.b64decode(payload.read_text(encoding='utf-8').strip(), validate=True)
+          parts_dir = Path('assets/render-final-parts')
+          parts = sorted(parts_dir.glob('part*.txt'))
+          if len(parts) != 7:
+              raise SystemExit(f'Expected 7 image parts, found {len(parts)}')
+          encoded = ''.join(p.read_text(encoding='utf-8').strip() for p in parts)
+          raw = base64.b64decode(encoded, validate=True)
+          digest = hashlib.sha256(raw).hexdigest()
+          expected = '07126a9eccb3cf7f0273c865366820600801f01a367259f359f3d2e5b4d849a0'
+          if digest != expected:
+              raise SystemExit(f'Unexpected image SHA256: {digest}')
+          if len(raw) != 38602 or raw[:4] != b'RIFF' or raw[8:12] != b'WEBP':
+              raise SystemExit('Invalid final WebP payload')
           out = Path('assets/render-hero-final-20260915.webp')
           out.write_bytes(raw)
-          if len(raw) < 20000:
-              raise SystemExit('Decoded image is unexpectedly small')
 
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          s = re.sub(r'data-build="[^"]+"', 'data-build="20260915-1445"', s, count=1)
-          s = re.sub(r'landing-stable-20260915\.css\?v=[^"]+', 'landing-stable-20260915.css?v=20260915-1445', s, count=1)
+          s = re.sub(r'data-build="[^"]+"', 'data-build="20260915-1455"', s, count=1)
+          s = re.sub(r'landing-stable-20260915\.css\?v=[^"]+', 'landing-stable-20260915.css?v=20260915-1455', s, count=1)
+          s = re.sub(
+              r'<img src="assets/render-visual-professionale\.svg\?v=[^"]+" width="1200" height="675" loading="lazy" decoding="async" alt="[^"]*">',
+              '<img src="assets/render-hero-final-20260915.webp?v=20260915-1455" width="720" height="405" loading="lazy" decoding="async" alt="Dal rilievo e dal modello tecnico CAD/BIM al render architettonico fotorealistico di un fabbricato">',
+              s,
+              count=1
+          )
+          if 'assets/render-hero-final-20260915.webp?v=20260915-1455' not in s:
+              raise SystemExit('Final render image reference was not installed in index.html')
           p.write_text(s, encoding='utf-8')
 
           css_path = Path('landing-stable-20260915.css')
           css = css_path.read_text(encoding='utf-8')
-          marker='/* FINAL GENERATED RENDER VISUAL 2026-09-15 14:45 */'
-          if marker not in css:
-              css += '''\n\n/* FINAL GENERATED RENDER VISUAL 2026-09-15 14:45 */\n.render-pro-figure{position:relative!important}\n.render-pro-figure::before{content:"";display:block!important;width:100%!important;aspect-ratio:720/405!important;background:url("assets/render-hero-final-20260915.webp?v=20260915-1445") center center/cover no-repeat!important}\n.render-pro-figure>img{display:none!important}\n@media(max-width:640px){.render-pro-figure::before{aspect-ratio:720/405!important;background-position:center center!important}}\n'''
+          css = re.sub(r'/\* FINAL GENERATED RENDER VISUAL 2026-09-15 14:45 \*/.*?@media\(max-width:640px\)\{\.render-pro-figure::before\{.*?\}\}\n?', '', css, flags=re.S)
+          css += '''\n\n/* FINAL RENDER VISUAL 2026-09-15 14:55 */\n.render-pro-figure>img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;background:#e8f3f9!important;visibility:visible!important;opacity:1!important}\n'''
           css_path.write_text(css, encoding='utf-8')
           PY
           rm -f assets/render-hero-final-20260915.webp.base64.txt
-      - name: Validate
+          rm -rf assets/render-final-parts assets/render-parts
+      - name: Validate final landing source
         run: |
           test -s assets/render-hero-final-20260915.webp
           test ! -e assets/render-hero-final-20260915.webp.base64.txt
-          grep -q 'render-hero-final-20260915.webp' landing-stable-20260915.css
-          grep -q 'data-build="20260915-1445"' index.html
+          test ! -e assets/render-final-parts
+          test ! -e assets/render-parts
+          grep -q 'data-build="20260915-1455"' index.html
+          grep -q 'landing-stable-20260915.css?v=20260915-1455' index.html
+          grep -q 'assets/render-hero-final-20260915.webp?v=20260915-1455' index.html
+          grep -q 'services-pro-grid' index.html
+          grep -q 'grid-template-columns:repeat(3,minmax(0,1fr))' landing-stable-20260915.css
+          node --check script.js
           python - <<'PY'
           from pathlib import Path
+          import hashlib
           b=Path('assets/render-hero-final-20260915.webp').read_bytes()
-          assert b[:4] == b'RIFF' and b[8:12] == b'WEBP'
-          print('WEBP OK', len(b), 'bytes')
+          assert len(b)==38602
+          assert hashlib.sha256(b).hexdigest()=='07126a9eccb3cf7f0273c865366820600801f01a367259f359f3d2e5b4d849a0'
+          print('Final WebP verified:', len(b), 'bytes')
           PY
-      - name: Commit
+      - name: Commit final production source
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add index.html landing-stable-20260915.css assets/render-hero-final-20260915.webp
-          git rm --cached assets/render-hero-final-20260915.webp.base64.txt 2>/dev/null || true
-          git add -u
-          git commit -m "Publish final generated render image" || exit 0
+          git add -A
+          git commit -m "Publish final generated render visual" || exit 0
           git push
