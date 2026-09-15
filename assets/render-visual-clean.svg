@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+<title id="title">Visualizzazione architettonica fotorealistica e tecnica</title>
+<desc id="desc">Composizione professionale di un edificio contemporaneo che passa da nuvola di punti e wireframe a visualizzazione renderizzata.</desc>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dff2ff"/><stop offset=".58" stop-color="#f8fbfe"/><stop offset="1" stop-color="#d6e6ef"/></linearGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8fd3ff" stop-opacity=".88"/><stop offset=".55" stop-color="#315f7d" stop-opacity=".92"/><stop offset="1" stop-color="#17384f"/></linearGradient>
+  <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#7a4a2f"/><stop offset=".5" stop-color="#b87d50"/><stop offset="1" stop-color="#5c3827"/></linearGradient>
+  <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f8f8"/><stop offset="1" stop-color="#c7d0d5"/></linearGradient>
+  <linearGradient id="pool" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#55c9e8"/><stop offset="1" stop-color="#1f7ea4"/></linearGradient>
+  <radialGradient id="sun"><stop stop-color="#fff7c6"/><stop offset="1" stop-color="#fff7c6" stop-opacity="0"/></radialGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#082f50" flood-opacity=".22"/></filter>
+  <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="1.8" fill="#4da8d8" opacity=".55"/><circle cx="15" cy="11" r="1.2" fill="#0b4f77" opacity=".4"/></pattern>
+  <clipPath id="leftHalf"><rect width="600" height="675"/></clipPath>
+</defs>
+<rect width="1200" height="675" rx="34" fill="url(#sky)"/>
+<circle cx="985" cy="96" r="150" fill="url(#sun)"/>
+<path d="M0 505 C170 465 250 505 390 480 C535 455 665 490 810 455 C960 420 1090 445 1200 425 L1200 675 L0 675Z" fill="#c9d7c7" opacity=".72"/>
+<path d="M0 545 C190 505 285 555 445 520 C635 478 760 535 930 493 C1030 468 1112 474 1200 457 L1200 675 L0 675Z" fill="#9cb59b" opacity=".55"/>
+<g filter="url(#shadow)">
+  <polygon points="325,455 862,455 1010,535 456,535" fill="#bfc9ce"/>
+  <polygon points="360,250 818,250 927,315 469,315" fill="#f1f3f4"/>
+  <polygon points="469,315 927,315 927,475 469,475" fill="#e6eaec"/>
+  <polygon points="360,250 469,315 469,475 360,410" fill="#d7dde0"/>
+  <rect x="505" y="338" width="365" height="115" rx="2" fill="url(#glass)"/>
+  <g stroke="#b8d7e8" stroke-width="5" opacity=".7"><line x1="570" y1="338" x2="570" y2="453"/><line x1="635" y1="338" x2="635" y2="453"/><line x1="700" y1="338" x2="700" y2="453"/><line x1="765" y1="338" x2="765" y2="453"/><line x1="830" y1="338" x2="830" y2="453"/></g>
+  <polygon points="398,205 820,205 922,260 500,260" fill="#f7f8f8"/>
+  <polygon points="500,260 922,260 922,326 500,326" fill="#fafafa"/>
+  <polygon points="398,205 500,260 500,326 398,272" fill="#dfe5e8"/>
+  <rect x="535" y="270" width="322" height="56" fill="url(#glass)"/>
+  <g stroke="#b7d5e5" stroke-width="4" opacity=".75"><line x1="600" y1="270" x2="600" y2="326"/><line x1="665" y1="270" x2="665" y2="326"/><line x1="730" y1="270" x2="730" y2="326"/><line x1="795" y1="270" x2="795" y2="326"/></g>
+  <polygon points="820,205 922,260 922,326 820,271" fill="url(#wood)"/>
+  <g stroke="#d9a278" stroke-width="3" opacity=".55"><line x1="840" y1="216" x2="840" y2="282"/><line x1="860" y1="227" x2="860" y2="293"/><line x1="880" y1="238" x2="880" y2="304"/><line x1="900" y1="249" x2="900" y2="315"/></g>
+  <rect x="510" y="473" width="360" height="16" fill="#9da8ad"/>
+</g>
+<polygon points="420,535 1045,535 1136,590 510,590" fill="url(#pool)" opacity=".95"/>
+<g stroke="#bff3ff" stroke-width="2" opacity=".5"><line x1="520" y1="555" x2="1030" y2="555"/><line x1="575" y1="574" x2="1088" y2="574"/></g>
+<g clip-path="url(#leftHalf)" opacity=".92">
+  <rect x="110" y="90" width="520" height="460" fill="url(#dots)" opacity=".45"/>
+  <g fill="none" stroke="#168dcc" stroke-width="2.2" opacity=".78">
+    <polygon points="360,250 818,250 927,315 469,315"/><polygon points="469,315 927,315 927,475 469,475"/><polygon points="360,250 469,315 469,475 360,410"/>
+    <polygon points="398,205 820,205 922,260 500,260"/><polygon points="500,260 922,260 922,326 500,326"/><polygon points="398,205 500,260 500,326 398,272"/>
+    <line x1="360" y1="250" x2="927" y2="475"/><line x1="469" y1="315" x2="818" y2="250"/><line x1="500" y1="260" x2="820" y2="205"/><line x1="398" y1="205" x2="922" y2="326"/>
+  </g>
+  <g fill="#0b5d86" opacity=".7"><circle cx="250" cy="190" r="3"/><circle cx="276" cy="214" r="2.5"/><circle cx="302" cy="243" r="2"/><circle cx="232" cy="270" r="2.8"/><circle cx="282" cy="312" r="2"/><circle cx="205" cy="335" r="2.5"/><circle cx="332" cy="360" r="2.2"/><circle cx="260" cy="400" r="2.6"/><circle cx="312" cy="445" r="2.1"/></g>
+</g>
+<rect x="586" y="70" width="3" height="495" fill="#1b86bc" opacity=".34"/>
+</svg>
