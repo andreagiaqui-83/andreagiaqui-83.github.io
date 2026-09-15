@@ -1,0 +1,35 @@
+name: Fix visible render FAQ
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-render-visible-faq.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add visible render FAQ
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html'); s=p.read_text(encoding='utf-8')
+          summary='<summary>Posso richiedere render da foto, immagini, nuvole di punti o elaborati tecnici?</summary>'
+          if summary not in s:
+              anchor='<details><summary>Posso richiedere un disegno meccanico AutoCAD da uno schizzo o da un disegno esistente?</summary><p>Sì. Puoi inviare schizzi a mano, fotografie, scansioni, PDF, immagini, DWG/DXF, quote o altri riferimenti disponibili. Il materiale viene valutato per realizzare un disegno tecnico AutoCAD 2D oppure, quando richiesto, una ricostruzione o modellazione AutoCAD 3D.</p></details>'
+              extra='<details><summary>Posso richiedere render da foto, immagini, nuvole di punti o elaborati tecnici?</summary><p>Sì. Posso sviluppare render fotorealistici e visualizzazioni 3D partendo da fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, modelli CAD/BIM, mesh e altri elaborati tecnici. Puoi richiedere immagini prospettiche statiche oppure visualizzazioni orbitali e sequenze 360° attorno al fabbricato o all’oggetto.</p></details>'
+              if anchor not in s: raise SystemExit('FAQ anchor not found')
+              s=s.replace(anchor,anchor+extra,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Validate
+        run: grep -q '<summary>Posso richiedere render da foto, immagini, nuvole di punti o elaborati tecnici?</summary>' index.html
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html
+          git commit -m "Add visible render FAQ" || exit 0
+          git push
