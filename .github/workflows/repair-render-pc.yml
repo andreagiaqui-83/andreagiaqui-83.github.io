@@ -1,0 +1,101 @@
+name: Repair render image on PC
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/repair-render-pc.yml'
+permissions:
+  contents: write
+jobs:
+  repair-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate WebP and create universal JPEG
+        run: |
+          python -m pip install --quiet pillow
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import re
+
+          src=Path('assets/render-hero-final-20260915.webp')
+          if not src.exists():
+              raise SystemExit('Source render WebP missing')
+          with Image.open(src) as im:
+              im.load()
+              print('SOURCE', im.format, im.size, im.mode, src.stat().st_size)
+              rgb=im.convert('RGB')
+              out=Path('assets/render-final-pc-20260915.jpg')
+              rgb.save(out,'JPEG',quality=92,optimize=True,progressive=True,subsampling=1)
+          with Image.open(out) as check:
+              check.load()
+              assert check.format == 'JPEG'
+              print('JPEG', check.size, check.mode, out.stat().st_size)
+              if out.stat().st_size < 20000:
+                  raise SystemExit('JPEG unexpectedly small')
+
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          s=re.sub(r'assets/render-hero-final-20260915\.webp\?v=[^\"\']+', 'assets/render-final-pc-20260915.jpg?v=20260915-1720', s)
+          s=re.sub(r'assets/render-visual-professionale\.svg\?v=[^\"\']+', 'assets/render-final-pc-20260915.jpg?v=20260915-1720', s)
+          s=s.replace('loading="lazy" decoding="async" alt="Dal rilievo e dal modello tecnico CAD/BIM al render architettonico fotorealistico di un fabbricato"', 'loading="eager" decoding="async" alt="Dal rilievo e dal modello tecnico CAD/BIM al render architettonico fotorealistico di un fabbricato"')
+          s=re.sub(r'data-build="[^"]+"', 'data-build="20260915-1720"', s, count=1)
+          s=re.sub(r'landing-stable-20260915\.css\?v=[^"]+', 'landing-stable-20260915.css?v=20260915-1720', s, count=1)
+          if 'render-final-pc-20260915.jpg?v=20260915-1720' not in s:
+              raise SystemExit('Render JPEG was not wired into index.html')
+          p.write_text(s,encoding='utf-8')
+
+          cssp=Path('landing-stable-20260915.css')
+          css=cssp.read_text(encoding='utf-8')
+          marker='/* PC SAFE RENDER IMAGE 2026-09-15 17:20 */'
+          if marker not in css:
+              css += '''\n\n/* PC SAFE RENDER IMAGE 2026-09-15 17:20 */\n.render-pro-figure>img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;background:#e8f3f9!important;visibility:visible!important;opacity:1!important}\n'''
+          cssp.write_text(css,encoding='utf-8')
+          PY
+      - name: Commit repaired asset and references
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html landing-stable-20260915.css assets/render-final-pc-20260915.jpg
+          git commit -m "Use universal JPEG render image for desktop browsers" || exit 0
+          git push
+      - name: Wait for GitHub Pages and verify live custom domain
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='https://andreagiaquinto.it/'
+          ASSET='https://andreagiaquinto.it/assets/render-final-pc-20260915.jpg?v=20260915-1720'
+          ORIGIN='https://andreagiaqui-83.github.io/assets/render-final-pc-20260915.jpg?v=20260915-1720'
+          ok=0
+          for i in {1..10}; do
+            echo "Live verification attempt $i"
+            html=$(curl -fsSL --connect-timeout 10 --max-time 20 "${ROOT}?verify=20260915-1720-${i}" || true)
+            if echo "$html" | grep -q 'render-final-pc-20260915.jpg?v=20260915-1720'; then
+              if curl -fsSL --connect-timeout 10 --max-time 30 "$ASSET" -o /tmp/live-render.jpg; then
+                ok=1
+                break
+              fi
+            fi
+            sleep 15
+          done
+          test "$ok" = 1
+          curl -fsSI "$ASSET" | tee /tmp/custom-headers.txt
+          curl -fsSL "$ORIGIN" -o /tmp/origin-render.jpg
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          for p in [Path('/tmp/live-render.jpg'),Path('/tmp/origin-render.jpg')]:
+              with Image.open(p) as im:
+                  im.load()
+                  print(p.name, im.format, im.size, im.mode, p.stat().st_size)
+                  assert im.format == 'JPEG'
+                  assert im.width >= 700 and im.height >= 390
+                  assert p.stat().st_size >= 20000
+          hdr=Path('/tmp/custom-headers.txt').read_text(errors='ignore').lower()
+          assert 'content-type: image/jpeg' in hdr, hdr
+          print('LIVE CUSTOM DOMAIN RENDER VERIFIED')
+          PY
