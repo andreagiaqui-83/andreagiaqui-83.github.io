@@ -11,50 +11,47 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build universal JPEG and mobile-safe render image
+      - name: Build clean universal SVG and mobile-safe render image
         run: |
-          python -m pip install --quiet pillow
           python - <<'PY'
           from pathlib import Path
-          from PIL import Image
           import re
 
-          build='20260916-0025'
-          src=Path('assets/render-architettonico.webp')
-          dst=Path('assets/render-architettonico-universal.jpg')
-          if not src.exists():
-              raise SystemExit('Missing render source asset')
-          im=Image.open(src).convert('RGB')
-          im.save(dst, 'JPEG', quality=93, optimize=True, progressive=True, subsampling=0)
-          w,h=im.size
+          build='20260916-0035'
+          src=Path('assets/render-visual-professionale.svg')
+          dst=Path('assets/render-visual-clean.svg')
+          svg=src.read_text(encoding='utf-8')
+          svg=re.sub(r'<g transform="translate\(790 82\)">.*?</g>\s*</svg>', '</svg>', svg, flags=re.S)
+          dst.write_text(svg, encoding='utf-8')
 
           css=Path('render-image-mobile-fix-20260916.css')
-          css.write_text('''/* RENDER IMAGE MOBILE FIX 2026-09-16 */\n.render-visual{background:#0e2f49!important;min-height:0!important}\n.render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;visibility:visible!important;opacity:1!important}\n@media(max-width:767px){\n  .render-pro-layout{grid-template-columns:1fr!important}\n  .render-copy{grid-column:1!important}\n  .render-visual{grid-column:1!important;width:100%!important;min-height:0!important;margin:0!important;border-radius:16px!important;overflow:hidden!important}\n  .render-visual img{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important}\n}\n''', encoding='utf-8')
+          css.write_text('''/* RENDER IMAGE MOBILE FIX 2026-09-16 */\n.render-visual{background:#0e2f49!important;min-height:0!important}\n.render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;visibility:visible!important;opacity:1!important}\n@media(max-width:767px){\n  .render-pro-layout{grid-template-columns:1fr!important}\n  .render-copy{grid-column:1!important}\n  .render-visual{grid-column:1!important;width:100%!important;min-height:0!important;height:auto!important;margin:0!important;border-radius:16px!important;overflow:hidden!important;background:#dcebf5!important}\n  .render-visual img{display:block!important;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important}\n}\n''', encoding='utf-8')
 
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-          s,n=re.subn(r'assets/render-architettonico\.webp\?v=[^\"\']+', f'assets/render-architettonico-universal.jpg?v={build}', s, count=1)
+          s,n=re.subn(r'assets/render-(?:architettonico\.webp|architettonico-universal\.jpg|visual-clean\.svg)\?v=[^\"\']+', f'assets/render-visual-clean.svg?v={build}', s, count=1)
           if n!=1:
               raise SystemExit(f'Expected one render image reference, found {n}')
-          s=re.sub(r'(<figure class="render-visual"[^>]*><img [^>]*?)width="\d+" height="\d+"', rf'\1width="{w}" height="{h}"', s, count=1)
+          s=re.sub(r'(<figure class="render-visual"[^>]*><img [^>]*?)width="\d+" height="\d+"', r'\1width="1200" height="675"', s, count=1)
           link=f'<link rel="stylesheet" href="render-image-mobile-fix-20260916.css?v={build}">' 
-          if 'render-image-mobile-fix-20260916.css' not in s:
+          if 'render-image-mobile-fix-20260916.css' in s:
+              s=re.sub(r'<link rel="stylesheet" href="render-image-mobile-fix-20260916\.css\?v=[^"]+">', link, s, count=1)
+          else:
               s=s.replace('</head>', link+'</head>',1)
           s=re.sub(r'data-build="[^"]+"', f'data-build="{build}"', s, count=1)
           p.write_text(s, encoding='utf-8')
-          print('JPEG', w, h, dst.stat().st_size)
           PY
       - name: Validate
         run: |
-          test -s assets/render-architettonico-universal.jpg
-          grep -q 'render-architettonico-universal.jpg?v=20260916-0025' index.html
-          grep -q 'render-image-mobile-fix-20260916.css?v=20260916-0025' index.html
-          grep -q 'data-build="20260916-0025"' index.html
+          test -s assets/render-visual-clean.svg
+          grep -q 'render-visual-clean.svg?v=20260916-0035' index.html
+          grep -q 'render-image-mobile-fix-20260916.css?v=20260916-0035' index.html
+          grep -q 'data-build="20260916-0035"' index.html
           grep -q 'object-fit:cover!important' render-image-mobile-fix-20260916.css
       - name: Commit fix
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add index.html assets/render-architettonico-universal.jpg render-image-mobile-fix-20260916.css
+          git add index.html assets/render-visual-clean.svg render-image-mobile-fix-20260916.css
           git commit -m "Fix render image visibility on mobile" || exit 0
           git push
