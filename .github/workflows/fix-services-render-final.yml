@@ -1,0 +1,95 @@
+name: Fix services and render final
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-services-render-final.yml'
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rebuild isolated services and render blocks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          services='''<section id="servizi" class="section wrap services-pro-section"><div class="section-heading"><p class="eyebrow">SERVIZI CAD · BIM · RENDER</p><h2>Dal materiale disponibile al risultato professionale</h2><p>Un unico flusso di lavoro per trasformare rilievi, schizzi, fotografie, nuvole di punti e documentazione tecnica in elaborati CAD 2D/3D, modelli Revit/BIM, disegni meccanici e visualizzazioni fotorealistiche.</p></div><div class="services-pro-grid"><article class="service-pro-card"><span class="service-pro-num">01</span><span class="service-pro-tag">2D</span><h3>AutoCAD 2D</h3><p>Piante, coperture, prospetti, sezioni e altri elaborati tecnici in DWG.</p></article><article class="service-pro-card"><span class="service-pro-num">02</span><span class="service-pro-tag">3D</span><h3>AutoCAD 3D</h3><p>Ricostruzione tridimensionale CAD a partire dal materiale disponibile.</p></article><article class="service-pro-card"><span class="service-pro-num">03</span><span class="service-pro-tag service-pro-tag-small">DOCFA</span><h3>DOCFA</h3><p>Planimetrie DOCFA predisposte in ambiente AutoCAD secondo le informazioni fornite.</p></article><article class="service-pro-card"><span class="service-pro-num">04</span><span class="service-pro-tag">BIM</span><h3>Revit / BIM</h3><p>Modello 3D Revit/BIM da rilievi, nuvole di punti, immagini e documentazione tecnica.</p></article><article class="service-pro-card"><span class="service-pro-num">05</span><span class="service-pro-tag service-pro-tag-small">MECH</span><h3>Disegno meccanico</h3><p>Disegni tecnici meccanici AutoCAD 2D o modelli 3D ricostruiti da schizzi, fotografie, PDF, scansioni, quote o altri riferimenti disponibili.</p></article><article class="service-pro-card"><span class="service-pro-num">06</span><span class="service-pro-tag service-pro-tag-small">RENDER</span><h3>Render e visualizzazione 3D</h3><p>Render fotorealistici e visualizzazioni professionali ricavati da foto, immagini, nuvole di punti, modelli e documentazione tecnica, con viste prospettiche statiche o orbitali 360°.</p></article></div></section>'''
+
+          pat=re.compile(r'<section id="servizi".*?</section>(?=<section class="section visual-showcase")',re.S)
+          if not pat.search(s):
+              raise SystemExit('Services section not found')
+          s=pat.sub(services,s,count=1)
+
+          # Replace render layout and use the known-valid local SVG asset; this avoids the broken WEBP payload.
+          s=s.replace('<div class="wrap render-wrap">','<div class="wrap render-pro-layout">',1)
+          render_figure='''<figure class="render-pro-figure" aria-label="Dal rilievo e dal modello tecnico al render"><img src="assets/render-visual-professionale.svg?v=20260915-1315" width="1200" height="675" loading="lazy" decoding="async" alt="Trasformazione da nuvola di punti e modello tecnico CAD BIM a visualizzazione architettonica renderizzata"><figcaption><strong>Dal modello tecnico alla realtà visuale.</strong><span>Geometria, materiali, luci, inquadratura e contesto vengono coordinati per ottenere una visualizzazione chiara e realistica.</span></figcaption></figure>'''
+          fpat=re.compile(r'<figure class="render-visual[^>]*>.*?</figure>',re.S)
+          if not fpat.search(s):
+              raise SystemExit('Render figure not found')
+          s=fpat.sub(render_figure,s,count=1)
+
+          # Final stylesheet is deliberately unique and loaded last.
+          s=re.sub(r'<link rel="stylesheet" href="landing-live-20260915\.css\?v=[^"]+">','',s,count=1)
+          if 'landing-stable-20260915.css?v=20260915-1315' not in s:
+              s=s.replace('</head>','<link rel="stylesheet" href="landing-stable-20260915.css?v=20260915-1315"></head>',1)
+          s=re.sub(r'data-build="[^"]+"','data-build="20260915-1315"',s,count=1)
+          p.write_text(s,encoding='utf-8')
+          PY
+
+          cat > landing-stable-20260915.css <<'CSS'
+          /* Isolated production layout: services + render. Avoids all legacy .cards/.card collisions. */
+          .services-pro-section{overflow:visible!important}
+          .services-pro-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:auto auto!important;gap:22px!important;width:100%!important;max-width:100%!important;align-items:stretch!important;justify-items:stretch!important}
+          .service-pro-card{box-sizing:border-box!important;position:relative!important;display:block!important;width:100%!important;min-width:0!important;max-width:none!important;min-height:220px!important;height:auto!important;margin:0!important;padding:27px 25px 25px!important;overflow:hidden!important;border:1px solid #d4e2ec!important;border-radius:18px!important;background:linear-gradient(145deg,#fff 0%,#fbfdff 75%,#eef8ff 100%)!important;box-shadow:0 10px 30px rgba(11,58,91,.075)!important;color:#0b1f33!important;white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important}
+          .service-pro-card:nth-child(1){grid-column:1!important;grid-row:1!important}.service-pro-card:nth-child(2){grid-column:2!important;grid-row:1!important}.service-pro-card:nth-child(3){grid-column:3!important;grid-row:1!important}.service-pro-card:nth-child(4){grid-column:1!important;grid-row:2!important}.service-pro-card:nth-child(5){grid-column:2!important;grid-row:2!important}.service-pro-card:nth-child(6){grid-column:3!important;grid-row:2!important}
+          .service-pro-card::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,#087ad8,#26a9e0)}
+          .service-pro-num{display:inline-flex!important;align-items:center;justify-content:center;height:28px;min-width:36px;padding:0 10px;border-radius:999px;background:#e9f7ff;color:#087ad8!important;font-size:12px!important;font-weight:900!important;letter-spacing:.04em!important}
+          .service-pro-tag{position:absolute;top:25px;right:24px;display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:16px;border:1px solid #d1e6f3;background:#eaf6fd;color:#0b4a6f;font-size:15px;font-weight:900;letter-spacing:.02em}.service-pro-tag-small{font-size:10px}
+          .service-pro-card h3{display:block!important;max-width:calc(100% - 80px)!important;margin:18px 0 10px!important;color:#0b2a46!important;font-size:23px!important;line-height:1.2!important;letter-spacing:-.015em!important;white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important}
+          .service-pro-card p{display:block!important;margin:0!important;color:#5e7185!important;font-size:16px!important;line-height:1.62!important;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important}
+          @media(hover:hover){.service-pro-card:hover{transform:translateY(-3px);border-color:#add3e9!important;box-shadow:0 17px 36px rgba(11,58,91,.11)!important}}
+
+          .render-pro-layout{width:min(1120px,calc(100% - 36px));margin:auto;display:grid!important;grid-template-columns:minmax(0,.95fr) minmax(420px,1.05fr)!important;gap:42px!important;align-items:center!important}
+          .render-pro-figure{box-sizing:border-box;margin:0!important;min-width:0!important;width:100%!important;overflow:hidden!important;border-radius:20px!important;border:1px solid rgba(255,255,255,.2)!important;background:#fff!important;box-shadow:0 24px 58px rgba(0,0,0,.27)!important}
+          .render-pro-figure img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;background:#e8f3f9!important;visibility:visible!important;opacity:1!important}
+          .render-pro-figure figcaption{display:grid!important;gap:5px!important;padding:17px 19px!important;background:#fff!important;color:#456075!important;line-height:1.5!important;border-top:1px solid #e1ebf2!important}
+          .render-pro-figure figcaption strong{color:#0b2a46!important;font-size:16px!important}.render-pro-figure figcaption span{font-size:13px!important}
+
+          @media(max-width:1000px){.render-pro-layout{grid-template-columns:1fr!important}.render-pro-figure{max-width:850px;margin-inline:auto!important}}
+          @media(max-width:980px){.services-pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:auto!important}.service-pro-card{grid-column:auto!important;grid-row:auto!important}}
+          @media(max-width:640px){.services-pro-grid{grid-template-columns:1fr!important;gap:15px!important}.service-pro-card{grid-column:auto!important;grid-row:auto!important;min-height:0!important;padding:23px 20px!important}.service-pro-tag{top:21px;right:18px;width:52px;height:52px}.service-pro-card h3{font-size:21px!important}.render-pro-layout{width:min(100% - 24px,1120px);gap:26px!important}.render-pro-figure{border-radius:14px!important}.render-pro-figure img{aspect-ratio:16/10!important}}
+          CSS
+
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text(encoding='utf-8')
+          assert s.count('class="service-pro-card"') == 6
+          assert 'class="cards"' not in s[s.index('id="servizi"'):s.index('visual-showcase')]
+          assert 'render-pro-layout' in s and 'render-pro-figure' in s
+          assert 'assets/render-visual-professionale.svg?v=20260915-1315' in s
+          assert 'landing-stable-20260915.css?v=20260915-1315' in s
+          assert 'data-build="20260915-1315"' in s
+          css=Path('landing-stable-20260915.css').read_text(encoding='utf-8')
+          assert 'grid-template-columns:repeat(3,minmax(0,1fr))!important' in css
+          assert '.service-pro-card:nth-child(6){grid-column:3!important;grid-row:2!important}' in css
+          print('Structural validation PASS')
+          PY
+          node --check script.js
+      - name: Commit verified repair
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git rm .github/workflows/fix-services-render-final.yml
+          git add -A
+          git commit -m "Repair services grid and render visual with isolated layout"
+          git push
