@@ -15,72 +15,27 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
+          import base64, re, zlib
 
           build = '20260915-2359'
-          p = Path('index.html')
-          s = p.read_text(encoding='utf-8')
+          css_z = 'eNqtV91u2zYUvt9TcC0G2IXkUL9WGGBY1mZAgSIDut3skpIom60kChKd2BX2FLvd0+1JRkr+ESXSdrIhiCCT1Pn9zjkfb96BXz4+3n8CP99/un98//ABfH54/PDwGfz28P73j78+Ahe6oQ1vbScAroeCW/Du5rtFTcqU1HZDEk5Z2VY4TWm5Qku32gL4PS0qVnNc8j+PJ6ua2TnesQ1vn2nK16ig5cxxXFhtrQTnycyB8AdgAy+stvP5ScJdgesVLRHecDZYTWlTCXFoVdN0sCx/2pwUYo8TO2H5pigbqarA2xm0nKyeg/0vv1MdQPGcGyXU7LnpVIPjY3C2l2+vcIU84fhgR3zXLbu+soxzuiptKsQ3qOG45rpIJazatQf/4pwlX8fm9XqRM14XWpVF4andBxuaFP24IDsSiw/bfZwhgMCBitVCHavR22WWRllmFLR2FRGRIkIEfG9JCLXCs6Hku4yV3G7oN4KSHBfVTILC8hbh07PlR2q+cloSe03oas2Rs4DRcItwLjFa4URi015ALyCF0YHqaL/ecH1U0pAsM09r+ygGqqVhoDPkiTYbnLfDLLsXs6yxWpf4u35F1tlgkT2ROsuFyDVNU1IOdmJWS5NqnNJNg1zV+34TOaLcG5bTFNSrGM/cILAO/wsnGuYpxsnXVc02ZYreQuJm/q0ibWs3a5wKMyCQmoAvMt7LhJb8W7ju3BwwQIuVsWS0bp/yWrKSDDb2CRpVOm4q0elELES3Q054MzSexV/kXkY5SmQ0p1sVa6hskyghJVcOnI2K8I3GNKd8h7rXfGgnk6gWO44uKjEpibCnUYDk3NjajuG+tq3WpCKYz1xL6a9KMxUt0PFHnWCC1sPwgEqxNKKK+C4nowRNnQQ5bY8RrokwkT4RjU9ZTky9eJIXWUB7JETutfY7ErOy6EH35keaijmUkzzxwnLyDeU0PQqXwVzTYv0sNnTZkTVqp/KDC9FHKCYZq0mbCIEikujNP3//9WYYoEN2cCy823CiNOlMKFkq+jmrUKCUK69x2QgdBereJAz/mNnijMbPpZt6Bj9dNZfdxnPv5y3UzsiYcc6Kq+rI+3/oyajzdCUUVdci92S56IKyW5V2yThpr4GtGaz+FWB13KXlOmGPQDf6j2BNIxJnoR6s/iI4A9cguBgN0PCaleaJMeAxwUvIilpGRuUVLluDm6dvcEesG13iDA3ty6bhNNvZhyqU27YQ9mLk7FWDRbwR4C8XVU2FFbv2xCrcERfqV0fINY7YI/AErMCYVwwGohrmfcRg7IVBNIWqNjUKr5A2A0nIFV7hhAqv+KkgKcWzk+2CN8gbQmu88gTRFVcefeGLer988xj1ArWFqRTWUlmRNe7V1rmupmtpqn4d4T+EaRlCs10dtT6cjKDh5J77XiFTpTcv5yX69n4+PdPK1Nbb5FangVTon0eU3yEKBIZM62/S/e1Zwtvqb9Xzs0NkmsvJnUtej6NFJO5c3vV3rr5d7eM6GhwTUFxJQMIzaBkNquBVgBnVoQzWBeRJzjngiNDU3U4PX0M9eteDc5PXu2jHkX31TMo3qbm9Yja1qvGBSZb/CpO1E9gUhpcMI3hpEB2d8iZER9Tnv2Dh9V8='
+          html_z = 'eNqNVctO5FYQ/ZWSs20wgTASktsRAZS0FAZEmFmwu7ar3aXYtzz3XjeiV1nmF/IX2Wab+ZP5kjnXD0IzLLJp+b6qTp06pzrzXAZRS1ItE8e2YpdQ2Rjvl8l8NG4fTMskzyrZzncenenmC53Tg8Y8aR/270zHpXZPOOjmbX7iwuljkn9c/fbh/NfVw8P5w+rm/RWd3138srq/ur+/eb+6OKcrulzR7d3N5Q12srTLs81xfjfEpLUGdWwa8UFKocqQk0Z4KwuStjW1WCGmSsu+ZRvMDviZApdWSpOliJN1+b0zfq2uVZKGWhPYiWnwSHynVgrBt1jaiu+RZ7cbggidXBLqXbP3WOKAOsApte1jaDc8abVSKjdinFLz5Y+/jO84BKW12DEB9ZbWpigcngRdTDumLQRgmXTa0LqO7w7pVr1Xq4SkjBR9kAFQkIGH2pm18H+FL8j2Wx0Tdb0N2OjEIPAiIh+wYMvzUM8CqHD14vwy/Wl1vaCW/QbMmSY4MNiYQl3MM1InsbpPoMOL8TG5A2064OHDoUMp2p9na6l74NyXwUhkQgY0Qy4FN8vkynPbyVDveAunIC7EspFP9/usUJG0NXlXLhOE5uDTKfj+s8NHLroft8vjo+N3R2ffnx4cn5yeJfQoVdgsk7P4vWGpN2GZnP5wlFCjphJbL5PG7J4SqrjUcW38ky2TyMYyufsfAKfGcSVrsKVRCexsxJ2OnORZ37zipWDLawkelxrJV7N6n1tVbng/C9ZRc+yh2NhAscMHujYKRrIUgWKwj6+0q66QEDXLaP+nnu2O6eTd0b9/k0E9AIpKyU+ye45yh8J8cP1oIrRRtiY67huVRZQIHYtukGTS1HOc68liuNn05QAcWqqgrygWnvU/mbXExWLQngdlYOMFqLRv3ho0heJG++YMahROQ9wDq4FxA/WorfNb8DgJD2U8WzKqEemzdLqW+c7Y/POf8Ln1UjdipulQjZ5vDHXqZQTOHmSCIHAA78OUOlwOzrTQzfDIoSUah0bXcPR/qeogOPBDNY9+jl3mFPND7O/0s2qNENem85TOqyvjwmZBCqeCu2hGK3H+xFlW16IODWoZIwjQ/DjOqpcDIyLcn0JYo8AAYcU2Vm/5H8ILYtElOaQP1ryesJ18/meuywxsDQMNoaQFjBDJgoDiKNrvNscOd+pGneLhXASEoJh5dhcn/DRHzQucsVFx9gwdmsbPt+03wz9YtJiZT4o+WhhppTUOpt84Xi+T7yDevoFhIfqN8GjnMUiWmjnB3u/095h/Bf1iqJo='
+
+          css = zlib.decompress(base64.b64decode(css_z)).decode('utf-8')
+          render_section = zlib.decompress(base64.b64decode(html_z)).decode('utf-8')
 
           source_css = Path('landing-render-visual-v2-20260915.css')
           if not source_css.exists():
               source_css = Path('landing-render-reflow-20260915.css')
-          css = source_css.read_text(encoding='utf-8')
-          css += r'''
-
-/* FINAL BALANCED RENDER SECTION 2026-09-15 23:59 */
-.render-section{padding:72px 0!important}
-.render-pro-layout{width:min(1120px,calc(100% - 36px))!important;margin:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(420px,500px)!important;grid-template-rows:auto auto auto!important;column-gap:32px!important;row-gap:24px!important;align-items:start!important}
-.render-copy{display:block!important;grid-column:1!important;grid-row:1!important;min-width:0!important}
-.render-copy>.eyebrow{margin:0 0 10px!important;color:#7fd8ff!important}
-.render-copy>h2{margin:0 0 18px!important;max-width:600px!important;color:#fff!important;font-size:clamp(36px,3.6vw,48px)!important;line-height:1.08!important;letter-spacing:-.035em!important}
-.render-copy>p{margin:0!important;max-width:610px!important;color:#d6e7f3!important;font-size:18px!important;line-height:1.65!important}
-.render-visual{grid-column:2!important;grid-row:1!important;margin:0!important;min-width:0!important;width:100%!important;overflow:hidden!important;border-radius:20px!important;border:1px solid rgba(255,255,255,.18)!important;background:#0e2f49!important;box-shadow:0 20px 46px rgba(0,0,0,.22)!important}
-.render-visual img{display:block!important;width:100%!important;max-width:none!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;background:#0e2f49!important;visibility:visible!important;opacity:1!important}
-.render-benefits{grid-column:1/-1!important;grid-row:2!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;margin:0!important;padding:0!important;list-style:none!important}
-.render-benefits li{position:relative!important;display:flex!important;align-items:center!important;min-height:82px!important;margin:0!important;padding:16px 18px 16px 48px!important;border-radius:16px!important;border:1px solid rgba(255,255,255,.14)!important;background:rgba(255,255,255,.075)!important;color:#f4fbff!important;font-size:16px!important;line-height:1.45!important}
-.render-benefits li::before{content:'✓'!important;position:absolute!important;left:17px!important;top:50%!important;transform:translateY(-50%)!important;color:#72d3ff!important;font-size:22px!important;font-weight:900!important}
-.render-bottom{grid-column:1/-1!important;grid-row:3!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:18px!important;align-items:center!important}
-.render-location-note{margin:0!important;padding:16px 18px!important;border-radius:14px!important;border:1px solid rgba(127,216,255,.28)!important;background:rgba(255,255,255,.075)!important;color:#d8ebf6!important;font-size:14.5px!important;line-height:1.55!important}
-.render-location-note strong{display:block!important;margin:0 0 5px!important;color:#fff!important;font-size:16px!important}
-.render-location-note span{color:#d8ebf6!important}
-.render-actions{margin:0!important;display:flex!important;justify-content:flex-end!important;align-items:center!important}
-.render-actions .button.primary{min-width:210px!important;width:auto!important;max-width:none!important;padding:14px 20px!important;background:#fff!important;color:#0b3658!important;border-color:#fff!important;box-shadow:0 10px 24px rgba(0,0,0,.16)!important}
-
-@media(max-width:1000px){
-  .render-section{padding:58px 0!important}
-  .render-pro-layout{grid-template-columns:1fr!important;grid-template-rows:auto!important;gap:22px!important}
-  .render-copy,.render-visual,.render-benefits,.render-bottom{grid-column:1!important;grid-row:auto!important}
-  .render-copy>h2{max-width:760px!important}
-  .render-copy>p{max-width:800px!important}
-  .render-visual{max-width:760px!important}
-  .render-benefits{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .render-bottom{grid-template-columns:1fr!important}
-  .render-actions{justify-content:flex-start!important}
-}
-
-@media(max-width:640px){
-  .render-section{padding:48px 0 52px!important}
-  .render-pro-layout{width:min(100% - 24px,1120px)!important;gap:18px!important}
-  .render-copy>h2{font-size:clamp(30px,8.8vw,38px)!important;line-height:1.08!important;margin-bottom:14px!important}
-  .render-copy>p{font-size:16px!important;line-height:1.6!important}
-  .render-visual{border-radius:15px!important}
-  .render-benefits{grid-template-columns:1fr!important;gap:10px!important}
-  .render-benefits li{min-height:0!important;padding:14px 14px 14px 42px!important;font-size:15px!important;border-radius:13px!important}
-  .render-benefits li::before{left:14px!important;font-size:19px!important}
-  .render-location-note{padding:14px 15px!important;font-size:14px!important;border-radius:13px!important}
-  .render-location-note strong{font-size:15px!important}
-  .render-actions .button.primary{min-width:0!important;width:auto!important;padding:13px 18px!important}
-}
-'''
           fresh_css = Path('landing-render-balanced-20260915.css')
-          fresh_css.write_text(css, encoding='utf-8')
+          fresh_css.write_text(source_css.read_text(encoding='utf-8') + '\n\n' + css + '\n', encoding='utf-8')
 
-          render_section = f'''<section id="render" class="section render-section"><div class="wrap render-pro-layout"><div class="render-copy"><p class="eyebrow">VISUALIZZAZIONE ARCHITETTONICA E DI PRODOTTO</p><h2>Render fotorealistici da rilievi, immagini e documentazione tecnica</h2><p>Trasformo il materiale disponibile in visualizzazioni 3D professionali per comunicare in modo chiaro l’aspetto finale di un fabbricato, di un ambiente o di un oggetto. Possono essere utilizzati fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, file CAD/BIM, mesh e altri elaborati tecnici in qualsiasi formato utile.</p></div><figure class="render-visual" aria-label="Esempio di render architettonico fotorealistico"><img src="assets/render-architettonico.webp?v={build}" width="959" height="540" loading="lazy" decoding="async" alt="Render architettonico fotorealistico di un edificio moderno"></figure><ul class="render-benefits"><li>Immagini prospettiche fotorealistiche per esterni, interni e oggetti</li><li>Visualizzazioni orbitali e sequenze 360° attorno al soggetto</li><li>Ricostruzione visiva da nuvole di punti, foto e modelli CAD/BIM</li><li>Materiali, luci, inquadrature e ambientazione calibrati sul progetto</li></ul><div class="render-bottom"><div class="render-location-note"><strong>Per render di fabbricati reali</strong><span>È consigliabile indicare la posizione esatta dell’immobile tramite indirizzo completo, coordinate geografiche e/o link Google Maps / Google Earth, oltre a fornire il maggior numero possibile di fotografie del fabbricato, del contesto e di elaborati tecnici pertinenti. Una documentazione più completa consente di impostare viste, ambientazione e proporzioni con maggiore coerenza rispetto al contesto reale.</span></div><div class="render-actions"><a class="button primary" href="#modulo">Richiedi un render</a></div></div></div></section>'''
-
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
           pattern = re.compile(r'<section id="render" class="section render-section">.*?</section>(?=<section id="preventivo")', re.S)
           s, n = pattern.subn(render_section, s, count=1)
           if n != 1:
-              raise SystemExit(f'Expected exactly one render section, found {n}')
+              raise SystemExit(f'Expected one render section, found {n}')
 
           new_link = f'<link rel="stylesheet" href="landing-render-balanced-20260915.css?v={build}">'
           s, n = re.subn(r'<link rel="stylesheet" href="landing-render-(?:visual-v2|reflow|balanced)-20260915\.css\?v=[^"]+">', new_link, s, count=1)
@@ -90,7 +45,6 @@ jobs:
           s, n = re.subn(r'data-build="[^"]+"', f'data-build="{build}"', s, count=1)
           if n == 0:
               s = s.replace('<body>', f'<body data-build="{build}">', 1)
-
           p.write_text(s, encoding='utf-8')
           PY
       - name: Validate balanced render section
@@ -100,7 +54,6 @@ jobs:
           grep -q 'assets/render-architettonico.webp?v=20260915-2359' index.html
           grep -q 'render-benefits' index.html
           grep -q 'FINAL BALANCED RENDER SECTION 2026-09-15 23:59' landing-render-balanced-20260915.css
-          grep -q 'width:min(1120px,calc(100% - 36px))!important' landing-render-balanced-20260915.css
           if grep -q 'render-flow-step' index.html; then exit 1; fi
       - name: Commit balanced render section
         run: |
