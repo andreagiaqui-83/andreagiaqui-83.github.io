@@ -1,0 +1,15 @@
+/* Layout services: 3 + 3 on desktop */
+#servizi .cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:24px!important;align-items:stretch!important}
+#servizi .card{width:auto!important;max-width:none!important;margin:0!important;height:100%!important;box-sizing:border-box!important}
+
+/* Render section reliability and guidance */
+.render-visual{background:linear-gradient(180deg,#f7fbfe,#eef5f9)!important;min-height:360px!important}
+.render-visual img{display:block!important;width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;background:#eef5f9!important}
+.render-location-note{margin:18px 0 24px;padding:16px 18px;border:1px solid rgba(127,216,255,.32);border-radius:14px;background:rgba(255,255,255,.08);color:#e7f5fc;line-height:1.6}
+.render-location-note strong{display:block;margin-bottom:5px;color:#fff}
+.render-location-note span{color:#d4e9f5}
+.form-location-note{margin:14px 0 0;padding:14px 16px;border:1px solid #b8d8ea;border-radius:12px;background:#f3faff;color:#3f6178;line-height:1.55;font-size:14px}
+.form-location-note strong{color:#0b3a5b}
+
+@media(max-width:980px){#servizi .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:640px){#servizi .cards{grid-template-columns:1fr!important;gap:16px!important}.render-visual{min-height:0!important}}
