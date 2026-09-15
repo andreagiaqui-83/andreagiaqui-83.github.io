@@ -1,0 +1,162 @@
+name: Final landing page master polish
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/landing-master-20260915.yml'
+permissions:
+  contents: write
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply professional landing-page polish
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Performance / social preview
+          if 'rel="preconnect" href="https://images.unsplash.com"' not in s:
+              s = s.replace('<link rel="icon" href="favicon.svg" type="image/svg+xml">', '<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://images.unsplash.com" crossorigin><link rel="dns-prefetch" href="//images.unsplash.com">', 1)
+          s = re.sub(r'<meta property="og:image" content="[^"]*">', '<meta property="og:image" content="https://drive.google.com/thumbnail?id=1SdyG3fAIzvyOfmTzvx0NTRr1UEjWJqYx&sz=w1600">', s, count=1)
+          if 'property="og:image:alt"' not in s:
+              s = s.replace('<meta property="og:image" content="https://drive.google.com/thumbnail?id=1SdyG3fAIzvyOfmTzvx0NTRr1UEjWJqYx&sz=w1600">', '<meta property="og:image" content="https://drive.google.com/thumbnail?id=1SdyG3fAIzvyOfmTzvx0NTRr1UEjWJqYx&sz=w1600"><meta property="og:image:alt" content="Andrea Giaquinto - servizi AutoCAD, Revit BIM, render e disegno tecnico">', 1)
+          if 'name="twitter:image"' not in s:
+              s = s.replace('<meta name="twitter:card" content="summary_large_image">', '<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://drive.google.com/thumbnail?id=1SdyG3fAIzvyOfmTzvx0NTRr1UEjWJqYx&sz=w1600">', 1)
+
+          # Load the final stylesheet last so it reliably wins over legacy rules.
+          if 'landing-master-20260915.css?v=20260915-3' not in s:
+              s = s.replace('</head>', '<link rel="stylesheet" href="landing-master-20260915.css?v=20260915-3"></head>', 1)
+
+          # Navigation and services copy
+          nav_old = '<a href="#servizi">Servizi</a><a href="#preventivo">Preventivo</a>'
+          nav_new = '<a href="#servizi">Servizi</a><a href="#render">Render</a><a href="#preventivo">Preventivo</a>'
+          if nav_old in s and nav_new not in s:
+              s = s.replace(nav_old, nav_new, 1)
+
+          s = s.replace('<p class="eyebrow">UN UNICO FLUSSO DI LAVORO</p><h2>Dal materiale disponibile all’elaborato finale</h2><p>Non devi classificare perfettamente i file prima di inviarli. Foto, immagini, PDF, piante, prospetti, sezioni e rilievi possono contribuire insieme alla ricostruzione.</p>', '<p class="eyebrow">SERVIZI CAD · BIM · RENDER</p><h2>Dal materiale disponibile al risultato professionale</h2><p>Un unico flusso di lavoro per trasformare rilievi, schizzi, fotografie, nuvole di punti e documentazione tecnica in elaborati CAD 2D/3D, modelli Revit/BIM, disegni meccanici e visualizzazioni fotorealistiche.</p>', 1)
+
+          s = s.replace('<p class="eyebrow">DAL 2D AL MODELLO BIM</p><h2>Un flusso grafico chiaro, tecnico e professionale</h2>', '<p class="eyebrow">DAL 2D AL MODELLO 3D E AL RENDER</p><h2>Un flusso grafico chiaro, tecnico e professionale</h2>', 1)
+
+          # Replace the old render illustration with an accessible model-to-render comparison.
+          old_figure_pattern = re.compile(r'<figure class="render-visual">.*?</figure>', re.S)
+          new_figure = '''<figure class="render-visual render-transform" aria-label="Confronto tra modello tecnico 3D e render fotorealistico"><div class="render-transform-stage"><div class="render-stage render-stage-model"><span class="render-stage-label">MODELLO 3D / BIM</span><svg class="render-wireframe" viewBox="0 0 640 520" role="img" aria-label="Modello tridimensionale tecnico a fil di ferro"><defs><linearGradient id="wfBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f9fdff"/><stop offset="1" stop-color="#dceefa"/></linearGradient><pattern id="wfGrid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9fc9e3" stroke-width="1" opacity=".35"/></pattern></defs><rect width="640" height="520" fill="url(#wfBg)"/><rect width="640" height="520" fill="url(#wfGrid)"/><g fill="none" stroke="#176d9e" stroke-width="3" opacity=".86"><path d="M115 355V205L275 120L505 195V345L345 425Z"/><path d="M275 120V285L115 355M275 285L505 345M275 285L345 425"/><path d="M115 205L345 270L505 195M345 270V425"/><path d="M155 330V235L262 180V290Z"/><path d="M370 285V220L465 245V318Z"/><path d="M340 173L430 200V260L340 235Z"/><path d="M195 375V312L245 325V395M395 390V320L455 335V365"/></g><g fill="none" stroke="#43a7d9" stroke-width="1.5" opacity=".55"><path d="M88 380L335 455L545 365"/><path d="M92 192L270 95L535 180"/><path d="M102 405L342 480L560 382"/><path d="M75 215L275 105L550 188"/></g><g fill="#0b4a6f" font-family="Arial,sans-serif" font-size="16" font-weight="700"><text x="45" y="55">MODELLO TECNICO</text><text x="45" y="80" font-size="12" font-weight="400" fill="#52758a">geometria · proporzioni · dettagli</text></g></svg></div><div class="render-stage render-stage-photo"><span class="render-stage-label">RENDER FOTOREALISTICO</span><img src="https://images.unsplash.com/photo-1769780265587-037ee842c0b0?auto=format&fit=crop&w=1600&q=86" width="1600" height="900" loading="lazy" decoding="async" alt="Esempio di casa moderna resa con visualizzazione architettonica fotorealistica"></div><div class="render-transition-badge" aria-hidden="true"><span>→</span></div></div><figcaption><strong>Dal modello tecnico alla visualizzazione finale.</strong><span>Geometria, materiali, luci e contesto vengono coordinati per ottenere immagini realistiche e comunicative. Immagine fotografica di riferimento: Unsplash.</span></figcaption></figure>'''
+          if old_figure_pattern.search(s):
+              s = old_figure_pattern.sub(new_figure, s, count=1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+          cat > landing-master-20260915.css <<'CSS'
+          /* Final expert polish — 2026-09-15 */
+          html{scroll-padding-top:88px}
+          body{overflow-x:hidden;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+          section[id]{scroll-margin-top:88px}
+          a,button{transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease}
+          .button:hover,.submit:hover{transform:translateY(-1px)}
+          .button:focus-visible,.submit:focus-visible,.topbar a:focus-visible{outline:3px solid rgba(38,169,224,.35);outline-offset:3px}
+          .topbar{box-shadow:0 8px 30px rgba(11,42,70,.045)}
+
+          /* Services: guaranteed 3 + 3 layout on desktop */
+          #servizi .section-heading{max-width:900px}
+          #servizi .cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:1fr!important;gap:20px!important;align-items:stretch!important;width:100%!important}
+          #servizi .card{position:relative!important;isolation:isolate;overflow:hidden;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;width:auto!important;min-width:0!important;max-width:none!important;min-height:230px!important;height:100%!important;margin:0!important;padding:27px 25px 25px!important;border:1px solid #d3e2ed!important;border-radius:18px!important;background:linear-gradient(145deg,#fff 0%,#fbfdff 72%,#eef8ff 100%)!important;box-shadow:0 11px 30px rgba(11,58,91,.07)!important}
+          #servizi .card::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,#087ad8,#26a9e0);opacity:.92}
+          #servizi .card::after{position:absolute;right:20px;top:21px;z-index:-1;display:grid;place-items:center;width:62px;height:62px;border-radius:17px;background:linear-gradient(145deg,#edf8ff,#dfeff9);border:1px solid #d3e8f5;color:#0b4a6f;font-weight:900;font-size:15px;letter-spacing:.02em;opacity:.92}
+          #servizi .card:nth-child(1)::after{content:"2D"}
+          #servizi .card:nth-child(2)::after{content:"3D"}
+          #servizi .card:nth-child(3)::after{content:"DOCFA";font-size:11px}
+          #servizi .card:nth-child(4)::after{content:"BIM"}
+          #servizi .card:nth-child(5)::after{content:"MECH";font-size:11px}
+          #servizi .card:nth-child(6)::after{content:"RENDER";font-size:10px}
+          #servizi .card>span{display:inline-flex!important;align-items:center;justify-content:center;min-width:34px;height:27px;padding:0 9px;border-radius:999px;background:#e9f7ff;color:#087ad8!important;font-size:12px!important;font-weight:900!important;letter-spacing:.04em}
+          #servizi .card h3{max-width:calc(100% - 72px);margin:17px 0 10px!important;font-size:23px!important;line-height:1.18!important;letter-spacing:-.018em}
+          #servizi .card p{margin:0!important;color:#587087!important;font-size:16px;line-height:1.62}
+          @media(hover:hover){#servizi .card:hover{transform:translateY(-4px);border-color:#a9d2ea!important;box-shadow:0 18px 38px rgba(11,58,91,.11)!important}}
+
+          /* Global content cards */
+          .visual-card,.calc-card,.form-step,.review-submit-card,.review-card{border-color:#d3e2ed!important}
+          @media(hover:hover){.visual-card:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(11,58,91,.12)}}
+          .choice:hover{border-color:#9fc9e3;background:#f2f9fe}
+
+          /* Render section: model -> photorealistic result */
+          .render-section{background:radial-gradient(circle at 78% 20%,rgba(31,135,197,.22),transparent 28%),linear-gradient(135deg,#061d31 0%,#083555 58%,#0a446b 100%)!important}
+          .render-wrap{grid-template-columns:minmax(0,.92fr) minmax(430px,1.08fr)!important;gap:42px!important;align-items:center!important}
+          .render-copy>p{max-width:690px}
+          .render-location-note{box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+          .render-visual.render-transform{min-height:0!important;margin:0;border:1px solid rgba(255,255,255,.2)!important;border-radius:22px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 26px 60px rgba(0,0,0,.28)!important}
+          .render-transform-stage{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:430px;background:#eaf5fb}
+          .render-stage{position:relative;min-width:0;overflow:hidden}
+          .render-stage-label{position:absolute;top:18px;z-index:4;display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border-radius:999px;background:rgba(4,43,72,.88);backdrop-filter:blur(7px);color:#fff;font-size:11px;font-weight:900;letter-spacing:.07em;box-shadow:0 5px 16px rgba(4,43,72,.18)}
+          .render-stage-model .render-stage-label{left:18px}
+          .render-stage-photo .render-stage-label{right:18px;background:rgba(255,255,255,.9);color:#083555}
+          .render-wireframe{display:block;width:100%;height:100%;min-height:430px}
+          .render-stage-photo img{display:block!important;width:100%!important;height:100%!important;min-height:430px!important;object-fit:cover!important;object-position:center!important;filter:saturate(1.04) contrast(1.03)!important;background:#dbeaf3!important}
+          .render-transition-badge{position:absolute;left:50%;top:50%;z-index:6;transform:translate(-50%,-50%);display:grid;place-items:center;width:58px;height:58px;border:5px solid #fff;border-radius:50%;background:linear-gradient(145deg,#0b3a5b,#087ad8);color:#fff;box-shadow:0 10px 26px rgba(4,43,72,.35)}
+          .render-transition-badge span{font-size:26px;font-weight:900;line-height:1;transform:translateX(1px)}
+          .render-visual figcaption{display:grid;gap:4px;padding:17px 19px!important;border-top:1px solid #e1ebf2;background:#fff;color:#456075!important;line-height:1.5}
+          .render-visual figcaption strong{color:#0b2a46;font-size:16px}
+          .render-visual figcaption span{font-size:13px}
+
+          /* Slightly stronger CTA hierarchy */
+          .hero-actions .button.primary,.render-actions .button.primary,.submit{box-shadow:0 12px 26px rgba(8,71,115,.19)}
+          .hero-actions .button.primary:hover,.render-actions .button.primary:hover,.submit:hover{box-shadow:0 16px 34px rgba(8,71,115,.24)}
+
+          @media(max-width:1050px){
+            .render-wrap{grid-template-columns:1fr!important}
+            .render-visual.render-transform{max-width:900px;width:100%;margin-inline:auto}
+          }
+          @media(max-width:980px){
+            #servizi .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+          }
+          @media(max-width:640px){
+            #servizi .cards{grid-template-columns:1fr!important;gap:15px!important}
+            #servizi .card{min-height:0!important;padding:23px 20px!important}
+            #servizi .card h3{font-size:21px!important}
+            .render-transform-stage{grid-template-columns:1fr;min-height:0}
+            .render-wireframe,.render-stage-photo img{min-height:300px!important;height:300px!important}
+            .render-transition-badge{left:50%;top:50%;transform:translate(-50%,-50%) rotate(90deg);width:50px;height:50px}
+            .render-stage-model .render-stage-label,.render-stage-photo .render-stage-label{top:14px}
+            .render-stage-photo .render-stage-label{right:14px}
+            .render-stage-model .render-stage-label{left:14px}
+            .render-visual figcaption{padding:15px 16px!important}
+          }
+          @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+          CSS
+
+          # Keep the repository clean: this workflow is only a one-shot migration.
+          git rm .github/workflows/landing-master-20260915.yml
+
+      - name: Validate final landing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf-8')
+          assert s.count('<article class="card">') == 6, 'Expected exactly 6 service cards'
+          assert 'landing-master-20260915.css?v=20260915-3' in s
+          assert 'render-transform-stage' in s
+          assert 'MODELLO 3D / BIM' in s and 'RENDER FOTOREALISTICO' in s
+          assert '<a href="#render">Render</a>' in s
+          assert 'planovolumetrico' not in s.lower()
+          css=Path('landing-master-20260915.css').read_text(encoding='utf-8')
+          assert 'grid-template-columns:repeat(3,minmax(0,1fr))!important' in css
+          assert '@media(max-width:640px)' in css
+          print('Landing validation: PASS')
+          PY
+          node --check script.js
+      - name: Commit and publish source
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html landing-master-20260915.css .github/workflows/landing-master-20260915.yml
+          git commit -m "Polish full landing page and render comparison" || exit 0
+          git push
