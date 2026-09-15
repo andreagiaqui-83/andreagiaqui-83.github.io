@@ -11,92 +11,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Rebuild render section with native-size visual and HTML workflow
+      - name: Rebuild render section
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
-
+          import base64, re
           build = '20260915-1835'
+          css_b64 = 'Ci8qIFJFTkRFUiBWSVNVQUwgVjIgMjAyNi0wOS0xNSAxODozNQogICBLZWVwIHRoZSA3MjBweCBzb3VyY2UgbmVhciBuYXRpdmUgc2l6ZTsgbW92ZSBhbGwgaW5mb3JtYXRpb24gdG8gcmVhbCBIVE1MLiAqLwoucmVuZGVyLXByby1tZWRpYXtib3gtc2l6aW5nOmJvcmRlci1ib3g7bWluLXdpZHRoOjA7d2lkdGg6MTAwJTtkaXNwbGF5OmdyaWQ7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOm1pbm1heCgwLDFmcikgbWlubWF4KDI1MHB4LDMwMHB4KTtnYXA6MTRweDthbGlnbi1pdGVtczpzdHJldGNofQoucmVuZGVyLW1haW4tc2hvdHtwb3NpdGlvbjpyZWxhdGl2ZTtib3gtc2l6aW5nOmJvcmRlci1ib3g7bWFyZ2luOjA7bWluLXdpZHRoOjA7b3ZlcmZsb3c6aGlkZGVuO2JvcmRlci1yYWRpdXM6MjBweDtib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjIwKTtiYWNrZ3JvdW5kOiMxMDJmNDk7Ym94LXNoYWRvdzowIDI0cHggNThweCByZ2JhKDAsMCwwLC4yNil9Ci5yZW5kZXItbWFpbi1zaG90IGltZ3tkaXNwbGF5OmJsb2NrO3dpZHRoOjEwMCU7bWF4LXdpZHRoOjcyMHB4O2hlaWdodDoxMDAlO21pbi1oZWlnaHQ6MTAwJTttYXJnaW4taW5saW5lOmF1dG87b2JqZWN0LWZpdDpjb250YWluO29iamVjdC1wb3NpdGlvbjpjZW50ZXI7YmFja2dyb3VuZDojMTAyZjQ5O3Zpc2liaWxpdHk6dmlzaWJsZTtvcGFjaXR5OjF9Ci5yZW5kZXItbWFpbi1zaG90OjphZnRlcntjb250ZW50OiJJbW1hZ2luZSBkaSBlc2VtcGlvIMK3IGlsIGZsdXNzbyDDqCBzcGllZ2F0byBxdWkgYWNjYW50byI7cG9zaXRpb246YWJzb2x1dGU7bGVmdDoxNHB4O2JvdHRvbToxNHB4O21heC13aWR0aDpjYWxjKDEwMCUgLSAyOHB4KTtwYWRkaW5nOjhweCAxMXB4O2JvcmRlci1yYWRpdXM6OTk5cHg7YmFja2dyb3VuZDpyZ2JhKDUsMzAsNTEsLjg2KTtib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjE4KTtjb2xvcjojZmZmO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtd2VpZ2h0OjgwMDtsaW5lLWhlaWdodDoxLjI7YmFja2Ryb3AtZmlsdGVyOmJsdXIoNnB4KX0KLnJlbmRlci1mbG93e2Rpc3BsYXk6Z3JpZDtncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyO2dhcDoxMHB4O2FsaWduLWNvbnRlbnQ6c3RyZXRjaH0KLnJlbmRlci1mbG93LXN0ZXB7ZGlzcGxheTpncmlkO2dyaWQtdGVtcGxhdGUtY29sdW1uczozOHB4IG1pbm1heCgwLDFmcik7Z2FwOjExcHg7YWxpZ24taXRlbXM6c3RhcnQ7cGFkZGluZzoxNHB4O2JvcmRlci1yYWRpdXM6MTZweDtib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjE1KTtiYWNrZ3JvdW5kOnJnYmEoMjU1LDI1NSwyNTUsLjA3NSk7Ym94LXNoYWRvdzppbnNldCAwIDFweCAwIHJnYmEoMjU1LDI1NSwyNTUsLjA0KX0KLnJlbmRlci1mbG93LW51bXtkaXNwbGF5OmlubGluZS1mbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyO3dpZHRoOjM4cHg7aGVpZ2h0OjM4cHg7Ym9yZGVyLXJhZGl1czo5OTlweDtiYWNrZ3JvdW5kOiNmZmY7Y29sb3I6IzBiMzY1ODtmb250LXNpemU6MTNweDtmb250LXdlaWdodDo5MDA7bGluZS1oZWlnaHQ6MX0KLnJlbmRlci1mbG93LXN0ZXAgc3Ryb25ne2Rpc3BsYXk6YmxvY2s7bWFyZ2luOjFweCAwIDRweDtjb2xvcjojZmZmO2ZvbnQtc2l6ZToxNnB4O2xpbmUtaGVpZ2h0OjEuMjJ9Ci5yZW5kZXItZmxvdy1zdGVwIHB7bWFyZ2luOjA7Y29sb3I6I2Q3ZTlmNDtmb250LXNpemU6MTMuNXB4O2xpbmUtaGVpZ2h0OjEuNDV9Ci5yZW5kZXItZmxvdy1mb290e3BhZGRpbmc6MTNweCAxNHB4O2JvcmRlci1yYWRpdXM6MTZweDtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxMzVkZWcscmdiYSg0MiwxNjcsMjI0LC4yMCkscmdiYSgyNTUsMjU1LDI1NSwuMDcpKTtib3JkZXI6MXB4IHNvbGlkIHJnYmEoMTI3LDIxNiwyNTUsLjI1KTtjb2xvcjojZWFmN2ZkO2ZvbnQtc2l6ZToxMy41cHg7bGluZS1oZWlnaHQ6MS40NX0KLnJlbmRlci1mbG93LWZvb3Qgc3Ryb25ne2Rpc3BsYXk6YmxvY2s7bWFyZ2luLWJvdHRvbTozcHg7Y29sb3I6I2ZmZjtmb250LXNpemU6MTVweH0KCkBtZWRpYShtaW4td2lkdGg6MTE4MHB4KXsKICAucmVuZGVyLXByby1sYXlvdXR7d2lkdGg6bWluKDE0MDBweCxjYWxjKDEwMCUgLSA1NnB4KSkhaW1wb3J0YW50O2dyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoMTIsbWlubWF4KDAsMWZyKSkhaW1wb3J0YW50O2dyaWQtdGVtcGxhdGUtcm93czphdXRvIGF1dG8gYXV0byBhdXRvIGF1dG8haW1wb3J0YW50O2NvbHVtbi1nYXA6MjhweCFpbXBvcnRhbnQ7cm93LWdhcDoyMnB4IWltcG9ydGFudDthbGlnbi1pdGVtczpzdGFydCFpbXBvcnRhbnR9CiAgLnJlbmRlci1jb3B5e2Rpc3BsYXk6Y29udGVudHMhaW1wb3J0YW50fQogIC5yZW5kZXItY29weT4uZXllYnJvd3tncmlkLWNvbHVtbjoxLzUhaW1wb3J0YW50O2dyaWQtcm93OjEhaW1wb3J0YW50O21hcmdpbjowIDAgMnB4IWltcG9ydGFudDthbGlnbi1zZWxmOmVuZCFpbXBvcnRhbnR9CiAgLnJlbmRlci1jb3B5Pmgye2dyaWQtY29sdW1uOjEvNSFpbXBvcnRhbnQ7Z3JpZC1yb3c6MiFpbXBvcnRhbnQ7bWFyZ2luOjAhaW1wb3J0YW50O21heC13aWR0aDo1MjBweCFpbXBvcnRhbnQ7Zm9udC1zaXplOmNsYW1wKDM4cHgsMy4wNXZ3LDUycHgpIWltcG9ydGFudDtsaW5lLWhlaWdodDoxLjA2IWltcG9ydGFudDtsZXR0ZXItc3BhY2luZzotLjAyOGVtIWltcG9ydGFudH0KICAucmVuZGVyLWNvcHk+cHtncmlkLWNvbHVtbjoxLzUhaW1wb3J0YW50O2dyaWQtcm93OjMhaW1wb3J0YW50O21hcmdpbjowIWltcG9ydGFudDttYXgtd2lkdGg6NTIwcHghaW1wb3J0YW50O2ZvbnQtc2l6ZToxN3B4IWltcG9ydGFudDtsaW5lLWhlaWdodDoxLjU4IWltcG9ydGFudDtjb2xvcjojZDZlN2YzIWltcG9ydGFudH0KICAucmVuZGVyLXByby1tZWRpYXtncmlkLWNvbHVtbjo1Ly0xIWltcG9ydGFudDtncmlkLXJvdzoxLzQhaW1wb3J0YW50O2FsaWduLXNlbGY6c3RhcnQhaW1wb3J0YW50O2dyaWQtdGVtcGxhdGUtY29sdW1uczptaW5tYXgoMCw2NTBweCkgbWlubWF4KDI2MHB4LDFmcikhaW1wb3J0YW50O2p1c3RpZnktY29udGVudDplbmQhaW1wb3J0YW50O2dhcDoxNnB4IWltcG9ydGFudH0KICAucmVuZGVyLW1haW4tc2hvdHttaW4taGVpZ2h0OjAhaW1wb3J0YW50fQogIC5yZW5kZXItbWFpbi1zaG90IGltZ3t3aWR0aDoxMDAlIWltcG9ydGFudDttYXgtd2lkdGg6NjUwcHghaW1wb3J0YW50O2hlaWdodDphdXRvIWltcG9ydGFudDttaW4taGVpZ2h0OjAhaW1wb3J0YW50O2FzcGVjdC1yYXRpbzoxNi85IWltcG9ydGFudDtvYmplY3QtZml0OmNvbnRhaW4haW1wb3J0YW50fQogIC5yZW5kZXItcG9pbnRze2dyaWQtY29sdW1uOjEvLTEhaW1wb3J0YW50O2dyaWQtcm93OjQhaW1wb3J0YW50O2Rpc3BsYXk6Z3JpZCFpbXBvcnRhbnQ7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOnJlcGVhdCg0LG1pbm1heCgwLDFmcikpIWltcG9ydGFudDtnYXA6MTRweCFpbXBvcnRhbnQ7bWFyZ2luOjZweCAwIDAhaW1wb3J0YW50O3BhZGRpbmc6MCFpbXBvcnRhbnR9CiAgLnJlbmRlci1wb2ludHMgbGl7bWluLWhlaWdodDo4NnB4IWltcG9ydGFudDtkaXNwbGF5OmZsZXghaW1wb3J0YW50O2FsaWduLWl0ZW1zOmNlbnRlciFpbXBvcnRhbnQ7bWFyZ2luOjAhaW1wb3J0YW50O3BhZGRpbmc6MTZweCAxNnB4IDE2cHggNDZweCFpbXBvcnRhbnQ7Zm9udC1zaXplOjE2cHghaW1wb3J0YW50O2xpbmUtaGVpZ2h0OjEuNDIhaW1wb3J0YW50O2JvcmRlci1yYWRpdXM6MTRweCFpbXBvcnRhbnR9CiAgLnJlbmRlci1wb2ludHMgbGk6OmJlZm9yZXtsZWZ0OjE2cHghaW1wb3J0YW50O3RvcDo1MCUhaW1wb3J0YW50O3RyYW5zZm9ybTp0cmFuc2xhdGVZKC01MCUpIWltcG9ydGFudDtmb250LXNpemU6MjBweCFpbXBvcnRhbnR9CiAgLnJlbmRlci1sb2NhdGlvbi1ub3Rle2dyaWQtY29sdW1uOjEvMTEhaW1wb3J0YW50O2dyaWQtcm93OjUhaW1wb3J0YW50O21hcmdpbjowIWltcG9ydGFudDtwYWRkaW5nOjE2cHggMjBweCFpbXBvcnRhbnQ7YWxpZ24tc2VsZjpzdHJldGNoIWltcG9ydGFudDtmb250LXNpemU6MTVweCFpbXBvcnRhbnQ7bGluZS1oZWlnaHQ6MS41NSFpbXBvcnRhbnR9CiAgLnJlbmRlci1sb2NhdGlvbi1ub3RlIHN0cm9uZ3tkaXNwbGF5OmlubGluZSFpbXBvcnRhbnQ7bWFyZ2luOjAgOHB4IDAgMCFpbXBvcnRhbnR9CiAgLnJlbmRlci1sb2NhdGlvbi1ub3RlIHNwYW57ZGlzcGxheTppbmxpbmUhaW1wb3J0YW50fQogIC5yZW5kZXItYWN0aW9uc3tncmlkLWNvbHVtbjoxMS8tMSFpbXBvcnRhbnQ7Z3JpZC1yb3c6NSFpbXBvcnRhbnQ7bWFyZ2luOjAhaW1wb3J0YW50O2FsaWduLXNlbGY6Y2VudGVyIWltcG9ydGFudDtqdXN0aWZ5LXNlbGY6c3RyZXRjaCFpbXBvcnRhbnQ7ZGlzcGxheTpmbGV4IWltcG9ydGFudDtqdXN0aWZ5LWNvbnRlbnQ6ZmxleC1lbmQhaW1wb3J0YW50fQogIC5yZW5kZXItYWN0aW9ucyAuYnV0dG9uLnByaW1hcnl7d2lkdGg6MTAwJSFpbXBvcnRhbnQ7bWF4LXdpZHRoOjI0MHB4IWltcG9ydGFudDtqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyIWltcG9ydGFudDt0ZXh0LWFsaWduOmNlbnRlciFpbXBvcnRhbnQ7cGFkZGluZzoxNXB4IDE4cHghaW1wb3J0YW50fQp9CgpAbWVkaWEobWF4LXdpZHRoOjExNzlweCl7CiAgLnJlbmRlci1wcm8tbWVkaWF7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOm1pbm1heCgwLDFmcikgbWlubWF4KDI0MHB4LDMwMHB4KX0KfQpAbWVkaWEobWF4LXdpZHRoOjkwMHB4KXsKICAucmVuZGVyLXByby1tZWRpYXtncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyfQogIC5yZW5kZXItbWFpbi1zaG90IGltZ3toZWlnaHQ6YXV0bzttaW4taGVpZ2h0OjA7YXNwZWN0LXJhdGlvOjE2Lzk7b2JqZWN0LWZpdDpjb250YWlufQogIC5yZW5kZXItZmxvd3tncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KDMsbWlubWF4KDAsMWZyKSl9CiAgLnJlbmRlci1mbG93LWZvb3R7Z3JpZC1jb2x1bW46MS8tMX0KfQpAbWVkaWEobWF4LXdpZHRoOjY0MHB4KXsKICAucmVuZGVyLXByby1tZWRpYXtnYXA6MTJweH0KICAucmVuZGVyLW1haW4tc2hvdHtib3JkZXItcmFkaXVzOjE2cHh9CiAgLnJlbmRlci1tYWluLXNob3Q6OmFmdGVye2xlZnQ6MTBweDtyaWdodDoxMHB4O2JvdHRvbToxMHB4O21heC13aWR0aDpub25lO2JvcmRlci1yYWRpdXM6MTJweDt0ZXh0LWFsaWduOmNlbnRlcjtmb250LXNpemU6MTEuNXB4fQogIC5yZW5kZXItZmxvd3tncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyO2dhcDo5cHh9CiAgLnJlbmRlci1mbG93LXN0ZXB7cGFkZGluZzoxMnB4IDEzcHh9CiAgLnJlbmRlci1mbG93LWZvb3R7Z3JpZC1jb2x1bW46YXV0bztwYWRkaW5nOjEycHggMTNweH0KfQo='
+          html_b64 = 'PGRpdiBjbGFzcz0icmVuZGVyLXByby1tZWRpYSIgYXJpYS1sYWJlbD0iRGFsIHJpbGlldm8gZSBkYWwgbW9kZWxsbyB0ZWNuaWNvIGFsIHJlbmRlciBmb3RvcmVhbGlzdGljbyI+PGZpZ3VyZSBjbGFzcz0icmVuZGVyLW1haW4tc2hvdCI+PGltZyBzcmM9ImFzc2V0cy9yZW5kZXItZmluYWwtcGMtMjAyNjA5MTUuanBnP3Y9MjAyNjA5MTUtMTcyNSIgd2lkdGg9IjcyMCIgaGVpZ2h0PSI0MDUiIGxvYWRpbmc9ImVhZ2VyIiBkZWNvZGluZz0iYXN5bmMiIGFsdD0iRXNlbXBpbyBkaSB0cmFzZm9ybWF6aW9uZSBkYSByaWxpZXZvIGUgbW9kZWxsbyB0ZWNuaWNvIGEgcmVuZGVyIGZvdG9yZWFsaXN0aWNvIj48L2ZpZ3VyZT48ZGl2IGNsYXNzPSJyZW5kZXItZmxvdyIgYXJpYS1sYWJlbD0iRmx1c3NvIGRpIGxhdm9ybyByZW5kZXIiPjxhcnRpY2xlIGNsYXNzPSJyZW5kZXItZmxvdy1zdGVwIj48c3BhbiBjbGFzcz0icmVuZGVyLWZsb3ctbnVtIj4wMTwvc3Bhbj48ZGl2PjxzdHJvbmc+RGF0aSBkaSBwYXJ0ZW56YTwvc3Ryb25nPjxwPkZvdG8sIHJpbGlldmksIG51dm9sZSBkaSBwdW50aSBlZCBlbGFib3JhdGkgdGVjbmljaS48L3A+PC9kaXY+PC9hcnRpY2xlPjxhcnRpY2xlIGNsYXNzPSJyZW5kZXItZmxvdy1zdGVwIj48c3BhbiBjbGFzcz0icmVuZGVyLWZsb3ctbnVtIj4wMjwvc3Bhbj48ZGl2PjxzdHJvbmc+TW9kZWxsbyAzRDwvc3Ryb25nPjxwPkdlb21ldHJpYSwgbWF0ZXJpYWxpLCBwcm9wb3J6aW9uaSBlIG90dGltaXp6YXppb25lLjwvcD48L2Rpdj48L2FydGljbGU+PGFydGljbGUgY2xhc3M9InJlbmRlci1mbG93LXN0ZXAiPjxzcGFuIGNsYXNzPSJyZW5kZXItZmxvdy1udW0iPjAzPC9zcGFuPjxkaXY+PHN0cm9uZz5SZW5kZXIgZm90b3JlYWxpc3RpY288L3N0cm9uZz48cD5MdWNpLCBhdG1vc2ZlcmEsIGlucXVhZHJhdHVyYSBlIHJlc2EgZmluYWxlLjwvcD48L2Rpdj48L2FydGljbGU+PGRpdiBjbGFzcz0icmVuZGVyLWZsb3ctZm9vdCI+PHN0cm9uZz5JbmZvcm1hemlvbmkgc2VtcHJlIGxlZ2dpYmlsaTwvc3Ryb25nPklsIHByb2Nlc3NvIG5vbiBkaXBlbmRlIHBpw7kgZGFsIHRlc3RvIGluY29ycG9yYXRvIG5lbGzigJlpbW1hZ2luZTogaSBjb250ZW51dGkgcHJpbmNpcGFsaSBzb25vIHRlc3RvIEhUTUwgbml0aWRvIGEgcXVhbHNpYXNpIHJpc29sdXppb25lLjwvZGl2PjwvZGl2PjwvZGl2Pg=='
+          css_append = base64.b64decode(css_b64).decode('utf-8')
+          replacement = base64.b64decode(html_b64).decode('utf-8')
           source_css = Path('landing-render-reflow-20260915.css')
           fresh_css = Path('landing-render-visual-v2-20260915.css')
-
-          css = source_css.read_text(encoding='utf-8')
-          css += r'''
-
-/* RENDER VISUAL V2 2026-09-15 18:35
-   Keep the 720px source near native size; move all information to real HTML. */
-.render-pro-media{box-sizing:border-box;min-width:0;width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,300px);gap:14px;align-items:stretch}
-.render-main-shot{position:relative;box-sizing:border-box;margin:0;min-width:0;overflow:hidden;border-radius:20px;border:1px solid rgba(255,255,255,.20);background:#102f49;box-shadow:0 24px 58px rgba(0,0,0,.26)}
-.render-main-shot img{display:block;width:100%;max-width:720px;height:100%;min-height:100%;margin-inline:auto;object-fit:contain;object-position:center;background:#102f49;visibility:visible;opacity:1}
-.render-main-shot::after{content:"Immagine di esempio · il flusso è spiegato qui accanto";position:absolute;left:14px;bottom:14px;max-width:calc(100% - 28px);padding:8px 11px;border-radius:999px;background:rgba(5,30,51,.86);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:12px;font-weight:800;line-height:1.2;backdrop-filter:blur(6px)}
-.render-flow{display:grid;grid-template-columns:1fr;gap:10px;align-content:stretch}
-.render-flow-step{display:grid;grid-template-columns:38px minmax(0,1fr);gap:11px;align-items:start;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.075);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-.render-flow-num{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:999px;background:#fff;color:#0b3658;font-size:13px;font-weight:900;line-height:1}
-.render-flow-step strong{display:block;margin:1px 0 4px;color:#fff;font-size:16px;line-height:1.22}
-.render-flow-step p{margin:0;color:#d7e9f4;font-size:13.5px;line-height:1.45}
-.render-flow-foot{padding:13px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(42,167,224,.20),rgba(255,255,255,.07));border:1px solid rgba(127,216,255,.25);color:#eaf7fd;font-size:13.5px;line-height:1.45}
-.render-flow-foot strong{display:block;margin-bottom:3px;color:#fff;font-size:15px}
-
-@media(min-width:1180px){
-  .render-pro-layout{width:min(1400px,calc(100% - 56px))!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;grid-template-rows:auto auto auto auto auto!important;column-gap:28px!important;row-gap:22px!important;align-items:start!important}
-  .render-copy{display:contents!important}
-  .render-copy>.eyebrow{grid-column:1/5!important;grid-row:1!important;margin:0 0 2px!important;align-self:end!important}
-  .render-copy>h2{grid-column:1/5!important;grid-row:2!important;margin:0!important;max-width:520px!important;font-size:clamp(38px,3.05vw,52px)!important;line-height:1.06!important;letter-spacing:-.028em!important}
-  .render-copy>p{grid-column:1/5!important;grid-row:3!important;margin:0!important;max-width:520px!important;font-size:17px!important;line-height:1.58!important;color:#d6e7f3!important}
-  .render-pro-media{grid-column:5/-1!important;grid-row:1/4!important;align-self:start!important;grid-template-columns:minmax(0,650px) minmax(260px,1fr)!important;justify-content:end!important;gap:16px!important}
-  .render-main-shot{min-height:0!important}
-  .render-main-shot img{width:100%!important;max-width:650px!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:contain!important}
-  .render-points{grid-column:1/-1!important;grid-row:4!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important;margin:6px 0 0!important;padding:0!important}
-  .render-points li{min-height:86px!important;display:flex!important;align-items:center!important;margin:0!important;padding:16px 16px 16px 46px!important;font-size:16px!important;line-height:1.42!important;border-radius:14px!important}
-  .render-points li::before{left:16px!important;top:50%!important;transform:translateY(-50%)!important;font-size:20px!important}
-  .render-location-note{grid-column:1/11!important;grid-row:5!important;margin:0!important;padding:16px 20px!important;align-self:stretch!important;font-size:15px!important;line-height:1.55!important}
-  .render-location-note strong{display:inline!important;margin:0 8px 0 0!important}
-  .render-location-note span{display:inline!important}
-  .render-actions{grid-column:11/-1!important;grid-row:5!important;margin:0!important;align-self:center!important;justify-self:stretch!important;display:flex!important;justify-content:flex-end!important}
-  .render-actions .button.primary{width:100%!important;max-width:240px!important;justify-content:center!important;text-align:center!important;padding:15px 18px!important}
-}
-
-@media(max-width:1179px){
-  .render-pro-media{grid-template-columns:minmax(0,1fr) minmax(240px,300px)}
-}
-@media(max-width:900px){
-  .render-pro-media{grid-template-columns:1fr}
-  .render-main-shot img{height:auto;min-height:0;aspect-ratio:16/9;object-fit:contain}
-  .render-flow{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .render-flow-foot{grid-column:1/-1}
-}
-@media(max-width:640px){
-  .render-pro-media{gap:12px}
-  .render-main-shot{border-radius:16px}
-  .render-main-shot::after{left:10px;right:10px;bottom:10px;max-width:none;border-radius:12px;text-align:center;font-size:11.5px}
-  .render-flow{grid-template-columns:1fr;gap:9px}
-  .render-flow-step{padding:12px 13px}
-  .render-flow-foot{grid-column:auto;padding:12px 13px}
-}
-'''
-          fresh_css.write_text(css, encoding='utf-8')
-
+          fresh_css.write_text(source_css.read_text(encoding='utf-8') + css_append, encoding='utf-8')
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          replacement = '''<div class="render-pro-media" aria-label="Dal rilievo e dal modello tecnico al render fotorealistico"><figure class="render-main-shot"><img src="assets/render-final-pc-20260915.jpg?v=20260915-1725" width="720" height="405" loading="eager" decoding="async" alt="Esempio di trasformazione da rilievo e modello tecnico a render fotorealistico"></figure><div class="render-flow" aria-label="Flusso di lavoro render"><article class="render-flow-step"><span class="render-flow-num">01</span><div><strong>Dati di partenza</strong><p>Foto, rilievi, nuvole di punti ed elaborati tecnici.</p></div></article><article class="render-flow-step"><span class="render-flow-num">02</span><div><strong>Modello 3D</strong><p>Geometria, materiali, proporzioni e ottimizzazione.</p></div></article><article class="render-flow-step"><span class="render-flow-num">03</span><div><strong>Render fotorealistico</strong><p>Luci, atmosfera, inquadratura e resa finale.</p></div></article><div class="render-flow-foot"><strong>Informazioni sempre leggibili</strong>Il processo non dipende più dal testo incorporato nell’immagine: i contenuti principali sono testo HTML nitido a qualsiasi risoluzione.</div></div></div>'''
-
           s, n = re.subn(r'<figure class="render-pro-figure"[^>]*>.*?</figure>', replacement, s, count=1, flags=re.S)
           if n != 1:
               raise SystemExit(f'Expected one render-pro-figure, found {n}')
-
           new_link = f'<link rel="stylesheet" href="landing-render-visual-v2-20260915.css?v={build}">'
           s, n = re.subn(r'<link rel="stylesheet" href="landing-render-reflow-20260915\.css\?v=[^"]+">', new_link, s, count=1)
           if n == 0:
               s, n = re.subn(r'<link rel="stylesheet" href="landing-stable-20260915\.css\?v=[^"]+">', new_link, s, count=1)
           if n == 0 and 'landing-render-visual-v2-20260915.css' not in s:
               s = s.replace('</head>', new_link + '</head>', 1)
-
           s, n = re.subn(r'data-build="[^"]+"', f'data-build="{build}"', s, count=1)
           if n == 0:
               s = s.replace('<body>', f'<body data-build="{build}">', 1)
-
           p.write_text(s, encoding='utf-8')
           PY
       - name: Validate render v2
