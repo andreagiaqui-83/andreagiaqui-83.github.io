@@ -15,16 +15,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          build='20260916-0105'
+          build='20260916-0110'
           dst='assets/render-hero-marketing-20260916.jpg'
-          url='https://drive.google.com/thumbnail?id=1gOd3mmJAqhfMGXN0AB0Vtt5Fn-pJwSe6&sz=w2000'
+          url='https://drive.google.com/thumbnail?id=1qKVsj7P2MIbh8egh7xl71V1Tt6BfjvgS&sz=w2000'
           curl -L --fail --retry 3 --connect-timeout 15 "$url" -o "$dst"
           python -m pip install --quiet pillow
           python - <<'PY'
           from pathlib import Path
           from PIL import Image
           import re
-          build='20260916-0105'
+          build='20260916-0110'
           dst=Path('assets/render-hero-marketing-20260916.jpg')
           with Image.open(dst) as im:
               im.verify()
@@ -34,10 +34,7 @@ jobs:
               assert w >= 1000 and h >= 500, (w,h)
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-          s,n=re.subn(r'(?:assets/render-[^\"\']+|https://drive\.google\.com/thumbnail\?id=[^\"\']+)\?v=[^\"\']+', f'assets/render-hero-marketing-20260916.jpg?v={build}', s, count=1)
-          if n != 1:
-              # current local asset references have a single query string after filename
-              s,n=re.subn(r'assets/render-[^\"\']+\?v=[^\"\']+', f'assets/render-hero-marketing-20260916.jpg?v={build}', s, count=1)
+          s,n=re.subn(r'assets/render-[^\"\']+\?v=[^\"\']+', f'assets/render-hero-marketing-20260916.jpg?v={build}', s, count=1)
           if n != 1:
               raise SystemExit(f'Expected one render image reference, found {n}')
           s=re.sub(r'(<figure class="render-visual"[^>]*><img [^>]*?)width="\d+" height="\d+"', rf'\1width="{w}" height="{h}"', s, count=1)
@@ -52,9 +49,9 @@ jobs:
       - name: Validate
         run: |
           test -s assets/render-hero-marketing-20260916.jpg
-          grep -q 'render-hero-marketing-20260916.jpg?v=20260916-0105' index.html
-          grep -q 'render-image-mobile-fix-20260916.css?v=20260916-0105' index.html
-          grep -q 'data-build="20260916-0105"' index.html
+          grep -q 'render-hero-marketing-20260916.jpg?v=20260916-0110' index.html
+          grep -q 'render-image-mobile-fix-20260916.css?v=20260916-0110' index.html
+          grep -q 'data-build="20260916-0110"' index.html
       - name: Commit
         run: |
           git config user.name github-actions[bot]
