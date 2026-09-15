@@ -1,0 +1,45 @@
+name: Insert final render image
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/insert-final-render-image.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install final render visual
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, urllib.request
+
+          # The new generated visual is committed separately as an asset before this workflow runs.
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s = re.sub(r'data-build="[^"]+"', 'data-build="20260915-1445"', s, count=1)
+          s = s.replace('landing-stable-20260915.css?v=20260915-1315','landing-stable-20260915.css?v=20260915-1445')
+          p.write_text(s, encoding='utf-8')
+
+          css = Path('landing-stable-20260915.css').read_text(encoding='utf-8')
+          marker='/* FINAL GENERATED RENDER VISUAL 2026-09-15 14:45 */'
+          if marker not in css:
+              css += '''\n\n/* FINAL GENERATED RENDER VISUAL 2026-09-15 14:45 */\n.render-pro-figure{position:relative!important}\n.render-pro-figure::before{content:"";display:block!important;width:100%!important;aspect-ratio:1199/675!important;background:url("assets/render-hero-final-20260915.webp?v=20260915-1445") center center/cover no-repeat!important}\n.render-pro-figure>img{display:none!important}\n@media(max-width:640px){.render-pro-figure::before{aspect-ratio:1199/675!important;background-position:center center!important}}\n'''
+          Path('landing-stable-20260915.css').write_text(css, encoding='utf-8')
+          PY
+      - name: Validate
+        run: |
+          test -f assets/render-hero-final-20260915.webp
+          grep -q 'render-hero-final-20260915.webp' landing-stable-20260915.css
+          grep -q 'data-build="20260915-1445"' index.html
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html landing-stable-20260915.css
+          git commit -m "Use final generated render visual" || exit 0
+          git push
