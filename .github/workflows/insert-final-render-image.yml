@@ -82,3 +82,4 @@ jobs:
           git add -A
           git commit -m "Publish final generated render visual" || exit 0
           git push
+# All 7 image parts are staged; this commit intentionally triggers the production assembly.
