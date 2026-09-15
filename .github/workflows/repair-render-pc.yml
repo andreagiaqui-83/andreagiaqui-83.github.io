@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate WebP and create universal JPEG
+      - name: Validate approved render and create universal JPEG
         run: |
           python -m pip install --quiet pillow
           python - <<'PY'
@@ -24,7 +24,7 @@ jobs:
 
           src=Path('assets/render-hero-final-20260915.webp')
           if not src.exists():
-              raise SystemExit('Source render WebP missing')
+              raise SystemExit('Approved source render WebP missing')
           with Image.open(src) as im:
               im.load()
               print('SOURCE', im.format, im.size, im.mode, src.stat().st_size)
@@ -34,47 +34,52 @@ jobs:
           with Image.open(out) as check:
               check.load()
               assert check.format == 'JPEG'
+              assert check.size == (720,405)
+              assert out.stat().st_size >= 20000
               print('JPEG', check.size, check.mode, out.stat().st_size)
-              if out.stat().st_size < 20000:
-                  raise SystemExit('JPEG unexpectedly small')
 
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-          s=re.sub(r'assets/render-hero-final-20260915\.webp\?v=[^\"\']+', 'assets/render-final-pc-20260915.jpg?v=20260915-1720', s)
-          s=re.sub(r'assets/render-visual-professionale\.svg\?v=[^\"\']+', 'assets/render-final-pc-20260915.jpg?v=20260915-1720', s)
-          s=s.replace('loading="lazy" decoding="async" alt="Dal rilievo e dal modello tecnico CAD/BIM al render architettonico fotorealistico di un fabbricato"', 'loading="eager" decoding="async" alt="Dal rilievo e dal modello tecnico CAD/BIM al render architettonico fotorealistico di un fabbricato"')
-          s=re.sub(r'data-build="[^"]+"', 'data-build="20260915-1720"', s, count=1)
-          s=re.sub(r'landing-stable-20260915\.css\?v=[^"]+', 'landing-stable-20260915.css?v=20260915-1720', s, count=1)
-          if 'render-final-pc-20260915.jpg?v=20260915-1720' not in s:
-              raise SystemExit('Render JPEG was not wired into index.html')
+          figure_pat=r'(<figure class="render-pro-figure"[^>]*>\s*<img\s+)src="[^"]+"'
+          s,n=re.subn(figure_pat, r'\1src="assets/render-final-pc-20260915.jpg?v=20260915-1725"', s, count=1)
+          if n != 1:
+              raise SystemExit(f'Could not replace render image in figure; replacements={n}')
+          # Make this critical sales visual load immediately on desktop and mobile.
+          s=re.sub(r'(<figure class="render-pro-figure"[^>]*>\s*<img[^>]*?)loading="[^"]+"', r'\1loading="eager"', s, count=1)
+          s=re.sub(r'(<figure class="render-pro-figure"[^>]*>\s*<img[^>]*?)width="[^"]+"', r'\1width="720"', s, count=1)
+          s=re.sub(r'(<figure class="render-pro-figure"[^>]*>\s*<img[^>]*?)height="[^"]+"', r'\1height="405"', s, count=1)
+          s=re.sub(r'data-build="[^"]+"', 'data-build="20260915-1725"', s, count=1)
+          s=re.sub(r'landing-stable-20260915\.css\?v=[^"]+', 'landing-stable-20260915.css?v=20260915-1725', s, count=1)
+          if 'render-final-pc-20260915.jpg?v=20260915-1725' not in s:
+              raise SystemExit('Render JPEG not present after replacement')
           p.write_text(s,encoding='utf-8')
 
           cssp=Path('landing-stable-20260915.css')
           css=cssp.read_text(encoding='utf-8')
-          marker='/* PC SAFE RENDER IMAGE 2026-09-15 17:20 */'
+          marker='/* PC SAFE RENDER IMAGE 2026-09-15 17:25 */'
           if marker not in css:
-              css += '''\n\n/* PC SAFE RENDER IMAGE 2026-09-15 17:20 */\n.render-pro-figure>img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;background:#e8f3f9!important;visibility:visible!important;opacity:1!important}\n'''
+              css += '''\n\n/* PC SAFE RENDER IMAGE 2026-09-15 17:25 */\n.render-pro-figure>img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;background:#e8f3f9!important;visibility:visible!important;opacity:1!important}\n'''
           cssp.write_text(css,encoding='utf-8')
           PY
-      - name: Commit repaired asset and references
+      - name: Commit repaired desktop render
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add index.html landing-stable-20260915.css assets/render-final-pc-20260915.jpg
-          git commit -m "Use universal JPEG render image for desktop browsers" || exit 0
+          git commit -m "Publish PC-safe JPEG render visual" || exit 0
           git push
       - name: Wait for GitHub Pages and verify live custom domain
         shell: bash
         run: |
           set -euo pipefail
           ROOT='https://andreagiaquinto.it/'
-          ASSET='https://andreagiaquinto.it/assets/render-final-pc-20260915.jpg?v=20260915-1720'
-          ORIGIN='https://andreagiaqui-83.github.io/assets/render-final-pc-20260915.jpg?v=20260915-1720'
+          ASSET='https://andreagiaquinto.it/assets/render-final-pc-20260915.jpg?v=20260915-1725'
+          ORIGIN='https://andreagiaqui-83.github.io/assets/render-final-pc-20260915.jpg?v=20260915-1725'
           ok=0
-          for i in {1..10}; do
+          for i in {1..12}; do
             echo "Live verification attempt $i"
-            html=$(curl -fsSL --connect-timeout 10 --max-time 20 "${ROOT}?verify=20260915-1720-${i}" || true)
-            if echo "$html" | grep -q 'render-final-pc-20260915.jpg?v=20260915-1720'; then
+            html=$(curl -fsSL --connect-timeout 10 --max-time 20 "${ROOT}?verify=20260915-1725-${i}" || true)
+            if echo "$html" | grep -q 'render-final-pc-20260915.jpg?v=20260915-1725'; then
               if curl -fsSL --connect-timeout 10 --max-time 30 "$ASSET" -o /tmp/live-render.jpg; then
                 ok=1
                 break
@@ -93,7 +98,7 @@ jobs:
                   im.load()
                   print(p.name, im.format, im.size, im.mode, p.stat().st_size)
                   assert im.format == 'JPEG'
-                  assert im.width >= 700 and im.height >= 390
+                  assert im.size == (720,405)
                   assert p.stat().st_size >= 20000
           hdr=Path('/tmp/custom-headers.txt').read_text(errors='ignore').lower()
           assert 'content-type: image/jpeg' in hdr, hdr
