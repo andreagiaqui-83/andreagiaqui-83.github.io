@@ -1,4 +1,4 @@
-name: Publish new render marketing visual
+name: Publish approved render marketing visual
 on:
   push:
     branches: [main]
@@ -11,43 +11,54 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download and install new marketing render
+      - name: Verify and install approved render visual
         shell: bash
         run: |
           set -euo pipefail
-          build='20260916-0110'
+          build='20260916-0105'
           dst='assets/render-hero-marketing-20260916.jpg'
-          curl -L --fail --retry 2 'https://drive.usercontent.google.com/download?id=1RhHyLnhYCnDjWrBthVI-A8UcJCCWIpGK&export=download&confirm=t' -o "$dst"
+          url='https://drive.google.com/thumbnail?id=1gOd3mmJAqhfMGXN0AB0Vtt5Fn-pJwSe6&sz=w2000'
+          curl -L --fail --retry 3 --connect-timeout 15 "$url" -o "$dst"
           python -m pip install --quiet pillow
           python - <<'PY'
           from pathlib import Path
           from PIL import Image
           import re
-          build='20260916-0110'
+          build='20260916-0105'
           dst=Path('assets/render-hero-marketing-20260916.jpg')
           with Image.open(dst) as im:
-              assert im.format == 'JPEG'
+              im.verify()
+          with Image.open(dst) as im:
+              assert im.format == 'JPEG', im.format
               w,h=im.size
-              assert w >= 1000 and h >= 500
+              assert w >= 1000 and h >= 500, (w,h)
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-          s,n=re.subn(r'assets/render-[^\"\']+\?v=[^\"\']+', f'assets/render-hero-marketing-20260916.jpg?v={build}', s, count=1)
-          if n != 1: raise SystemExit(f'Expected one render image reference, found {n}')
+          s,n=re.subn(r'(?:assets/render-[^\"\']+|https://drive\.google\.com/thumbnail\?id=[^\"\']+)\?v=[^\"\']+', f'assets/render-hero-marketing-20260916.jpg?v={build}', s, count=1)
+          if n != 1:
+              # current local asset references have a single query string after filename
+              s,n=re.subn(r'assets/render-[^\"\']+\?v=[^\"\']+', f'assets/render-hero-marketing-20260916.jpg?v={build}', s, count=1)
+          if n != 1:
+              raise SystemExit(f'Expected one render image reference, found {n}')
           s=re.sub(r'(<figure class="render-visual"[^>]*><img [^>]*?)width="\d+" height="\d+"', rf'\1width="{w}" height="{h}"', s, count=1)
           s=re.sub(r'data-build="[^"]+"', f'data-build="{build}"', s, count=1)
+          css_link=f'<link rel="stylesheet" href="render-image-mobile-fix-20260916.css?v={build}">' 
+          s=re.sub(r'<link rel="stylesheet" href="render-image-mobile-fix-20260916\.css\?v=[^"]+">', css_link, s, count=1)
           p.write_text(s,encoding='utf-8')
           css=Path('render-image-mobile-fix-20260916.css')
-          css.write_text('''/* MARKETING RENDER VISUAL - DESKTOP + MOBILE */\n.render-visual{background:#0e2f49!important;min-height:0!important;overflow:hidden!important}\n.render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;visibility:visible!important;opacity:1!important}\n@media(max-width:767px){.render-pro-layout{grid-template-columns:1fr!important}.render-copy,.render-visual{grid-column:1!important}.render-visual{width:100%!important;height:auto!important;margin:0!important;border-radius:16px!important}.render-visual img{width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important}}\n''',encoding='utf-8')
+          css.write_text('''/* APPROVED MARKETING RENDER VISUAL - DESKTOP + MOBILE */\n.render-visual{background:#0e2f49!important;min-height:0!important;overflow:hidden!important}\n.render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;visibility:visible!important;opacity:1!important}\n@media(max-width:767px){\n  .render-pro-layout{grid-template-columns:1fr!important}\n  .render-copy,.render-visual{grid-column:1!important}\n  .render-visual{width:100%!important;height:auto!important;min-height:0!important;margin:0!important;border-radius:16px!important;overflow:hidden!important}\n  .render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important}\n}\n''',encoding='utf-8')
+          print('APPROVED_RENDER', w, h, dst.stat().st_size)
           PY
       - name: Validate
         run: |
           test -s assets/render-hero-marketing-20260916.jpg
-          grep -q 'render-hero-marketing-20260916.jpg?v=20260916-0110' index.html
-          grep -q 'data-build="20260916-0110"' index.html
+          grep -q 'render-hero-marketing-20260916.jpg?v=20260916-0105' index.html
+          grep -q 'render-image-mobile-fix-20260916.css?v=20260916-0105' index.html
+          grep -q 'data-build="20260916-0105"' index.html
       - name: Commit
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add index.html assets/render-hero-marketing-20260916.jpg render-image-mobile-fix-20260916.css
-          git commit -m "Publish new render marketing visual" || exit 0
+          git commit -m "Publish approved render marketing visual" || exit 0
           git push
