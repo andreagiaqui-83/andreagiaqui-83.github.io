@@ -1,4 +1,4 @@
-name: Fix render image on mobile
+name: Restore final render visual on all devices
 on:
   push:
     branches: [main]
@@ -11,28 +11,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build clean universal SVG and mobile-safe render image
+      - name: Restore final approved render visual with universal fallback
+        shell: bash
         run: |
+          set -euo pipefail
+          build='20260916-0045'
+          src='assets/render-hero-final-20260915.webp'
+          dst='assets/render-hero-final-universal.jpg'
+          test -s "$src"
+
+          if command -v ffmpeg >/dev/null 2>&1; then
+            ffmpeg -hide_banner -loglevel error -y -i "$src" -vf "scale=1440:810:flags=lanczos" -q:v 2 "$dst"
+          else
+            python -m pip install --quiet pillow
+            python - <<'PY'
+          from PIL import Image
+          src='assets/render-hero-final-20260915.webp'
+          dst='assets/render-hero-final-universal.jpg'
+          im=Image.open(src).convert('RGB').resize((1440,810), Image.Resampling.LANCZOS)
+          im.save(dst,'JPEG',quality=94,optimize=True,progressive=True,subsampling=0)
+          PY
+          fi
+
           python - <<'PY'
           from pathlib import Path
           import re
+          from PIL import Image
 
-          build='20260916-0035'
-          src=Path('assets/render-visual-professionale.svg')
-          dst=Path('assets/render-visual-clean.svg')
-          svg=src.read_text(encoding='utf-8')
-          svg=re.sub(r'<g transform="translate\(790 82\)">.*?</g>\s*</svg>', '</svg>', svg, flags=re.S)
-          dst.write_text(svg, encoding='utf-8')
+          build='20260916-0045'
+          dst=Path('assets/render-hero-final-universal.jpg')
+          with Image.open(dst) as im:
+              assert im.format == 'JPEG'
+              assert im.size == (1440,810)
 
           css=Path('render-image-mobile-fix-20260916.css')
-          css.write_text('''/* RENDER IMAGE MOBILE FIX 2026-09-16 */\n.render-visual{background:#0e2f49!important;min-height:0!important}\n.render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;visibility:visible!important;opacity:1!important}\n@media(max-width:767px){\n  .render-pro-layout{grid-template-columns:1fr!important}\n  .render-copy{grid-column:1!important}\n  .render-visual{grid-column:1!important;width:100%!important;min-height:0!important;height:auto!important;margin:0!important;border-radius:16px!important;overflow:hidden!important;background:#dcebf5!important}\n  .render-visual img{display:block!important;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important}\n}\n''', encoding='utf-8')
+          css.write_text('''/* FINAL RENDER VISUAL - DESKTOP + MOBILE 2026-09-16 */\n.render-visual{background:#0e2f49!important;min-height:0!important;overflow:hidden!important}\n.render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;visibility:visible!important;opacity:1!important}\n@media(max-width:767px){\n  .render-pro-layout{grid-template-columns:1fr!important}\n  .render-copy{grid-column:1!important}\n  .render-visual{grid-column:1!important;width:100%!important;min-height:0!important;height:auto!important;margin:0!important;border-radius:16px!important;overflow:hidden!important;background:#0e2f49!important}\n  .render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important}\n}\n''', encoding='utf-8')
 
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-          s,n=re.subn(r'assets/render-(?:architettonico\.webp|architettonico-universal\.jpg|visual-clean\.svg)\?v=[^\"\']+', f'assets/render-visual-clean.svg?v={build}', s, count=1)
-          if n!=1:
+          s,n=re.subn(r'assets/render-(?:visual-clean\.svg|architettonico\.webp|architettonico-universal\.jpg|hero-final-universal\.jpg|hero-final-20260915\.webp)\?v=[^\"\']+', f'assets/render-hero-final-universal.jpg?v={build}', s, count=1)
+          if n != 1:
               raise SystemExit(f'Expected one render image reference, found {n}')
-          s=re.sub(r'(<figure class="render-visual"[^>]*><img [^>]*?)width="\d+" height="\d+"', r'\1width="1200" height="675"', s, count=1)
+          s=re.sub(r'(<figure class="render-visual"[^>]*><img [^>]*?)width="\d+" height="\d+"', r'\1width="1440" height="810"', s, count=1)
           link=f'<link rel="stylesheet" href="render-image-mobile-fix-20260916.css?v={build}">' 
           if 'render-image-mobile-fix-20260916.css' in s:
               s=re.sub(r'<link rel="stylesheet" href="render-image-mobile-fix-20260916\.css\?v=[^"]+">', link, s, count=1)
@@ -41,17 +61,17 @@ jobs:
           s=re.sub(r'data-build="[^"]+"', f'data-build="{build}"', s, count=1)
           p.write_text(s, encoding='utf-8')
           PY
-      - name: Validate
+      - name: Validate final visual
         run: |
-          test -s assets/render-visual-clean.svg
-          grep -q 'render-visual-clean.svg?v=20260916-0035' index.html
-          grep -q 'render-image-mobile-fix-20260916.css?v=20260916-0035' index.html
-          grep -q 'data-build="20260916-0035"' index.html
+          test -s assets/render-hero-final-universal.jpg
+          grep -q 'render-hero-final-universal.jpg?v=20260916-0045' index.html
+          grep -q 'render-image-mobile-fix-20260916.css?v=20260916-0045' index.html
+          grep -q 'data-build="20260916-0045"' index.html
           grep -q 'object-fit:cover!important' render-image-mobile-fix-20260916.css
-      - name: Commit fix
+      - name: Commit final visual restoration
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add index.html assets/render-visual-clean.svg render-image-mobile-fix-20260916.css
-          git commit -m "Fix render image visibility on mobile" || exit 0
+          git add index.html assets/render-hero-final-universal.jpg render-image-mobile-fix-20260916.css
+          git commit -m "Restore final attractive render visual on mobile" || exit 0
           git push
