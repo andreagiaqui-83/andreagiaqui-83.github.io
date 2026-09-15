@@ -1,0 +1,70 @@
+name: Force cache-safe landing refresh
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/force-live-refresh-20260915.yml'
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply cache-safe live refresh
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Strong cache-busting hints for browsers that kept old HTML/CSS.
+          cache_meta = '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">'
+          if 'http-equiv="Cache-Control"' not in s:
+              s = s.replace('<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="viewport" content="width=device-width, initial-scale=1">'+cache_meta, 1)
+
+          # We no longer need the external photo host for the render comparison.
+          s = s.replace('<link rel="preconnect" href="https://images.unsplash.com" crossorigin>', '')
+          s = s.replace('<link rel="dns-prefetch" href="//images.unsplash.com">', '')
+
+          # Completely new stylesheet filename so stale cached CSS cannot be reused.
+          s = re.sub(r'<link rel="stylesheet" href="landing-master-20260915\.css\?v=[^"]+">', '<link rel="stylesheet" href="landing-live-20260915.css?v=20260915-1145">', s, count=1)
+          if 'landing-live-20260915.css?v=20260915-1145' not in s:
+              s = s.replace('</head>', '<link rel="stylesheet" href="landing-live-20260915.css?v=20260915-1145"></head>', 1)
+
+          # Force a fresh JavaScript request too.
+          s = re.sub(r'<script src="script\.js(?:\?v=[^"]*)?" defer></script>', '<script src="script.js?v=20260915-1145" defer></script>', s, count=1)
+
+          # Replace the previous model/render construction with a reliable local visual.
+          pattern = re.compile(r'<figure class="render-visual render-transform".*?</figure>', re.S)
+          replacement = '''<figure class="render-visual render-transform render-local-comparison" aria-label="Confronto tra modello tecnico 3D e render fotorealistico"><img class="render-compare-img" src="assets/render-model-to-reality.webp?v=20260915-1145" width="1200" height="750" loading="lazy" decoding="async" alt="Confronto professionale tra modello tecnico tridimensionale e render architettonico fotorealistico di una villa moderna"><figcaption><strong>Dal modello tecnico alla realtà visuale.</strong><span>Il modello 3D viene trasformato in una visualizzazione fotorealistica coordinando geometria, materiali, illuminazione, ambientazione e contesto.</span></figcaption></figure>'''
+          if pattern.search(s):
+              s = pattern.sub(replacement, s, count=1)
+
+          # Build marker: useful to verify that the newest HTML is really being served.
+          if 'data-build="20260915-1145"' not in s:
+              s = s.replace('<body>', '<body data-build="20260915-1145">', 1)
+
+          p.write_text(s, encoding='utf-8')
+
+          # Copy the already validated final stylesheet to a brand-new name and add live overrides.
+          css = Path('landing-master-20260915.css').read_text(encoding='utf-8')
+          css += '''\n/* LIVE CACHE-SAFE OVERRIDES 2026-09-15 11:45 */\n#servizi .cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:20px!important;width:100%!important;align-items:stretch!important}\n#servizi .card{min-width:0!important;width:100%!important;max-width:none!important;margin:0!important;box-sizing:border-box!important;overflow:hidden!important}\n#servizi .card h3,#servizi .card p{overflow-wrap:anywhere}\n.render-local-comparison{background:#fff!important;min-height:0!important}\n.render-local-comparison .render-compare-img{display:block!important;width:100%!important;height:auto!important;aspect-ratio:8/5!important;object-fit:cover!important;object-position:center!important;background:#e9f3f9!important}\n.render-local-comparison figcaption{display:grid;gap:5px;padding:17px 19px!important;background:#fff!important;border-top:1px solid #dfeaf2!important}\n@media(max-width:980px){#servizi .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}\n@media(max-width:640px){#servizi .cards{grid-template-columns:1fr!important}.render-local-comparison .render-compare-img{aspect-ratio:auto!important}}\n'''
+          Path('landing-live-20260915.css').write_text(css, encoding='utf-8')
+          PY
+      - name: Validate refreshed landing
+        run: |
+          grep -q 'data-build="20260915-1145"' index.html
+          grep -q 'landing-live-20260915.css?v=20260915-1145' index.html
+          grep -q 'assets/render-model-to-reality.webp?v=20260915-1145' index.html
+          grep -q 'grid-template-columns:repeat(3,minmax(0,1fr))!important' landing-live-20260915.css
+          node --check script.js
+      - name: Commit refreshed source
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html landing-live-20260915.css
+          git commit -m "Force cache-safe landing refresh" || exit 0
+          git push
