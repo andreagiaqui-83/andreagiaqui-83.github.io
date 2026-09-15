@@ -1,4 +1,4 @@
-name: Restore final render visual on all devices
+name: Publish new render marketing visual
 on:
   push:
     branches: [main]
@@ -11,67 +11,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Restore final approved render visual with universal fallback
+      - name: Download and install new marketing render
         shell: bash
         run: |
           set -euo pipefail
-          build='20260916-0045'
-          src='assets/render-hero-final-20260915.webp'
-          dst='assets/render-hero-final-universal.jpg'
-          test -s "$src"
-
-          if command -v ffmpeg >/dev/null 2>&1; then
-            ffmpeg -hide_banner -loglevel error -y -i "$src" -vf "scale=1440:810:flags=lanczos" -q:v 2 "$dst"
-          else
-            python -m pip install --quiet pillow
-            python - <<'PY'
-          from PIL import Image
-          src='assets/render-hero-final-20260915.webp'
-          dst='assets/render-hero-final-universal.jpg'
-          im=Image.open(src).convert('RGB').resize((1440,810), Image.Resampling.LANCZOS)
-          im.save(dst,'JPEG',quality=94,optimize=True,progressive=True,subsampling=0)
-          PY
-          fi
-
+          build='20260916-0110'
+          dst='assets/render-hero-marketing-20260916.jpg'
+          curl -L --fail --retry 2 'https://drive.usercontent.google.com/download?id=1RhHyLnhYCnDjWrBthVI-A8UcJCCWIpGK&export=download&confirm=t' -o "$dst"
+          python -m pip install --quiet pillow
           python - <<'PY'
           from pathlib import Path
-          import re
           from PIL import Image
-
-          build='20260916-0045'
-          dst=Path('assets/render-hero-final-universal.jpg')
+          import re
+          build='20260916-0110'
+          dst=Path('assets/render-hero-marketing-20260916.jpg')
           with Image.open(dst) as im:
               assert im.format == 'JPEG'
-              assert im.size == (1440,810)
-
-          css=Path('render-image-mobile-fix-20260916.css')
-          css.write_text('''/* FINAL RENDER VISUAL - DESKTOP + MOBILE 2026-09-16 */\n.render-visual{background:#0e2f49!important;min-height:0!important;overflow:hidden!important}\n.render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;visibility:visible!important;opacity:1!important}\n@media(max-width:767px){\n  .render-pro-layout{grid-template-columns:1fr!important}\n  .render-copy{grid-column:1!important}\n  .render-visual{grid-column:1!important;width:100%!important;min-height:0!important;height:auto!important;margin:0!important;border-radius:16px!important;overflow:hidden!important;background:#0e2f49!important}\n  .render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important}\n}\n''', encoding='utf-8')
-
+              w,h=im.size
+              assert w >= 1000 and h >= 500
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-          s,n=re.subn(r'assets/render-(?:visual-clean\.svg|architettonico\.webp|architettonico-universal\.jpg|hero-final-universal\.jpg|hero-final-20260915\.webp)\?v=[^\"\']+', f'assets/render-hero-final-universal.jpg?v={build}', s, count=1)
-          if n != 1:
-              raise SystemExit(f'Expected one render image reference, found {n}')
-          s=re.sub(r'(<figure class="render-visual"[^>]*><img [^>]*?)width="\d+" height="\d+"', r'\1width="1440" height="810"', s, count=1)
-          link=f'<link rel="stylesheet" href="render-image-mobile-fix-20260916.css?v={build}">' 
-          if 'render-image-mobile-fix-20260916.css' in s:
-              s=re.sub(r'<link rel="stylesheet" href="render-image-mobile-fix-20260916\.css\?v=[^"]+">', link, s, count=1)
-          else:
-              s=s.replace('</head>', link+'</head>',1)
+          s,n=re.subn(r'assets/render-[^\"\']+\?v=[^\"\']+', f'assets/render-hero-marketing-20260916.jpg?v={build}', s, count=1)
+          if n != 1: raise SystemExit(f'Expected one render image reference, found {n}')
+          s=re.sub(r'(<figure class="render-visual"[^>]*><img [^>]*?)width="\d+" height="\d+"', rf'\1width="{w}" height="{h}"', s, count=1)
           s=re.sub(r'data-build="[^"]+"', f'data-build="{build}"', s, count=1)
-          p.write_text(s, encoding='utf-8')
+          p.write_text(s,encoding='utf-8')
+          css=Path('render-image-mobile-fix-20260916.css')
+          css.write_text('''/* MARKETING RENDER VISUAL - DESKTOP + MOBILE */\n.render-visual{background:#0e2f49!important;min-height:0!important;overflow:hidden!important}\n.render-visual img{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/9!important;object-fit:cover!important;object-position:center!important;visibility:visible!important;opacity:1!important}\n@media(max-width:767px){.render-pro-layout{grid-template-columns:1fr!important}.render-copy,.render-visual{grid-column:1!important}.render-visual{width:100%!important;height:auto!important;margin:0!important;border-radius:16px!important}.render-visual img{width:100%!important;height:auto!important;aspect-ratio:16/9!important;object-fit:cover!important}}\n''',encoding='utf-8')
           PY
-      - name: Validate final visual
+      - name: Validate
         run: |
-          test -s assets/render-hero-final-universal.jpg
-          grep -q 'render-hero-final-universal.jpg?v=20260916-0045' index.html
-          grep -q 'render-image-mobile-fix-20260916.css?v=20260916-0045' index.html
-          grep -q 'data-build="20260916-0045"' index.html
-          grep -q 'object-fit:cover!important' render-image-mobile-fix-20260916.css
-      - name: Commit final visual restoration
+          test -s assets/render-hero-marketing-20260916.jpg
+          grep -q 'render-hero-marketing-20260916.jpg?v=20260916-0110' index.html
+          grep -q 'data-build="20260916-0110"' index.html
+      - name: Commit
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add index.html assets/render-hero-final-universal.jpg render-image-mobile-fix-20260916.css
-          git commit -m "Restore final attractive render visual on mobile" || exit 0
+          git add index.html assets/render-hero-marketing-20260916.jpg render-image-mobile-fix-20260916.css
+          git commit -m "Publish new render marketing visual" || exit 0
           git push
