@@ -1,0 +1,96 @@
+/* MOBILE SERVICES FIX 2026-09-16 */
+@media (max-width: 767px) {
+  html, body { max-width: 100%; overflow-x: hidden; }
+  .services-pro-section {
+    overflow: visible !important;
+    width: min(100% - 24px, 1120px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .services-pro-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: none !important;
+    grid-auto-flow: row !important;
+    grid-auto-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .services-pro-grid > .service-pro-card,
+  .services-pro-grid > .service-pro-card:nth-child(n) {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 22px 20px 20px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    white-space: normal !important;
+  }
+  .service-pro-card h3 {
+    max-width: calc(100% - 68px) !important;
+    margin: 16px 0 9px !important;
+    font-size: 22px !important;
+    line-height: 1.18 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+  }
+  .service-pro-card p {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+    line-height: 1.55 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+  .service-pro-tag {
+    top: 20px !important;
+    right: 18px !important;
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 14px !important;
+    font-size: 14px !important;
+  }
+  .service-pro-tag-small { font-size: 9px !important; }
+  .service-pro-num {
+    height: 27px !important;
+    min-width: 35px !important;
+    padding: 0 9px !important;
+    font-size: 12px !important;
+  }
+}
+@media (max-width: 420px) {
+  .services-pro-section { width: min(100% - 20px, 1120px) !important; }
+  .services-pro-grid { gap: 12px !important; }
+  .services-pro-grid > .service-pro-card,
+  .services-pro-grid > .service-pro-card:nth-child(n) {
+    padding: 20px 17px 18px !important;
+    border-radius: 16px !important;
+  }
+  .service-pro-card h3 {
+    max-width: calc(100% - 60px) !important;
+    font-size: 21px !important;
+  }
+  .service-pro-card p {
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+  }
+  .service-pro-tag {
+    top: 18px !important;
+    right: 15px !important;
+    width: 46px !important;
+    height: 46px !important;
+  }
+}
