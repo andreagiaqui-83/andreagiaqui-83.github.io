@@ -1,0 +1,69 @@
+name: Polish services and render section
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/polish-services-render.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch landing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          # CSS override loaded last to guarantee the requested 3+3 services layout.
+          link='<link rel="stylesheet" href="site-polish-20260915.css?v=20260915-2">'
+          if link not in s:
+              s=s.replace('</head>',link+'</head>',1)
+
+          # Reliable local SVG visual: replaces the blank WebP render panel.
+          s=s.replace('src="assets/render-architettonico.webp" width="959" height="540"','src="assets/render-visual-professionale.svg?v=20260915-2" width="1200" height="675"',1)
+
+          # Professional guidance inside the render section.
+          old='</ul><div class="render-actions"><a class="button primary" href="#modulo">Richiedi un render</a></div>'
+          new='</ul><div class="render-location-note"><strong>Per render di fabbricati reali</strong><span>È consigliabile indicare la posizione esatta dell’immobile tramite indirizzo completo, coordinate geografiche e/o link Google Maps / Google Earth, oltre a fornire il maggior numero possibile di fotografie del fabbricato, del contesto e di elaborati tecnici pertinenti. Una documentazione più completa consente di impostare viste, ambientazione e proporzioni con maggiore coerenza rispetto al contesto reale.</span></div><div class="render-actions"><a class="button primary" href="#modulo">Richiedi un render</a></div>'
+          if 'class="render-location-note"' not in s and old in s:
+              s=s.replace(old,new,1)
+
+          # Same information where the customer enters the site position.
+          pos='<label>Coordinate geografiche<input type="text" name="Coordinate_geografiche" placeholder="Latitudine / longitudine o altre coordinate"></label>'
+          pos_note='<p class="form-location-note"><strong>Render di fabbricati:</strong> se richiedi una visualizzazione fotorealistica, indica quando possibile l’indirizzo fisico esatto, le coordinate e/o il link Google Maps / Earth. Allega inoltre più materiale pertinente possibile: fotografie esterne e interne, immagini del contesto, piante, prospetti, sezioni, nuvole di punti, modelli CAD/BIM e altri riferimenti utili.</p>'
+          if 'class="form-location-note"' not in s and pos in s:
+              s=s.replace(pos,pos+pos_note,1)
+
+          # Visible FAQ: clarify why exact site position and abundant source material help.
+          oldfaq='Sì. Posso sviluppare render fotorealistici e visualizzazioni 3D partendo da fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, modelli CAD/BIM, mesh e altri elaborati tecnici. Puoi richiedere immagini prospettiche statiche oppure visualizzazioni orbitali e sequenze 360° attorno al fabbricato o all’oggetto.'
+          newfaq='Sì. Posso sviluppare render fotorealistici e visualizzazioni 3D partendo da fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, modelli CAD/BIM, mesh e altri elaborati tecnici. Puoi richiedere immagini prospettiche statiche oppure visualizzazioni orbitali e sequenze 360° attorno al fabbricato o all’oggetto. Per un fabbricato reale è preferibile fornire anche indirizzo esatto, coordinate o link Google Maps / Earth e quanto più materiale pertinente possibile, così da ricostruire con maggiore coerenza il soggetto e il suo contesto.'
+          s=s.replace(oldfaq,newfaq)
+
+          # JSON-LD FAQ answer uses a slightly different wording.
+          oldjson='Sì. È possibile sviluppare render fotorealistici e visualizzazioni 3D a partire da fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, modelli CAD/BIM e altri elaborati tecnici. Gli output possono comprendere immagini prospettiche statiche e visualizzazioni orbitali o sequenze 360° attorno al fabbricato o all’oggetto.'
+          newjson='Sì. È possibile sviluppare render fotorealistici e visualizzazioni 3D a partire da fotografie, immagini, nuvole di punti, piante, prospetti, sezioni, modelli CAD/BIM e altri elaborati tecnici. Gli output possono comprendere immagini prospettiche statiche e visualizzazioni orbitali o sequenze 360° attorno al fabbricato o all’oggetto. Per fabbricati reali è consigliato fornire anche indirizzo esatto, coordinate o link Google Maps / Earth e quanto più materiale pertinente possibile, per migliorare la coerenza del render con il contesto reale.'
+          s=s.replace(oldjson,newjson)
+
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Validate
+        run: |
+          grep -q 'site-polish-20260915.css?v=20260915-2' index.html
+          grep -q 'render-visual-professionale.svg?v=20260915-2' index.html
+          grep -q 'class="render-location-note"' index.html
+          grep -q 'class="form-location-note"' index.html
+          grep -q 'id="servizi"' index.html
+          test -f assets/render-visual-professionale.svg
+          test -f site-polish-20260915.css
+          ! grep -qi 'planovolumetrico' index.html
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html
+          git commit -m "Fix services grid render visual and location guidance" || exit 0
+          git push
