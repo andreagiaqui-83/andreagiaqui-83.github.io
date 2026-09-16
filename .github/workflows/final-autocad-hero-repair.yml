@@ -1,0 +1,27 @@
+name: Final AutoCAD hero repair
+on:
+  push:
+    paths:
+      - '.github/workflows/final-autocad-hero-repair.yml'
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply final repair V15
+        run: python .github/scripts/final_autocad_repair.py
+      - name: Commit repaired landing and cleanup
+        run: |
+          rm -f .github/workflows/fix-autocad-hero-v2.yml
+          rm -f .github/workflows/final-autocad-hero-repair.yml
+          rm -f .github/scripts/final_autocad_repair.py
+          rm -f .github/scripts/portrait.b64
+          git config user.name 'andreagiaqui-83'
+          git config user.email 'andrea.giaqui@gmail.com'
+          git add -A
+          git commit -m 'Ripara definitivamente landing AutoCAD V15'
+          git push origin HEAD:main
