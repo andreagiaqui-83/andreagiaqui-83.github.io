@@ -5,7 +5,7 @@
 
   document.title = 'Disegnatore AutoCAD 2D/3D, Revit BIM, Render e Disegno Meccanico | Preventivo Gratuito';
   document.querySelectorAll('a[href*="facebook.com/disegnatoreautocadonline"]').forEach(link => {
-    if (link.closest('footer')) link.textContent = 'Facebook · Disegnatore AutoCAD e Revit';
+    if (link.closest('footer') && !link.querySelector('svg')) link.textContent = 'Facebook · Disegnatore AutoCAD e Revit';
   });
 
   const form = document.getElementById('quoteForm');
