@@ -1,0 +1,54 @@
+name: Verify WhatsApp size and AutoCAD training banner
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/scripts/services_training.py'
+      - '.github/workflows/services-training-verified.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: services-training-verification
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install validators
+        run: |
+          python -m pip install --quiet 'Pillow>=11.3,<13' 'playwright>=1.50,<2' requests beautifulsoup4
+          python -m playwright install --with-deps chromium webkit
+      - name: Prepare isolated additions and verify source integrity
+        run: python .github/scripts/services_training.py prepare
+      - name: Compare WhatsApp with lesson landing and test responsive banner
+        run: python .github/scripts/services_training.py local
+      - name: Commit verified candidate without changing main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          branch="services-training-ready-${GITHUB_RUN_ID}"
+          git checkout -b "$branch"
+          git add index.html assets/autocad-lezioni-personalizzate-4b462515.jpg .github/training-media
+          git commit -m 'Add matching WhatsApp shortcut and responsive AutoCAD lessons banner'
+          git push origin "HEAD:refs/heads/$branch"
+          echo "CANDIDATE_READY $branch $(git rev-parse HEAD)"
+          echo "Candidate: $branch, commit $(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+      - name: Save pre-publication evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: services-training-local-proof
+          path: ${{ runner.temp }}/training-proof/
+          retention-days: 7
+      - name: Verify final public page and real browser navigation
+        run: python .github/scripts/services_training.py live
+      - name: Save verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: services-training-live-proof
+          path: ${{ runner.temp }}/training-proof/
+          retention-days: 7
