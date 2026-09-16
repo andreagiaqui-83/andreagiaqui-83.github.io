@@ -14,8 +14,9 @@ import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
-BUILD = '20260916-servizi-in-costruzione-01'
+BUILD = '20260916-servizi-in-costruzione-02'
 BASE = 'fdbcdf1289136f8daafd891e508d42728fe8fe18'
+DIFF_BASE = 'b324da84854f00da817d64254a58e1b9866ff939'
 REPORT = Path(os.environ.get('RUNNER_TEMP', '/tmp')) / 'maintenance-proof'
 ALLOWED = {'index.html', '.github/SERVICES-PUBLICATION.md', '.github/services-publication.json', '.github/scripts/services_maintenance_check.py', '.github/workflows/services-maintenance-verified.yml'}
 
@@ -27,7 +28,7 @@ def record(name, data):
     (REPORT/name).write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
 
 def static_checks():
-    changed = subprocess.check_output(['git','diff','--name-only',BASE,'HEAD'], text=True).splitlines()
+    changed = subprocess.check_output(['git','diff','--name-only',DIFF_BASE,'HEAD'], text=True).splitlines()
     assert set(changed) <= ALLOWED, changed
     data = Path('index.html').read_bytes()
     soup = BeautifulSoup(data, 'html.parser')
@@ -35,18 +36,24 @@ def static_checks():
     assert soup.body['data-build'] == BUILD
     assert soup.h1.get_text(strip=True) == 'Pagina in costruzione'
     assert 'I servizi non sono attivi.' in soup.get_text()
-    assert 'andrea.giaquinto@gmail.com' in soup.get_text()
-    assert 'andrea.giaqui@gmail.com' not in soup.get_text()
+    assert 'andrea.giaqui@gmail.com' in soup.get_text()
+    assert 'andrea.giaquinto@' not in data.decode('utf-8')
+    previous = subprocess.check_output(['git','show',f'{DIFF_BASE}:index.html']).decode('utf-8')
+    expected = previous.replace('andrea.giaquinto@','andrea.giaqui@').replace('20260916-servizi-in-costruzione-01',BUILD)
+    assert data.decode('utf-8') == expected, 'Changes beyond email and build identifier'
     assert not soup.select('form,input,button,iframe,object,embed,script[src],link[rel="stylesheet"]')
     assert not soup.select('script:not([type="application/ld+json"])')
     assert not soup.select('meta[http-equiv="refresh"]')
     assert soup.select_one('meta[name="robots"]')['content'] == 'index,follow'
     assert soup.select_one('link[rel="canonical"]')['href'] == 'https://andreagiaquinto.it/'
     assert not soup.select('[role="dialog"]')
-    assert json.loads(soup.select_one('script[type="application/ld+json"]').string)['@type'] == 'Person'
+    person = json.loads(soup.select_one('script[type="application/ld+json"]').string)
+    assert person['@type'] == 'Person' and person['email'] == 'andrea.giaqui@gmail.com'
+    for selector in ['meta[name="description"]','meta[property="og:description"]']:
+        assert 'andrea.giaqui@gmail.com' in soup.select_one(selector)['content']
     links = [a['href'] for a in soup.select('a')]
     assert len(links) == 4
-    assert 'tel:+393337240544' in links and 'mailto:andrea.giaquinto@gmail.com' in links
+    assert 'tel:+393337240544' in links and 'mailto:andrea.giaqui@gmail.com' in links
     assert '/lezioni-autocad/' in links
     assert len([l for l in links if l.startswith('https://wa.me/393337240544?text=')]) == 1
     result = {'status':'PASS','build':BUILD,'changed':changed,'html_sha256':sha(data),'backup':BASE,'lessons_and_backend_unchanged':True}
@@ -84,7 +91,7 @@ def browsers(base, stage):
                     for selector in ['h1','.inactive','.contact-panel','.courses','.notice']:
                         box=page.locator(selector).bounding_box()
                         assert box and box['width']>0 and box['x']>=-1 and box['x']+box['width']<=width+1, (width,selector,box)
-                    assert page.locator('a[href="mailto:andrea.giaquinto@gmail.com"] strong').inner_text()=='andrea.giaquinto@gmail.com'
+                    assert page.locator('a[href="mailto:andrea.giaqui@gmail.com"] strong').inner_text()=='andrea.giaqui@gmail.com'
                     for link in page.locator('a').all():
                         assert link.bounding_box()['height'] >= 44
                         link.click(trial=True)
