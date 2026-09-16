@@ -11,4 +11,21 @@
 .footer-banner-wrap{justify-content:center}
 .footer-banner{text-align:left}
 .legal{text-align:center}
-@media(max-width:600px){.footer-banner-wrap{justify-content:stretch}.footer-banner{grid-template-columns:1fr;text-align:center}.footer-contact-actions{align-items:stretch}.footer-contact-actions .btn{justify-content:center}}
+
+/* Card n. 2: fallback grafico certo e visibile anche in caso di cache/asset precedente */
+.roadmap-card:nth-child(2) .roadmap-visual{background:url("autocad_dalla_bozza_alla_pianta.webp") center/cover no-repeat}
+.roadmap-card:nth-child(2) .roadmap-visual img{opacity:0}
+
+/* Banner finale: visual professionale CAD -> BIM -> Render */
+.footer-banner{grid-template-columns:minmax(260px,42%) 1fr!important;width:min(100%,980px)!important;align-items:stretch!important}
+.footer-banner-visual{background:#081827 url("servizi-cad-bim-render.svg") center/cover no-repeat!important;min-height:220px;border:1px solid rgba(255,255,255,.10);border-radius:14px}
+.footer-banner-visual svg{display:none!important}
+.footer-banner-text{align-self:center}
+
+@media(max-width:600px){
+  .footer-banner-wrap{justify-content:stretch}
+  .footer-banner{grid-template-columns:1fr!important;text-align:center}
+  .footer-banner-visual{min-height:210px}
+  .footer-contact-actions{align-items:stretch}
+  .footer-contact-actions .btn{justify-content:center}
+}
