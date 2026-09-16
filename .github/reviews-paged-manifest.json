@@ -1,0 +1,21 @@
+{
+  "build": "20260916-recensioni-02",
+  "files": {
+    "index.html": "78a67df83604098bd980c3611062caded5d6f85ba7ab9ba58d9f120549afa483",
+    "script.js": "8637889a55c7521a67a20c24adb8b8070eb3cc9544c9c113484c2cddd0f2e75f",
+    "reviews-carousel.css": "d5d8d3d6c8bb1035f9ecb321cce0771ec3b4bf437e7f122e77b06fd9d1dc5281",
+    "reviews-carousel.js": "4b8d16c02794be8b84dd89bcae21c9b950e2eca71dd33be959a8acd29746c2e5"
+  },
+  "unchanged_sections": [
+    "quoteForm",
+    "reviewForm",
+    "render",
+    "servizi",
+    "formazione-autocad",
+    "whatsappQuickContact",
+    "footer",
+    "reviews content"
+  ],
+  "core_prefix_sha256": "57f0f89b610b2823d7c929a565d713960f7c6f779ba7004efd54dc6a54db06b9",
+  "lessons_sha256": "610c5b77ded6b5b641ef9b2a8caf097952ce999f87a57d45494749cdabcea21b"
+}
