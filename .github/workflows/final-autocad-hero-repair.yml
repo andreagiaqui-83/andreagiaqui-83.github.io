@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Verify photo and apply final repair V15
+      - name: Verify physical photo and apply V15 final
         run: |
           test -s lezioni-autocad/assets/andrea-giaquinto-autocad.webp
           python .github/scripts/final_autocad_repair.py
