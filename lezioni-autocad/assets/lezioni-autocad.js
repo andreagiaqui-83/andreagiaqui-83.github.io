@@ -25,6 +25,26 @@
     document.addEventListener('click', e => { if (!nav.contains(e.target) && !toggle.contains(e.target)) close(); });
     window.addEventListener('resize', () => { if (window.innerWidth > 1100) close(); });
   }
+
+  const reviewsSection = document.getElementById('recensioni');
+  if (reviewsSection) {
+    const eyebrow = reviewsSection.querySelector('.eyebrow');
+    const heading = reviewsSection.querySelector('h2');
+    const copy = reviewsSection.querySelector('.copy');
+    const grid = reviewsSection.querySelector('.reviews-grid');
+    if (eyebrow) eyebrow.textContent = 'Recensioni delle lezioni';
+    if (heading) heading.textContent = 'Cosa dicono gli studenti delle lezioni AutoCAD.';
+    if (copy) copy.textContent = 'Alcune recensioni reali ricevute da studenti che hanno seguito lezioni e ripetizioni AutoCAD personalizzate.';
+    if (grid) {
+      grid.innerHTML = `
+        <article class="review-card"><div class="review-mark">“</div><p>Andrea è molto professionale, preparato e mette a proprio agio durante la lezione. Super consigliato!!! :)</p><span>Lucia C. · Lezioni AutoCAD</span></article>
+        <article class="review-card"><div class="review-mark">“</div><p>Andrea è un bravo insegnante, chiaro, semplice e passo passo ti aiuta a comprendere come usare i comandi e le scorciatoie più semplici. Ha anche tanta pazienza.</p><span>Michela F. · Lezioni AutoCAD</span></article>
+        <article class="review-card"><div class="review-mark">“</div><p>Il suo Insegnamento è chiaro e diretto.. veramente ho visto notevoli miglioramenti</p><span>Dino P. · Lezioni AutoCAD</span></article>
+        <article class="review-card"><div class="review-mark">“</div><p>Mi ha aiutato tanto con le ripetizioni di AutoCAD e sono migliorato nel rendimento e nelle verifiche.</p><span>Loris C. · Ripetizioni AutoCAD</span></article>
+        <article class="review-card"><div class="review-mark">“</div><p>Mi ha aiutato a capire le coordinate polari e cartesiane, molto bravo e chiaro</p><span>Hassan Y. · Lezioni AutoCAD</span></article>`;
+    }
+  }
+
   document.getElementById('year').textContent = new Date().getFullYear();
   const carousel = document.getElementById('reviewsCarousel');
   const prev = document.getElementById('reviewsPrev');
