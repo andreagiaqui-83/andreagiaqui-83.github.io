@@ -1,0 +1,27 @@
+{
+  "build": "20260916-formazione-wa-01",
+  "base": "5bf82ad2073cc56e34e4489ed075b44e111d3ad2",
+  "reference_revision": "cc7da1e4c1ae21a54fd8bb9417317dbdc9872965",
+  "path": "assets/autocad-lezioni-personalizzate-4b462515.jpg",
+  "bytes": 81467,
+  "sha256": "cf7d51f71dd93fc1a1a6cc223c7ecaf29b695c44342dd89320a0af2d8cf58b01",
+  "dimensions": [
+    618,
+    593
+  ],
+  "source_sha256": "4b46251558bac02dd873bcbdcfa2be7b8ee9a91fbecf6bff4f82e4610e7947e9",
+  "css_sha256": "6f47cf8cb756336a7c5c3f272e5f1438bbc9fc32dd7524daeacd4f7fc2054904",
+  "original_html_sha256": "f372fe5f55d32726b195ac181600fd2014c6b4ef6b68f060bb75bf1850befe15",
+  "lessons_sha256": "610c5b77ded6b5b641ef9b2a8caf097952ce999f87a57d45494749cdabcea21b",
+  "course_url": "https://andreagiaquinto.it/lezioni-autocad/",
+  "whatsapp_url": "https://wa.me/393337240544?text=Ciao%20Andrea%2C%20vorrei%20richiedere%20un%20preventivo.",
+  "unchanged": [
+    "Existing HTML",
+    "Render",
+    "Services",
+    "Quote form",
+    "Review form",
+    "Lesson landing",
+    "Backend"
+  ]
+}
