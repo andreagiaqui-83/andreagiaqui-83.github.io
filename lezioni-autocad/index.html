@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#07111f" name="theme-color"/>
+<meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>
+<title>Lezioni AutoCAD 2D e 3D Online | Andrea Giaquinto</title>
+<meta content="Lezioni AutoCAD 2D e 3D online e a domicilio con Andrea Giaquinto, certificato Autodesk ACU e con oltre 20 anni di esperienza. Prima lezione di 30 minuti gratis." name="description"/>
+<link href="https://andreagiaquinto.it/lezioni-autocad/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="it_IT" property="og:locale"/>
+<meta content="Lezioni AutoCAD 2D e 3D | Impara davvero il CAD" property="og:title"/>
+<meta content="Percorso pratico e personalizzato per studenti, principianti e professionisti. Online in tutta Italia. Prima lezione orientativa di 30 minuti gratis." property="og:description"/>
+<meta content="https://andreagiaquinto.it/lezioni-autocad/" property="og:url"/>
+<meta content="Andrea Giaquinto" property="og:site_name"/>
+<meta content="summary" name="twitter:card"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://andreagiaquinto.it/lezioni-autocad/#andrea-giaquinto","name":"Andrea Giaquinto","jobTitle":"Disegnatore AutoCAD","description":"Disegnatore AutoCAD certificato Autodesk Certified User (ACU) con oltre 20 anni di esperienza nel disegno tecnico.","url":"https://andreagiaquinto.it/","sameAs":["https://www.linkedin.com/in/andrea-giaquinto-165156360"],"telephone":"+39 333 724 0544","email":"andrea.giaqui@gmail.com"},{"@type":"Service","@id":"https://andreagiaquinto.it/lezioni-autocad/#servizio","name":"Lezioni AutoCAD 2D e 3D","serviceType":"Lezioni e ripetizioni AutoCAD 2D e 3D","provider":{"@id":"https://andreagiaquinto.it/lezioni-autocad/#andrea-giaquinto"},"areaServed":{"@type":"Country","name":"Italia"},"availableChannel":[{"@type":"ServiceChannel","serviceUrl":"https://andreagiaquinto.it/lezioni-autocad/","name":"Lezioni online"},{"@type":"ServiceChannel","name":"Lezioni a domicilio su accordo"}],"description":"Lezioni personalizzate di AutoCAD 2D e 3D per principianti, studenti e professionisti, con esercizi pratici e possibilità di lavorare su progetti reali."}]}</script>
+<style>
+:root { --bg: #06101c; --bg-2: #081725; --surface: rgba(12, 30, 48, .78); --surface-strong: #0c1d30; --line: rgba(170, 216, 245, .15); --text: #f3f8fc; --muted: #a9bdd0; --cyan: #69e5ff; --cyan-2: #1fc7f0; --blue: #7286ff; --green: #8bf2bd; --yellow: #ffda7a; --danger: #ff9f9f; --shadow: 0 28px 80px rgba(0,0,0,.33); --radius-xl: 28px; --radius-lg: 20px; --radius-md: 14px; --container: 1180px; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; background: radial-gradient(circle at 10% -10%, rgba(66, 126, 255, .18), transparent 34rem), radial-gradient(circle at 90% 10%, rgba(0, 212, 255, .13), transparent 28rem), var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+::selection { background: rgba(105, 229, 255, .28); color: white; }
+.container { width: min(calc(100% - 36px), var(--container)); margin-inline: auto; }
+.section { padding: 96px 0; position: relative; }
+.section-sm { padding: 72px 0; }
+.eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--cyan); text-transform: uppercase; letter-spacing: .13em; font-weight: 800; font-size: .78rem; }
+.eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+.section-title { margin: 12px 0 14px; max-width: 850px; font-size: clamp(2rem, 4.7vw, 3.65rem); line-height: 1.05; letter-spacing: -.045em; }
+.section-copy { margin: 0; max-width: 760px; color: var(--muted); font-size: 1.08rem; }
+.kicker { color: var(--cyan); font-weight: 800; }
+.site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(6,16,28,.74); backdrop-filter: blur(18px); }
+.nav { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand-mark { width: 42px; height: 42px; flex: 0 0 42px; display: grid; place-items: center; border: 1px solid rgba(105,229,255,.4); border-radius: 12px; background: linear-gradient(145deg, rgba(105,229,255,.12), rgba(114,134,255,.14)); box-shadow: inset 0 0 22px rgba(105,229,255,.06); color: var(--cyan); font-weight: 900; letter-spacing: -.06em; }
+.brand-copy { min-width: 0; }
+.brand-copy strong { display: block; font-size: .98rem; line-height: 1.15; }
+.brand-copy span { display: block; margin-top: 3px; color: var(--muted); font-size: .72rem; letter-spacing: .11em; text-transform: uppercase; }
+.nav-links { display: flex; align-items: center; gap: 26px; color: #c9d8e6; font-size: .92rem; font-weight: 650; }
+.nav-links a:not(.btn):hover { color: var(--cyan); }
+.menu-toggle { display: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.03); color: white; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 0 20px; border: 1px solid transparent; border-radius: 13px; font-weight: 800; letter-spacing: -.01em; transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease; }
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { color: #03131d; background: linear-gradient(135deg, var(--cyan), #a0f1ff); box-shadow: 0 12px 38px rgba(44, 208, 239, .22); }
+.btn-primary:hover { box-shadow: 0 16px 46px rgba(44, 208, 239, .30); }
+.btn-secondary { color: white; border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.055); }
+.btn-secondary:hover { border-color: rgba(105,229,255,.42); background: rgba(105,229,255,.08); }
+.btn-small { min-height: 42px; padding: 0 16px; border-radius: 11px; font-size: .88rem; }
+.hero { position: relative; overflow: hidden; padding: 88px 0 66px; }
+.hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(105,229,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(105,229,255,.035) 1px, transparent 1px); background-size: 52px 52px; mask-image: linear-gradient(to bottom, rgba(0,0,0,.8), transparent 92%); }
+.hero-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.04fr .96fr; align-items: center; gap: 56px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid rgba(105,229,255,.2); border-radius: 999px; background: rgba(105,229,255,.055); color: #d7f9ff; font-size: .82rem; font-weight: 750; }
+.hero-badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px rgba(139,242,189,.08); }
+.hero h1 { margin: 22px 0 20px; font-size: clamp(2.9rem, 6.2vw, 5.85rem); line-height: .94; letter-spacing: -.065em; max-width: 850px; }
+.hero h1 span { background: linear-gradient(95deg, var(--cyan), #a8b6ff 63%, var(--green)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-lead { max-width: 720px; margin: 0; color: #b7c9d9; font-size: clamp(1.04rem, 2vw, 1.22rem); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.hero-trust { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 27px; }
+.trust-chip { padding: 9px 12px; border: 1px solid rgba(255,255,255,.1); border-radius: 999px; background: rgba(255,255,255,.035); color: #c8d7e5; font-size: .82rem; }
+.trust-chip strong { color: white; }
+.cad-window { position: relative; border: 1px solid rgba(141,199,232,.2); border-radius: 24px; overflow: hidden; background: #071421; box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,.02); transform: perspective(1200px) rotateY(-4deg) rotateX(2deg); }
+.cad-window::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: linear-gradient(145deg, rgba(105,229,255,.35), transparent 42%, rgba(114,134,255,.25)); filter: blur(16px); opacity: .38; }
+.cad-top { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; border-bottom: 1px solid rgba(255,255,255,.08); background: #0b1b2a; }
+.cad-dots { display: flex; gap: 6px; }
+.cad-dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.25); }
+.cad-title { color: #93aabd; font-size: .7rem; font-weight: 700; letter-spacing: .05em; }
+.cad-toolbar { display: flex; gap: 7px; }
+.cad-toolbar i { width: 21px; height: 7px; border-radius: 3px; background: rgba(105,229,255,.15); }
+.cad-canvas { position: relative; min-height: 430px; overflow: hidden; background-color: #071421; background-image: linear-gradient(rgba(96, 201, 228, .052) 1px, transparent 1px), linear-gradient(90deg, rgba(96, 201, 228, .052) 1px, transparent 1px), linear-gradient(rgba(96, 201, 228, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(96, 201, 228, .025) 1px, transparent 1px); background-size: 30px 30px, 30px 30px, 6px 6px, 6px 6px; }
+.cad-canvas svg { position: absolute; inset: 7% 6% 10%; width: 88%; height: 83%; }
+.cad-cursor { position: absolute; left: 61%; top: 43%; width: 42px; height: 42px; }
+.cad-cursor::before, .cad-cursor::after { content: ""; position: absolute; background: var(--cyan); opacity: .72; }
+.cad-cursor::before { width: 42px; height: 1px; top: 20px; left: 0; }
+.cad-cursor::after { width: 1px; height: 42px; left: 20px; top: 0; }
+.cad-tooltip { position: absolute; left: calc(61% + 28px); top: calc(43% + 24px); padding: 7px 9px; border: 1px solid rgba(105,229,255,.26); border-radius: 7px; background: rgba(8,28,42,.92); color: var(--cyan); font-size: .68rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; box-shadow: 0 8px 25px rgba(0,0,0,.25); }
+.cad-command { display: flex; align-items: center; gap: 10px; height: 54px; padding: 0 14px; border-top: 1px solid rgba(255,255,255,.08); background: #091a29; color: #8aa4b8; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .7rem; }
+.cad-command strong { color: var(--green); font-weight: 650; }
+.cad-float { position: absolute; right: -19px; bottom: 56px; z-index: 4; width: 182px; padding: 14px; border: 1px solid rgba(255,255,255,.12); border-radius: 16px; background: rgba(8, 25, 40, .94); backdrop-filter: blur(12px); box-shadow: 0 20px 45px rgba(0,0,0,.34); }
+.cad-float strong { display: block; color: var(--green); font-size: 1.6rem; letter-spacing: -.04em; }
+.cad-float span { color: #afc1d0; font-size: .78rem; }
+.stats { position: relative; z-index: 3; margin-top: 42px; display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 18px; background: rgba(9,24,39,.62); overflow: hidden; }
+.stat { padding: 18px 22px; border-right: 1px solid var(--line); }
+.stat:last-child { border-right: 0; }
+.stat strong { display: block; font-size: 1.35rem; letter-spacing: -.04em; }
+.stat span { color: var(--muted); font-size: .84rem; }
+.cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; }
+.card { position: relative; overflow: hidden; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: linear-gradient(145deg, rgba(13,31,50,.84), rgba(8,22,35,.72)); box-shadow: inset 0 1px rgba(255,255,255,.02); }
+.card::after { content: ""; position: absolute; width: 120px; height: 120px; right: -54px; top: -58px; border-radius: 50%; background: rgba(105,229,255,.06); filter: blur(5px); }
+.card-icon { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 18px; border-radius: 14px; background: rgba(105,229,255,.08); color: var(--cyan); border: 1px solid rgba(105,229,255,.14); }
+.card-icon svg { width: 23px; height: 23px; }
+.card h3 { margin: 0 0 8px; font-size: 1.17rem; letter-spacing: -.025em; }
+.card p { margin: 0; color: var(--muted); font-size: .93rem; }
+.card ul { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+.card li { position: relative; padding-left: 22px; color: #bfd0dd; font-size: .9rem; }
+.card li::before { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 900; }
+.split { display: grid; grid-template-columns: .92fr 1.08fr; gap: 46px; align-items: start; }
+.sticky-copy { position: sticky; top: 104px; }
+.journey { display: grid; gap: 14px; }
+.step { display: grid; grid-template-columns: 52px 1fr; gap: 16px; padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.025); }
+.step-no { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 14px; border: 1px solid rgba(105,229,255,.2); color: var(--cyan); background: rgba(105,229,255,.055); font-weight: 900; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.step h3 { margin: 2px 0 6px; font-size: 1.08rem; }
+.step p { margin: 0; color: var(--muted); font-size: .93rem; }
+.audience-card { min-height: 240px; }
+.audience-tag { display: inline-flex; padding: 6px 9px; margin-bottom: 18px; border-radius: 999px; background: rgba(114,134,255,.11); color: #c4ccff; font-size: .72rem; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
+.project-banner { display: grid; grid-template-columns: 1.15fr .85fr; gap: 28px; align-items: center; padding: 36px; border: 1px solid rgba(105,229,255,.18); border-radius: var(--radius-xl); background: linear-gradient(130deg, rgba(105,229,255,.08), transparent 50%), linear-gradient(320deg, rgba(114,134,255,.10), transparent 46%), #0a1a2a; box-shadow: var(--shadow); }
+.project-banner h2 { margin: 9px 0 12px; font-size: clamp(2rem,4vw,3.2rem); line-height: 1.04; letter-spacing: -.045em; }
+.project-banner p { margin: 0; color: #b7c9d8; max-width: 700px; }
+.project-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+.project-checks span { padding: 10px 12px; border: 1px solid rgba(255,255,255,.09); border-radius: 11px; color: #d7e3ec; font-size: .84rem; background: rgba(255,255,255,.025); }
+.project-visual { position: relative; min-height: 300px; display: grid; place-items: center; }
+.sheet { position: absolute; width: 74%; aspect-ratio: .76; border: 1px solid rgba(255,255,255,.17); border-radius: 10px; background: #0c2235; box-shadow: 0 18px 40px rgba(0,0,0,.25); }
+.sheet:nth-child(1) { transform: translate(-25px, 12px) rotate(-6deg); opacity: .52; }
+.sheet:nth-child(2) { transform: translate(18px, -5px) rotate(4deg); opacity: .72; }
+.sheet:nth-child(3) { transform: translate(0, -3px); background-image: linear-gradient(rgba(105,229,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(105,229,255,.08) 1px, transparent 1px); background-size: 20px 20px; overflow: hidden; }
+.sheet:nth-child(3)::before, .sheet:nth-child(3)::after { content: ""; position: absolute; border: 2px solid var(--cyan); opacity: .72; }
+.sheet:nth-child(3)::before { inset: 18% 17% 37% 15%; clip-path: polygon(0 0, 100% 0, 100% 24%, 80% 24%, 80% 100%, 56% 100%, 56% 73%, 0 73%); }
+.sheet:nth-child(3)::after { left: 16%; right: 16%; bottom: 14%; height: 11%; border-color: rgba(139,242,189,.7); }
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 36px; }
+.mode-card { padding: 30px; border: 1px solid var(--line); border-radius: 22px; background: rgba(255,255,255,.025); }
+.mode-card strong { display: block; margin: 12px 0 8px; font-size: 1.45rem; letter-spacing: -.035em; }
+.mode-card p { margin: 0; color: var(--muted); }
+.mode-symbol { font-size: 2rem; }
+.free-lesson { padding: 34px; margin-top: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border: 1px solid rgba(139,242,189,.2); border-radius: 22px; background: linear-gradient(120deg, rgba(139,242,189,.10), rgba(105,229,255,.04)); }
+.free-lesson strong { display: block; color: var(--green); font-size: 1.05rem; }
+.free-lesson h3 { margin: 5px 0 5px; font-size: 1.55rem; letter-spacing: -.035em; }
+.free-lesson p { margin: 0; color: var(--muted); }
+.faq { display: grid; gap: 12px; margin-top: 34px; max-width: 920px; }
+details { border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.025); }
+summary { list-style: none; cursor: pointer; padding: 20px 54px 20px 20px; position: relative; font-weight: 800; letter-spacing: -.015em; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--cyan); font-size: 1.4rem; font-weight: 400; }
+details[open] summary::after { content: "–"; }
+details p { margin: 0; padding: 0 20px 20px; color: var(--muted); }
+.contact-section { background: linear-gradient(to bottom, transparent, rgba(8,24,39,.56)); }
+.contact-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: 28px; align-items: start; }
+.contact-panel, .form-panel { border: 1px solid var(--line); border-radius: 24px; background: rgba(9,24,39,.77); box-shadow: var(--shadow); }
+.contact-panel { padding: 30px; position: sticky; top: 104px; }
+.contact-panel h2 { margin: 10px 0 12px; font-size: 2.2rem; line-height: 1.04; letter-spacing: -.045em; }
+.contact-panel > p { margin: 0 0 24px; color: var(--muted); }
+.contact-list { display: grid; gap: 10px; }
+.contact-item { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: center; padding: 12px; border: 1px solid rgba(255,255,255,.08); border-radius: 13px; background: rgba(255,255,255,.025); transition: border-color .2s ease, background .2s ease; }
+.contact-item:hover { border-color: rgba(105,229,255,.26); background: rgba(105,229,255,.05); }
+.contact-item i { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 11px; background: rgba(105,229,255,.08); color: var(--cyan); font-style: normal; }
+.contact-item small { display: block; color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; }
+.contact-item strong { display: block; margin-top: 2px; font-size: .9rem; overflow-wrap: anywhere; }
+.credential { margin-top: 18px; padding: 14px; border: 1px dashed rgba(139,242,189,.22); border-radius: 13px; color: #cfe7d9; background: rgba(139,242,189,.04); font-size: .84rem; }
+.form-panel { padding: 30px; }
+.form-panel h3 { margin: 0 0 6px; font-size: 1.55rem; letter-spacing: -.035em; }
+.form-panel > p { margin: 0 0 22px; color: var(--muted); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: grid; gap: 7px; }
+.field.full { grid-column: 1 / -1; }
+label { color: #d9e7f1; font-size: .82rem; font-weight: 750; }
+.optional { color: #8399aa; font-weight: 500; }
+input, select, textarea { width: 100%; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; background: #081827; color: white; outline: 0; padding: 13px 14px; transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
+input, select { min-height: 49px; }
+textarea { min-height: 138px; resize: vertical; }
+input::placeholder, textarea::placeholder { color: #6f8799; }
+input:focus, select:focus, textarea:focus { border-color: rgba(105,229,255,.55); box-shadow: 0 0 0 4px rgba(105,229,255,.07); background: #091c2d; }
+select { color-scheme: dark; }
+.privacy-row { display: flex; gap: 10px; align-items: flex-start; margin-top: 2px; }
+.privacy-row input { width: 18px; min-height: 18px; height: 18px; margin-top: 3px; accent-color: var(--cyan-2); }
+.privacy-row label { color: #9fb4c5; font-weight: 500; line-height: 1.45; }
+.privacy-details { margin-top: 10px; border-radius: 12px; }
+.privacy-details summary { padding: 11px 42px 11px 13px; color: #9db2c3; font-size: .8rem; font-weight: 650; }
+.privacy-details summary::after { right: 14px; }
+.privacy-details p { padding: 0 13px 13px; font-size: .78rem; }
+.form-actions { display: flex; align-items: center; gap: 14px; margin-top: 18px; }
+.form-note { color: #849aaa; font-size: .77rem; }
+.status { padding: 14px 16px; margin-bottom: 18px; border-radius: 12px; font-size: .9rem; }
+.status.success { border: 1px solid rgba(139,242,189,.25); background: rgba(139,242,189,.08); color: #d5f9e4; }
+.status.error { border: 1px solid rgba(255,159,159,.25); background: rgba(255,159,159,.07); color: #ffd5d5; }
+.status a { text-decoration: underline; font-weight: 800; }
+.hp-field { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+.footer { padding: 30px 0 40px; border-top: 1px solid rgba(255,255,255,.08); color: #8096a8; font-size: .78rem; }
+.footer-row { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
+.footer strong { color: #b9c8d4; }
+.back-home { color: var(--cyan); font-weight: 750; }
+.whatsapp-fab { position: fixed; right: 18px; bottom: 18px; z-index: 45; display: flex; align-items: center; gap: 9px; min-height: 48px; padding: 0 15px; border-radius: 999px; background: #8bf2bd; color: #052017; font-weight: 900; font-size: .84rem; box-shadow: 0 16px 40px rgba(0,0,0,.32); }
+.whatsapp-fab svg { width: 19px; height: 19px; }
+@media (max-width: 1020px) {
+.hero-grid, .split, .contact-grid, .project-banner { grid-template-columns: 1fr; }
+.hero-grid { gap: 42px; }
+.cad-window { max-width: 720px; transform: none; }
+.cad-float { right: 12px; }
+.cards-4 { grid-template-columns: 1fr 1fr; }
+.cards-3 { grid-template-columns: 1fr 1fr; }
+.sticky-copy, .contact-panel { position: static; }
+.project-visual { min-height: 340px; }
+}
+@media (max-width: 820px) {
+.menu-toggle { display: grid; place-items: center; }
+.nav-links { position: fixed; left: 18px; right: 18px; top: 82px; display: none; align-items: stretch; flex-direction: column; gap: 2px; padding: 12px; border: 1px solid var(--line); border-radius: 18px; background: rgba(7,19,31,.97); box-shadow: var(--shadow); }
+.nav-links.open { display: flex; }
+.nav-links a { padding: 11px 12px; border-radius: 10px; }
+.nav-links .btn { margin-top: 4px; }
+.section { padding: 78px 0; }
+.hero { padding-top: 66px; }
+}
+@media (max-width: 640px) {
+.container { width: min(calc(100% - 26px), var(--container)); }
+.brand-copy span { display: none; }
+.hero h1 { font-size: clamp(2.65rem, 15vw, 4.1rem); }
+.hero-actions .btn { width: 100%; }
+.cad-canvas { min-height: 330px; }
+.cad-float { width: 154px; bottom: 62px; }
+.stats { grid-template-columns: 1fr; }
+.stat { border-right: 0; border-bottom: 1px solid var(--line); }
+.stat:last-child { border-bottom: 0; }
+.cards-4, .cards-3, .mode-grid, .form-grid { grid-template-columns: 1fr; }
+.field.full { grid-column: auto; }
+.project-banner, .contact-panel, .form-panel { padding: 22px; }
+.project-checks { grid-template-columns: 1fr; }
+.project-visual { min-height: 290px; }
+.free-lesson { align-items: flex-start; flex-direction: column; }
+.free-lesson .btn { width: 100%; }
+.form-actions { align-items: stretch; flex-direction: column; }
+.form-actions .btn { width: 100%; }
+.footer-row { flex-direction: column; }
+.whatsapp-fab span { display: none; }
+.whatsapp-fab { width: 50px; padding: 0; justify-content: center; }
+}
+@media (prefers-reduced-motion: no-preference) {
+.cad-cursor { animation: cursorMove 5.5s ease-in-out infinite alternate; }
+.cad-tooltip { animation: tooltipMove 5.5s ease-in-out infinite alternate; }
+@keyframes cursorMove { from { transform: translate(-18px, 20px); } to { transform: translate(28px, -28px); } }
+@keyframes tooltipMove { from { transform: translate(-18px, 20px); } to { transform: translate(28px, -28px); } }
+}
+/* Static release: accessibility and reliable progressive enhancement. */
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:4px}
+html{scroll-padding-top:104px}
+.skip-link{position:fixed;top:10px;left:10px;z-index:100;background:var(--yellow);color:#102030;padding:12px 18px;border-radius:8px;transform:translateY(-160%)}
+.skip-link:focus{transform:none}
+.btn:disabled{opacity:.65;cursor:wait;transform:none}
+.status{outline-offset:4px}
+.status.progress{border:1px solid #69e5ff;color:#c9f3ff;background:#112c3b}
+.fallback-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+.fallback-links .btn{font-size:.83rem;padding:12px 16px}
+.new-request{margin-top:16px}
+.contact-item strong{overflow-wrap:anywhere}
+.footer{padding-bottom:110px}
+.privacy-details a,.status a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:820px){html:not(.js) .nav{flex-wrap:wrap}html:not(.js) .nav-links{display:flex;position:static;flex-direction:row;flex-wrap:wrap;width:100%;box-shadow:none;background:transparent;border:0;padding:0 0 10px}html:not(.js) .site-header{position:relative}}
+@media(max-width:640px){input,select,textarea{font-size:16px!important}.form-panel{padding-bottom:35px}.fallback-links .btn{width:100%}.hero{padding-top:38px}.cad-tooltip{display:none}.whatsapp-fab{bottom:calc(16px + env(safe-area-inset-bottom))}.hero-badge{max-width:100%;font-size:.67rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<meta content="strict-origin-when-cross-origin" name="referrer"/><link href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="14" fill="%23081725"/%3E%3Ctext x="32" y="43" text-anchor="middle" font-family="Arial" font-size="30" font-weight="bold" fill="%2369e5ff"%3EAG%3C/text%3E%3C/svg%3E' rel="icon"/></head>
+<body data-build="lezioni-autocad-static-1"><a class="skip-link" href="#contenuto">Salta al contenuto</a>
+<header class="site-header" id="top">
+<div class="container nav">
+<a aria-label="Andrea Giaquinto Formazione AutoCAD" class="brand" href="#top">
+<span class="brand-mark">AG</span>
+<span class="brand-copy">
+<strong>Andrea Giaquinto</strong>
+<span>Formazione AutoCAD 2D / 3D</span>
+</span>
+</a>
+<button aria-controls="navLinks" aria-expanded="false" aria-label="Apri menu" class="menu-toggle" hidden="" type="button">☰</button>
+<nav aria-label="Navigazione principale" class="nav-links" id="navLinks">
+<a href="#programma">Programma</a>
+<a href="#metodo">Metodo</a>
+<a href="#per-chi">Per chi</a>
+<a href="#faq">FAQ</a>
+<a class="btn btn-primary btn-small" href="#contatti">30 min gratis</a>
+</nav>
+</div>
+</header>
+<main id="contenuto" tabindex="-1">
+<section class="hero">
+<div class="container hero-grid">
+<div>
+<span class="hero-badge"><i aria-hidden="true"></i> Lezioni personalizzate · AutoCAD 2D + 3D</span>
+<h1>Impara AutoCAD <span>davvero.</span></h1>
+<p class="hero-lead">Corso, lezioni e ripetizioni di AutoCAD 2D e 3D con un metodo pratico: impari i comandi mentre realizzi disegni, tavole e progetti reali. Percorsi per <strong>principianti, studenti e professionisti</strong>.</p>
+<div class="hero-actions">
+<a class="btn btn-primary" href="https://wa.me/393337240544?text=Ciao%20Andrea%2C%20vorrei%20prenotare%20la%20prima%20lezione%20gratuita%20di%2030%20minuti%20per%20AutoCAD%202D%2F3D." rel="noopener" target="_blank">Prenota 30 min gratis →</a>
+<a class="btn btn-secondary" href="#programma">Scopri cosa impari</a>
+</div>
+<div aria-label="Punti di forza" class="hero-trust">
+<span class="trust-chip"><strong>ACU</strong> · certificazione Autodesk</span>
+<span class="trust-chip"><strong>20+ anni</strong> di esperienza CAD</span>
+<span class="trust-chip"><strong>Online</strong> in tutta Italia</span>
+</div>
+</div>
+<div aria-label="Illustrazione di un ambiente CAD" class="cad-window">
+<div class="cad-top">
+<span class="cad-dots"><i></i><i></i><i></i></span>
+<span class="cad-title">LEZIONE AUTOCAD · ESERCIZIO PRATICO</span>
+<span class="cad-toolbar"><i></i><i></i><i></i></span>
+</div>
+<div class="cad-canvas">
+<svg aria-label="Disegno tecnico stilizzato di una pianta e di un modello 3D" role="img" viewbox="0 0 700 470">
+<g fill="none" opacity=".92" stroke="#69e5ff" stroke-width="3">
+<path d="M78 74 H377 V118 H515 V343 H414 V396 H78 Z"></path>
+<path d="M78 185 H210 V74 M210 185 V298 H78 M210 230 H378 V343 M378 118 V230 H515"></path>
+<path d="M210 298 H307 V396 M307 298 H414 V396"></path>
+<path d="M133 74 V104 M252 74 V104 M377 166 H407 M377 292 H407 M129 396 V366 M350 396 V366" stroke="#8bf2bd"></path>
+<path d="M223 175 A30 30 0 0 1 253 145" stroke="#8bf2bd"></path>
+<path d="M319 230 A34 34 0 0 0 353 264" stroke="#8bf2bd"></path>
+</g>
+<g fill="none" opacity=".65" stroke="#7286ff" stroke-width="1.6">
+<path d="M47 48 H544 M47 422 H544 M52 55 V414 M543 55 V414" stroke-dasharray="5 7"></path>
+<path d="M78 54 V35 M210 54 V35 M377 54 V35 M515 98 H565 M515 343 H565"></path>
+<path d="M78 39 H515 M552 118 V343"></path>
+</g>
+<g fill="#9fb5c7" font-family="monospace" font-size="14" opacity=".8">
+<text x="257" y="28">12.40 m</text>
+<text transform="rotate(90 570 236)" x="570" y="236">8.70 m</text>
+</g>
+<g fill="none" opacity=".8" stroke="#b1f0ff" stroke-width="2" transform="translate(475 55)">
+<path d="M0 55 L72 13 L153 57 L79 101 Z"></path>
+<path d="M0 55 V137 L79 181 L79 101 M79 181 L153 137 V57"></path>
+<path d="M20 66 V126 L50 142 V84 M105 86 V153 M130 72 V139"></path>
+</g>
+</svg>
+<span aria-hidden="true" class="cad-cursor"></span>
+<span class="cad-tooltip">_LINE · punto successivo</span>
+<div class="cad-float"><strong>30 min</strong><span>prima lezione gratuita</span></div>
+</div>
+<div class="cad-command">Comando: <strong>APPRENDIMENTO PRATICO</strong> · esercizio → correzione → metodo</div>
+</div>
+</div>
+<div aria-label="Informazioni principali" class="container stats">
+<div class="stat"><strong>2D + 3D</strong><span>dal disegno tecnico alla modellazione</span></div>
+<div class="stat"><strong>1:1</strong><span>percorso personalizzato sul tuo livello</span></div>
+<div class="stat"><strong>Pratica reale</strong><span>esercizi, tavole e progetti concreti</span></div>
+</div>
+</section>
+<section class="section" id="programma">
+<div class="container">
+<span class="eyebrow">Programma</span>
+<h2 class="section-title">Dalle basi a un flusso di lavoro CAD professionale.</h2>
+<p class="section-copy">Non impari una lista di comandi a memoria: impari <strong>quando usarli, perché usarli e come combinarli</strong> per lavorare con precisione, velocità e ordine.</p>
+<div class="cards-4">
+<article class="card">
+<div aria-hidden="true" class="card-icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 19V5h16v14H4Z"></path><path d="M8 5v14M4 10h16"></path></svg>
+</div>
+<h3>AutoCAD 2D</h3>
+<p>Disegno tecnico preciso, pulito e organizzato.</p>
+<ul><li>Comandi fondamentali e avanzati</li><li>Layer, proprietà e precisione</li><li>Blocchi, retini e riferimenti</li></ul>
+</article>
+<article class="card">
+<div aria-hidden="true" class="card-icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"></path><path d="m4 7.5 8 4.5 8-4.5M12 12v9"></path></svg>
+</div>
+<h3>AutoCAD 3D</h3>
+<p>Passaggio dal disegno alla modellazione tridimensionale.</p>
+<ul><li>Solidi e modellazione 3D</li><li>UCS, viste e navigazione</li><li>Modifica e gestione dei modelli</li></ul>
+</article>
+<article class="card">
+<div aria-hidden="true" class="card-icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M5 3h14v18H5z"></path><path d="M8 7h8M8 11h8M8 15h5"></path></svg>
+</div>
+<h3>Tavole complete</h3>
+<p>Dal modello alla presentazione ordinata del lavoro.</p>
+<ul><li>Layout e finestre</li><li>Scale, quote e testi</li><li>Stampa e messa in tavola</li></ul>
+</article>
+<article class="card">
+<div aria-hidden="true" class="card-icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M5 12h14M12 5v14"></path><circle cx="12" cy="12" r="9"></circle></svg>
+</div>
+<h3>Applicazioni reali</h3>
+<p>Esercizi adatti al tuo settore e ai tuoi obiettivi.</p>
+<ul><li>Architettura ed edilizia</li><li>Disegno meccanico</li><li>Progetti e standard ISO</li></ul>
+</article>
+</div>
+</div>
+</section>
+<section class="section" id="metodo">
+<div class="container split">
+<div class="sticky-copy">
+<span class="eyebrow">Metodo pratico</span>
+<h2 class="section-title">Meno teoria astratta. Più AutoCAD usato bene.</h2>
+<p class="section-copy">Ogni argomento parte da un obiettivo concreto. Ti guido passo dopo passo, poi lo ripeti sul tuo PC finché il procedimento diventa chiaro e riutilizzabile.</p>
+<div class="hero-actions">
+<a class="btn btn-secondary" href="#contatti">Parliamo dei tuoi obiettivi</a>
+</div>
+</div>
+<div class="journey">
+<article class="step"><span class="step-no">01</span><div><h3>Valutiamo il tuo livello</h3><p>Capisco cosa sai già fare, dove perdi tempo e quale risultato vuoi raggiungere.</p></div></article>
+<article class="step"><span class="step-no">02</span><div><h3>Vedi il procedimento</h3><p>Ti mostro il comando nel suo contesto reale, con impostazioni, alternative ed errori da evitare.</p></div></article>
+<article class="step"><span class="step-no">03</span><div><h3>Lo fai tu</h3><p>Replichi subito i passaggi sul tuo AutoCAD. La correzione è immediata, mentre lavori.</p></div></article>
+<article class="step"><span class="step-no">04</span><div><h3>Costruiamo un metodo</h3><p>Colleghiamo i singoli strumenti in un flusso di lavoro ordinato, veloce e applicabile ai tuoi progetti.</p></div></article>
+</div>
+</div>
+</section>
+<section class="section-sm" id="per-chi">
+<div class="container">
+<span class="eyebrow">Percorsi su misura</span>
+<h2 class="section-title">Un solo corso non va bene per tutti.</h2>
+<p class="section-copy">Le lezioni cambiano in base a chi sei e a ciò che devi saper fare davvero.</p>
+<div class="cards-3">
+<article class="card audience-card"><span class="audience-tag">Principianti</span><h3>Parti da zero senza confusione</h3><p>Interfaccia, precisione, comandi, layer e metodo spiegati con una progressione logica. Costruiamo basi solide prima di aumentare la difficoltà.</p></article>
+<article class="card audience-card"><span class="audience-tag">Studenti</span><h3>Ripetizioni e supporto sugli esercizi</h3><p>Recupero di argomenti, preparazione di tavole, correzione degli errori e aiuto a comprendere il procedimento, non solo a “finire il compito”.</p></article>
+<article class="card audience-card"><span class="audience-tag">Professionisti</span><h3>Più velocità, ordine e controllo</h3><p>Ottimizziamo il flusso di lavoro, approfondiamo gli strumenti che ti servono e lavoriamo direttamente su casi vicini alla tua attività.</p></article>
+</div>
+</div>
+</section>
+<section class="section-sm">
+<div class="container project-banner">
+<div>
+<span class="eyebrow">Il tuo progetto può diventare la lezione</span>
+<h2>Impara mentre risolvi un lavoro reale.</h2>
+<p>Hai una pianta, una tavola, un esercizio, un particolare meccanico o un progetto da impostare? Possiamo usarlo come materiale didattico e svilupparlo insieme fino alla messa in tavola.</p>
+<div class="project-checks"><span>✓ Disegno 2D</span><span>✓ Modellazione 3D</span><span>✓ Layout e stampa</span><span>✓ Impostazione secondo standard richiesti</span></div>
+</div>
+<div aria-hidden="true" class="project-visual"><span class="sheet"></span><span class="sheet"></span><span class="sheet"></span></div>
+</div>
+</section>
+<section class="section" id="modalita">
+<div class="container">
+<span class="eyebrow">Modalità delle lezioni</span>
+<h2 class="section-title">Segui da dove ti è più comodo.</h2>
+<p class="section-copy">Per le lezioni online lavori direttamente sul tuo computer e replichi ogni passaggio in tempo reale.</p>
+<div class="mode-grid">
+<article class="mode-card"><span aria-hidden="true" class="mode-symbol">🌐</span><strong>Online in tutta Italia</strong><p>Condivisione schermo in tempo reale: osservi, provi subito sul tuo PC e ricevi correzioni mentre lavori.</p></article>
+<article class="mode-card"><span aria-hidden="true" class="mode-symbol">🏠</span><strong>A domicilio</strong><p>Disponibilità in zona locale da concordare in base alla distanza, agli orari e alle esigenze della lezione.</p></article>
+</div>
+<div class="free-lesson">
+<div><strong>Prima lezione gratuita</strong><h3>30 minuti per capire da dove partire.</h3><p>Valutiamo livello, obiettivi e percorso più utile, senza impegno.</p></div>
+<a class="btn btn-primary" href="https://wa.me/393337240544?text=Ciao%20Andrea%2C%20vorrei%20prenotare%20la%20prima%20lezione%20gratuita%20di%2030%20minuti%20per%20AutoCAD." rel="noopener" target="_blank">Prenota su WhatsApp →</a>
+</div>
+</div>
+</section>
+<section class="section-sm" id="faq">
+<div class="container">
+<span class="eyebrow">Domande frequenti</span>
+<h2 class="section-title">Lezioni AutoCAD: le risposte più utili.</h2>
+<div class="faq">
+<details>
+<summary>Posso iniziare anche se non ho mai usato AutoCAD?</summary>
+<p>Sì. Il percorso può partire dalle basi: interfaccia, coordinate, comandi fondamentali, layer, proprietà, precisione di disegno e metodo di lavoro. La difficoltà cresce gradualmente in base ai tuoi obiettivi.</p>
+</details>
+<details>
+<summary>Le lezioni sono individuali e personalizzate?</summary>
+<p>Sì. Le lezioni sono costruite sul tuo livello, sul tempo disponibile e sull’obiettivo: studio, ripetizioni, lavoro, aggiornamento professionale o sviluppo di un progetto reale.</p>
+</details>
+<details>
+<summary>Posso lavorare durante la lezione su un mio progetto?</summary>
+<p>Sì. Puoi portare una tavola, un esercizio scolastico o un progetto professionale. Possiamo svilupparlo insieme fino alla messa in tavola, impostando un flusso CAD ordinato e coerente con gli standard richiesti.</p>
+</details>
+<details>
+<summary>Come funzionano le lezioni AutoCAD online?</summary>
+<p>Con condivisione dello schermo in tempo reale. Vedi ogni passaggio, lo replichi sul tuo PC e ricevi indicazioni immediate. L’obiettivo è imparare facendo, non limitarsi a osservare.</p>
+</details>
+<details>
+<summary>Tratti sia AutoCAD 2D sia AutoCAD 3D?</summary>
+<p>Sì. Il percorso può concentrarsi solo sul 2D, solo sul 3D oppure integrarli: disegno tecnico, modifica, organizzazione del file, impaginazione, modellazione tridimensionale e preparazione delle tavole.</p>
+</details>
+<details>
+<summary>La prima lezione gratuita quanto dura?</summary>
+<p>La prima lezione è gratuita e dura 30 minuti. Valutiamo insieme il tuo livello, gli obiettivi e il percorso più utile per iniziare, senza impegno.</p>
+</details>
+<details><summary>Quanto costano le lezioni successive?</summary><p>La prima lezione di 30 minuti è gratuita. Prezzo, durata e frequenza delle lezioni successive vengono concordati in base al percorso: chiedimi informazioni indicando il tuo livello e il risultato che vuoi raggiungere.</p></details><details><summary>Il corso rilascia una certificazione Autodesk?</summary><p>La certificazione Autodesk Certified User (ACU) indicata in questa pagina è la qualifica personale di Andrea. Le lezioni sono un servizio di formazione indipendente e non includono un esame o il rilascio di una certificazione Autodesk.</p></details></div>
+</div>
+</section>
+<section class="section contact-section" id="contatti">
+<div class="container contact-grid">
+<aside class="contact-panel">
+<span class="eyebrow">Contatti</span>
+<h2>Parlami del tuo obiettivo.</h2>
+<p>Scrivimi cosa vuoi imparare o migliorare. Ti rispondo personalmente per capire il percorso più adatto.</p>
+<div class="contact-list">
+<a class="contact-item" href="https://wa.me/393337240544?text=Ciao%20Andrea%2C%20vorrei%20informazioni%20sulle%20lezioni%20AutoCAD%202D%20e%203D." rel="noopener" target="_blank"><i>WA</i><span><small>WhatsApp</small><strong>+39 333 724 0544</strong></span></a>
+<a class="contact-item" href="tel:+393337240544"><i>☎</i><span><small>Telefono</small><strong>+39 333 724 0544</strong></span></a>
+<a class="contact-item" href="mailto:andrea.giaqui@gmail.com"><i>@</i><span><small>Email</small><strong>andrea.giaqui@gmail.com</strong></span></a>
+<a class="contact-item" href="https://www.linkedin.com/in/andrea-giaquinto-165156360" rel="noopener" target="_blank"><i>in</i><span><small>LinkedIn</small><strong>Andrea Giaquinto</strong></span></a>
+</div>
+<div class="credential"><strong>Andrea Giaquinto</strong><br/>Disegnatore AutoCAD certificato Autodesk Certified User (ACU) · oltre 20 anni di esperienza nel disegno tecnico.</div>
+</aside>
+<div class="form-panel">
+<h3>Richiedi informazioni o la prima lezione gratuita</h3>
+<p>Compila il modulo: bastano pochi dati per capire come posso aiutarti.</p>
+<form action="#contatti" id="lessonForm" method="post"><noscript><p class="status">Per usare il modulo è necessario JavaScript. Puoi contattare Andrea al <a href="tel:+393337240544">333 724 0544</a>, su <a href="https://wa.me/393337240544">WhatsApp</a> o via <a href="mailto:andrea.giaqui@gmail.com">email</a>.</p></noscript>
+<div aria-hidden="true" class="hp-field"><label for="website">Sito web</label><input autocomplete="off" id="website" name="website" tabindex="-1" type="text"/></div>
+<div class="form-grid">
+<div class="field"><label for="name">Nome e cognome *</label><input autocomplete="name" id="name" maxlength="120" minlength="2" name="name" placeholder="Mario Rossi" required="" type="text" value=""/></div>
+<div class="field"><label for="email">Email *</label><input autocomplete="email" id="email" maxlength="180" name="email" placeholder="nome@email.it" required="" type="email" value=""/></div>
+<div class="field"><label for="phone">Telefono / WhatsApp <span class="optional">facoltativo</span></label><input autocomplete="tel" id="phone" inputmode="tel" maxlength="80" name="phone" placeholder="333 123 4567" type="tel" value=""/></div>
+<div class="field"><label for="profile">Profilo <span class="optional">facoltativo</span></label><select id="profile" name="profile"><option value="">Seleziona</option><option value="Principiante">Principiante</option><option value="Studente">Studente</option><option value="Professionista">Professionista</option><option value="Altro">Altro</option></select></div>
+<div class="field"><label for="level">Livello AutoCAD <span class="optional">facoltativo</span></label><select id="level" name="level"><option value="">Seleziona</option><option value="Mai usato">Mai usato</option><option value="Base">Base</option><option value="Intermedio">Intermedio</option><option value="Avanzato / da perfezionare">Avanzato / da perfezionare</option></select></div>
+<div class="field"><label for="mode">Modalità preferita <span class="optional">facoltativo</span></label><select id="mode" name="mode"><option value="">Seleziona</option><option value="Online">Online</option><option value="A domicilio">A domicilio</option><option value="Da valutare insieme">Da valutare insieme</option></select></div>
+<div class="field full"><label for="goal">Cosa vuoi imparare? <span class="optional">facoltativo</span></label><input id="goal" maxlength="160" name="goal" placeholder="Es. AutoCAD da zero, 3D, impaginazione, velocizzare il lavoro..." type="text" value=""/></div>
+<div class="field full"><label for="message">Raccontami brevemente cosa ti serve <span class="optional">facoltativo</span></label><textarea id="message" maxlength="2500" name="message" placeholder="Puoi indicare anche se hai un esercizio o un progetto reale su cui vuoi lavorare."></textarea></div>
+<div class="field full">
+<div class="privacy-row"><input id="privacy" name="privacy" required="" type="checkbox" value="1"/><label for="privacy">Ho letto l’informativa sul trattamento dei dati e richiedo di essere ricontattato per le lezioni AutoCAD. *</label></div>
+<details class="privacy-details"><summary>Informativa breve sul trattamento dei dati</summary><p>Il titolare del trattamento è Andrea Giaquinto (andrea.giaqui@gmail.com). Nome ed email sono necessari per rispondere alla richiesta; gli altri dati sono facoltativi. I dati sono utilizzati per gestire le informazioni o le lezioni richieste, non per newsletter o pubblicità automatica. Il modulo utilizza i servizi Cloudflare e Resend per elaborare e trasmettere il messaggio alla casella email di Andrea. La copia tecnica della richiesta nel servizio cloud viene rimossa dalla procedura di pulizia dopo 30 giorni; la corrispondenza email è gestita per il tempo necessario al rapporto richiesto. Per chiedere accesso, rettifica, cancellazione, limitazione o opposizione al trattamento puoi scrivere all’indirizzo sopra indicato; resta possibile rivolgersi al Garante per la protezione dei dati personali. I servizi tecnici possono trattare dati di connessione secondo le proprie informative. Non inserire password, dati sensibili o documenti riservati in questo modulo.</p></details>
+</div>
+</div>
+<div class="form-actions"><button class="btn btn-primary" disabled="" id="lessonSubmit" type="submit">Invia richiesta →</button><span class="form-note">Risposta personale. Nessuna iscrizione automatica.</span></div>
+<div aria-atomic="true" aria-live="polite" class="status" hidden="" id="formStatus" role="status" tabindex="-1"></div><div class="fallback-links" hidden="" id="formFallback"><a class="btn btn-secondary" href="https://wa.me/393337240544" id="fallbackWhatsapp" rel="noopener noreferrer" target="_blank">Invia su WhatsApp</a><a class="btn btn-secondary" href="mailto:andrea.giaqui@gmail.com" id="fallbackEmail">Invia via email</a></div><button class="btn btn-secondary new-request" hidden="" id="newRequest" type="button">Scrivi una nuova richiesta</button></form>
+</div>
+</div>
+</section>
+</main>
+<footer class="footer">
+<div class="container footer-row">
+<div><strong>Andrea Giaquinto · Formazione AutoCAD</strong><br/>Lezioni AutoCAD 2D e 3D online in tutta Italia e a domicilio su accordo.<br/>AutoCAD e Autodesk sono marchi dei rispettivi proprietari. La pagina non dichiara affiliazioni o sponsorizzazioni ulteriori rispetto alla certificazione personale indicata.</div>
+<a class="back-home" href="https://andreagiaquinto.it/">← Torna al sito principale</a>
+</div>
+</footer>
+<a aria-label="Contatta Andrea su WhatsApp" class="whatsapp-fab" href="https://wa.me/393337240544?text=Ciao%20Andrea%2C%20vorrei%20informazioni%20sulle%20lezioni%20AutoCAD%202D%20e%203D." rel="noopener" target="_blank">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.5-4.7a8.5 8.5 0 1 1 16-4.1Z"></path><path d="M8.6 8.2c.2-.4.4-.4.7-.4h.4c.2 0 .4.1.5.4l.8 1.8c.1.3.1.5-.1.8l-.6.7c-.2.2-.2.4 0 .7.5.9 1.2 1.6 2.1 2.1.3.2.5.2.7 0l.8-1c.2-.3.5-.3.8-.2l1.7.8c.3.1.5.3.5.5 0 .3-.1 1.4-.8 2-.6.6-1.5.9-2.6.6-1.1-.3-2.7-.9-4.2-2.3-1.5-1.4-2.4-3.2-2.7-4.3-.3-1 .1-1.8.5-2.2Z"></path></svg>
+<span>WhatsApp</span>
+</a>
+<script>(() => {
+  'use strict';
+  const backend = 'https://cad-bim-preventivi.andrea-giaqui.workers.dev';
+  const canonicalOrigin = 'https://andreagiaquinto.it';
+  const toggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('navLinks');
+  if (toggle && nav) {
+    document.documentElement.classList.add('js');
+    toggle.hidden = false;
+    const close = (focusToggle = false) => {
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Apri menu');
+      toggle.textContent = '☰';
+      if (focusToggle) toggle.focus();
+    };
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Chiudi menu' : 'Apri menu');
+      toggle.textContent = open ? '×' : '☰';
+    });
+    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => close()));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && nav.classList.contains('open')) close(true);
+    });
+    document.addEventListener('click', event => {
+      if (!nav.contains(event.target) && !toggle.contains(event.target)) close();
+    });
+  }
+  const form = document.getElementById('lessonForm');
+  if (!form) return;
+  const submit = document.getElementById('lessonSubmit');
+  const status = document.getElementById('formStatus');
+  const fallback = document.getElementById('formFallback');
+  const newRequest = document.getElementById('newRequest');
+  const nameInput = form.elements.namedItem('name');
+  let busy = false;
+  let completed = false;
+  const values = () => {
+    const data = new FormData(form);
+    const get = key => String(data.get(key) || '').trim();
+    return {
+      Tipo_richiesta: 'LEZIONI AUTOCAD 2D E 3D — informazioni / prima lezione gratuita di 30 minuti',
+      Pagina_origine: canonicalOrigin + '/lezioni-autocad/',
+      Nome_cognome: get('name'),
+      email: get('email'),
+      Telefono_WhatsApp: get('phone'),
+      Profilo: get('profile'),
+      Livello_AutoCAD: get('level'),
+      Modalita_preferita: get('mode'),
+      Obiettivo_lezioni: get('goal'),
+      Messaggio: get('message'),
+      Consenso_privacy: get('privacy') === '1' ? 'Informativa letta; richiesta di essere ricontattato sulle lezioni AutoCAD.' : ''
+    };
+  };
+  const displayStatus = (message, kind) => {
+    status.textContent = message;
+    status.className = 'status ' + kind;
+    status.hidden = false;
+    status.focus({ preventScroll: true });
+    if (!status.getBoundingClientRect().top || status.getBoundingClientRect().top > window.innerHeight - 70) {
+      status.scrollIntoView({ block: 'center', behavior: 'auto' });
+    }
+  };
+  const buildFallback = () => {
+    const data = values();
+    const labels = {
+      Nome_cognome: 'Nome', email: 'Email', Telefono_WhatsApp: 'Telefono / WhatsApp',
+      Profilo: 'Profilo', Livello_AutoCAD: 'Livello AutoCAD', Modalita_preferita: 'Modalità',
+      Obiettivo_lezioni: 'Obiettivo', Messaggio: 'Messaggio'
+    };
+    const text = 'Ciao Andrea, vorrei informazioni sulle lezioni AutoCAD 2D/3D e sulla prima lezione gratuita di 30 minuti.\n\n' +
+      Object.entries(labels).filter(([key]) => data[key]).map(([key, label]) => label + ': ' + data[key]).join('\n');
+    document.getElementById('fallbackWhatsapp').href = 'https://wa.me/393337240544?text=' + encodeURIComponent(text);
+    document.getElementById('fallbackEmail').href = 'mailto:andrea.giaqui@gmail.com?subject=' +
+      encodeURIComponent('Lezioni AutoCAD 2D/3D — richiesta informazioni') + '&body=' + encodeURIComponent(text);
+    fallback.hidden = false;
+  };
+  const api = async (path, body) => {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 20000);
+    try {
+      const options = { method: 'POST', credentials: 'omit', cache: 'no-store', signal: controller.signal };
+      if (body !== undefined) {
+        options.headers = { 'Content-Type': 'application/json' };
+        options.body = JSON.stringify(body);
+      }
+      const response = await fetch(backend + path, options);
+      let data;
+      try { data = await response.json(); } catch (_) { throw new Error('Risposta non riconosciuta'); }
+      if (!response.ok || data?.ok !== true) throw new Error('Invio non confermato');
+      return data;
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  };
+  nameInput.addEventListener('input', () => nameInput.setCustomValidity(''));
+  form.addEventListener('input', () => {
+    if (!fallback.hidden) buildFallback();
+  });
+  newRequest.addEventListener('click', () => {
+    completed = false;
+    submit.disabled = false;
+    submit.textContent = 'Invia richiesta →';
+    status.hidden = true;
+    fallback.hidden = true;
+    newRequest.hidden = true;
+    nameInput.focus();
+  });
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (busy || completed) return;
+    nameInput.setCustomValidity(nameInput.value.trim().length >= 2 ? '' : 'Inserisci un nome di almeno due caratteri.');
+    if (!form.reportValidity()) return;
+    if (String(form.elements.namedItem('website').value || '').trim()) {
+      displayStatus('Controlla i dati inseriti e riprova.', 'error');
+      return;
+    }
+    if (window.location.origin !== canonicalOrigin) {
+      displayStatus('Questa è un’anteprima. L’invio diretto funziona dalla pagina pubblicata su andreagiaquinto.it. Puoi comunque contattare Andrea via WhatsApp o email.', 'error');
+      buildFallback();
+      return;
+    }
+    busy = true;
+    submit.disabled = true;
+    submit.textContent = 'Invio in corso…';
+    fallback.hidden = true;
+    displayStatus('Invio della richiesta in corso…', 'progress');
+    let submitAttempted = false;
+    try {
+      const fields = values();
+      const session = await api('/api/session');
+      if (typeof session.sessionId !== 'string' || !session.sessionId || typeof session.token !== 'string' || !session.token) {
+        throw new Error('Sessione non valida');
+      }
+      submitAttempted = true;
+      await api('/api/submit', { sessionId: session.sessionId, token: session.token, fields });
+      completed = true;
+      displayStatus('Il servizio ha accettato la tua richiesta. Grazie! Andrea ti ricontatterà ai recapiti indicati per concordare il percorso o la prima lezione gratuita. Non è necessario inviare di nuovo.', 'success');
+      form.reset();
+      submit.textContent = 'Richiesta inviata ✓';
+      newRequest.hidden = false;
+    } catch (_) {
+      displayStatus(submitAttempted
+        ? 'Non è stato possibile confermare l’esito dell’invio: la richiesta potrebbe essere già arrivata. I dati sono ancora nel modulo. Puoi contattare Andrea su WhatsApp o via email; un nuovo invio potrebbe generare un duplicato.'
+        : 'Il collegamento al servizio non è riuscito. I dati sono ancora nel modulo: puoi riprovare oppure inviare la richiesta su WhatsApp o via email.', 'error');
+      buildFallback();
+      submit.textContent = 'Riprova l’invio →';
+    } finally {
+      busy = false;
+      submit.disabled = completed;
+    }
+  });
+  // Progressive enhancement: the button stays disabled if JavaScript is unavailable.
+  submit.disabled = false;
+})();
+</script></body>
+</html>
