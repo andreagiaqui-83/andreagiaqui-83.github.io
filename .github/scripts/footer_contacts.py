@@ -1,4 +1,4 @@
-"""Update only footer contacts; verify candidate and published page in browsers."""
+"""Update footer contacts and verify candidate and public browser rendering."""
 from pathlib import Path
 import functools
 import hashlib
@@ -63,12 +63,22 @@ def prepare():
     old_build = re.search(r'data-build="([^"]+)"', original)[1]
     updated, count = re.subn(r'data-build="[^"]+"', f'data-build="{BUILD}"', updated, count=1)
     assert count == 1
-    # Reversing just these three changes must reproduce the complete approved HTML.
     assert updated.replace(new, old_match[0], 1).replace(link, '', 1).replace(f'data-build="{BUILD}"', f'data-build="{old_build}"', 1) == original
     assert re.search(r'<main\b.*?</main>', updated, re.S)[0] == re.search(r'<main\b.*?</main>', original, re.S)[0]
+    script_path = Path('script.js')
+    old_script = script_path.read_text(encoding='utf-8')
+    destructive = "if (link.closest('footer')) link.textContent"
+    guarded = "if (link.closest('footer') && !link.querySelector('svg')) link.textContent"
+    assert old_script.count(destructive) == 1, 'Expected the known legacy footer label rewrite'
+    new_script = old_script.replace(destructive, guarded, 1)
+    assert new_script.replace(guarded, destructive, 1) == old_script
+    script_pattern = r'(<script src="script\.js\?v=)[^"]+(")'
+    updated, count = re.subn(script_pattern, lambda m: m[1] + BUILD + m[2], updated, count=1)
+    assert count == 1, 'Must update the script cache key'
+    script_path.write_text(new_script, encoding='utf-8')
     p.write_text(updated, encoding='utf-8')
     PROOF.mkdir(parents=True, exist_ok=True)
-    (PROOF/'change-scope.json').write_text(json.dumps({'build': BUILD, 'scope': 'Footer contacts, stylesheet link and build marker only', 'phone': tel['href'], 'facebook': facebook['href'], 'whatsapp': wa_url, 'unchanged_main': True}, indent=2))
+    (PROOF/'change-scope.json').write_text(json.dumps({'build': BUILD, 'scope': 'Footer contacts, scoped stylesheet, cache keys and guard preserving the Facebook icon; form logic unchanged', 'phone': tel['href'], 'facebook': facebook['href'], 'whatsapp': wa_url, 'unchanged_main': True}, indent=2))
     print('FOOTER_ONLY_CHANGE_VERIFIED', flush=True)
 
 
@@ -96,6 +106,8 @@ def browsers(base, stage):
                     footer = page.locator('footer')
                     footer.scroll_into_view_if_needed()
                     page.wait_for_timeout(300)
+                    if width in [320, 390, 393, 1440]:
+                        footer.screenshot(path=str(PROOF/f'{stage}-{engine}-{width}.png'), animations='disabled')
                     contacts = page.locator('footer .footer-contacts')
                     links = contacts.locator('a')
                     assert links.count() == 4
@@ -127,8 +139,6 @@ def browsers(base, stage):
                         assert 'noopener' in button.get_attribute('rel')
                     wa.focus()
                     assert wa.evaluate('(a)=>document.activeElement===a')
-                    if width in [390, 393, 1440]:
-                        footer.screenshot(path=str(PROOF/f'{stage}-{engine}-{width}.png'), animations='disabled')
                     results.append({'engine': engine, 'width': width, 'status': 'PASS', 'links': metrics, 'render_decoded': True})
                     print(stage.upper() + '_FOOTER_BROWSER_PASS', engine, width, flush=True)
                     context.close()
@@ -152,6 +162,7 @@ def live():
     base = 'https://andreagiaquinto.it/'
     expected_html = Path('index.html').read_bytes()
     expected_css = Path(CSS).read_bytes()
+    expected_script = Path('script.js').read_bytes()
     for attempt in range(80):
         try:
             response = requests.get(base, timeout=20, headers={'Cache-Control': 'no-cache'})
@@ -161,6 +172,9 @@ def live():
             sheet.raise_for_status()
             assert 'text/css' in sheet.headers.get('Content-Type', '')
             assert sheet.content == expected_css, 'Waiting for complete CSS'
+            js = requests.get(urljoin(base, 'script.js') + '?v=' + BUILD, timeout=20)
+            js.raise_for_status()
+            assert js.content == expected_script, 'Waiting for fixed footer icon guard'
             break
         except (requests.RequestException, AssertionError) as exc:
             print(f'Waiting for public delivery {attempt+1}/80: {exc}', flush=True)
@@ -168,7 +182,7 @@ def live():
     else:
         raise RuntimeError('Published footer not verified')
     browsers(base, 'live')
-    report = {'build': BUILD, 'status': 'PASS', 'url': base, 'html_http': response.status_code, 'css_http': sheet.status_code, 'html_sha256': hashlib.sha256(expected_html).hexdigest(), 'css_sha256': hashlib.sha256(expected_css).hexdigest(), 'browser_checks': 10}
+    report = {'build': BUILD, 'status': 'PASS', 'url': base, 'html_http': response.status_code, 'css_http': sheet.status_code, 'script_http': js.status_code, 'html_sha256': hashlib.sha256(expected_html).hexdigest(), 'css_sha256': hashlib.sha256(expected_css).hexdigest(), 'script_sha256': hashlib.sha256(expected_script).hexdigest(), 'browser_checks': 10}
     (PROOF/'live-http.json').write_text(json.dumps(report, indent=2))
     print('LIVE_FOOTER_VERIFIED', json.dumps(report), flush=True)
 

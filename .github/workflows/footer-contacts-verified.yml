@@ -23,6 +23,8 @@ jobs:
           python -m playwright install --with-deps chromium webkit
       - name: Prepare footer without modifying the rest of the landing
         run: python .github/scripts/footer_contacts.py prepare
+      - name: Verify JavaScript syntax
+        run: node --check script.js
       - name: Verify contact links and desktop and mobile layout
         run: python .github/scripts/footer_contacts.py local
       - name: Save verified candidate for publication
@@ -32,8 +34,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           branch="footer-verified-${GITHUB_RUN_ID}"
           git checkout -b "$branch"
-          git add index.html
-          git commit -m 'Add Facebook logo and WhatsApp CTA; preserve phone and email'
+          git add index.html script.js
+          git commit -m 'Add Facebook logo and WhatsApp CTA; preserve phone, email and icons'
           git push origin "HEAD:refs/heads/$branch"
           echo "CANDIDATE_READY $branch $(git rev-parse HEAD)"
           echo "Verified candidate: $branch $(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
