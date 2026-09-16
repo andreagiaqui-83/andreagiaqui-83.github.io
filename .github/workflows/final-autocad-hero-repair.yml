@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Apply final repair V15 stable
+      - name: Apply final repair V15 stable photo
         run: python .github/scripts/final_autocad_repair.py
       - name: Commit repaired landing and cleanup
         run: |
