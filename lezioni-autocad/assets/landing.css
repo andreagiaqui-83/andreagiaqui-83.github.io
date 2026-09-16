@@ -12,3 +12,26 @@
 .program-visual picture{display:block;width:100%}
 .program-card .program-visual img{display:block;width:100%;height:auto;max-height:none;object-fit:contain}
 @media(max-width:980px){.program-card:last-child .program-visual{height:auto;aspect-ratio:auto}}
+
+/* Clarify the offer and keep supporting proof close to the first call to action. */
+.hero-banner h1{font-size:clamp(38px,4.1vw,56px);line-height:1.08}
+.featured-review{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:28px;margin:28px 0 0;padding:22px 26px;border:1px solid var(--line);border-radius:16px;background:#0c2232}
+.featured-review blockquote{margin:0;padding-left:18px;border-left:2px solid var(--cyan)}
+.featured-review blockquote p{margin:0;color:#dce7ef;font-size:15px;line-height:1.7}
+.featured-review figcaption{font-size:12px;line-height:1.7}
+.featured-review figcaption>strong,.featured-review figcaption>span{display:block}
+.featured-review figcaption>span{color:var(--muted)}
+.featured-review a{display:inline-block;padding:10px 0 4px}
+.session-outcomes{padding-left:23px;margin:24px 0;color:var(--muted);font-size:16px;line-height:1.7}
+.session-outcomes li{padding-left:5px;margin:14px 0}
+.session-outcomes li::marker{color:var(--cyan);font-weight:700}
+.session-outcomes strong{color:var(--text)}
+.visual-section{padding-block:56px}
+.visual-layout{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:40px}
+.visual-copy{max-width:480px}
+.visual-copy h2{font-size:clamp(32px,3.3vw,44px)}
+.visual-copy .visual-note{text-align:left;margin:18px 0 0}
+.visual-layout .journey{min-width:0}
+.visual-layout .journey figcaption{font-size:9px;letter-spacing:.04em;padding:14px 8px}
+@media(max-width:800px){.hero-banner h1{font-size:clamp(40px,6.3vw,54px)}.visual-layout{grid-template-columns:1fr;gap:24px}.visual-copy{max-width:640px}}
+@media(max-width:600px){.hero-banner h1{font-size:clamp(34px,9.4vw,48px)}.featured-review{grid-template-columns:1fr;gap:14px;padding:20px;margin-top:22px}.featured-review blockquote{padding-left:14px}.featured-review figcaption{padding-left:16px}.featured-review a{padding-block:12px}.visual-section{padding-block:40px}.visual-layout .journey figcaption{font-size:8px}}
