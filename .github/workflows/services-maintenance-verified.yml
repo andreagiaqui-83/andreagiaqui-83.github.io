@@ -1,0 +1,40 @@
+name: Verify services holding page and unaffected AutoCAD lessons
+on:
+  push:
+    branches: [services-maintenance-20260916]
+    paths:
+      - 'index.html'
+      - '.github/scripts/services_maintenance_check.py'
+      - '.github/workflows/services-maintenance-verified.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install browser validators
+        run: |
+          python -m pip install --quiet playwright requests beautifulsoup4
+          python -m playwright install --with-deps chromium webkit
+      - name: Validate preserved baseline and responsive holding page
+        run: python .github/scripts/services_maintenance_check.py local
+      - name: Save pre-publication screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: services-maintenance-local-proof
+          path: ${{ runner.temp }}/maintenance-proof/
+          retention-days: 7
+      - name: Verify public site after explicit promotion
+        run: python .github/scripts/services_maintenance_check.py live
+      - name: Save all verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: services-maintenance-live-proof
+          path: ${{ runner.temp }}/maintenance-proof/
+          retention-days: 7
