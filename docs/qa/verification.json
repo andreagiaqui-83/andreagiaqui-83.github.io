@@ -1,0 +1,228 @@
+{
+  "build": "20260916-autocad-v17.2",
+  "date": "2026-09-16",
+  "environment": "Chromium browser, iframe with real CSS viewport widths, desktop scrollbar 15px. Wider screenshots scaled only for display.",
+  "limitations": [
+    "No physical iOS/Android device testing",
+    "Performance entries from the resize suite intentionally excluded; they are not valid page-load CWV.",
+    "No actual email sent and no Google account configured."
+  ],
+  "responsive": [
+    {
+      "width": 320,
+      "clientWidth": 305,
+      "scrollWidth": 305,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 360,
+      "clientWidth": 345,
+      "scrollWidth": 345,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 375,
+      "clientWidth": 360,
+      "scrollWidth": 360,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 390,
+      "clientWidth": 375,
+      "scrollWidth": 375,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 412,
+      "clientWidth": 397,
+      "scrollWidth": 397,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 430,
+      "clientWidth": 415,
+      "scrollWidth": 415,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 600,
+      "clientWidth": 585,
+      "scrollWidth": 585,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 768,
+      "clientWidth": 753,
+      "scrollWidth": 753,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 800,
+      "clientWidth": 785,
+      "scrollWidth": 785,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 1024,
+      "clientWidth": 1009,
+      "scrollWidth": 1009,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 1366,
+      "clientWidth": 1351,
+      "scrollWidth": 1351,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 1440,
+      "clientWidth": 1425,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    },
+    {
+      "width": 1920,
+      "clientWidth": 1905,
+      "scrollWidth": 1905,
+      "overflow": false,
+      "build": "20260916-autocad-v17.2",
+      "brokenImages": [],
+      "outside": [],
+      "googleResources": 0
+    }
+  ],
+  "accessibility": {
+    "passes": 29,
+    "violations": [],
+    "incomplete": [
+      "color-contrast"
+    ]
+  },
+  "http": [
+    {
+      "path": "/",
+      "status": 200,
+      "url": "https://andreagiaquinto.it/",
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/lezioni-autocad/",
+      "status": 200,
+      "url": "https://andreagiaquinto.it/lezioni-autocad/",
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/privacy/",
+      "status": 200,
+      "url": "https://andreagiaquinto.it/privacy/",
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "url": "https://andreagiaquinto.it/sitemap.xml",
+      "type": "application/xml"
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "url": "https://andreagiaquinto.it/robots.txt",
+      "type": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "/not-found-qa-v17/",
+      "status": 404,
+      "url": "https://andreagiaquinto.it/not-found-qa-v17/",
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "https://cad-bim-preventivi.andrea-giaqui.workers.dev/health",
+      "status": 200,
+      "url": "https://cad-bim-preventivi.andrea-giaqui.workers.dev/health",
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/reviews?source=autocad-lessons",
+      "status": 200,
+      "url": "https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/reviews?source=autocad-lessons",
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/api/lessons invalid payload - no email",
+      "status": 400,
+      "body": {
+        "ok": false,
+        "error": "Controlla i campi richiesti."
+      }
+    }
+  ],
+  "interactions": [
+    "Mobile menu opens and closes with Escape",
+    "Review next changes 1–1 to 2–2; previous restores 1–1",
+    "FAQ opens and closes using native details",
+    "Empty form blocked by required field validation",
+    "Cookie preferences readable on mobile, inactive categories disabled",
+    "CTA targets and external contact URLs validated without sending messages"
+  ],
+  "tests": {
+    "server": 6,
+    "frontend": 5,
+    "failed": 0
+  },
+  "lab_observation": {
+    "build": "20260916-autocad-v17.2",
+    "cls": 0,
+    "lcp_ms": 416,
+    "shifts": [],
+    "width": 1348,
+    "method": "Temporary noindex copy of the same landing, top-level Chromium, warm cache, no CPU/network throttling; no physical-device or field CWV claim."
+  }
+}

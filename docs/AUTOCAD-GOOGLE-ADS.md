@@ -11,7 +11,7 @@ L'unico file di configurazione è `assets/measurement-config.js`. Gli ID sono vu
 1. Recuperare o creare nell'account corretto una proprietà GA4 e il flusso web per `https://andreagiaquinto.it`. Inserire il suo ID reale in `ga4Id`. Se esiste una proprietà usarla, senza crearne una duplicata.
 2. Nel flusso GA4 disabilitare le misurazioni avanzate automatiche di moduli, scroll e click in uscita: questi eventi sono già gestiti dal sito. La pagina invia un solo `page_view` manuale dopo il consenso; non aggiungere ulteriori tag di visualizzazione. Verificare la retention dell'account e aggiornare l'informativa quando il servizio è attivato.
 3. Marcare **solo `generate_lead`** come evento chiave del modulo. Le richieste devono avere risposta positiva del server. Non creare un evento chiave da `form_submit_attempt`, `form_start`, WhatsApp, telefono o email.
-4. Collegare GA4 a Google Ads e importare `generate_lead` una sola volta come conversione primaria, conteggio «Una». Il valore economico del contatto non è noto: non assegnare 15 € a ogni lead. Il prezzo di una lezione non è il valore di una richiesta.
+4. Per le campagne, inserire anche l’ID Google Ads reale `AW-…` in `adsId`, mantenendo `conversionMode: 'ga4_import'`: abilita la scelta separata sulla misurazione pubblicitaria e l’attribuzione del click dopo consenso, senza inviare una seconda conversione diretta. Collegare GA4 a Google Ads e importare `generate_lead` una sola volta come conversione primaria, conteggio «Una». Il valore economico del contatto non è noto: non assegnare 15 € a ogni lead. Il prezzo di una lezione non è il valore di una richiesta.
 5. Alternativa alla conversione importata: compilare `adsId` e `adsLeadLabel` con valori reali e impostare `conversionMode: 'direct'`. Usare la conversione diretta come primaria **al posto** dell'importazione GA4, mai entrambe per lo stesso modulo. Il codice invia `transaction_id` per deduplicare e richiede consenso pubblicitario. Personalizzazione annunci e Google Signals restano disabilitati.
 6. Fare una sessione di Tag Assistant/DebugView: rifiuto, consenso statistiche, consenso pubblicitario, revoca e nuova visita. Verificare almeno una richiesta realmente ricevuta nella casella del titolare. I test automatici non certificano la consegna nella posta.
 7. Aggiornare il paragrafo dell'informativa che dichiara i servizi inattivi, indicando quelli effettivamente attivati. Solo dopo questi controlli passare a GO Ads.
@@ -101,9 +101,9 @@ Nessun incremento di conversione è stato misurato durante la revisione: sono st
 
 ## Fonti ufficiali consultate
 
-- Google, Consent Mode: https://developers.google.com/tag-platform/security/guides/consent
-- Google, eventi GA4: https://developers.google.com/analytics/devguides/collection/ga4/reference/events
-- Google, AI features e siti: https://developers.google.com/search/docs/appearance/ai-features
-- Search Console, verifica proprietà: https://support.google.com/webmasters/answer/9008080
-- Garante, cookie: https://www.garanteprivacy.it/faq/cookie
-- Resend, idempotenza (24 ore): https://resend.com/docs/dashboard/emails/idempotency-keys
+- [Google, Consent Mode](https://developers.google.com/tag-platform/security/guides/consent)
+- [Google, eventi GA4](https://developers.google.com/analytics/devguides/collection/ga4/reference/events)
+- [Google, AI features e siti](https://developers.google.com/search/docs/appearance/ai-features)
+- [Search Console, verifica proprietà](https://support.google.com/webmasters/answer/9008080)
+- [Garante, cookie](https://www.garanteprivacy.it/faq/cookie)
+- [Resend, idempotenza (24 ore)](https://resend.com/docs/dashboard/emails/idempotency-keys)

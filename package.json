@@ -1,0 +1,10 @@
+{
+  "name": "andreagiaquinto-static-site",
+  "private": true,
+  "scripts": {
+    "test": "node --test scripts/test-lessons.mjs scripts/test-frontend.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  }
+}
