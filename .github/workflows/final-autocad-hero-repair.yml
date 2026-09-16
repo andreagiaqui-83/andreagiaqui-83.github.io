@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Verify physical photo and apply V15 final
+      - name: Verify photo and apply V16
         run: |
           test -s lezioni-autocad/assets/andrea-giaquinto-autocad.webp
           python .github/scripts/final_autocad_repair.py
@@ -25,5 +25,5 @@ jobs:
           git config user.name 'andreagiaqui-83'
           git config user.email 'andrea.giaqui@gmail.com'
           git add -A
-          git commit -m 'Ripara definitivamente landing AutoCAD V15'
+          git commit -m 'Ripara definitivamente landing AutoCAD V16'
           git push origin HEAD:main
