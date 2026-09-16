@@ -16,21 +16,22 @@
 .roadmap-card:nth-child(2) .roadmap-visual{background:url("autocad_dalla_bozza_alla_pianta.webp") center/cover no-repeat}
 .roadmap-card:nth-child(2) .roadmap-visual img{opacity:0}
 
-/* Banner finale CAD -> BIM -> Render: desktop a tutta larghezza e proporzioni originali */
+/* Banner finale CAD -> BIM -> Render: immagine sempre visibile, proporzionata e non tagliata */
 .footer-banner{grid-template-columns:1fr!important;width:100%!important;max-width:1180px!important;align-items:stretch!important;overflow:hidden;padding:16px!important}
-.footer-banner-visual{background:#081827 url("dal-progetto-alla-casa-reale.webp") center/contain no-repeat!important;width:100%;aspect-ratio:1000/333;min-height:0!important;border:1px solid rgba(105,229,255,.20);border-radius:14px;box-shadow:inset 0 0 45px rgba(6,16,28,.16),0 14px 32px rgba(0,0,0,.18)}
+.footer-banner-visual{width:100%;aspect-ratio:1000/333;min-height:0!important;border:1px solid rgba(105,229,255,.20);border-radius:14px;box-shadow:inset 0 0 45px rgba(6,16,28,.16),0 14px 32px rgba(0,0,0,.18);background-color:#081827!important;background-image:url("/assets/render-hero-final-20260915.webp"),url("/assets/render-architettonico.webp")!important;background-position:center,center!important;background-size:contain,contain!important;background-repeat:no-repeat,no-repeat!important}
 .footer-banner-visual svg,.footer-banner-visual img{display:none!important}
-.footer-banner-text{align-self:center;text-align:center;padding:16px 16px 2px}
-.footer-banner-text strong{font-size:1.08rem}
-.footer-banner-text p{font-size:.88rem}
-.footer-badge{transition:transform .2s ease,background .2s ease}
-.footer-badge:hover{transform:translateY(-2px);background:rgba(105,229,255,.08)}
+.footer-banner-text{align-self:center;text-align:center;padding:18px 16px 4px}
+.footer-banner-text strong{font-size:1.15rem}
+.footer-banner-text p{font-size:.92rem}
+.footer-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:58px;padding:16px 28px!important;border-radius:14px!important;font-size:1rem!important;font-weight:850!important;letter-spacing:-.01em;background:linear-gradient(120deg,rgba(105,229,255,.16),rgba(114,134,255,.12))!important;border:1px solid rgba(105,229,255,.48)!important;box-shadow:0 10px 28px rgba(42,180,220,.15)!important;transition:transform .2s ease,background .2s ease,box-shadow .2s ease!important}
+.footer-badge:hover{transform:translateY(-2px);background:linear-gradient(120deg,rgba(105,229,255,.25),rgba(114,134,255,.18))!important;box-shadow:0 14px 34px rgba(42,180,220,.22)!important;color:#fff}
 
 @media(max-width:600px){
   .footer-banner-wrap{justify-content:stretch}
   .footer-banner{grid-template-columns:1fr!important;text-align:center;width:100%!important;padding:10px!important}
-  .footer-banner-visual{width:100%;aspect-ratio:1000/333;min-height:0!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
-  .footer-banner-text{padding:12px 4px 2px}
+  .footer-banner-visual{width:100%;aspect-ratio:1000/333;min-height:0!important;background-size:contain,contain!important;background-position:center,center!important;background-repeat:no-repeat,no-repeat!important}
+  .footer-banner-text{padding:14px 4px 2px}
+  .footer-badge{width:100%;min-height:60px;padding:16px 18px!important;font-size:1rem!important}
   .footer-contact-actions{align-items:stretch}
   .footer-contact-actions .btn{justify-content:center}
 }
