@@ -1,6 +1,6 @@
 @import url("lezioni-autocad-base.css?v=20260916-2");
 
-/* Correzioni pubblicazione 16/09/2026: immagini AutoCAD visibili e footer centrato */
+/* Immagini AutoCAD e footer */
 .cad-shot-img{width:100%;height:auto;display:block;aspect-ratio:353/190;object-fit:cover}
 .roadmap-visual img{width:100%;height:auto;display:block;aspect-ratio:353/190;object-fit:cover}
 .footer{text-align:center}
@@ -10,12 +10,10 @@
 .footer-contact-actions,.footer-contact-details{justify-content:center}
 .footer-banner-wrap{display:flex;justify-content:center;margin-top:28px}
 .legal{text-align:center}
-
-/* Card n. 2: fallback grafico certo e visibile anche in caso di cache/asset precedente */
 .roadmap-card:nth-child(2) .roadmap-visual{background:url("autocad_dalla_bozza_alla_pianta.webp") center/cover no-repeat}
 .roadmap-card:nth-child(2) .roadmap-visual img{opacity:0}
 
-/* Banner finale: grafica render precedente */
+/* Banner finale servizi CAD/BIM/Render */
 .footer-banner{display:flex!important;flex-direction:column!important;align-items:center!important;gap:20px!important;width:min(100%,1220px)!important;max-width:1220px!important;margin-inline:auto!important;padding:14px 14px 26px!important;border:1px solid rgba(105,229,255,.22)!important;border-radius:22px!important;background:linear-gradient(120deg,rgba(105,229,255,.08),rgba(114,134,255,.08))!important;overflow:hidden!important;text-align:center!important}
 .footer-banner-visual{width:min(100%,1180px)!important;max-width:1180px!important;aspect-ratio:16/9!important;min-height:0!important;border:1px solid rgba(105,229,255,.20)!important;border-radius:16px!important;box-shadow:0 14px 32px rgba(0,0,0,.18)!important;background:#081827 url("/assets/render-hero-final-universal.jpg?v=20260916-3") center/contain no-repeat!important}
 .footer-banner-visual svg,.footer-banner-visual img{display:none!important}
@@ -25,31 +23,36 @@
 .footer-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:min(100%,390px)!important;min-height:62px;padding:17px 34px!important;border-radius:14px!important;font-size:1.08rem!important;font-weight:850!important;letter-spacing:-.01em;background:linear-gradient(120deg,rgba(105,229,255,.22),rgba(114,134,255,.17))!important;border:1px solid rgba(105,229,255,.58)!important;box-shadow:0 12px 30px rgba(42,180,220,.20)!important;transition:transform .2s ease,background .2s ease,box-shadow .2s ease!important}
 .footer-badge:hover{transform:translateY(-2px);background:linear-gradient(120deg,rgba(105,229,255,.32),rgba(114,134,255,.24))!important;box-shadow:0 16px 36px rgba(42,180,220,.28)!important;color:#fff}
 
-/* Hero formazione: banner professionale con ritratto */
-.lesson-banner{position:relative;border:1px solid rgba(105,229,255,.34);border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#0c263d,#061523 72%);box-shadow:0 26px 62px rgba(0,0,0,.38);isolation:isolate}
-.lesson-banner::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 18% 8%,rgba(105,229,255,.18),transparent 30%),radial-gradient(circle at 92% 20%,rgba(139,242,189,.14),transparent 28%),linear-gradient(rgba(105,229,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(105,229,255,.045) 1px,transparent 1px);background-size:auto,auto,42px 42px,42px 42px}
-.lesson-banner-inner{padding:20px}
-.lesson-banner-kicker{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}
-.lesson-banner-kicker span{display:inline-flex;align-items:center;padding:8px 11px;border:1px solid rgba(105,229,255,.26);border-radius:999px;background:rgba(6,16,28,.55);font-size:.69rem;font-weight:800;letter-spacing:.08em;color:#dffaff;text-transform:uppercase}
-.lesson-banner-main{display:grid;grid-template-columns:minmax(0,1fr) 172px;gap:18px;align-items:center}
-.lesson-banner-copy h3{margin:0 0 10px;font-size:clamp(1.48rem,2.15vw,2.18rem);line-height:1.07;letter-spacing:-.04em}
-.lesson-banner-copy p{margin:0;color:#bfd3e1;font-size:.94rem;line-height:1.6}
-.lesson-banner-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.lesson-banner-chips span{padding:7px 10px;border-radius:999px;background:#0f2a40;border:1px solid rgba(105,229,255,.18);color:#e8f9ff;font-size:.76rem;font-weight:750}
-.lesson-photo-wrap{position:relative;overflow:hidden;border-radius:19px;border:1px solid rgba(105,229,255,.3);background:#06111c;box-shadow:0 17px 34px rgba(0,0,0,.32)}
-.lesson-photo-wrap::after{content:"Andrea Giaquinto";position:absolute;left:8px;right:8px;bottom:8px;padding:7px 8px;border-radius:9px;background:rgba(5,18,31,.82);backdrop-filter:blur(5px);text-align:center;color:#fff;font-size:.72rem;font-weight:800}
-.lesson-photo{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
-.lesson-cad-preview{position:relative;margin-top:16px;border-radius:16px;overflow:hidden;border:1px solid rgba(105,229,255,.17);background:#071421}
-.lesson-cad-preview img{display:block;width:100%;height:auto;aspect-ratio:353/190;object-fit:cover}
-.lesson-cad-preview::after{content:"Dal primo comando alla tavola completa";position:absolute;left:0;right:0;bottom:0;padding:10px 13px;background:linear-gradient(transparent,rgba(4,15,26,.94));color:#e9fbff;font-size:.79rem;font-weight:800;text-align:right}
-.lesson-banner-foot{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:13px;font-size:.8rem;color:#b7ccdb}
-.lesson-banner-foot strong{color:#8bf2bd;font-size:.84rem}
+/* HERO DEFINITIVO: banner orizzontale a tutta larghezza */
+body .hero .hero-grid{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:28px!important}
+body .hero .hero-grid>div:first-child{width:100%!important;max-width:1050px!important}
+body .hero .lesson-banner{order:-1!important;width:100%!important;max-width:none!important;margin:0!important;border:1px solid rgba(105,229,255,.38)!important;border-radius:28px!important;overflow:hidden!important;background:linear-gradient(135deg,#082039 0%,#061524 52%,#08253d 100%)!important;box-shadow:0 28px 70px rgba(0,0,0,.38)!important;transform:none!important;position:relative!important;isolation:isolate!important}
+body .hero .lesson-banner::before{content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;background:radial-gradient(circle at 12% 20%,rgba(105,229,255,.20),transparent 28%),radial-gradient(circle at 88% 24%,rgba(139,242,189,.13),transparent 28%),linear-gradient(rgba(105,229,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(105,229,255,.045) 1px,transparent 1px)!important;background-size:auto,auto,44px 44px,44px 44px!important;pointer-events:none!important}
+body .hero .lesson-banner-inner{display:grid!important;grid-template-columns:minmax(240px,300px) minmax(360px,1fr) minmax(390px,510px)!important;grid-template-areas:"kicker kicker kicker" "portrait copy preview" "foot foot foot"!important;gap:20px 28px!important;align-items:center!important;padding:26px 28px 22px!important}
+body .hero .lesson-banner-kicker{grid-area:kicker!important;display:flex!important;justify-content:space-between!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important;margin:0!important}
+body .hero .lesson-banner-kicker span{display:inline-flex!important;align-items:center!important;padding:9px 14px!important;border:1px solid rgba(105,229,255,.34)!important;border-radius:999px!important;background:rgba(5,17,30,.68)!important;color:#e8fbff!important;font-size:.74rem!important;font-weight:850!important;letter-spacing:.08em!important;text-transform:uppercase!important}
+body .hero .lesson-banner-main{display:contents!important}
+body .hero .lesson-banner-copy{grid-area:copy!important;min-width:0!important}
+body .hero .lesson-banner-copy h3{margin:0 0 14px!important;font-size:clamp(2rem,3vw,3.15rem)!important;line-height:1.02!important;letter-spacing:-.045em!important;color:#f7fbff!important}
+body .hero .lesson-banner-copy p{margin:0!important;color:#c5d9e7!important;font-size:1.02rem!important;line-height:1.65!important}
+body .hero .lesson-banner-chips{display:flex!important;flex-wrap:wrap!important;gap:9px!important;margin-top:18px!important}
+body .hero .lesson-banner-chips span{padding:9px 12px!important;border-radius:999px!important;background:#0e2c45!important;border:1px solid rgba(105,229,255,.22)!important;color:#effbff!important;font-size:.82rem!important;font-weight:800!important}
+body .hero .lesson-photo-wrap{grid-area:portrait!important;width:100%!important;max-width:290px!important;margin:0!important;justify-self:start!important;border-radius:24px!important;overflow:hidden!important;border:1px solid rgba(105,229,255,.32)!important;background:#06111c!important;box-shadow:0 18px 42px rgba(0,0,0,.32)!important;position:relative!important}
+body .hero .lesson-photo-wrap::after{content:"Andrea Giaquinto"!important;position:absolute!important;left:10px!important;right:10px!important;bottom:10px!important;padding:9px 10px!important;border-radius:11px!important;background:rgba(4,15,27,.84)!important;backdrop-filter:blur(6px)!important;text-align:center!important;color:#fff!important;font-size:.8rem!important;font-weight:850!important}
+body .hero .lesson-photo{content:url("/assets/autocad-lezioni-personalizzate-4b462515.jpg")!important;display:block!important;width:100%!important;aspect-ratio:4/5!important;object-fit:cover!important;background:#071421!important}
+body .hero .lesson-cad-preview{grid-area:preview!important;margin:0!important;width:100%!important;border-radius:22px!important;overflow:hidden!important;border:1px solid rgba(105,229,255,.25)!important;background:#071421!important;box-shadow:0 18px 42px rgba(0,0,0,.30)!important;position:relative!important}
+body .hero .lesson-cad-preview img{display:block!important;width:100%!important;height:auto!important;aspect-ratio:16/10!important;object-fit:cover!important}
+body .hero .lesson-cad-preview::after{content:"Dalle basi ai tuoi progetti reali"!important;position:absolute!important;left:0!important;right:0!important;bottom:0!important;padding:34px 16px 12px!important;background:linear-gradient(transparent,rgba(3,13,24,.96))!important;color:#effcff!important;text-align:center!important;font-size:.92rem!important;font-weight:850!important}
+body .hero .lesson-banner-foot{grid-area:foot!important;display:flex!important;justify-content:space-between!important;align-items:center!important;gap:14px!important;margin:0!important;padding-top:4px!important;color:#bad0df!important;font-size:.88rem!important}
+body .hero .lesson-banner-foot strong{color:#8bf2bd!important;font-size:.92rem!important}
 
-/* Recensioni */
+/* Recensioni: nessun riferimento visibile a processi interni */
 .review-submit-box{margin-top:28px;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:22px;padding:24px;border:1px solid rgba(105,229,255,.2);border-radius:22px;background:linear-gradient(135deg,#102a40,#071827)}
 .review-submit-copy>strong{display:block;font-size:1.24rem;margin-bottom:10px}
-.review-submit-copy p{color:#b1c5d6;margin-bottom:12px}
+.review-submit-copy p{font-size:0!important;margin-bottom:12px!important;color:#b1c5d6!important}
+.review-submit-copy p::after{content:"Invia la tua recensione sulle lezioni AutoCAD. Se pubblicata, sul sito comparirà soltanto nel formato Nome C., con il cognome puntato.";font-size:.94rem!important;line-height:1.6!important}
 .review-rules{margin:0;padding-left:19px;color:#d7e6ef;font-size:.9rem}
+.review-rules li:nth-child(2){display:none!important}
 .review-rules li+li{margin-top:6px}
 .review-form{padding:18px;border:1px solid rgba(105,229,255,.14);border-radius:18px;background:rgba(5,18,31,.55)}
 .review-form .form-grid{gap:14px}
@@ -57,66 +60,37 @@
 .review-form .small{display:block;margin-top:5px;line-height:1.45}
 .review-submit-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
 .review-submit-actions .btn{flex:1 1 210px}
-
-/* Hero v11: banner orizzontale a tutta larghezza */
-.hero .hero-grid{grid-template-columns:1fr!important;gap:28px!important;align-items:stretch!important}
-.hero .hero-grid>div:first-child{order:2;max-width:1040px}
-.hero .lesson-banner{order:1;grid-column:1/-1;width:100%;min-height:430px;border-radius:28px;background:linear-gradient(110deg,rgba(4,18,31,.98),rgba(7,37,57,.96) 52%,rgba(5,20,34,.98));box-shadow:0 28px 72px rgba(0,0,0,.42)}
-.hero .lesson-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,17,30,.02) 0 66%,rgba(4,17,30,.46) 100%),url("/assets/render-hero-final-universal.jpg?v=20260916-4") right center/45% auto no-repeat;opacity:.22;z-index:-1;pointer-events:none}
-.hero .lesson-banner-inner{display:grid;grid-template-columns:minmax(230px,.72fr) minmax(0,1.3fr) minmax(300px,1fr);grid-template-areas:"kicker kicker kicker" "photo copy cad" "foot foot foot";gap:18px 24px;padding:24px 26px}
-.hero .lesson-banner-kicker{grid-area:kicker;margin:0 0 2px}
-.hero .lesson-banner-main{display:contents}
-.hero .lesson-photo-wrap{grid-area:photo;align-self:stretch;margin:0;min-height:330px;border-radius:22px}
-.hero .lesson-photo{height:100%;min-height:330px;aspect-ratio:auto;object-fit:cover;object-position:center 18%}
-.hero .lesson-banner-copy{grid-area:copy;align-self:center;padding:8px 0}
-.hero .lesson-banner-copy h3{font-size:clamp(2rem,3.2vw,3.55rem);line-height:1.02;max-width:13ch;margin-bottom:16px}
-.hero .lesson-banner-copy p{font-size:clamp(1rem,1.35vw,1.16rem);max-width:640px;line-height:1.65}
-.hero .lesson-banner-chips{margin-top:18px;gap:10px}
-.hero .lesson-banner-chips span{padding:9px 12px;font-size:.84rem}
-.hero .lesson-cad-preview{grid-area:cad;align-self:stretch;margin:0;min-height:330px;border-radius:22px;box-shadow:0 16px 36px rgba(0,0,0,.28)}
-.hero .lesson-cad-preview img{width:100%;height:100%;min-height:330px;aspect-ratio:auto;object-fit:cover;object-position:center}
-.hero .lesson-cad-preview::after{content:"Dalle basi ai tuoi progetti reali";padding:22px 16px 14px;text-align:center;font-size:.92rem;letter-spacing:.04em}
-.hero .lesson-banner-foot{grid-area:foot;margin:0;padding-top:2px;font-size:.9rem}
-.hero .lesson-banner-foot strong{font-size:.92rem}
-
-/* Testi recensioni: nessun riferimento preventivo al processo interno */
-.review-submit-copy p{font-size:0!important}
-.review-submit-copy p::after{content:"Puoi lasciare la tua recensione direttamente dalla pagina. Se verrà pubblicata, apparirà solo nel formato Nome C., con il cognome puntato.";display:block;font-size:.95rem;line-height:1.6;color:#b1c5d6}
-.review-rules li:nth-child(2){display:none!important}
 #reviewSubmit{font-size:0!important}
-#reviewSubmit::after{content:"Invia recensione →";font-size:.98rem}
+#reviewSubmit::after{content:"Invia recensione →";font-size:1rem!important;font-weight:800!important}
 #reviewStatus.success{font-size:0!important}
-#reviewStatus.success::after{content:"Grazie! La recensione è stata ricevuta correttamente.";font-size:.95rem;line-height:1.55}
+#reviewStatus.success::after{content:"Grazie! La recensione è stata ricevuta correttamente.";font-size:.95rem!important;line-height:1.55!important}
 
 @media(max-width:1100px){
-  .review-submit-box{grid-template-columns:1fr}
-  .hero .lesson-banner-inner{grid-template-columns:220px minmax(0,1fr);grid-template-areas:"kicker kicker" "photo copy" "cad cad" "foot foot"}
-  .hero .lesson-cad-preview{min-height:300px}
-  .hero .lesson-cad-preview img{min-height:300px}
-  .hero .lesson-banner-copy h3{max-width:18ch}
+ body .hero .lesson-banner-inner{grid-template-columns:220px minmax(0,1fr)!important;grid-template-areas:"kicker kicker" "portrait copy" "preview preview" "foot foot"!important}
+ body .hero .lesson-photo-wrap{max-width:220px!important}
+ .review-submit-box{grid-template-columns:1fr}
 }
-
-@media(max-width:600px){
-  .footer-banner-wrap{justify-content:stretch}
-  .footer-banner{width:100%!important;max-width:100%!important;padding:10px!important;gap:16px!important}
-  .footer-banner-visual{width:100%!important;max-width:100%!important;aspect-ratio:16/9!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
-  .footer-banner-text{padding:4px 4px 0}
-  .footer-banner-text strong{font-size:1.2rem}
-  .footer-banner-text p{font-size:.96rem}
-  .footer-badge{width:100%!important;min-width:0!important;min-height:58px;padding:15px 18px!important;font-size:1rem!important}
-  .footer-contact-actions{align-items:stretch}
-  .footer-contact-actions .btn{justify-content:center}
-  .hero .lesson-banner{min-height:0;border-radius:22px}
-  .hero .lesson-banner-inner{display:grid;grid-template-columns:1fr;grid-template-areas:"kicker" "copy" "photo" "cad" "foot";gap:14px;padding:14px}
-  .hero .lesson-banner-kicker{justify-content:center}
-  .hero .lesson-banner-copy{text-align:center}
-  .hero .lesson-banner-copy h3{font-size:1.62rem;max-width:none}
-  .hero .lesson-banner-chips{justify-content:center}
-  .hero .lesson-photo-wrap{max-width:260px;min-height:0;margin-inline:auto}
-  .hero .lesson-photo{min-height:0;aspect-ratio:4/5}
-  .hero .lesson-cad-preview{min-height:0}
-  .hero .lesson-cad-preview img{min-height:0;aspect-ratio:353/190}
-  .hero .lesson-banner-foot{flex-direction:column;align-items:center;text-align:center}
-  .review-submit-box{padding:17px}
-  .review-form{padding:14px}
+@media(max-width:700px){
+ .footer-banner-wrap{justify-content:stretch}
+ .footer-banner{width:100%!important;max-width:100%!important;padding:10px!important;gap:16px!important}
+ .footer-banner-visual{width:100%!important;max-width:100%!important;aspect-ratio:16/9!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
+ .footer-banner-text{padding:4px 4px 0}
+ .footer-banner-text strong{font-size:1.2rem}
+ .footer-banner-text p{font-size:.96rem}
+ .footer-badge{width:100%!important;min-width:0!important;min-height:58px;padding:15px 18px!important;font-size:1rem!important}
+ .footer-contact-actions{align-items:stretch}
+ .footer-contact-actions .btn{justify-content:center}
+ body .hero .hero-grid{gap:22px!important}
+ body .hero .lesson-banner{border-radius:22px!important}
+ body .hero .lesson-banner-inner{grid-template-columns:1fr!important;grid-template-areas:"kicker" "portrait" "copy" "preview" "foot"!important;padding:16px!important;gap:16px!important}
+ body .hero .lesson-banner-kicker{justify-content:center!important}
+ body .hero .lesson-banner-kicker span{font-size:.68rem!important}
+ body .hero .lesson-photo-wrap{max-width:230px!important;justify-self:center!important}
+ body .hero .lesson-banner-copy{text-align:center!important}
+ body .hero .lesson-banner-copy h3{font-size:clamp(1.65rem,8vw,2.35rem)!important}
+ body .hero .lesson-banner-copy p{font-size:.96rem!important}
+ body .hero .lesson-banner-chips{justify-content:center!important}
+ body .hero .lesson-banner-foot{flex-direction:column!important;text-align:center!important}
+ .review-submit-box{padding:17px}
+ .review-form{padding:14px}
 }
