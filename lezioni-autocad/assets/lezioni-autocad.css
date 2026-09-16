@@ -15,7 +15,7 @@
 .roadmap-card:nth-child(2) .roadmap-visual{background:url("autocad_dalla_bozza_alla_pianta.webp") center/cover no-repeat}
 .roadmap-card:nth-child(2) .roadmap-visual img{opacity:0}
 
-/* Banner finale: ripristino della grafica render precedente, usando la sorgente JPG più definita */
+/* Banner finale: grafica render precedente */
 .footer-banner{display:flex!important;flex-direction:column!important;align-items:center!important;gap:20px!important;width:min(100%,1220px)!important;max-width:1220px!important;margin-inline:auto!important;padding:14px 14px 26px!important;border:1px solid rgba(105,229,255,.22)!important;border-radius:22px!important;background:linear-gradient(120deg,rgba(105,229,255,.08),rgba(114,134,255,.08))!important;overflow:hidden!important;text-align:center!important}
 .footer-banner-visual{width:min(100%,1180px)!important;max-width:1180px!important;aspect-ratio:16/9!important;min-height:0!important;border:1px solid rgba(105,229,255,.20)!important;border-radius:16px!important;box-shadow:0 14px 32px rgba(0,0,0,.18)!important;background:#081827 url("/assets/render-hero-final-universal.jpg?v=20260916-3") center/contain no-repeat!important}
 .footer-banner-visual svg,.footer-banner-visual img{display:none!important}
@@ -24,6 +24,44 @@
 .footer-banner-text p{font-size:clamp(1rem,1.25vw,1.1rem);line-height:1.55;margin-bottom:18px}
 .footer-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:min(100%,390px)!important;min-height:62px;padding:17px 34px!important;border-radius:14px!important;font-size:1.08rem!important;font-weight:850!important;letter-spacing:-.01em;background:linear-gradient(120deg,rgba(105,229,255,.22),rgba(114,134,255,.17))!important;border:1px solid rgba(105,229,255,.58)!important;box-shadow:0 12px 30px rgba(42,180,220,.20)!important;transition:transform .2s ease,background .2s ease,box-shadow .2s ease!important}
 .footer-badge:hover{transform:translateY(-2px);background:linear-gradient(120deg,rgba(105,229,255,.32),rgba(114,134,255,.24))!important;box-shadow:0 16px 36px rgba(42,180,220,.28)!important;color:#fff}
+
+/* Hero formazione: banner professionale con ritratto */
+.lesson-banner{position:relative;border:1px solid rgba(105,229,255,.34);border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#0c263d,#061523 72%);box-shadow:0 26px 62px rgba(0,0,0,.38);isolation:isolate}
+.lesson-banner::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 18% 8%,rgba(105,229,255,.18),transparent 30%),radial-gradient(circle at 92% 20%,rgba(139,242,189,.14),transparent 28%),linear-gradient(rgba(105,229,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(105,229,255,.045) 1px,transparent 1px);background-size:auto,auto,42px 42px,42px 42px}
+.lesson-banner-inner{padding:20px}
+.lesson-banner-kicker{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.lesson-banner-kicker span{display:inline-flex;align-items:center;padding:8px 11px;border:1px solid rgba(105,229,255,.26);border-radius:999px;background:rgba(6,16,28,.55);font-size:.69rem;font-weight:800;letter-spacing:.08em;color:#dffaff;text-transform:uppercase}
+.lesson-banner-main{display:grid;grid-template-columns:minmax(0,1fr) 172px;gap:18px;align-items:center}
+.lesson-banner-copy h3{margin:0 0 10px;font-size:clamp(1.48rem,2.15vw,2.18rem);line-height:1.07;letter-spacing:-.04em}
+.lesson-banner-copy p{margin:0;color:#bfd3e1;font-size:.94rem;line-height:1.6}
+.lesson-banner-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.lesson-banner-chips span{padding:7px 10px;border-radius:999px;background:#0f2a40;border:1px solid rgba(105,229,255,.18);color:#e8f9ff;font-size:.76rem;font-weight:750}
+.lesson-photo-wrap{position:relative;overflow:hidden;border-radius:19px;border:1px solid rgba(105,229,255,.3);background:#06111c;box-shadow:0 17px 34px rgba(0,0,0,.32)}
+.lesson-photo-wrap::after{content:"Andrea Giaquinto";position:absolute;left:8px;right:8px;bottom:8px;padding:7px 8px;border-radius:9px;background:rgba(5,18,31,.82);backdrop-filter:blur(5px);text-align:center;color:#fff;font-size:.72rem;font-weight:800}
+.lesson-photo{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.lesson-cad-preview{position:relative;margin-top:16px;border-radius:16px;overflow:hidden;border:1px solid rgba(105,229,255,.17);background:#071421}
+.lesson-cad-preview img{display:block;width:100%;height:auto;aspect-ratio:353/190;object-fit:cover}
+.lesson-cad-preview::after{content:"Dal primo comando alla tavola completa";position:absolute;left:0;right:0;bottom:0;padding:10px 13px;background:linear-gradient(transparent,rgba(4,15,26,.94));color:#e9fbff;font-size:.79rem;font-weight:800;text-align:right}
+.lesson-banner-foot{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:13px;font-size:.8rem;color:#b7ccdb}
+.lesson-banner-foot strong{color:#8bf2bd;font-size:.84rem}
+
+/* Recensioni: invio moderato + approvazione manuale */
+.review-submit-box{margin-top:28px;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:22px;padding:24px;border:1px solid rgba(105,229,255,.2);border-radius:22px;background:linear-gradient(135deg,#102a40,#071827)}
+.review-submit-copy>strong{display:block;font-size:1.24rem;margin-bottom:10px}
+.review-submit-copy p{color:#b1c5d6;margin-bottom:12px}
+.review-rules{margin:0;padding-left:19px;color:#d7e6ef;font-size:.9rem}
+.review-rules li+li{margin-top:6px}
+.review-form{padding:18px;border:1px solid rgba(105,229,255,.14);border-radius:18px;background:rgba(5,18,31,.55)}
+.review-form .form-grid{gap:14px}
+.review-form textarea{min-height:132px}
+.review-form .small{display:block;margin-top:5px;line-height:1.45}
+.review-submit-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.review-submit-actions .btn{flex:1 1 210px}
+
+@media(max-width:1100px){
+  .lesson-banner-main{grid-template-columns:minmax(0,1fr) 190px}
+  .review-submit-box{grid-template-columns:1fr}
+}
 
 @media(max-width:600px){
   .footer-banner-wrap{justify-content:stretch}
@@ -35,4 +73,14 @@
   .footer-badge{width:100%!important;min-width:0!important;min-height:58px;padding:15px 18px!important;font-size:1rem!important}
   .footer-contact-actions{align-items:stretch}
   .footer-contact-actions .btn{justify-content:center}
+  .lesson-banner-inner{padding:14px}
+  .lesson-banner-main{grid-template-columns:1fr;gap:14px}
+  .lesson-photo-wrap{max-width:230px;margin-inline:auto}
+  .lesson-banner-copy{text-align:center}
+  .lesson-banner-chips{justify-content:center}
+  .lesson-banner-kicker{justify-content:center}
+  .lesson-banner-foot{flex-direction:column;align-items:center;text-align:center}
+  .lesson-cad-preview::after{text-align:center}
+  .review-submit-box{padding:17px}
+  .review-form{padding:14px}
 }
