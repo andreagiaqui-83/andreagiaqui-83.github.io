@@ -16,16 +16,21 @@
 .roadmap-card:nth-child(2) .roadmap-visual{background:url("autocad_dalla_bozza_alla_pianta.webp") center/cover no-repeat}
 .roadmap-card:nth-child(2) .roadmap-visual img{opacity:0}
 
-/* Banner finale: visual professionale CAD -> BIM -> Render */
-.footer-banner{grid-template-columns:minmax(260px,42%) 1fr!important;width:min(100%,980px)!important;align-items:stretch!important}
-.footer-banner-visual{background:#081827 url("servizi-cad-bim-render.svg") center/cover no-repeat!important;min-height:220px;border:1px solid rgba(255,255,255,.10);border-radius:14px}
-.footer-banner-visual svg{display:none!important}
-.footer-banner-text{align-self:center}
+/* Banner finale: render professionale preso dalla landing CAD/BIM/Render */
+.footer-banner{grid-template-columns:minmax(300px,46%) 1fr!important;width:min(100%,1020px)!important;align-items:stretch!important;overflow:hidden}
+.footer-banner-visual{background:linear-gradient(120deg,rgba(6,16,28,.08),rgba(6,16,28,.32)),url("../../assets/render-hero-final-20260915.webp") center/cover no-repeat!important;min-height:250px;border:1px solid rgba(105,229,255,.20);border-radius:14px;box-shadow:inset 0 0 45px rgba(6,16,28,.22),0 14px 32px rgba(0,0,0,.18)}
+.footer-banner-visual svg,.footer-banner-visual img{display:none!important}
+.footer-banner-text{align-self:center;padding:10px 12px}
+.footer-banner-text strong{font-size:1.08rem}
+.footer-banner-text p{font-size:.88rem}
+.footer-badge{transition:transform .2s ease,background .2s ease}
+.footer-badge:hover{transform:translateY(-2px);background:rgba(105,229,255,.08)}
 
 @media(max-width:600px){
   .footer-banner-wrap{justify-content:stretch}
   .footer-banner{grid-template-columns:1fr!important;text-align:center}
-  .footer-banner-visual{min-height:210px}
+  .footer-banner-visual{min-height:220px;background-position:center!important}
+  .footer-banner-text{padding:8px 2px 2px}
   .footer-contact-actions{align-items:stretch}
   .footer-contact-actions .btn{justify-content:center}
 }
