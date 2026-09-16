@@ -45,7 +45,7 @@
 .lesson-banner-foot{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:13px;font-size:.8rem;color:#b7ccdb}
 .lesson-banner-foot strong{color:#8bf2bd;font-size:.84rem}
 
-/* Recensioni: invio moderato + approvazione manuale */
+/* Recensioni */
 .review-submit-box{margin-top:28px;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:22px;padding:24px;border:1px solid rgba(105,229,255,.2);border-radius:22px;background:linear-gradient(135deg,#102a40,#071827)}
 .review-submit-copy>strong{display:block;font-size:1.24rem;margin-bottom:10px}
 .review-submit-copy p{color:#b1c5d6;margin-bottom:12px}
@@ -58,9 +58,42 @@
 .review-submit-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
 .review-submit-actions .btn{flex:1 1 210px}
 
+/* Hero v11: banner orizzontale a tutta larghezza */
+.hero .hero-grid{grid-template-columns:1fr!important;gap:28px!important;align-items:stretch!important}
+.hero .hero-grid>div:first-child{order:2;max-width:1040px}
+.hero .lesson-banner{order:1;grid-column:1/-1;width:100%;min-height:430px;border-radius:28px;background:linear-gradient(110deg,rgba(4,18,31,.98),rgba(7,37,57,.96) 52%,rgba(5,20,34,.98));box-shadow:0 28px 72px rgba(0,0,0,.42)}
+.hero .lesson-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,17,30,.02) 0 66%,rgba(4,17,30,.46) 100%),url("/assets/render-hero-final-universal.jpg?v=20260916-4") right center/45% auto no-repeat;opacity:.22;z-index:-1;pointer-events:none}
+.hero .lesson-banner-inner{display:grid;grid-template-columns:minmax(230px,.72fr) minmax(0,1.3fr) minmax(300px,1fr);grid-template-areas:"kicker kicker kicker" "photo copy cad" "foot foot foot";gap:18px 24px;padding:24px 26px}
+.hero .lesson-banner-kicker{grid-area:kicker;margin:0 0 2px}
+.hero .lesson-banner-main{display:contents}
+.hero .lesson-photo-wrap{grid-area:photo;align-self:stretch;margin:0;min-height:330px;border-radius:22px}
+.hero .lesson-photo{height:100%;min-height:330px;aspect-ratio:auto;object-fit:cover;object-position:center 18%}
+.hero .lesson-banner-copy{grid-area:copy;align-self:center;padding:8px 0}
+.hero .lesson-banner-copy h3{font-size:clamp(2rem,3.2vw,3.55rem);line-height:1.02;max-width:13ch;margin-bottom:16px}
+.hero .lesson-banner-copy p{font-size:clamp(1rem,1.35vw,1.16rem);max-width:640px;line-height:1.65}
+.hero .lesson-banner-chips{margin-top:18px;gap:10px}
+.hero .lesson-banner-chips span{padding:9px 12px;font-size:.84rem}
+.hero .lesson-cad-preview{grid-area:cad;align-self:stretch;margin:0;min-height:330px;border-radius:22px;box-shadow:0 16px 36px rgba(0,0,0,.28)}
+.hero .lesson-cad-preview img{width:100%;height:100%;min-height:330px;aspect-ratio:auto;object-fit:cover;object-position:center}
+.hero .lesson-cad-preview::after{content:"Dalle basi ai tuoi progetti reali";padding:22px 16px 14px;text-align:center;font-size:.92rem;letter-spacing:.04em}
+.hero .lesson-banner-foot{grid-area:foot;margin:0;padding-top:2px;font-size:.9rem}
+.hero .lesson-banner-foot strong{font-size:.92rem}
+
+/* Testi recensioni: nessun riferimento preventivo al processo interno */
+.review-submit-copy p{font-size:0!important}
+.review-submit-copy p::after{content:"Puoi lasciare la tua recensione direttamente dalla pagina. Se verrà pubblicata, apparirà solo nel formato Nome C., con il cognome puntato.";display:block;font-size:.95rem;line-height:1.6;color:#b1c5d6}
+.review-rules li:nth-child(2){display:none!important}
+#reviewSubmit{font-size:0!important}
+#reviewSubmit::after{content:"Invia recensione →";font-size:.98rem}
+#reviewStatus.success{font-size:0!important}
+#reviewStatus.success::after{content:"Grazie! La recensione è stata ricevuta correttamente.";font-size:.95rem;line-height:1.55}
+
 @media(max-width:1100px){
-  .lesson-banner-main{grid-template-columns:minmax(0,1fr) 190px}
   .review-submit-box{grid-template-columns:1fr}
+  .hero .lesson-banner-inner{grid-template-columns:220px minmax(0,1fr);grid-template-areas:"kicker kicker" "photo copy" "cad cad" "foot foot"}
+  .hero .lesson-cad-preview{min-height:300px}
+  .hero .lesson-cad-preview img{min-height:300px}
+  .hero .lesson-banner-copy h3{max-width:18ch}
 }
 
 @media(max-width:600px){
@@ -73,14 +106,17 @@
   .footer-badge{width:100%!important;min-width:0!important;min-height:58px;padding:15px 18px!important;font-size:1rem!important}
   .footer-contact-actions{align-items:stretch}
   .footer-contact-actions .btn{justify-content:center}
-  .lesson-banner-inner{padding:14px}
-  .lesson-banner-main{grid-template-columns:1fr;gap:14px}
-  .lesson-photo-wrap{max-width:230px;margin-inline:auto}
-  .lesson-banner-copy{text-align:center}
-  .lesson-banner-chips{justify-content:center}
-  .lesson-banner-kicker{justify-content:center}
-  .lesson-banner-foot{flex-direction:column;align-items:center;text-align:center}
-  .lesson-cad-preview::after{text-align:center}
+  .hero .lesson-banner{min-height:0;border-radius:22px}
+  .hero .lesson-banner-inner{display:grid;grid-template-columns:1fr;grid-template-areas:"kicker" "copy" "photo" "cad" "foot";gap:14px;padding:14px}
+  .hero .lesson-banner-kicker{justify-content:center}
+  .hero .lesson-banner-copy{text-align:center}
+  .hero .lesson-banner-copy h3{font-size:1.62rem;max-width:none}
+  .hero .lesson-banner-chips{justify-content:center}
+  .hero .lesson-photo-wrap{max-width:260px;min-height:0;margin-inline:auto}
+  .hero .lesson-photo{min-height:0;aspect-ratio:4/5}
+  .hero .lesson-cad-preview{min-height:0}
+  .hero .lesson-cad-preview img{min-height:0;aspect-ratio:353/190}
+  .hero .lesson-banner-foot{flex-direction:column;align-items:center;text-align:center}
   .review-submit-box{padding:17px}
   .review-form{padding:14px}
 }
