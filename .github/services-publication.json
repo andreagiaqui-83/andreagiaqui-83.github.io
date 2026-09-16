@@ -1,6 +1,6 @@
 {
   "state": "construction",
-  "build": "20260916-servizi-in-costruzione-01",
+  "build": "20260916-servizi-in-costruzione-02",
   "scope": ["/", "/index.html"],
   "lessons_path": "/lezioni-autocad/",
   "lessons_unchanged": true,
@@ -8,5 +8,5 @@
   "backup_branch": "backup/servizi-prima-costruzione-20260916",
   "backup_commit": "fdbcdf1289136f8daafd891e508d42728fe8fe18",
   "telephone": "+393337240544",
-  "email": "andrea.giaquinto@gmail.com"
+  "email": "andrea.giaqui@gmail.com"
 }
