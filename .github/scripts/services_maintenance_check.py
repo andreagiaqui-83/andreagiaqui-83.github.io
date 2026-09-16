@@ -146,7 +146,7 @@ def live():
         try:
             response=requests.get('https://andreagiaquinto.it/',timeout=25,headers={'Cache-Control':'no-cache'})
             response.raise_for_status()
-            assert response.status==200 and sha(response.content)==expected, 'Waiting for public holding page'
+            assert response.status_code==200 and sha(response.content)==expected, 'Waiting for public holding page'
             alternate=requests.get('https://andreagiaquinto.it/index.html',timeout=25)
             alternate.raise_for_status()
             assert sha(alternate.content)==expected
