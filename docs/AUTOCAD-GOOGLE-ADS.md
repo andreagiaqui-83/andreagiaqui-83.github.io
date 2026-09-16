@@ -89,7 +89,7 @@ Esclusioni da valutare: crack, torrent, download software, licenza gratis, offer
 
 Misurare richieste confermate e quota di contatti pertinenti, segmentando dispositivi. Una variabile per volta; assegnazione persistente, esclusione dei test interni, stessa qualità del traffico. Definire prima metrica, minimo effetto utile e campione in base al tasso osservato; evitare vincitori decisi dopo pochi click.
 
-1. Headline attuale vs «Lezioni AutoCAD online, costruite sui tuoi obiettivi».
+1. Baseline dalla versione 17.4: «Lezioni AutoCAD online, su misura per te.» Eventuale variante: «Lezioni AutoCAD online, costruite sui tuoi obiettivi».
 2. CTA «Richiedi i tuoi 30 minuti» vs «Parliamo del tuo obiettivo».
 3. Visual architettonico attuale vs esercizio didattico autentico fornito da Andrea.
 4. Prezzo insieme alla sessione gratuita vs stesso prezzo immediatamente sotto la CTA (mai nascosto).
