@@ -1,0 +1,54 @@
+name: Footer social contacts - verified publication
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/footer-contacts-verified.yml'
+      - '.github/scripts/footer_contacts.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: footer-contacts-verification
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install browser verification tools
+        run: |
+          python -m pip install --quiet 'playwright>=1.50,<2' 'beautifulsoup4>=4.12,<5' requests
+          python -m playwright install --with-deps chromium webkit
+      - name: Prepare footer without modifying the rest of the landing
+        run: python .github/scripts/footer_contacts.py prepare
+      - name: Verify contact links and desktop and mobile layout
+        run: python .github/scripts/footer_contacts.py local
+      - name: Save verified candidate for publication
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          branch="footer-verified-${GITHUB_RUN_ID}"
+          git checkout -b "$branch"
+          git add index.html
+          git commit -m 'Add Facebook logo and WhatsApp CTA; preserve phone and email'
+          git push origin "HEAD:refs/heads/$branch"
+          echo "CANDIDATE_READY $branch $(git rev-parse HEAD)"
+          echo "Verified candidate: $branch $(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+      - name: Save preview verification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: footer-local-proof
+          path: ${{ runner.temp }}/footer-proof/
+          retention-days: 7
+      - name: Verify actual public page and browser rendering
+        run: python .github/scripts/footer_contacts.py live
+      - name: Save public verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: footer-live-proof
+          path: ${{ runner.temp }}/footer-proof/
+          retention-days: 7

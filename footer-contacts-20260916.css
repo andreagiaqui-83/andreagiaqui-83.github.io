@@ -1,0 +1,18 @@
+/* Footer contacts only: the approved landing layout is unchanged. */
+footer .footer-contacts{display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-width:0}
+footer .footer-contact-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;width:100%}
+footer .footer-contact-button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;max-width:100%;padding:12px 18px;border:1px solid transparent;border-radius:12px;font-size:16px;font-weight:750;line-height:1.35;text-decoration:none;transition:background-color .15s,border-color .15s,box-shadow .15s}
+footer .footer-contact-button span{min-width:0;overflow-wrap:anywhere}
+footer .footer-contact-button svg{display:block;flex:0 0 26px;width:26px;height:26px}
+footer .footer-contact-button--whatsapp{background:#25d366;color:#062d18;border-color:#25d366}
+footer .footer-contact-button--whatsapp:hover{background:#3de079;border-color:#3de079;box-shadow:0 5px 16px rgba(37,211,102,.16)}
+footer .footer-contact-button--facebook{background:#fff;color:#0b2a46;border-color:#fff}
+footer .footer-contact-button--facebook:hover{background:#e9f3ff;border-color:#c3ddff}
+footer .footer-contact-details{display:flex;flex-wrap:wrap;align-items:center;gap:4px 20px;width:100%;min-width:0}
+footer .footer-contact-link{display:inline-flex;align-items:center;gap:10px;min-height:44px;max-width:100%;color:#c9e8fa;font-size:16px;line-height:1.5;text-decoration:none}
+footer .footer-contact-link span{min-width:0;overflow-wrap:anywhere}
+footer .footer-contact-link svg{flex:0 0 20px;width:20px;height:20px;opacity:.9}
+footer .footer-contact-link:hover span{text-decoration:underline;text-underline-offset:4px}
+footer .footer-contacts a:focus-visible{outline:3px solid #9ae5ff;outline-offset:4px}
+@media(max-width:575px){footer .footer-contact-actions{flex-direction:column;align-items:stretch;gap:10px}footer .footer-contact-button{width:100%}footer .footer-contact-details{flex-direction:column;align-items:flex-start;gap:2px}footer .footer-contacts{gap:12px}}
+@media(prefers-reduced-motion:reduce){footer .footer-contact-button{transition:none}}
