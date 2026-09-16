@@ -1,0 +1,56 @@
+name: Verify reviews arrows and one-card mobile paging
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/reviews-paged-verified.yml'
+      - '.github/scripts/reviews_paged.py'
+      - 'reviews-carousel.css'
+      - 'reviews-carousel.js'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: services-reviews-paged
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install validators
+        run: |
+          python -m pip install --quiet 'playwright>=1.50,<2' requests beautifulsoup4
+          python -m playwright install --with-deps chromium webkit
+      - name: Prepare isolated review update and syntax checks
+        run: python .github/scripts/reviews_paged.py prepare
+      - name: Verify arrows, native swipes, mobile pages and desktop
+        run: python .github/scripts/reviews_paged.py local
+      - name: Create verified candidate branch without changing main
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          branch="reviews-paged-ready-${GITHUB_RUN_ID}"
+          git checkout -b "$branch"
+          git add index.html script.js .github/reviews-paged-manifest.json
+          git commit -m 'Fix reviews: matching arrows and one complete card per mobile page'
+          git push origin "HEAD:refs/heads/$branch"
+          echo "CANDIDATE_READY $branch $(git rev-parse HEAD)"
+          echo "Candidate: $branch, commit $(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+      - name: Save pre-publication screenshots and results
+        uses: actions/upload-artifact@v4
+        with:
+          name: reviews-paged-local-proof
+          path: ${{ runner.temp }}/reviews-proof/
+          retention-days: 7
+      - name: Verify full public deployment and browser interactions
+        run: python .github/scripts/reviews_paged.py live
+      - name: Save verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reviews-paged-live-proof
+          path: ${{ runner.temp }}/reviews-proof/
+          retention-days: 7
