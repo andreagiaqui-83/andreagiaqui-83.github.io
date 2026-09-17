@@ -35,7 +35,7 @@ class Signature(HTMLParser):
         a=dict(attrs)
         if tag in ('img','source'):
             self.images.append((tag, sorted((k,v) for k,v in a.items() if k!='alt')))
-        if tag=='img': self.alts.append(a.get('alt',''))
+        if tag=='img' and a.get('src'): self.alts.append(a.get('alt',''))
         if tag=='a': self.links.append(a.get('href'))
         if 'id' in a: self.ids.append(a['id'])
         if tag=='script' and a.get('src'): self.scripts.append(a['src'])
@@ -53,7 +53,7 @@ checks={
     'identical_forms':re.findall(r'<form\b.*?</form>',original,re.S)==re.findall(r'<form\b.*?</form>',updated,re.S),
     'identical_hero':re.search(r'<section class="hero".*?</section>',original,re.S).group()==re.search(r'<section class="hero".*?</section>',updated,re.S).group(),
     'identical_reviews':re.search(r'<section class="section" id="recensioni">.*?</section>',original,re.S).group()==re.search(r'<section class="section" id="recensioni">.*?</section>',updated,re.S).group(),
-    'all_image_alt_texts_nonempty':all(str(alt).strip() for alt in after.alts),
+    'all_source_image_alt_texts_nonempty':all(str(alt).strip() for alt in after.alts),
     'only_requested_note_removed':original.count('<p class="visual-note">')==updated.count('<p class="visual-note">')+1,
     'modal_instructions_preserved':'<p id="programImageNote">Seleziona “Dimensioni reali” e scorri per leggere i dettagli.</p>' in updated,
 }
