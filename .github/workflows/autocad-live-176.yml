@@ -1,0 +1,57 @@
+name: Verify AutoCAD 17.6 on live domain
+on:
+  push:
+    branches: ['autocad-copy-17-6-20260917']
+    paths: ['.github/workflows/autocad-live-176.yml']
+permissions:
+  contents: read
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify deployed HTML and prepare read-only public tests
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlopen, Request
+          import hashlib, json, time, re
+          out=Path('qa-live');out.mkdir(exist_ok=True)
+          url='https://andreagiaquinto.it/lezioni-autocad/'
+          expected='9e7f2b5ea2191e8dc50468e105620ff2f14e100befc0c0913285d8d537bd28b1'
+          for attempt in range(18):
+              try:
+                  with urlopen(Request(url,headers={'Cache-Control':'no-cache','User-Agent':'AutoCAD-Release-Verification'}),timeout=15) as response:
+                      raw=response.read()
+                  if hashlib.sha256(raw).hexdigest()==expected:break
+              except Exception as error:print(type(error).__name__)
+              time.sleep(5)
+          else:raise SystemExit('Live HTML does not match the validated candidate')
+          text=raw.decode('utf-8')
+          assert not re.search(r'\b(?:IA|AI)\b',text)
+          assert 'data-build="20260917-autocad-v17.6"' in text
+          (out/'deployed-html-check.json').write_text(json.dumps({'url':url,'sha256':expected,'exactCandidateMatch':True,'technologyLabelsRemoved':True,'build':'20260917-autocad-v17.6'},indent=2))
+          qa=Path('.github/scripts/verify_autocad_175.py').read_text()
+          qa=qa.replace('20260917-autocad-v17.5','20260917-autocad-v17.6').replace('AutoCAD 17.5','AutoCAD 17.6')
+          qa=qa.replace('40662acfd04fc3b6f58e029e8027a6b45b61ca10','1f0f328adea95643e2a232f5f34a487f46b12508')
+          (out/'verify_live.py').write_text(qa)
+          print('LIVE_HTML_PASS '+expected)
+          PY
+      - name: Install browser
+        run: |
+          python -m pip install --disable-pip-version-check playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Test public page at thirteen widths without submitting anything
+        env:
+          QA_OUTPUT: qa-live
+        run: python qa-live/verify_live.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: autocad-17-6-live-verification
+          path: qa-live/
+          retention-days: 14
+          if-no-files-found: error
