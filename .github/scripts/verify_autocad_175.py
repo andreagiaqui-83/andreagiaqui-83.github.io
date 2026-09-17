@@ -31,7 +31,9 @@ async def inspect(page):
       const images = [...document.images].filter(i=>i.currentSrc||i.getAttribute('src'));
       const ids = [...document.querySelectorAll('[id]')].map(x=>x.id);
       const missingAnchors = [...document.querySelectorAll('a[href^="#"]')].map(a=>a.getAttribute('href')).filter(h=>h.length>1&&!document.getElementById(decodeURIComponent(h.slice(1))));
-      const sections = [...document.querySelectorAll('main section[id]')].map(e=>({id:e.id,visible:!!(e.getClientRects().length&&getComputedStyle(e).display!=='none')}));
+      // The render section has a class but no ID. Include every section, using
+      // a deterministic structural key rather than omitting unnumbered sections.
+      const sections = [...document.querySelectorAll('main section')].map((e,i)=>({id:e.id||('section-'+i+':'+e.className),isRender:e.matches('.visual-section'),visible:!!(e.getClientRects().length&&getComputedStyle(e).display!=='none')}));
       return {
         build:document.body.dataset.build, h1:document.querySelectorAll('h1').length,
         duplicateIds:ids.filter((x,i)=>ids.indexOf(x)!==i), missingAnchors,
@@ -123,16 +125,21 @@ async def check_preview(browser):
     page=await context.new_page()
     try:
         await page.goto(URL,wait_until='domcontentloaded',timeout=60000)
+        await page.wait_for_selector('.visual-section')
         normal=await inspect(page)
         await page.goto(URL+'?anteprima=senza-render',wait_until='domcontentloaded',timeout=60000)
+        await page.wait_for_selector('.visual-preview-note')
         preview=await inspect(page)
         removed=[s['id'] for s in normal['sections'] if s['visible'] and not next((t['visible'] for t in preview['sections'] if t['id']==s['id']),False)]
+        render_before=[s for s in normal['sections'] if s['isRender']]
+        render_after=[s for s in preview['sections'] if s['isRender']]
         result['hiddenSections']=removed
         result['checks']={
             'currentRelease':preview['build']==EXPECTED,
             'noindex':'noindex' in preview['robots'],
             'sameCanonical':preview['canonical']==URL,
             'oneSectionHidden':len(removed)==1,
+            'onlyRenderHidden':len(render_before)==1 and len(render_after)==1 and render_before[0]['visible'] and not render_after[0]['visible'] and removed==[render_before[0]['id']],
             'previewNoteVisible':await page.locator('.visual-preview-note').is_visible(),
             'formsPreserved':normal['forms']==preview['forms'],
             'noHorizontalOverflow':preview['overflow']<=2,
