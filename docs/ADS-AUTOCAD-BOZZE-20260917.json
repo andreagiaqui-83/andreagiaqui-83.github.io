@@ -1,0 +1,50 @@
+{
+  "status": "draft_not_published",
+  "createdAt": "2026-09-17",
+  "budget": null,
+  "budgetAuthorized": false,
+  "googleAdsAccountConnected": false,
+  "createInAccountAs": "PAUSED",
+  "activationRequires": ["account_connection", "approved_budget_and_duration", "confirmed_test_email_delivery", "verified_conversion_tracking_and_consent"],
+  "scope": "AutoCAD 2D/3D online lessons only; CAD/BIM/render services remain separate",
+  "finalUrl": "https://andreagiaquinto.it/lezioni-autocad/",
+  "adGroups": [
+    {
+      "name": "Lezioni individuali",
+      "headlines": ["Lezioni AutoCAD Online", "AutoCAD Su Misura Per Te", "Lezioni Individuali a 15 €/h", "Primi 30 Minuti Gratuiti", "AutoCAD 2D e 3D", "Con Andrea Giaquinto", "Impara Sul Tuo Progetto", "Fai Domande In Diretta", "Correzioni Mentre Disegni", "Un Percorso Personalizzato", "Dal Primo Comando Al Progetto", "Online In Tutta Italia"],
+      "descriptions": ["Lezioni AutoCAD individuali online. Primi 30 minuti gratuiti, poi 15 €/ora.", "Fai domande, provi i comandi e ricevi correzioni in diretta sul tuo schermo.", "Parti da zero o perfeziona il tuo metodo. Un percorso su misura per i tuoi obiettivi.", "Per studenti e professionisti. Contatta Andrea e concorda il tuo primo incontro."],
+      "keywords": ["lezioni autocad online", "insegnante autocad online", "lezioni private autocad", "docente autocad online", "lezioni autocad individuali", "imparare autocad online"],
+      "path": ["lezioni", "autocad"]
+    },
+    {
+      "name": "Corso AutoCAD 2D",
+      "headlines": ["Corso AutoCAD 2D Online", "AutoCAD 2D Da Zero", "Layer, Quote, Blocchi e Stampa", "Lezioni 2D Personalizzate", "Primi 30 Minuti Gratuiti", "Lezioni Online a 15 €/ora", "Disegna Con Più Precisione", "Esercizi e Correzioni Dal Vivo", "Piante, Prospetti e Sezioni", "Dal File DWG Alla Tavola", "Impara Con Andrea Giaquinto", "Un Metodo Per I Tuoi Disegni"],
+      "descriptions": ["Impara AutoCAD 2D: comandi, layer, blocchi, quote e stampa. Lezioni online su misura.", "Lavoriamo su esercizi e tavole, con spiegazioni e correzioni mentre disegni.", "Primi 30 minuti gratuiti per parlare del tuo livello. Lezioni successive a 15 €/ora.", "Per scuola, università e lavoro. Un corso individuale che segue i tuoi obiettivi."],
+      "keywords": ["corso autocad 2d online", "lezioni autocad 2d", "corso autocad base online", "imparare autocad da zero", "corso autocad 2d individuale", "corso autocad layout stampa"],
+      "path": ["corso", "autocad-2d"]
+    },
+    {
+      "name": "Corso AutoCAD 3D",
+      "headlines": ["Corso AutoCAD 3D Online", "Lezioni AutoCAD 3D", "Dal Disegno 2D Al Modello 3D", "Solidi, UCS e Viste 3D", "AutoCAD 3D Su Misura", "Impara Con Esercizi Pratici", "Confronto Individuale Dal Vivo", "Primi 30 Minuti Gratuiti", "Lezioni Online a 15 €/ora", "Lavora Sul Tuo Progetto", "Con Andrea Giaquinto", "Online In Tutta Italia"],
+      "descriptions": ["Esplora AutoCAD 3D con lezioni individuali: solidi, UCS, viste e modifica dei modelli.", "Un percorso sul tuo livello. Condividi lo schermo, provi e chiarisci i tuoi dubbi.", "Primi 30 minuti gratuiti, poi 15 €/ora. Lezioni AutoCAD 3D esclusivamente online.", "Dal disegno alla geometria tridimensionale, con esercizi e correzioni in diretta."],
+      "keywords": ["corso autocad 3d online", "lezioni autocad 3d", "corso autocad 3d individuale", "imparare autocad 3d", "insegnante autocad 3d", "ripetizioni autocad 3d"],
+      "path": ["corso", "autocad-3d"]
+    },
+    {
+      "name": "Ripetizioni scuola e università",
+      "headlines": ["Ripetizioni AutoCAD Online", "AutoCAD: Scuola e Università", "Porta Il Programma Del Docente", "Esercizi e Tavole Da Chiarire", "Preparazione Maturità AutoCAD", "Preparati Agli Esami AutoCAD", "Riparti Dai Tuoi Dubbi", "Ripetizioni Personalizzate", "Primi 30 Minuti Gratuiti", "Lezioni Online a 15 €/ora", "Un Insegnante Per I Tuoi Dubbi", "Con Andrea Giaquinto"],
+      "descriptions": ["Ripetizioni AutoCAD online per scuola e università. Partiamo dal tuo programma.", "Preparazione agli argomenti AutoCAD di maturità ed esami, con esercizi mirati.", "Capisci i passaggi, correggi gli errori e riprova sul tuo PC, con Andrea al tuo fianco.", "Primi 30 minuti gratuiti, poi 15 €/ora. Raccontami cosa studi e su cosa vuoi lavorare."],
+      "keywords": ["ripetizioni autocad", "ripetizioni autocad online", "ripetizioni autocad università", "ripetizioni autocad geometri", "ripetizioni autocad architettura", "preparazione esame autocad"],
+      "path": ["ripetizioni", "autocad"]
+    },
+    {
+      "name": "AutoCAD per professionisti",
+      "headlines": ["AutoCAD Per Il Tuo Lavoro", "Lezioni Per Professionisti", "Perfeziona Il Tuo Metodo CAD", "Lavora Sui Tuoi File DWG", "Lezioni AutoCAD Personalizzate", "Tavole Ordinate e Leggibili", "Piante, Sezioni e Dettagli", "Correzioni In Condivisione", "Primi 30 Minuti Gratuiti", "Lezioni Online a 15 €/ora", "Con Andrea Giaquinto", "Un Percorso Sul Tuo Livello"],
+      "descriptions": ["Lezioni AutoCAD online per professionisti. Lavoriamo su problemi ed esercizi reali.", "Organizza layer, blocchi, quote e layout. Un percorso individuale sul tuo livello.", "Oltre 20 anni di esperienza nel disegno CAD. Confrontati direttamente con Andrea.", "Primi 30 minuti gratuiti, poi 15 €/ora. Definiamo insieme il tuo obiettivo pratico."],
+      "keywords": ["corso autocad professionisti", "corso autocad per architetti", "lezioni autocad geometri", "corso autocad ingegneri", "corso autocad avanzato online", "lezioni autocad professionali"],
+      "path": ["lezioni", "professionisti"]
+    }
+  ],
+  "negativeKeywordCandidates": ["crack", "torrent", "keygen", "serial number", "download autocad", "scaricare autocad", "licenza autocad gratis", "offerte lavoro autocad", "annunci lavoro autocad", "stipendio disegnatore", "manuale autocad pdf", "tutorial autocad gratis"],
+  "notes": ["Keyword candidates have not been validated with actual Keyword Planner volumes or CPC.", "Do not exclude gratis generically: the first 30 minutes are free.", "Use generate_lead once as primary conversion; contact clicks are secondary.", "Do not assign the hourly lesson price as lead value.", "Choose active groups only after budget and market estimates are available."]
+}
