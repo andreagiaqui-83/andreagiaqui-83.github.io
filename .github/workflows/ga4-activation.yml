@@ -1,0 +1,54 @@
+name: Validate GA4 activation
+on:
+  push:
+    branches: ['ga4-activation-20260917']
+    paths:
+      - '.github/workflows/ga4-activation.yml'
+      - '.github/scripts/prepare_ga4_activation.py'
+      - '.github/scripts/test_ga4_activation.py'
+permissions:
+  contents: write
+concurrency:
+  group: ga4-activation-staging
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Prepare GA4 ID, new consent version and privacy copy
+        run: python .github/scripts/prepare_ga4_activation.py
+      - name: Existing isolated tests (no real emails)
+        run: |
+          npm ci --ignore-scripts
+          set -o pipefail
+          npm test | tee ga4-results/unit-tests.txt
+      - name: Install browser
+        run: |
+          python -m pip install --disable-pip-version-check playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Consent and event tests (all analytics collection intercepted)
+        run: python .github/scripts/test_ga4_activation.py
+      - name: Save only verified candidate files to staging
+        run: |
+          test "$GITHUB_REF_NAME" = 'ga4-activation-20260917'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- assets/measurement-config.js index.html lezioni-autocad/index.html privacy/index.html
+          git commit -m 'Enable owner-supplied GA4 after consent; keep Ads off and preserve landing 17.6'
+          git push origin HEAD:ga4-activation-20260917
+          git rev-parse HEAD | tee ga4-results/candidate-commit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ga4-activation-candidate
+          path: ga4-results/
+          retention-days: 14
+          if-no-files-found: error
