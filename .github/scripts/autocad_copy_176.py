@@ -23,16 +23,19 @@ updated = original
 for old, new, count in replacements:
     assert updated.count(old) == count, f'Expected {count} exact occurrences of: {old[:90]}'
     updated = updated.replace(old, new)
-assert not re.search(r'\b(?:IA|AI)\b|intelligenza\s+artificiale', updated, re.I), 'AI reference remains in HTML'
+# Lowercase 'ai' is an Italian preposition and must not be removed.
+assert not re.search(r'\b(?:IA|AI)\b', updated), 'Technology acronym remains in HTML'
+assert not re.search(r'intelligenza\s+artificiale', updated, re.I), 'AI phrase remains in HTML'
 
 class Signature(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.images=[]; self.links=[]; self.ids=[]; self.scripts=[]; self.css=[]
+        self.images=[]; self.links=[]; self.ids=[]; self.scripts=[]; self.css=[]; self.alts=[]
     def handle_starttag(self, tag, attrs):
         a=dict(attrs)
         if tag in ('img','source'):
             self.images.append((tag, sorted((k,v) for k,v in a.items() if k!='alt')))
+        if tag=='img': self.alts.append(a.get('alt',''))
         if tag=='a': self.links.append(a.get('href'))
         if 'id' in a: self.ids.append(a['id'])
         if tag=='script' and a.get('src'): self.scripts.append(a['src'])
@@ -50,15 +53,13 @@ checks={
     'identical_forms':re.findall(r'<form\b.*?</form>',original,re.S)==re.findall(r'<form\b.*?</form>',updated,re.S),
     'identical_hero':re.search(r'<section class="hero".*?</section>',original,re.S).group()==re.search(r'<section class="hero".*?</section>',updated,re.S).group(),
     'identical_reviews':re.search(r'<section class="section" id="recensioni">.*?</section>',original,re.S).group()==re.search(r'<section class="section" id="recensioni">.*?</section>',updated,re.S).group(),
-    'all_image_alt_texts_nonempty':all(str(dict(a).get('alt','')).strip() for a in re.findall(r'<img\s+([^>]+)>',updated)) if False else all(m.strip() for m in re.findall(r'<img\b[^>]*\balt="([^"]*)"',updated)),
+    'all_image_alt_texts_nonempty':all(str(alt).strip() for alt in after.alts),
     'only_requested_note_removed':original.count('<p class="visual-note">')==updated.count('<p class="visual-note">')+1,
     'modal_instructions_preserved':'<p id="programImageNote">Seleziona “Dimensioni reali” e scorri per leggere i dettagli.</p>' in updated,
 }
 assert all(checks.values()), checks
 TARGET.write_text(updated,encoding='utf-8')
 
-# The only production change is the HTML text above. Do not touch image bytes,
-# styles, scripts, forms, backend, the services homepage or Google configuration.
 production_changes = subprocess.check_output(['git','diff','--name-only',BASE,'--','lezioni-autocad','assets','index.html','cloudflare-worker','privacy']).decode().splitlines()
 assert production_changes==['lezioni-autocad/index.html'],production_changes
 report={'base':BASE,'build':'20260917-autocad-v17.6','checks':checks,'image_elements_unchanged':len(after.images),'production_files_changed':production_changes,'html_sha256':hashlib.sha256(updated.encode()).hexdigest(),'email_sent':False,'google_activated':False}
@@ -66,8 +67,8 @@ report={'base':BASE,'build':'20260917-autocad-v17.6','checks':checks,'image_elem
 (OUT/'changes.diff').write_bytes(subprocess.check_output(['git','diff','--',str(TARGET)]))
 (OUT/'index.html').write_text(updated,encoding='utf-8')
 
-# Reuse the existing verified 13-width acceptance test against the local server.
-# The production canonical must stay HTTPS even in the local test environment.
+# Reuse the existing 13-width acceptance test on the candidate, without editing
+# the production QA script. The canonical must remain the real HTTPS URL.
 qa=Path('.github/scripts/verify_autocad_175.py').read_text(encoding='utf-8')
 qa=qa.replace("BASE = 'https://andreagiaquinto.it'", "BASE = 'http://127.0.0.1:8765'")
 qa=qa.replace('20260917-autocad-v17.5','20260917-autocad-v17.6')
