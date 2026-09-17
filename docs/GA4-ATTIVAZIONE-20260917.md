@@ -6,7 +6,7 @@ Il titolare ha fornito lo screenshot dei dettagli dello stream «Andrea Giaquint
 
 Il tag Google pubblico relativo all'ID risponde HTTP 200 e contiene l'ID di misurazione. L'ID numerico dello stream non è esposto nel tag scaricato: non è stato presentato come una verifica nell'account.
 
-## Configurazione
+## Configurazione pubblicata
 
 - ID GA4 inserito nell'unico file `assets/measurement-config.js`.
 - Google Ads resta non configurato: `adsId` e `adsLeadLabel` vuoti. Nessuna campagna, spesa, remarketing o conversione diretta Ads attivata.
@@ -33,16 +33,32 @@ Workflow `35213841948`, success; artifact `10494247820`.
 
 I test del modulo non hanno inviato email vere. I test del candidato non hanno inviato eventi reali a Google: gli endpoint sono stati intercettati. Il parser di test gestisce correttamente i batch GA4 con più eventi in un POST.
 
-## Verifica dopo pubblicazione
+## Pubblicazione e verifica sul dominio
 
-Da completare dopo il deploy: confronto dei file pubblicati con il candidato, ripetizione dei controlli di consenso e una sola visita tecnica con evento page_view inviato a Google, etichettata `utm_source=technical_check&utm_medium=qa&utm_campaign=ga4_activation`. Nessun lead fittizio deve essere inviato alla proprietà reale.
+Commit di attivazione su main: `fd60059e6bec40a5ff19093c188e6e504ed350eb`.
+GitHub Pages run `35214176985`: **success**, completato il 17 settembre 2026 alle 11:09:33 UTC.
 
-La risposta dell'endpoint di raccolta non dimostra che i report privati siano già popolati. Occorre confermare nel pannello Tempo reale del titolare o tramite una connessione autorizzata alla proprietà.
+Workflow pubblico `35214229794`: **success**, artifact `10493838630` (ga4-live-verification).
+
+- Tutti e quattro i file pubblicati corrispondono byte per byte al candidato verificato (SHA-256 registrati nell'artifact).
+- **54/54 controlli browser sul sito pubblico superati**, inclusi consenso, rifiuto, revoca, cookie, eventi, layout e immagini.
+- Una sola visita tecnica effettiva, etichettata `utm_source=technical_check&utm_medium=qa&utm_campaign=ga4_activation`, ha inviato a Google un `page_view` con `tid=G-SQ7LJ1FVVY`.
+- L'endpoint Google ha risposto **HTTP 204**. Il controllo è stato eseguito intorno alle 11:10 UTC.
+- Tutti gli altri eventi diagnostici e tutti gli invii dei moduli sono stati intercettati. **Zero email reali, zero lead fittizi inviati alla proprietà reale, zero campagne attivate.**
+
+La risposta dell'endpoint dimostra la trasmissione tecnica, non la presenza nei report privati dell'account. La visibilità nella proprietà GA4 va confermata dal titolare in Tempo reale o mediante una connessione autorizzata. Non è stata dichiarata una verifica del pannello amministrativo.
 
 ## Passaggi ancora aperti nell'account
 
-- Confermare la prima visita nei report Tempo reale.
-- Verificare conservazione dei dati della proprietà e impostazioni del servizio con il titolare; non è stata inventata una durata dell'account. La durata configurata dei cookie è distinta dalla conservazione dei report.
-- Configurare generate_lead come evento chiave nell'account, senza duplicare conversioni future in Ads.
-- Prova di ricezione email reale ancora subordinata all'autorizzazione esplicita già richiesta.
-- Collegamento GA4–Ads, Search Console, eventuali integrazioni di reporting e campagne non ancora completati. Non dichiararli attivi solo perché è stato installato GA4.
+1. Confermare la prima visita nei report Tempo reale. Il titolare può aprire la landing, acconsentire alle Statistiche e osservare il relativo page_view dopo qualche minuto.
+2. Verificare conservazione dei dati della proprietà e impostazioni del servizio con il titolare; non è stata inventata una durata dell'account. La durata configurata dei cookie (180 giorni) è distinta dalla conservazione dei report.
+3. Configurare generate_lead come evento chiave nell'account, senza duplicare conversioni future in Ads.
+4. Prova di ricezione email reale ancora subordinata all'autorizzazione esplicita già richiesta.
+5. Collegamento GA4–Ads, Search Console, eventuali integrazioni di reporting e campagne non ancora completati. Non dichiararli attivi solo perché è stato installato GA4.
+
+## Fonti operative
+
+- https://developers.google.com/tag-platform/security/concepts/consent-mode
+- https://developers.google.com/analytics/devguides/collection/ga4/views
+- https://support.google.com/analytics/answer/11198161?hl=it
+- https://www.garanteprivacy.it/faq/cookie
