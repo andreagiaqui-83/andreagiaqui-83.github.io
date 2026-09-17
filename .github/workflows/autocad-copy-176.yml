@@ -1,0 +1,56 @@
+name: Validate AutoCAD text update 17.6
+on:
+  push:
+    branches: ['autocad-copy-17-6-20260917']
+    paths:
+      - '.github/workflows/autocad-copy-176.yml'
+      - '.github/scripts/autocad_copy_176.py'
+permissions:
+  contents: write
+concurrency:
+  group: autocad-copy-176-staging
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Prepare text-only candidate and verify preservation
+        run: python .github/scripts/autocad_copy_176.py
+      - name: Isolated frontend and backend tests (no real email)
+        run: |
+          npm ci --ignore-scripts
+          set -o pipefail
+          npm test | tee qa-results/unit-tests.txt
+      - name: Install browser checks
+        run: |
+          python -m pip install --disable-pip-version-check playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Test thirteen widths, all enlarged images, forms and preview locally
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/autocad-176-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          python qa-results/verify_candidate.py
+      - name: Save only the verified HTML to the staging branch
+        run: |
+          test "${GITHUB_REF_NAME}" = 'autocad-copy-17-6-20260917'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- lezioni-autocad/index.html
+          git commit -m 'AutoCAD 17.6: requested caption cleanup, layout and assets unchanged'
+          git push origin HEAD:autocad-copy-17-6-20260917
+          git rev-parse HEAD | tee qa-results/candidate-commit.txt
+          git rev-parse HEAD:lezioni-autocad/index.html | tee qa-results/html-blob.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: autocad-copy-176-validated
+          path: qa-results/
+          retention-days: 14
+          if-no-files-found: error
