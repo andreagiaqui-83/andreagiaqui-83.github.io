@@ -8,10 +8,13 @@
 .interior-design-head .mini-eyebrow{color:#087ad8;font-size:11px;font-weight:900;letter-spacing:.14em}
 .interior-design-head strong{color:#0b2a46;font-size:20px;line-height:1.25}
 .interior-design-head p{margin:0;color:#526d83;font-size:15px;line-height:1.6}
-.interior-style-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:17px 0 8px}
-.interior-style-grid span{display:flex;align-items:center;gap:9px;min-width:0;padding:11px 12px;border:1px solid #cbe1ef;border-radius:11px;background:#fff;color:#17344e;font-size:14px;font-weight:760;line-height:1.4}
-.interior-style-grid b{display:inline-grid;place-items:center;flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:#e1f4ff;color:#087ad8;font-size:11px}
+.interior-style-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 8px}
+.interior-style-card{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:start;gap:11px;min-width:0;padding:15px;border:1px solid #cbe1ef;border-radius:13px;background:#fff;box-shadow:0 5px 16px rgba(11,58,91,.045)}
+.interior-style-card>b{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#e1f4ff;color:#087ad8;font-size:11px;font-weight:900}
+.interior-style-card div{min-width:0}
+.interior-style-card strong{display:block;color:#0b2a46;font-size:15px;line-height:1.35}
+.interior-style-card p{margin:5px 0 0;color:#5e7185;font-size:13px;line-height:1.55;font-weight:520}
 .interior-custom{margin:18px 0 0}
 .interior-custom textarea{min-height:132px;resize:vertical}
 .interior-custom small{line-height:1.5}
-@media(max-width:576px){.service-unavailable{padding:14px}.interior-design-panel{padding:17px 14px;border-radius:14px}.interior-design-head strong{font-size:18px}.interior-style-grid{grid-template-columns:1fr}.interior-style-grid span{font-size:13px}}
+@media(max-width:576px){.service-unavailable{padding:14px}.interior-design-panel{padding:17px 14px;border-radius:14px}.interior-design-head strong{font-size:18px}.interior-style-grid{grid-template-columns:1fr}.interior-style-card{padding:13px}.interior-style-card strong{font-size:14px}.interior-style-card p{font-size:13px}}

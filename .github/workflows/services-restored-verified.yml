@@ -5,6 +5,7 @@ on:
     paths:
       - 'index.html'
       - 'services-interior-20260919.css'
+      - 'assets/banner-preventivo-cad-bim.svg'
       - '.github/scripts/services_restored_check.py'
       - '.github/workflows/services-restored-verified.yml'
 permissions:

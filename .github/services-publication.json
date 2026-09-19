@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260919-servizi-interior-02",
+  "build": "20260919-servizi-interior-03",
   "scope": [
     "/",
     "/index.html"
@@ -9,15 +9,30 @@
   "lessons_unchanged": true,
   "point_cloud_service": "temporarily unavailable",
   "point_cloud_form_field": "disabled",
-  "pricing": "No public numeric prices; personalized quote only",
-  "value_positioning": "Professional service with contained/competitive costs",
+  "pricing": "No public numeric prices; personalized quote only; hero image contains no tariff amount",
   "interior_design": {
     "enabled": true,
-    "engine": "LAS2Mesh",
-    "included_proposals": 4,
-    "proposal_names": "not fixed; four distinct contemporary alternatives generated according to the project",
+    "included_proposals": [
+      {
+        "name": "Minimal contemporaneo",
+        "meaning": "Linee pulite, essenzialità, palette neutre e funzionalità"
+      },
+      {
+        "name": "Japandi",
+        "meaning": "Semplicità giapponese e calore scandinavo, legni chiari e texture naturali"
+      },
+      {
+        "name": "Mediterraneo contemporaneo",
+        "meaning": "Luce, intonaci caldi, pietra, legno e tonalità sabbia/terra"
+      },
+      {
+        "name": "Organic Modern",
+        "meaning": "Forme morbide, materiali naturali, texture materiche e toni caldi"
+      }
+    ],
     "optional_fifth_custom_proposal": true
   },
+  "public_program_reference": "none",
   "telephone": "+393337240544",
   "email": "andrea.giaqui@gmail.com"
 }

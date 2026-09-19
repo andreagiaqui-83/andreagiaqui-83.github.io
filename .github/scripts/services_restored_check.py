@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
-BUILD="20260919-servizi-interior-02"
+BUILD="20260919-servizi-interior-03"
 REPORT=Path(os.environ.get("RUNNER_TEMP","/tmp"))/"services-restored-proof"
 
 def sha(b): return hashlib.sha256(b).hexdigest()
@@ -22,8 +22,12 @@ def static():
     assert cloud and cloud.has_attr("disabled") and cloud.get("placeholder")=="Servizio attualmente non disponibile"
     assert soup.select_one('input[name="Output[]"][value="Interior Design"]')
     styles=[x.get_text(" ",strip=True) for x in soup.select(".interior-style-grid span")]
-    assert len(styles)==4 and all(f"Proposta contemporanea {i}" in styles[i-1] for i in range(1,5))
-    assert "LAS2MESH" in soup.select_one(".interior-design-panel").get_text(" ",strip=True).upper()
+    assert len(styles)==4
+    panel_text=soup.select_one(".interior-design-panel").get_text(" ",strip=True)
+    for name in ["Minimal contemporaneo","Japandi","Mediterraneo contemporaneo","Organic Modern"]:
+        assert name in panel_text
+    assert "LAS2MESH" not in data.decode("utf-8").upper()
+    assert all(len(card.get_text(" ",strip=True))>55 for card in soup.select(".interior-style-card"))
     page_text=soup.get_text(" ",strip=True)
     assert "0,20 €" not in page_text and "60 €" not in page_text and "TARIFFA INDICATIVA" not in page_text
     assert "PREVENTIVO PERSONALIZZATO" in page_text and "costi contenuti" in page_text.lower()
@@ -33,6 +37,9 @@ def static():
     assert soup.select_one("#whatsappQuickContact")
     assert soup.select_one("#formazione-autocad .training-cta[href='/lezioni-autocad/']")
     assert "services-interior-20260919.css" in data.decode()
+    assert "assets/banner-preventivo-cad-bim.svg" in data.decode()
+    hero=Path("assets/banner-preventivo-cad-bim.svg").read_text(encoding="utf-8")
+    assert "0,20" not in hero and "€" not in hero and "metro quadro lordo" not in hero.lower()
     assert "reviews-carousel.js" in data.decode()
     write("static.json",{"status":"PASS","build":BUILD,"html_sha256":sha(data),"styles":styles})
     print("STATIC_PASS",flush=True)
@@ -52,9 +59,11 @@ def browsers(base,stage):
                     cloud=page.locator('input[name="Nuvola_di_punti_link_cloud"]')
                     assert cloud.is_disabled() and cloud.get_attribute("placeholder")=="Servizio attualmente non disponibile"
                     panel=page.locator(".interior-design-panel"); panel.scroll_into_view_if_needed()
-                    assert panel.locator(".interior-style-grid span").count()==4
-                    assert "LAS2MESH" in panel.inner_text().upper()
-                    assert all(f"Proposta contemporanea {i}" in panel.locator(".interior-style-grid span").nth(i-1).inner_text() for i in range(1,5))
+                    assert panel.locator(".interior-style-card").count()==4
+                    ptext=panel.inner_text()
+                    for name in ["Minimal contemporaneo","Japandi","Mediterraneo contemporaneo","Organic Modern"]:
+                        assert name in ptext
+                    assert "LAS2MESH" not in page.content().upper()
                     assert page.locator("text=Da 0,20 €").count()==0
                     assert page.locator("text=PREVENTIVO PERSONALIZZATO").count()==1
                     custom=panel.locator('textarea[name="Interior_Design_5a_proposta_personalizzata"]')
