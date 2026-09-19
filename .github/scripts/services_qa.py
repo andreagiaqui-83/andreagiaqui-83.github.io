@@ -15,6 +15,7 @@ def static():
  s=BeautifulSoup(Path('index.html').read_text(),'html.parser')
  assert s.body['data-build']==BUILD
  assert len(s.select('h1'))==1
+ assert s.select_one('.hp')['aria-hidden']=='true'
  assert not s.select('img[src*="drive.google"]')
  assert len(s.select('link[rel=stylesheet]'))==2
  assert s.select_one('#pointCloud').has_attr('disabled')
