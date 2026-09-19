@@ -1,0 +1,17 @@
+/* Temporary point-cloud availability and Interior Design offer — 2026-09-19 */
+.service-unavailable{padding:16px;border:1px solid #e2b067;border-radius:14px;background:#fff9ef}
+.service-unavailable .availability-badge{display:inline-flex;width:max-content;max-width:100%;align-items:center;padding:5px 9px;border:1px solid #e3aa3a;border-radius:999px;background:#fff3cf;color:#7a5307;font-size:12px;font-weight:850;line-height:1.35;letter-spacing:.01em}
+.service-unavailable input:disabled{opacity:1;cursor:not-allowed;color:#778695;background:#edf2f6;border-color:#cad5df;border-style:dashed;-webkit-text-fill-color:#778695}
+.service-unavailable small{color:#77510d;line-height:1.5}
+.interior-design-panel{margin:4px 0 22px;padding:22px;border:1px solid #b9d9ed;border-radius:16px;background:linear-gradient(135deg,#eef8ff,#f9fcff);box-shadow:0 8px 22px rgba(11,58,91,.05)}
+.interior-design-head{display:grid;gap:6px}
+.interior-design-head .mini-eyebrow{color:#087ad8;font-size:11px;font-weight:900;letter-spacing:.14em}
+.interior-design-head strong{color:#0b2a46;font-size:20px;line-height:1.25}
+.interior-design-head p{margin:0;color:#526d83;font-size:15px;line-height:1.6}
+.interior-style-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:17px 0 8px}
+.interior-style-grid span{display:flex;align-items:center;gap:9px;min-width:0;padding:11px 12px;border:1px solid #cbe1ef;border-radius:11px;background:#fff;color:#17344e;font-size:14px;font-weight:760;line-height:1.4}
+.interior-style-grid b{display:inline-grid;place-items:center;flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:#e1f4ff;color:#087ad8;font-size:11px}
+.interior-custom{margin:18px 0 0}
+.interior-custom textarea{min-height:132px;resize:vertical}
+.interior-custom small{line-height:1.5}
+@media(max-width:576px){.service-unavailable{padding:14px}.interior-design-panel{padding:17px 14px;border-radius:14px}.interior-design-head strong{font-size:18px}.interior-style-grid{grid-template-columns:1fr}.interior-style-grid span{font-size:13px}}

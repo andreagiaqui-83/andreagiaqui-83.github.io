@@ -1,12 +1,25 @@
 {
-  "state": "construction",
-  "build": "20260916-servizi-in-costruzione-02",
-  "scope": ["/", "/index.html"],
+  "state": "active",
+  "build": "20260919-servizi-interior-01",
+  "scope": [
+    "/",
+    "/index.html"
+  ],
   "lessons_path": "/lezioni-autocad/",
   "lessons_unchanged": true,
-  "reactivation": "Only after an explicit request from Andrea following LAS2Mesh completion",
-  "backup_branch": "backup/servizi-prima-costruzione-20260916",
-  "backup_commit": "fdbcdf1289136f8daafd891e508d42728fe8fe18",
+  "restored_from": "fdbcdf1289136f8daafd891e508d42728fe8fe18",
+  "point_cloud_service": "temporarily unavailable",
+  "point_cloud_form_field": "disabled",
+  "interior_design": {
+    "enabled": true,
+    "included_proposals": [
+      "Minimal contemporaneo",
+      "Japandi",
+      "Organic Modern",
+      "Contemporary Luxury"
+    ],
+    "optional_fifth_custom_proposal": true
+  },
   "telephone": "+393337240544",
   "email": "andrea.giaqui@gmail.com"
 }

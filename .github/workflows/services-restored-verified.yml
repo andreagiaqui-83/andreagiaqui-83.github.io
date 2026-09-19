@@ -1,0 +1,38 @@
+name: Verify restored services, disabled point cloud and Interior Design
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'services-interior-20260919.css'
+      - '.github/scripts/services_restored_check.py'
+      - '.github/workflows/services-restored-verified.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install validators
+        run: |
+          python -m pip install --quiet playwright requests beautifulsoup4
+          python -m playwright install --with-deps chromium webkit
+      - name: Verify restored page locally on desktop and mobile
+        run: python .github/scripts/services_restored_check.py local
+      - name: Save local proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: services-restored-local-proof
+          path: ${{ runner.temp }}/services-restored-proof/
+          retention-days: 7
+      - name: Verify the public deployment
+        run: python .github/scripts/services_restored_check.py live
+      - name: Save live proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: services-restored-live-proof
+          path: ${{ runner.temp }}/services-restored-proof/
+          retention-days: 7
