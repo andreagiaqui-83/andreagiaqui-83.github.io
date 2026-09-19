@@ -14,6 +14,7 @@ def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
  s=BeautifulSoup(Path('index.html').read_text(),'html.parser')
  assert s.body['data-build']==BUILD
+ assert 'restano inattivi' not in Path('privacy/index.html').read_text()
  assert len(s.select('h1'))==1
  assert s.select_one('.hp')['aria-hidden']=='true'
  assert not s.select('img[src*="drive.google"]')
