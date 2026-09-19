@@ -1,0 +1,70 @@
+name: Services public performance audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/services-performance.yml'
+      - 'index.html'
+      - 'assets/services/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Wait for the exact homepage publication
+        run: |
+          python - <<'PYWAIT'
+          import urllib.request, hashlib, time
+          from pathlib import Path
+          expected=hashlib.sha256(Path('index.html').read_bytes()).hexdigest()
+          for attempt in range(30):
+              with urllib.request.urlopen('https://andreagiaquinto.it/',timeout=25) as response:
+                  actual=hashlib.sha256(response.read()).hexdigest()
+              if actual==expected:
+                  print('Verified live HTML SHA-256 '+actual)
+                  break
+              time.sleep(10)
+          else:
+              raise SystemExit('Live homepage does not match the audited commit')
+          PYWAIT
+      - name: Measure public page, mobile and desktop
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: |
+          mkdir -p audit-results
+          npx --yes lighthouse@12.8.2 'https://andreagiaquinto.it/' --chrome-flags='--headless --no-sandbox' --only-categories=performance,accessibility,best-practices,seo --output=json --output=html --output-path=audit-results/mobile --quiet
+          npx --yes lighthouse@12.8.2 'https://andreagiaquinto.it/' --preset=desktop --chrome-flags='--headless --no-sandbox' --only-categories=performance,accessibility,best-practices,seo --output=json --output=html --output-path=audit-results/desktop --quiet
+      - name: Summarize measured results
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          summary={'kind':'single-run synthetic lab audit','realEmailSent':False,'adsActivated':False,'fieldData':False,'reports':[]}
+          for path in sorted(Path('audit-results').glob('*.json')):
+              data=json.loads(path.read_text())
+              if data.get('runtimeError'):
+                  raise SystemExit(str(data['runtimeError']))
+              report={'file':path.name,'url':data.get('finalDisplayedUrl') or data.get('finalUrl'),'fetchTime':data['fetchTime'],'lighthouseVersion':data['lighthouseVersion'],'scores':{k:round(v['score']*100) for k,v in data['categories'].items() if v.get('score') is not None},'metrics':{k:data['audits'][k].get('numericValue') for k in ['first-contentful-paint','largest-contentful-paint','total-blocking-time','cumulative-layout-shift','speed-index']},'failedAudits':[{'id':k,'title':v['title'],'displayValue':v.get('displayValue','')} for k,v in data['audits'].items() if v.get('score') is not None and v['score']<1 and v.get('scoreDisplayMode') not in ['notApplicable','manual','informative']]}
+              summary['reports'].append(report)
+          assert len(summary['reports'])==2, 'Both reports are required'
+          Path('audit-results/summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2))
+          print('LIGHTHOUSE_RESULT '+json.dumps(summary,ensure_ascii=False))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('# Servizi — misure di laboratorio\n\nUna esecuzione per dispositivo, non Core Web Vitals degli utenti reali. Nessuna email inviata; nessuna campagna attivata.\n\n')
+              for row in summary['reports']:
+                  f.write('## '+row['file']+'\n\n'+json.dumps(row['scores'])+'\n\n'+json.dumps(row['metrics'])+'\n\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: services-public-lighthouse-${{ github.sha }}
+          path: audit-results/
+          if-no-files-found: error
+          retention-days: 14
