@@ -5,6 +5,9 @@ on:
     paths:
       - 'index.html'
       - 'assets/services/**'
+      - 'assets/measurement.js'
+      - 'scripts/test-frontend.cjs'
+      - 'privacy/index.html'
       - 'cloudflare-worker/src/index.js'
       - 'scripts/test-services-*'
       - '.github/scripts/services_qa.py'
