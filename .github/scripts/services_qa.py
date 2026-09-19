@@ -97,6 +97,12 @@ def run_browser(base,stage):
      for img in page.locator('img').all():
       img.scroll_into_view_if_needed();expect(img).to_have_js_property('complete',True);assert img.evaluate('(e)=>e.naturalWidth>0'),img.get_attribute('src')
      if width in [390,1440]:page.locator('#interior-design').screenshot(path=str(OUT/f'{stage}-{engine}-{width}-interior.png'))
+     # Check rendered words: DOM text extraction alone missed a hidden <br> joining words.
+     headings=page.locator('h1,h2,h3').evaluate_all("els=>els.map(e=>({visible:e.innerText,source:e.textContent}))")
+     for heading in headings:
+      assert re.sub(r'\s+',' ',heading['visible']).strip()==re.sub(r'\s+',' ',heading['source']).strip(),(engine,width,heading)
+     assert page.locator('#faq h2').inner_text()=='Le risposte che ti servono.',(engine,width,'FAQ word spacing')
+     if width in [390,1440]:page.locator('#faq').screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq.png'))
      # Mobile: complete cards, arrows, keyboard first/last and responsive resize.
      view=page.locator('#reviewsCarousel');view.scroll_into_view_if_needed()
      def one_card():
