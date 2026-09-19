@@ -102,7 +102,9 @@ def run_browser(base,stage):
      for heading in headings:
       assert re.sub(r'\s+',' ',heading['visible']).strip()==re.sub(r'\s+',' ',heading['source']).strip(),(engine,width,heading)
      assert page.locator('#faq h2').inner_text()=='Le risposte che ti servono.',(engine,width,'FAQ word spacing')
-     if width in [390,1440]:page.locator('#faq').screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq.png'))
+     if width in [390,1440]:
+      page.locator('#faq h2').scroll_into_view_if_needed()
+      page.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq.png'))
      # Mobile: complete cards, arrows, keyboard first/last and responsive resize.
      view=page.locator('#reviewsCarousel');view.scroll_into_view_if_needed()
      def one_card():
