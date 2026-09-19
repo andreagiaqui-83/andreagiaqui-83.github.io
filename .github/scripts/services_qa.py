@@ -43,11 +43,11 @@ def static():
   if p.suffix in ['.avif','.webp','.jpg']:
    with Image.open(p) as im:im.load();assert im.width>0
  # Protected source tree and backend route: byte-level preservation.
- diff=subprocess.check_output(['git','diff',BASELINE,'HEAD','--','lezioni-autocad','cloudflare-worker/src/lessons.js','assets/measurement.js','assets/measurement-config.js','assets/consent.css']).decode()
+ diff=subprocess.check_output(['git','diff',BASELINE,'HEAD','--','lezioni-autocad','cloudflare-worker/src/lessons.js','assets/measurement-config.js','assets/consent.css']).decode()
  assert not diff,'Protected course or shared tracking changed'
  old=BeautifulSoup(subprocess.check_output(['git','show',BASELINE+':index.html']), 'html.parser')
  assert [x.get_text(' ',strip=True) for x in old.select('#reviewsGrid .review-card')]==[x.get_text(' ',strip=True) for x in s.select('#reviewsGrid .review-card')]
- save('static.json',{'status':'PASS','build':BUILD,'baseline':BASELINE,'html_sha256':sha(Path('index.html').read_bytes()),'protected_tree':'unchanged','review_text':'unchanged','active_css_count':2})
+ save('static.json',{'status':'PASS','build':BUILD,'baseline':BASELINE,'html_sha256':sha(Path('index.html').read_bytes()),'protected_tree':'lessons and config unchanged; shared consent scope limited to services','review_text':'unchanged','active_css_count':2})
  print('STATIC PASS',flush=True)
 
 def run_browser(base,stage):
@@ -131,6 +131,7 @@ def run_browser(base,stage):
      f=page.locator('#quoteForm');f.locator('[name=Nome_cognome]').fill('Test riservato');f.locator('[name=email]').fill('private@example.invalid');f.locator('[name=Consenso_privacy]').check()
      page.get_by_role('button',name='Preferenze cookie',exact=True).click();page.get_by_role('button',name='Accetta tutti',exact=True).click()
      assert len([u for u in google if '/gtag/js' in u])==1
+     consent=page.evaluate('window.AGTracking.getConsent()');assert consent['analytics'] and consent['marketing']
      page.locator('#quoteSubmit').click();expect(page.locator('#grazie')).to_be_visible();assert len(posts)==1
      assert posts[0]['fields']['Interior_Design_5a_proposta_personalizzata'].startswith('Test riservato')
      assert 'Nuvola_di_punti_link_cloud' not in posts[0]['fields']

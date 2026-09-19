@@ -4,6 +4,10 @@
   const cfg = window.AG_MEASUREMENT || {};
   const ga4 = /^G-[A-Z0-9]+$/.test(cfg.ga4Id || '') ? cfg.ga4Id : '';
   const ads = /^AW-\d+$/.test(cfg.adsId || '') ? cfg.adsId : '';
+  // Services import GA4 key events into Ads; this needs advertising consent
+  // even without a separate AW tag. Other pages keep their existing behavior.
+  const importConsent = !!ga4 && cfg.conversionMode === 'ga4_import' && document.body.dataset.pageType === 'services';
+  const marketingEnabled = !!ads || importConsent;
   const key = 'ag_cookie_preferences';
   const denied = {analytics_storage:'denied', ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied'};
   window.dataLayer = window.dataLayer || [];
@@ -17,7 +21,7 @@
   function readChoice() {
     try {
       const value = JSON.parse(localStorage.getItem(key));
-      if (value?.version === cfg.consentVersion && value.expires > Date.now()) return {analytics:value.analytics === true, marketing:value.marketing === true};
+      if (value?.version === cfg.consentVersion && value.expires > Date.now()) return {analytics:value.analytics === true, marketing:value.marketing === true && marketingEnabled};
     } catch (_) {}
     return null;
   }
@@ -69,7 +73,7 @@
   }
   function save(next) {
     const revoked = (choice.analytics && !next.analytics) || (choice.marketing && !next.marketing);
-    choice = {analytics:next.analytics === true && !!ga4,marketing:next.marketing === true && !!ads};
+    choice = {analytics:next.analytics === true && !!ga4,marketing:next.marketing === true && marketingEnabled};
     updateConsent();
     try {localStorage.setItem(key,JSON.stringify({...choice,version:cfg.consentVersion,updated:Date.now(),expires:Date.now()+ (cfg.consentMaxAgeDays || 180)*86400000}));} catch (_) {}
     if (revoked) {
@@ -103,7 +107,8 @@
     dialog.innerHTML='<h2 id="ag-consent-title">Le tue preferenze cookie</h2><p>Il sito funziona anche senza cookie statistici o pubblicitari. Puoi cambiare scelta in qualsiasi momento dal link a fondo pagina.</p><div class="ag-consent-options"><label><input type="checkbox" checked disabled> Necessari <small>Funzioni del sito e memorizzazione delle preferenze.</small></label><label><input id="ag-analytics" type="checkbox"> Statistiche <small>Misurazione delle visite e dell’utilizzo con Google Analytics.</small></label><label><input id="ag-marketing" type="checkbox"> Misurazione pubblicitaria <small>Attribuzione delle richieste alle campagne Google Ads. Nessuna personalizzazione pubblicitaria.</small></label></div><p class="ag-consent-inactive" hidden>Nessun servizio Google di misurazione è attualmente attivo.</p><a href="/privacy/">Leggi l’informativa privacy e cookie</a><div class="ag-consent-actions"><button type="button" data-choice="reject">Rifiuta facoltativi</button><button type="button" data-choice="all">Accetta tutti</button><button type="button" data-choice="save">Salva preferenze</button></div><button type="button" class="ag-consent-close" aria-label="Chiudi senza accettare">Chiudi</button>';
     document.body.append(dialog);
     const analytics=dialog.querySelector('#ag-analytics'),marketing=dialog.querySelector('#ag-marketing');
-    analytics.disabled=!ga4;marketing.disabled=!ads;
+    analytics.disabled=!ga4;marketing.disabled=!marketingEnabled;
+    if(importConsent)marketing.parentElement.querySelector('small').textContent += ' Richiede anche il consenso alle statistiche.';
     dialog.querySelector('.ag-consent-inactive').hidden=!!(ga4||ads);
     function close() {dialog.close();document.dispatchEvent(new Event('ag:consentclose'));}
     function open() {analytics.checked=choice.analytics;marketing.checked=choice.marketing;dialog.showModal();document.dispatchEvent(new Event('ag:consentopen'));}
