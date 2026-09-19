@@ -82,6 +82,11 @@ def run_browser(base,stage):
      assert page.locator('.ag-consent').evaluate('(e)=>e.scrollWidth<=e.clientWidth+1')
      page.get_by_role('button',name='Rifiuta facoltativi').click()
      assert not google
+     if engine=='chromium' and width in [320,1440]:
+      page.add_script_tag(path=str(ROOT/'node_modules/axe-core/axe.min.js'))
+      axe=page.evaluate("async()=>await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})")
+      save(f'{stage}-accessibility-{width}.json',axe)
+      assert not axe['violations'],[(x['id'],[n['target'] for n in x['nodes']]) for x in axe['violations']]
      expect(page.locator('#pointCloud')).to_be_disabled()
      assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1'),(engine,width,'overflow')
      cta=page.locator('.hero [data-cta=hero_quote]').bounding_box();assert cta['width']>=44 and cta['height']>=44

@@ -158,9 +158,11 @@
   });
   document.getElementById('newQuote').addEventListener('click',()=>{submitted=false;started=false;currentSession=null;success.hidden=true;submit.disabled=false;submit.textContent='Richiedi preventivo gratuito ↗';form.querySelector('[name="Output[]"]').focus();scrollTo(form);});
   submit.disabled=false;
-  const wa=document.getElementById('whatsappQuickContact');let consentOpen=false,quoteVisible=false;
-  const updateWA=()=>{const editing=form.contains(document.activeElement);wa?.classList.toggle('is-obscured',consentOpen||((quoteVisible||editing)&&matchMedia('(max-width:767px)').matches));};
+  const wa=document.getElementById('whatsappQuickContact');let consentOpen=false,quoteVisible=false,footerVisible=false;
+  const updateWA=()=>{const editing=form.contains(document.activeElement);wa?.classList.toggle('is-obscured',consentOpen||footerVisible||((quoteVisible||editing)&&matchMedia('(max-width:767px)').matches));};
   if('IntersectionObserver' in window)new IntersectionObserver(entries=>{quoteVisible=entries.some(x=>x.isIntersecting);updateWA();},{threshold:0}).observe(form);
+  if('IntersectionObserver' in window)new IntersectionObserver(entries=>{footerVisible=entries.some(x=>x.isIntersecting);updateWA();},{threshold:0}).observe(document.querySelector('footer'));
+  window.addEventListener('resize',updateWA);
   document.addEventListener('focusin',updateWA);document.addEventListener('focusout',()=>setTimeout(updateWA,0));
   document.addEventListener('ag:consentopen',()=>{consentOpen=true;updateWA();});document.addEventListener('ag:consentclose',()=>{consentOpen=false;updateWA();});
   consentOpen=!!document.querySelector('.ag-consent[open]');updateWA();
