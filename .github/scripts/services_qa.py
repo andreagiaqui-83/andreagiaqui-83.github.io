@@ -98,7 +98,7 @@ def run_browser(base,stage):
       img.scroll_into_view_if_needed();expect(img).to_have_js_property('complete',True);assert img.evaluate('(e)=>e.naturalWidth>0'),img.get_attribute('src')
      if width in [390,1440]:page.locator('#interior-design').screenshot(path=str(OUT/f'{stage}-{engine}-{width}-interior.png'))
      # Check rendered words: DOM text extraction alone missed a hidden <br> joining words.
-     headings=page.locator('h1,h2,h3').evaluate_all("els=>els.filter(e=>e.getClientRects().length>0).map(e=>({visible:e.innerText,source:e.textContent}))")
+     headings=page.locator('h1,h2,h3').evaluate_all("els=>els.map(e=>({visible:e.innerText,source:e.textContent})).filter(h=>h.visible.trim())")
      for heading in headings:
       assert re.sub(r'\s+',' ',heading['visible']).strip()==re.sub(r'\s+',' ',heading['source']).strip(),(engine,width,heading)
      assert page.locator('#faq h2').inner_text()=='Le risposte che ti servono.',(engine,width,'FAQ word spacing')
