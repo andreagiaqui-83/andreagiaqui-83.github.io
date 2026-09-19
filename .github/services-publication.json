@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260919-servizi-interior-03",
+  "build": "20260919-services-r1",
   "scope": [
     "/",
     "/index.html"
@@ -34,5 +34,6 @@
   },
   "public_program_reference": "none",
   "telephone": "+393337240544",
-  "email": "andrea.giaqui@gmail.com"
+  "email": "andrea.giaqui@gmail.com",
+  "baseline": "3faaa38312710c8c6bf9ed697e30b126a42838e3"
 }

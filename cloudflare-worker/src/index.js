@@ -15,6 +15,7 @@ const FIELD_LABELS = {
   'Output[]': 'Output richiesti',
   Output: 'Output richiesti',
   Indicazioni_output: 'Indicazioni sull’output',
+  Interior_Design_5a_proposta_personalizzata: 'Quinta proposta Interior Design personalizzata',
   Data_indicativa_consegna: 'Data indicativa di consegna',
   Professione: 'Professione',
   Note_conclusive: 'Note conclusive',
@@ -103,7 +104,14 @@ async function writeSession(env, session) {
   });
 }
 
-async function createSession(_request, env, origin) {
+async function createSession(request, env, origin) {
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const hour = new Date().toISOString().slice(0, 13);
+  const digest = await hmac(env.SIGNING_SECRET, `quote-rate|${ip}`);
+  const prefix = `quote-rate/${digest}/${hour}/`;
+  const recent = await env.QUOTE_FILES.list({prefix, limit: 12});
+  if ((recent.objects || []).length >= 12) return json({ok:false,error:'Troppe richieste. Riprova più tardi o contattami direttamente.'},429,origin,env);
+  await env.QUOTE_FILES.put(prefix + crypto.randomUUID(), '1');
   const sessionId = crypto.randomUUID();
   const exp = Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS;
   const token = await makeToken(env, sessionId, exp);
@@ -118,27 +126,47 @@ async function uploadFile(request, env, origin, sessionId) {
     return json({ ok: false, error: 'Sessione non valida o scaduta.' }, 401, origin, env);
   }
 
-  const rawName = decodeURIComponent(request.headers.get('X-File-Name') || 'file');
+  let rawName;
+  try { rawName = decodeURIComponent(request.headers.get('X-File-Name') || 'file'); }
+  catch (_) { return json({ok:false,error:'Nome file non valido.'},400,origin,env); }
+  if (/\.(las|laz|e57|rcp|rcs)$/i.test(rawName)) return json({ok:false,error:'Il servizio da nuvola di punti è attualmente non disponibile.'},400,origin,env);
   const fieldName = request.headers.get('X-Field-Name') || 'Allegato';
   const declaredSize = Number(request.headers.get('X-File-Size') || request.headers.get('Content-Length') || 0);
-  if (!declaredSize || declaredSize < 0) return json({ ok: false, error: 'Dimensione file non valida.' }, 400, origin, env);
+  if (!Number.isSafeInteger(declaredSize) || declaredSize <= 0) return json({ ok: false, error: 'Dimensione file non valida.' }, 400, origin, env);
   if (declaredSize > MAX_FILE_BYTES) return json({ ok: false, error: 'Il singolo file supera 90 MB. Usa un link cloud per questo file.' }, 413, origin, env);
 
   const session = await readSession(env, sessionId);
   if (!session) return json({ ok: false, error: 'Sessione non trovata.' }, 404, origin, env);
+  if (session.submittedAt) return json({ok:false,error:'Richiesta già inviata.'},409,origin,env);
+  const duplicate = (session.files || []).find(f => f.name === rawName && f.fieldName === fieldName && f.size === declaredSize);
+  if (duplicate) return json({ok:true,file:duplicate,totalBytes:session.totalBytes},200,origin,env);
   if ((session.totalBytes || 0) + declaredSize > MAX_TOTAL_BYTES) {
     return json({ ok: false, error: 'Gli allegati complessivi superano 500 MB. Usa un link cloud per il materiale eccedente.' }, 413, origin, env);
   }
 
   const safeName = sanitizeFileName(rawName);
   const key = `quotes/${sessionId}/files/${crypto.randomUUID()}-${safeName}`;
-  await env.QUOTE_FILES.put(key, request.body, {
-    httpMetadata: {
-      contentType: request.headers.get('Content-Type') || 'application/octet-stream',
-      contentDisposition: `attachment; filename="${safeName}"`,
-    },
-    customMetadata: { originalName: rawName.slice(0, 300), fieldName: fieldName.slice(0, 120), sessionId },
-  });
+  if (!request.body) return json({ok:false,error:'Allegato vuoto.'},400,origin,env);
+  // Cloudflare R2 requires a known-length stream. FixedLengthStream also rejects
+  // truncated bodies and bodies larger than the declared size without buffering.
+  const bounded = new FixedLengthStream(declaredSize);
+  const abort = new AbortController();
+  try {
+    await Promise.all([
+      request.body.pipeTo(bounded.writable, {signal: abort.signal}),
+      env.QUOTE_FILES.put(key, bounded.readable, {
+        httpMetadata: {
+          contentType: request.headers.get('Content-Type') || 'application/octet-stream',
+          contentDisposition: `attachment; filename="${safeName}"`,
+        },
+        customMetadata: { originalName: rawName.slice(0, 300), fieldName: fieldName.slice(0, 120), sessionId },
+      })
+    ]);
+  } catch (_) {
+    abort.abort();
+    await env.QUOTE_FILES.delete(key);
+    return json({ok:false,error:'Allegato incompleto o dimensione non valida. Riprova il caricamento.'},400,origin,env);
+  }
 
   const entry = { key, name: rawName, fieldName, size: declaredSize, uploadedAt: new Date().toISOString() };
   session.files = Array.isArray(session.files) ? session.files : [];
@@ -264,7 +292,22 @@ async function submitQuote(request, env, origin) {
 
   const session = await readSession(env, sessionId);
   if (!session) return json({ ok: false, error: 'Sessione non trovata.' }, 404, origin, env);
-  const fields = body.fields || {};
+  const fields = body.fields;
+  if (!fields || typeof fields !== 'object' || Array.isArray(fields) || Object.keys(fields).length > 35 || JSON.stringify(fields).length > 24000 || String(body.website || '').trim()) return json({ok:false,error:'Dati della richiesta non validi.'},400,origin,env);
+  for (const value of Object.values(fields)) if (typeof value !== 'string' && !(Array.isArray(value) && value.length <= 12 && value.every(x => typeof x === 'string'))) return json({ok:false,error:'Formato campo non valido.'},400,origin,env);
+  const name = String(fields.Nome_cognome || '').trim();
+  const email = getCustomerEmail(fields);
+  const outputs = [].concat(fields['Output[]'] || []);
+  const validOutputs = new Set(['Elaborati AutoCAD 2D','Modello AutoCAD 3D','Planimetria DOCFA in AutoCAD','Modello Revit / BIM 3D','Disegno meccanico AutoCAD','Render fotorealistici / viste prospettiche','Visualizzazioni orbitali / sequenze 360°','Interior Design','Altro']);
+  if (name.length < 2 || name.length > 120 || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || fields.Consenso_privacy !== 'Acconsento' || !outputs.length || !outputs.every(x=>validOutputs.has(x))) return json({ok:false,error:'Controlla nome, email, servizio e informativa privacy.'},400,origin,env);
+  if (fields.Nuvola_di_punti_link_cloud) return json({ok:false,error:'Il servizio da nuvola di punti è attualmente non disponibile.'},400,origin,env);
+  for (const key of ['Link_cloud_materiale_completo','Google_Maps_Earth']) if (fields[key] && !/^https?:\/\//i.test(fields[key])) return json({ok:false,error:'Collegamento non valido.'},400,origin,env);
+  if (['Telefono','WhatsApp'].includes(fields.Contatto_preferito) && !String(fields.Telefono_WhatsApp || '').trim()) return json({ok:false,error:'Inserisci il recapito telefonico.'},400,origin,env);
+  const fingerprint = await hmac(env.SIGNING_SECRET, JSON.stringify(fields));
+  if (session.submitFingerprint && session.submitFingerprint !== fingerprint) return json({ok:false,error:'La richiesta è già stata elaborata con altri dati. Avvia una nuova richiesta.'},409,origin,env);
+  if (session.submittedAt) return json({ok:true,requestId:sessionId,customerCopySent:!!session.customerCopySent},200,origin,env);
+  session.submitFingerprint = fingerprint;
+  await writeSession(env, session);
   const uploads = [];
   for (const file of session.files || []) uploads.push({ ...file, downloadUrl: await makeDownloadUrl(request, env, file.key) });
 
@@ -286,7 +329,7 @@ async function submitQuote(request, env, origin) {
     reply_to: customerEmail || undefined,
     subject: 'Nuova richiesta preventivo AutoCAD / Revit dal sito',
     html: ownerHtml,
-  });
+  }, 'cad-quote/' + sessionId);
 
   let customerCopySent = false;
   if (customerEmail && env.SEND_CUSTOMER_COPY === 'true') {
@@ -309,7 +352,7 @@ async function submitQuote(request, env, origin) {
         reply_to: env.EMAIL_TO,
         subject: 'Conferma richiesta di preventivo AutoCAD / Revit',
         html: customerHtml,
-      });
+      }, 'cad-quote-copy/' + sessionId);
       customerCopySent = true;
     } catch (error) {
       console.error('Customer confirmation email failed', error);
@@ -325,11 +368,14 @@ async function submitQuote(request, env, origin) {
     customerCopySent,
   }), { httpMetadata: { contentType: 'application/json' } });
 
-  return json({ ok: true, customerCopySent }, 200, origin, env);
+  session.submittedAt = new Date().toISOString();
+  session.customerCopySent = customerCopySent;
+  await writeSession(env, session);
+  return json({ ok: true, requestId: sessionId, customerCopySent }, 200, origin, env);
 }
 
 async function cleanup(env) {
-  for (const [prefix, days] of [['lessons/',30],['lesson-rate/',2],['review-rate/',2],['reviews-pending/',90]]) {
+  for (const [prefix, days] of [['lessons/',30],['lesson-rate/',2],['review-rate/',2],['quote-rate/',2],['reviews-pending/',90]]) {
     let cursor;
     do {
       const listed=await env.QUOTE_FILES.list({prefix,limit:1000,cursor});
@@ -381,6 +427,7 @@ async function listReviews(request, env, origin) {
       const obj=await env.QUOTE_FILES.get(item.key); if(!obj)continue;
       const review=await obj.json().catch(()=>null); if(!review?.displayName||!review?.text)continue;
       if(review.status && review.status!=='approved')continue;
+      if(source==='cad-services' && (review.source==='autocad-lessons' || training.has(review.service)))continue;
       if(source==='autocad-lessons' && review.source!=='autocad-lessons' && !training.has(review.service))continue;
       const name=publicReviewName(review.displayName);
       if(!name)continue;
@@ -425,7 +472,7 @@ async function submitReview(request, env, origin) {
   const body = await request.json().catch(() => null);
   if (!body) return json({ ok: false, error: 'Recensione non valida.' }, 400, origin, env);
   if (String(body.website || '').trim()) return json({ ok: false, error: 'Invio non valido.' }, 400, origin, env);
-  if (body.source === 'autocad-lessons' && body.privacy !== true) return json({ok:false,error:'Conferma la lettura dell’informativa.'},400,origin,env);
+  if (['autocad-lessons','cad-services'].includes(body.source) && body.privacy !== true) return json({ok:false,error:'Conferma la lettura dell’informativa.'},400,origin,env);
 
   const displayName = publicReviewName(body.name);
   const text = cleanReviewText(body.text, 600);
@@ -523,7 +570,7 @@ export default {
     if (url.pathname === '/api/session' && request.method === 'POST') return createSession(request, env, origin);
     if (url.pathname.startsWith('/api/upload/') && request.method === 'PUT') return uploadFile(request, env, origin, url.pathname.split('/').pop());
     if (url.pathname.startsWith('/api/upload/') && request.method === 'DELETE') return deleteUploadedFile(request, env, origin, url.pathname.split('/').pop());
-    if (url.pathname === '/api/submit' && request.method === 'POST') return submitQuote(request, env, origin);
+    if (url.pathname === '/api/submit' && request.method === 'POST') return submitQuote(request, env, origin).catch(() => json({ok:false,error:'Invio non confermato. Riprova tra poco o contattami direttamente.'},503,origin,env));
     if (url.pathname === '/api/reviews' && request.method === 'GET') return listReviews(request, env, origin);
     if (url.pathname === '/api/reviews' && request.method === 'POST') return submitReview(request, env, origin);
     if (url.pathname === '/api/review-manage' && ['GET','POST'].includes(request.method)) return manageReview(request, env);

@@ -1,39 +1,47 @@
-name: Verify restored services, disabled point cloud and Interior Design
+name: Services landing regression and live verification
 on:
   push:
-    branches: [main]
+    branches: [main, 'optimize/services-*']
     paths:
       - 'index.html'
-      - 'services-interior-20260919.css'
-      - 'assets/banner-preventivo-cad-bim.svg'
+      - 'assets/services/**'
+      - 'cloudflare-worker/src/index.js'
+      - 'scripts/test-services-*'
+      - '.github/scripts/services_qa.py'
       - '.github/scripts/services_restored_check.py'
       - '.github/workflows/services-restored-verified.yml'
 permissions:
   contents: read
+concurrency:
+  group: services-quality-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-      - name: Install validators
-        run: |
-          python -m pip install --quiet playwright requests beautifulsoup4
-          python -m playwright install --with-deps chromium webkit
-      - name: Verify restored page locally on desktop and mobile
-        run: python .github/scripts/services_restored_check.py local
-      - name: Save local proof
-        uses: actions/upload-artifact@v4
         with:
-          name: services-restored-local-proof
-          path: ${{ runner.temp }}/services-restored-proof/
-          retention-days: 7
-      - name: Verify the public deployment
-        run: python .github/scripts/services_restored_check.py live
-      - name: Save live proof
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          python -m pip install --quiet playwright requests beautifulsoup4 pillow
+          python -m playwright install --with-deps chromium webkit firefox
+      - name: Unit and security regression tests, including protected lessons
+        run: node --test scripts/test-frontend.cjs scripts/test-lessons.mjs scripts/test-services-frontend.cjs scripts/test-services-backend.mjs
+      - name: Verify candidate in Chromium, WebKit and Firefox
+        run: python .github/scripts/services_qa.py local
+      - name: Verify public deployment
+        if: github.ref == 'refs/heads/main'
+        run: python .github/scripts/services_qa.py live
+      - name: Save visual and functional evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: services-restored-live-proof
+          name: services-quality-${{ github.sha }}
           path: ${{ runner.temp }}/services-restored-proof/
-          retention-days: 7
+          retention-days: 30
