@@ -21,7 +21,7 @@ def static():
     cloud=soup.select_one('input[name="Nuvola_di_punti_link_cloud"]')
     assert cloud and cloud.has_attr("disabled") and cloud.get("placeholder")=="Servizio attualmente non disponibile"
     assert soup.select_one('input[name="Output[]"][value="Interior Design"]')
-    styles=[x.get_text(" ",strip=True) for x in soup.select(".interior-style-grid span")]
+    styles=[x.get_text(" ",strip=True) for x in soup.select(".interior-style-card")]
     assert len(styles)==4
     panel_text=soup.select_one(".interior-design-panel").get_text(" ",strip=True)
     for name in ["Minimal contemporaneo","Japandi","Mediterraneo contemporaneo","Organic Modern"]:
