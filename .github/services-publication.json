@@ -1,23 +1,21 @@
 {
   "state": "active",
-  "build": "20260919-servizi-interior-01",
+  "build": "20260919-servizi-interior-02",
   "scope": [
     "/",
     "/index.html"
   ],
   "lessons_path": "/lezioni-autocad/",
   "lessons_unchanged": true,
-  "restored_from": "fdbcdf1289136f8daafd891e508d42728fe8fe18",
   "point_cloud_service": "temporarily unavailable",
   "point_cloud_form_field": "disabled",
+  "pricing": "No public numeric prices; personalized quote only",
+  "value_positioning": "Professional service with contained/competitive costs",
   "interior_design": {
     "enabled": true,
-    "included_proposals": [
-      "Minimal contemporaneo",
-      "Japandi",
-      "Organic Modern",
-      "Contemporary Luxury"
-    ],
+    "engine": "LAS2Mesh",
+    "included_proposals": 4,
+    "proposal_names": "not fixed; four distinct contemporary alternatives generated according to the project",
     "optional_fifth_custom_proposal": true
   },
   "telephone": "+393337240544",

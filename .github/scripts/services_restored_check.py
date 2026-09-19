@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
-BUILD="20260919-servizi-interior-01"
+BUILD="20260919-servizi-interior-02"
 REPORT=Path(os.environ.get("RUNNER_TEMP","/tmp"))/"services-restored-proof"
 
 def sha(b): return hashlib.sha256(b).hexdigest()
@@ -22,7 +22,11 @@ def static():
     assert cloud and cloud.has_attr("disabled") and cloud.get("placeholder")=="Servizio attualmente non disponibile"
     assert soup.select_one('input[name="Output[]"][value="Interior Design"]')
     styles=[x.get_text(" ",strip=True) for x in soup.select(".interior-style-grid span")]
-    assert len(styles)==4 and any("Japandi" in x for x in styles) and any("Organic Modern" in x for x in styles)
+    assert len(styles)==4 and all(f"Proposta contemporanea {i}" in styles[i-1] for i in range(1,5))
+    assert "LAS2MESH" in soup.select_one(".interior-design-panel").get_text(" ",strip=True).upper()
+    page_text=soup.get_text(" ",strip=True)
+    assert "0,20 €" not in page_text and "60 €" not in page_text and "TARIFFA INDICATIVA" not in page_text
+    assert "PREVENTIVO PERSONALIZZATO" in page_text and "costi contenuti" in page_text.lower()
     custom=soup.select_one('textarea[name="Interior_Design_5a_proposta_personalizzata"]')
     assert custom and "materiali" in custom.get("placeholder","").lower() and "colori" in custom.get("placeholder","").lower()
     assert soup.select_one('a[href="mailto:andrea.giaqui@gmail.com"]')
@@ -49,6 +53,10 @@ def browsers(base,stage):
                     assert cloud.is_disabled() and cloud.get_attribute("placeholder")=="Servizio attualmente non disponibile"
                     panel=page.locator(".interior-design-panel"); panel.scroll_into_view_if_needed()
                     assert panel.locator(".interior-style-grid span").count()==4
+                    assert "LAS2MESH" in panel.inner_text().upper()
+                    assert all(f"Proposta contemporanea {i}" in panel.locator(".interior-style-grid span").nth(i-1).inner_text() for i in range(1,5))
+                    assert page.locator("text=Da 0,20 €").count()==0
+                    assert page.locator("text=PREVENTIVO PERSONALIZZATO").count()==1
                     custom=panel.locator('textarea[name="Interior_Design_5a_proposta_personalizzata"]')
                     custom.fill("Legno chiaro, pietra naturale, toni sabbia, illuminazione calda")
                     assert "Legno chiaro" in custom.input_value()
