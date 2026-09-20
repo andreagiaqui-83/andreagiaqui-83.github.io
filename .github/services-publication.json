@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260920-services-r4",
+  "build": "20260920-services-r5",
   "scope": [
     "/",
     "/index.html"
@@ -42,5 +42,7 @@
     "DWG/DXF for CAD",
     "IFC for BIM",
     "PDF for consultation"
-  ]
+  ],
+  "google_business_profile": "https://share.google/jGcqtu9IW1WccgA6V",
+  "google_reviews_link": "https://g.page/r/Ce--D7Asz-FHEBM/review"
 }
