@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260919-services-r1",
+  "build": "20260920-services-r2",
   "scope": [
     "/",
     "/index.html"
@@ -35,5 +35,12 @@
   "public_program_reference": "none",
   "telephone": "+393337240544",
   "email": "andrea.giaqui@gmail.com",
-  "baseline": "3faaa38312710c8c6bf9ed697e30b126a42838e3"
+  "baseline": "3faaa38312710c8c6bf9ed697e30b126a42838e3",
+  "technical_details_always_visible": true,
+  "review_form_always_visible": true,
+  "exchange_formats": [
+    "DWG/DXF for CAD",
+    "IFC for BIM",
+    "PDF for consultation"
+  ]
 }

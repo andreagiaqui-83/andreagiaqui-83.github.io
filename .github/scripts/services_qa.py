@@ -8,7 +8,7 @@ from PIL import Image
 from playwright.sync_api import sync_playwright, expect
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
-BUILD='20260919-services-r1'
+BUILD='20260920-services-r2'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
@@ -105,6 +105,20 @@ def run_browser(base,stage):
      if width in [390,1440]:
       page.locator('#faq h2').scroll_into_view_if_needed()
       page.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq.png'))
+     # Permanently visible forms and aligned legal actions on every viewport.
+     for selector in ['.technical-details', '#reviewForm']:
+      target=page.locator(selector)
+      expect(target).to_be_visible()
+      assert target.evaluate("e=>!e.closest('details')")
+      for field in target.locator('input:not(.hp),textarea,button').all():
+       expect(field).to_be_visible()
+       box=field.bounding_box();assert box['x']>=-1 and box['x']+box['width']<=width+1,(width,selector,box)
+     legal=page.locator('.legal-links').evaluate("e=>[...e.children].map(n=>{const r=n.getBoundingClientRect();const t=document.createRange();t.selectNodeContents(n);const b=t.getBoundingClientRect();return {top:r.top,height:r.height,textTop:b.top,textHeight:b.height};})")
+     assert abs(legal[0]['textTop']-legal[1]['textTop'])<=1,(engine,width,legal)
+     assert all(x['height']>=44 for x in legal)
+     if width in [390,1440]:
+      for selector,name in [('.compatibility-note','compatibility'),('.technical-details','technical'),('.review-submit-section','review-form'),('.legal','footer')]:
+       page.locator(selector).screenshot(path=str(OUT/f'{stage}-{engine}-{width}-{name}.png'))
      # Mobile: complete cards, arrows, keyboard first/last and responsive resize.
      view=page.locator('#reviewsCarousel');view.scroll_into_view_if_needed()
      def one_card():
