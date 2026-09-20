@@ -90,7 +90,10 @@ def run_browser(base,stage):
       save(f'{stage}-accessibility-{width}.json',axe)
       assert not axe['violations'],[(x['id'],[n['target'] for n in x['nodes']]) for x in axe['violations']]
      expect(page.locator('#pointCloud')).to_be_disabled()
-     assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1'),(engine,width,'overflow')
+     if not page.evaluate('document.documentElement.scrollWidth<=innerWidth+1'):
+      overflow=page.evaluate("[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width&&r.right>innerWidth+1&&getComputedStyle(e).position==='absolute';}).map(e=>({tag:e.tagName,id:e.id,class:e.className,right:e.getBoundingClientRect().right,width:e.getBoundingClientRect().width}))")
+      page.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-overflow.png'),full_page=True)
+      raise AssertionError((engine,width,'overflow',overflow))
      cta=page.locator('.hero [data-cta=hero_quote]').bounding_box();assert cta['width']>=44 and cta['height']>=44
      if width>=1366:assert cta['y']+cta['height']<=height,(width,'hero CTA below fold')
      if width in [390,1440]:page.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-hero.png'))

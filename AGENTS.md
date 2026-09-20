@@ -9,4 +9,3 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - Descrivere la compatibilità CAD/BIM con formati e versioni concordati; non promettere compatibilità universale o conservazione integrale di ogni funzione nativa. Incoraggiare materiali complementari pertinenti e disponibili, senza renderli obbligatori.
 - Sincronizzare FAQ visibili e dati strutturati. Conservare canonical, metadati, gerarchia dei titoli, immagini ottimizzate e regole in `.github/SERVICES-PUBLICATION.md`.
 - Prima della pubblicazione, eseguire le verifiche pertinenti già presenti e controllare le aree modificate alle larghezze desktop e mobile; verificare che i link legali siano allineati. Aggiornare build e versione CSS quando necessario.
-- Proseguire con le modifiche e le pubblicazioni già autorizzate dall’utente; non introdurre ulteriori richieste di conferma per attività ordinarie o reversibili.
