@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260920-services-r2",
+  "build": "20260920-services-r3",
   "scope": [
     "/",
     "/index.html"

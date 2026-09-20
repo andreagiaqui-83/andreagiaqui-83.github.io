@@ -11,7 +11,7 @@ La landing principale https://andreagiaquinto.it/ è attiva.
 - La pagina pubblica non deve citare il nome del software interno utilizzato per elaborare le proposte.
 - E-mail: andrea.giaqui@gmail.com. Telefono/WhatsApp: 333 724 0544.
 - La landing /lezioni-autocad/ resta separata.
-- Build: `20260920-services-r2`. Dettagli tecnici e modulo recensioni sono sezioni sempre visibili, senza accordion.
+- Build: `20260920-services-r3`. Dettagli tecnici e modulo recensioni sono sezioni sempre visibili, senza accordion.
 - La compatibilità è descritta tramite DWG/DXF (CAD), IFC (scambio BIM) e PDF (consultazione); formato, versione, contenuti e modificabilità vengono concordati per progetto.
 - Invitare a combinare materiali pertinenti disponibili: planimetrie, misure, fotografie, schizzi, modelli e riferimenti geografici. Tutto il materiale resta facoltativo; non promettere fedeltà assoluta indipendente dalla qualità dei dati.
 - Seguire `AGENTS.md` per preservare SEO, annunci, conversioni, consenso e qualità responsive nelle modifiche future.
