@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from playwright.sync_api import sync_playwright, expect
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
-BASELINE='3faaa38312710c8c6bf9ed697e30b126a42838e3'
+BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
 BUILD='20260919-services-r1'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
@@ -146,7 +146,8 @@ def run_browser(base,stage):
      assert 'Nuvola_di_punti_link_cloud' not in posts[0]['fields']
      events=page.evaluate('window.dataLayer.filter(x=>x[0]==="event").map(x=>({name:x[1],data:x[2]}))')
      assert len([e for e in events if e['name']=='page_view'])==1
-     assert len([e for e in events if e['name']=='generate_lead'])==1
+     assert len([e for e in events if e['name']=='service_quote_success'])==1
+     assert not [e for e in events if e['name']=='generate_lead']
      serialized=json.dumps(events);assert 'private@example' not in serialized and 'riservato' not in serialized and 'test-b' not in serialized
      assert not errors,errors
      assert not bad,bad

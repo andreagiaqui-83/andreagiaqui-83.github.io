@@ -146,7 +146,7 @@
       submit.textContent='Invio richiesta…';setNotice('Invio della richiesta in corso…');
       await api('/api/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:currentSession.sessionId,token:currentSession.token,fields:data,website:''})});
       submitted=true;setNotice();success.hidden=false;
-      track('form_complete');track('generate_lead',{lead_id:currentSession.sessionId});
+      track('form_complete');track('service_quote_success',{lead_id:currentSession.sessionId});
       form.reset();for(const input of files.keys()){files.set(input,[]);renderFiles(input);}cloud.required=false;
       success.focus();scrollTo(success);
     }catch(error){
