@@ -15,4 +15,4 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 /* Collegamenti ai profili e recensioni Google: accessibili anche su mobile. */
-.professional-profiles{display:flex;flex-wrap:wrap;gap:4px 20px;margin-top:12px}.professional-profiles a{display:inline-flex;align-items:center;min-height:44px;font-size:13px;text-underline-offset:4px}.google-review-link{display:inline-flex;align-items:center;min-height:44px;max-width:100%;line-height:1.6;overflow-wrap:anywhere}
+.professional-profiles{display:flex;flex-wrap:wrap;gap:4px 20px;margin-top:12px}.professional-profiles a{color:#e6edf0;display:inline-flex;align-items:center;min-height:44px;font-size:13px;text-underline-offset:4px}.google-review-link{display:inline-flex;align-items:center;min-height:44px;max-width:100%;line-height:1.6;overflow-wrap:anywhere}
