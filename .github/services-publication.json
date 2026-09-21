@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260920-services-r5",
+  "build": "20260921-services-r1",
   "scope": [
     "/",
     "/index.html"
@@ -44,5 +44,12 @@
     "PDF for consultation"
   ],
   "google_business_profile": "https://share.google/jGcqtu9IW1WccgA6V",
-  "google_reviews_link": "https://g.page/r/Ce--D7Asz-FHEBM/review"
+  "google_reviews_link": "https://g.page/r/Ce--D7Asz-FHEBM/review",
+  "render_deliverables": [
+    "prospetti",
+    "viste 3D render",
+    "sezioni render su richiesta"
+  ],
+  "pdf_delivery": "Tavole CAD/Revit e immagini render/Interior Design su richiesta, per apertura e condivisione; immagini originali per dettaglio visivo",
+  "production_method": "Ibrido: automazioni e IA con direzione, verifica e rifinitura del disegnatore CAD/BIM"
 }
