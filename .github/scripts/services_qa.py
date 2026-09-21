@@ -8,7 +8,7 @@ from PIL import Image
 from playwright.sync_api import sync_playwright, expect
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
-BUILD='20260921-services-r1'
+BUILD='20260921-services-r2'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
@@ -28,7 +28,8 @@ def static():
  assert len(fq)==len(visible)
  for item,detail in zip(fq,visible):
   assert item['name']==detail.summary.get_text()
-  assert item['acceptedAnswer']['text']==detail.p.get_text()
+  answer=detail.select_one('.faq-answer') or detail.p
+  assert item['acceptedAnswer']['text']==re.sub(r'\s+',' ',answer.get_text()).strip()
  assert all(x['@type'] not in ['Offer','AggregateRating','Review'] for x in graph)
  active=[Path('index.html'),Path('assets/services/services.js'),Path('assets/services/services.css'),Path('assets/measurement.js'),Path('assets/measurement-config.js'),Path('reviews-carousel.js'),Path('favicon.svg')]
  for p in active:
@@ -120,10 +121,10 @@ def run_browser(base,stage):
      assert abs(legal[0]['textTop']-legal[1]['textTop'])<=1,(engine,width,legal)
      assert all(x['height']>=44 for x in legal)
      if width in [390,1440]:
-      for selector,name in [('.compatibility-note','compatibility'),('#render','render'),('#preventivo','person'),('.technical-details','technical'),('.review-submit-section','review-form'),('.legal','footer')]:
+      for selector,name in [('.compatibility-note','compatibility'),('.collaboration-note','collaboration'),('#render','render'),('#preventivo','person'),('.technical-details','technical'),('.review-submit-section','review-form'),('.legal','footer')]:
        page.locator(selector).screenshot(path=str(OUT/f'{stage}-{engine}-{width}-{name}.png'))
-      for faq_index,name in [(7,'pdf'),(8,'hybrid')]:
-       detail=page.locator('#faq details').nth(faq_index)
+      for selector,name in [('#consegna-pdf','pdf'),('#metodo-ibrido','hybrid'),('#settori-cad-bim','sectors'),('#vantaggi-disegnatore-online','online'),('#compatibilita-software','software')]:
+       detail=page.locator(selector)
        detail.locator('summary').click()
        detail.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq-{name}.png'))
        assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1')

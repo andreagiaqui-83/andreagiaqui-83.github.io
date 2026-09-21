@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260921-services-r1",
+  "build": "20260921-services-r2",
   "scope": [
     "/",
     "/index.html"
@@ -51,5 +51,7 @@
     "sezioni render su richiesta"
   ],
   "pdf_delivery": "Tavole CAD/Revit e immagini render/Interior Design su richiesta, per apertura e condivisione; immagini originali per dettaglio visivo",
-  "production_method": "Ibrido: automazioni e IA con direzione, verifica e rifinitura del disegnatore CAD/BIM"
+  "production_method": "Ibrido: automazioni e IA con direzione, verifica e rifinitura del disegnatore CAD/BIM",
+  "sectors": "Ambiti CAD/BIM raggruppati nella FAQ; supporto al disegno e alla documentazione, fattibilità concordata sul progetto",
+  "online_collaboration": "Incarichi occasionali o continuativi, picchi di lavoro, preventivo e condizioni concordati; nessuna promessa di assenza di contratto o risparmio garantito"
 }
