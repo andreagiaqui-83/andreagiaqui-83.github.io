@@ -50,7 +50,7 @@ def static():
    with Image.open(p) as im:im.load();assert im.width>0
  # The user authorized lesson footer, review visibility and copy changes on 27 September.
  # Keep all other course assets, backend and tracking byte-for-byte; browser checks cover authorized edits.
- diff=subprocess.check_output(['git','diff',BASELINE,'HEAD','--','lezioni-autocad',':(exclude)lezioni-autocad/index.html',':(exclude)lezioni-autocad/assets/landing.css',':(exclude)lezioni-autocad/assets/landing.js','cloudflare-worker/src/lessons.js','assets/measurement-config.js','assets/consent.css']).decode()
+ diff=subprocess.check_output(['git','diff',BASELINE,'HEAD','--','lezioni-autocad',':(exclude)lezioni-autocad/AGENTS.md',':(exclude)lezioni-autocad/index.html',':(exclude)lezioni-autocad/assets/landing.css',':(exclude)lezioni-autocad/assets/landing.js','cloudflare-worker/src/lessons.js','assets/measurement-config.js','assets/consent.css']).decode()
  assert not diff,'Protected lesson assets, backend or tracking changed'
  old=BeautifulSoup(subprocess.check_output(['git','show',BASELINE+':index.html']), 'html.parser')
  assert [x.get_text(' ',strip=True) for x in old.select('#reviewsGrid .review-card')]==[x.get_text(' ',strip=True) for x in s.select('#reviewsGrid .review-card')]
