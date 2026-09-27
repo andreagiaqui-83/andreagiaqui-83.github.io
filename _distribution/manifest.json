@@ -1,0 +1,31 @@
+{
+  "files": [
+    {
+      "path": "downloads/express-tools/Express_Tools_Italiano_3.2-rc1.exe",
+      "size": 3940352,
+      "sha256": "25e0380fa0e580ac556e353dc2ca2c50e34f62edefd3544cfa7f8b13f692e144"
+    },
+    {
+      "path": "downloads/yqarch/YQArch_Italiano_3.64.exe",
+      "size": 20211200,
+      "sha256": "6ed121ec822ba503ed139a2a5594593d6c609c6293eea5486fd55f4ca44a7906"
+    },
+    {
+      "path": "downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html",
+      "size": 1304217,
+      "sha256": "8f11c33301ca529e593244776ef5d03e831f0fb671963e541bffa8f96cc6b762"
+    },
+    {
+      "path": "downloads/yqarch/YQArch_Italiano_3.64.zip",
+      "size": 17852564,
+      "sha256": "8db4ce155c803cea76678b82e8333d298bfd52667538d87307b2c6cab5595711"
+    },
+    {
+      "path": "downloads/yqarch/YQArch_Italiano_3.64_REPORT.html",
+      "size": 329921,
+      "sha256": "615f124ff65651a24734ececbf898cd7f854e53b19d3ae14519fbeaa356e8788"
+    }
+  ],
+  "archive_sha256": "7f2d11dc422ec326c7e085faef25209ead1c8033caa5e096c29b32f8f18e66b2",
+  "archive_bytes": 17865884
+}

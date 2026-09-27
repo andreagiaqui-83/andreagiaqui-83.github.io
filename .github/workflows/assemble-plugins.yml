@@ -1,0 +1,62 @@
+name: Assemble verified plugin distribution
+on:
+  push:
+    branches: ['distribution/plugins-20260927']
+permissions:
+  contents: write
+jobs:
+  assemble:
+    if: github.event.head_commit.message == 'Assemble complete plugin distribution'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reassemble and verify exact release bytes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,tarfile,io
+          manifest=json.loads(Path('_distribution/manifest.json').read_text())
+          data=b''.join(p.read_bytes() for p in sorted(Path('_distribution/parts').glob('*')))
+          assert len(data)==manifest['archive_bytes']
+          assert hashlib.sha256(data).hexdigest()==manifest['archive_sha256']
+          expected={x['path']:x for x in manifest['files']}
+          with tarfile.open(fileobj=io.BytesIO(data),mode='r:xz') as archive:
+            assert set(archive.getnames())==set(expected)
+            for member in archive.getmembers():
+              assert member.isfile() and member.name in expected
+              item=expected[member.name];content=archive.extractfile(member).read()
+              assert len(content)==item['size'] and hashlib.sha256(content).hexdigest()==item['sha256']
+              path=Path(member.name);path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(content)
+          print('Release archive and all five files verified')
+          PY
+      - name: Create candidate without temporary distribution files
+        run: |
+          git rm -r _distribution .github/workflows/assemble-plugins.yml
+          git add downloads
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          tree=$(git write-tree)
+          commit=$(git commit-tree "$tree" -p 9aaa4535a37d5cc04c329c5051cb1cb9cbb8b88d -m 'Add Italian plugin landing pages, verified downloads and moderated discussions')
+          git push origin "$commit:refs/heads/assembled/plugins-20260927"
+          echo "Candidate commit: $commit" >> "$GITHUB_STEP_SUMMARY"
+  preview:
+    if: github.event.head_commit.message != 'Assemble complete plugin distribution'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund playwright@1.58.2
+          npx playwright install --with-deps chromium webkit firefox
+      - run: node .github/scripts/plugins_qa.cjs local
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-preview
+          path: ${{ runner.temp }}/plugins-proof/
