@@ -1,0 +1,73 @@
+name: Site polish preview and validation
+on:
+  push:
+    branches: [distribution/site-polish-20260927]
+permissions:
+  contents: write
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Assemble the exact reviewed tree without large chat transfers
+        run: |
+          python - <<'PY'
+          import pathlib,json,hashlib,tarfile,io,subprocess,os
+          manifest=json.loads(pathlib.Path('_polish/manifest.json').read_text())
+          parts=[]
+          for p in manifest['parts']:
+              data=pathlib.Path('_polish',p['file']).read_bytes()
+              assert hashlib.sha256(data).hexdigest()==p['sha256']
+              parts.append(data)
+          data=b''.join(parts)
+          assert hashlib.sha256(data).hexdigest()==manifest['archive_sha256']
+          subprocess.run(['git','checkout','--detach',manifest['base']],check=True)
+          expected={f['path'] for f in manifest['files']}
+          with tarfile.open(fileobj=io.BytesIO(data),mode='r:xz') as tar:
+              assert set(tar.getnames())==expected
+              for name in tar.getnames():
+                  assert not pathlib.PurePosixPath(name).is_absolute() and '..' not in pathlib.PurePosixPath(name).parts
+              tar.extractall(filter='data')
+          for f in manifest['files']:
+              assert hashlib.sha256(pathlib.Path(f['path']).read_bytes()).hexdigest()==f['sha256']
+          subprocess.run(['git','add','--all'],check=True)
+          tree=subprocess.check_output(['git','write-tree'],text=True).strip()
+          assert tree==manifest['tree'],(tree,manifest['tree'])
+          subprocess.run(['git','-c','user.name=Site Publisher','-c','user.email=actions@users.noreply.github.com','commit','-m','Unify page footers, improve plugin visuals and make lesson reviews always visible'],check=True)
+          subprocess.run(['git','push','origin','HEAD:refs/heads/optimize/services-site-uniform-20260927'],check=True)
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:out.write('Reviewed tree: `'+tree+'`\n\nCandidate commit: `'+subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()+'`\n')
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install verification dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund playwright@1.58.2
+          npx playwright install --with-deps chromium webkit firefox
+          python -m pip install --quiet playwright==1.58.0 requests beautifulsoup4 pillow
+          python -m playwright install --with-deps chromium webkit firefox
+      - name: Existing isolated tests and component synchronization
+        run: |
+          npm test
+          node scripts/sync-site-footer.cjs --check
+      - name: Plugin desktop and mobile previews
+        run: node .github/scripts/plugins_qa.cjs local
+      - name: Shared footer, guide and lessons verification
+        if: always() && success()
+        run: node .github/scripts/site_consistency_qa.cjs local
+      - name: Services regression checks
+        if: always() && success()
+        run: python .github/scripts/services_qa.py local
+      - name: Save screenshots and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-polish-preview
+          path: |
+            ${{ runner.temp }}/plugins-proof/
+            ${{ runner.temp }}/services-restored-proof/
+          retention-days: 30

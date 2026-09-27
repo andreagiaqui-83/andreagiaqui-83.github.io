@@ -1,0 +1,148 @@
+{
+  "base": "d45ddb0f370a381bf414b589e4264c2288ba1550",
+  "tree": "02c882b4ab0d7861dcb5fdae739617f05d509d12",
+  "archive_sha256": "52303f5cc57fc903c9e15e32a09997832208f1ea1aa1a68c6cb2de41a463a4e2",
+  "parts": [
+    {
+      "file": "part-000",
+      "bytes": 524286,
+      "sha256": "03f4777feb5f5c104244a4e63c445d548170826389a9bb178b25211093f1e1b5"
+    },
+    {
+      "file": "part-001",
+      "bytes": 524286,
+      "sha256": "916692dee7e7c701205b55d6af51909c8568d77ce641dd8bf858ce8fe0a2c28d"
+    },
+    {
+      "file": "part-002",
+      "bytes": 187576,
+      "sha256": "582222ea0685a82b98f4334dccd3df5567277103cadbeff366a6b9c46a67e301"
+    }
+  ],
+  "files": [
+    {
+      "path": ".github/SERVICES-PUBLICATION.md",
+      "sha256": "90cf4e2870320453e80e6d42de888b89d3071458d11e0a5a4deb924e04b6cb73"
+    },
+    {
+      "path": ".github/scripts/plugins_qa.cjs",
+      "sha256": "c13c616c985222bf5e868c9041cfa269bf70b860923401201b64b18d323c6d51"
+    },
+    {
+      "path": ".github/scripts/services_qa.py",
+      "sha256": "66769edbb27525990068629d4cd10fcd127b67a68ba03a4757ef7dde2e644554"
+    },
+    {
+      "path": ".github/scripts/site_consistency_qa.cjs",
+      "sha256": "2cbd05232cf852db3085a5cdfffbad2303378b2285ef9b694f8427bac28044bd"
+    },
+    {
+      "path": ".github/workflows/plugins-verified.yml",
+      "sha256": "e0500a084a80f99cf6e36bafabd762488b20e3055c61a69a261318fdac93ec6e"
+    },
+    {
+      "path": "404.html",
+      "sha256": "73cf2782bd1e78e29cf7cc557c69e1bb107c6f269c2b2ccefa0521eaf88694ba"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "1b387de3a6026e8a914f5c74937b14ea8f74ca49bdc18cefce750ba87e3ccb43"
+    },
+    {
+      "path": "assets/plugins/express-tools-realistic-1536.webp",
+      "sha256": "8b063cafa4d7f94dd2a762bc37da901fad88e1a5863e00fd5f21be25e0db066c"
+    },
+    {
+      "path": "assets/plugins/express-tools-realistic-640.webp",
+      "sha256": "1c28ffa4d95af2cc4866c1f4532891b5dc8a61e213c93885ab0175acb60d26c4"
+    },
+    {
+      "path": "assets/plugins/express-tools-realistic-960.webp",
+      "sha256": "e3e8e0717c0bbd7222b08af83b894f04cefde038d7cfe328bcaceced76b3bb31"
+    },
+    {
+      "path": "assets/plugins/express-tools-social-v2.jpg",
+      "sha256": "7fdb58c2eec4d2d58bb360fd4e56157b0e377cc9fc8e9d299f4252518d9f3181"
+    },
+    {
+      "path": "assets/plugins/plugins.css",
+      "sha256": "c67f86efdb37fbf35db27ac2a768ce94949fa3c87d19fb93ac33b8a713afc970"
+    },
+    {
+      "path": "assets/plugins/yqarch-realistic-1536.webp",
+      "sha256": "97c5bc909e74bed8d02d58e7cff052fedc0f606d1597932365eb83d5d2fb5966"
+    },
+    {
+      "path": "assets/plugins/yqarch-realistic-640.webp",
+      "sha256": "de195846e73a2e58742a2f72ba62c9e4782221686b71c4d7ef9e6a52cb3630cd"
+    },
+    {
+      "path": "assets/plugins/yqarch-realistic-960.webp",
+      "sha256": "1e923f8a0342f63b0462d1f2b190210f07d26c9dc5e5ce3c7a598fc71c3d9f57"
+    },
+    {
+      "path": "assets/plugins/yqarch-social-v2.jpg",
+      "sha256": "1f3fb889806a815173ee37e978ac3f129a5dcd4a183eabaaedcbdf49da8ba6a0"
+    },
+    {
+      "path": "assets/site-footer.css",
+      "sha256": "dc8af6ffb1e86355382a06c570442b6e1f619bd65f27f8bf21fad538072d7203"
+    },
+    {
+      "path": "docs/SITE-UNIFORME-20260927.md",
+      "sha256": "69300941fa5a55c5fd974aa6bdff25e72d1bc3d642e4e18e6885552d460c10f3"
+    },
+    {
+      "path": "downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html",
+      "sha256": "c97cc0f82e02c0104ecccc7f93b077965559bce83003d6b6212c5f263ea7ed69"
+    },
+    {
+      "path": "express-tools-italiano/guida/index.html",
+      "sha256": "d6cca562b9436cb039c032d0c8a93ba1869966b43a65f1ce236ee02370be190f"
+    },
+    {
+      "path": "express-tools-italiano/index.html",
+      "sha256": "aa2f87e061dcc737dc0465d81d548189683e27e89210a226694e6b52c9f07b95"
+    },
+    {
+      "path": "index.html",
+      "sha256": "de7a8e97ea32018faa776d20be5b16b56a2909794ceb3908218a6d769774e1f7"
+    },
+    {
+      "path": "lezioni-autocad/AGENTS.md",
+      "sha256": "1c0797582636f5391f192ded6dc21d3699d4de0ecfec6afc18b15d3846525365"
+    },
+    {
+      "path": "lezioni-autocad/assets/landing.css",
+      "sha256": "c7c2e121519c6f724623d8a725bb3e1144f3f0e35df51c7afedbb45c26172a4d"
+    },
+    {
+      "path": "lezioni-autocad/assets/landing.js",
+      "sha256": "c93c1036e9353d5496394adf3ed38a247a71f7c43b73ac55201cd9ebe1ea0b7c"
+    },
+    {
+      "path": "lezioni-autocad/index.html",
+      "sha256": "4b74fa77e89d4bc43f77d9be6b5a12f0169a46d7d8c546d73929a0290f77cd1f"
+    },
+    {
+      "path": "partials/site-footer.html",
+      "sha256": "bad6e51b752bc58dd11b0708fe80632ca95deee5f71eaa03a67530df480088de"
+    },
+    {
+      "path": "privacy/index.html",
+      "sha256": "4bfd20f6105b7f24955a5f42a053ac9b4c7a1f9d5319286499d1566c0066f368"
+    },
+    {
+      "path": "scripts/sync-site-footer.cjs",
+      "sha256": "55d1d00afb3ac5e1cf81bdf41c82870c74caf92bdb0c0978673fe6fde59e5f10"
+    },
+    {
+      "path": "sitemap.xml",
+      "sha256": "4ba3c55383c8fd3cb96f27591ade75de39dd37b6795bbec3f2dfdd766da80064"
+    },
+    {
+      "path": "yqarch-italiano/index.html",
+      "sha256": "8ba3175684c91c2623f5982a0c8ee0a7afb2559de39cdd7a348af6e1c7217068"
+    }
+  ]
+}
