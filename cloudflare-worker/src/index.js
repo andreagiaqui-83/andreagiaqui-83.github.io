@@ -16,6 +16,8 @@ const FIELD_LABELS = {
   Output: 'Output richiesti',
   Indicazioni_output: 'Indicazioni sull’output',
   Interior_Design_5a_proposta_personalizzata: 'Quinta proposta Interior Design personalizzata',
+  'Interior_Design_stili[]': 'Stili Interior Design da valutare',
+  'Render_viste[]': 'Viste render richieste',
   Data_indicativa_consegna: 'Data indicativa di consegna',
   Professione: 'Professione',
   Note_conclusive: 'Note conclusive',

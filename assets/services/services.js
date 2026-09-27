@@ -24,9 +24,30 @@
   if(!form)return;
   const submit=document.getElementById('quoteSubmit'),notice=document.getElementById('fileWarning'),success=document.getElementById('grazie');
   const progress=document.getElementById('uploadProgress'),cloud=form.elements.Link_cloud_materiale_completo;
-  const interior=document.getElementById('interiorSelected'),panel=document.getElementById('interiorPreferences'),custom=document.getElementById('interiorCustom');
-  const updateInterior=()=>{panel.hidden=!interior.checked;interior.setAttribute('aria-expanded',String(interior.checked));custom.disabled=!interior.checked;};
-  interior.addEventListener('change',()=>{updateInterior();if(interior.checked)track('cta_click',{cta_id:'interior_design_selected'});});updateInterior();
+  const interior=document.getElementById('interiorSelected'),customChoice=document.getElementById('interiorCustomSelected');
+  const cadChoices=['cad2dSelected','cad3dSelected'].map(id=>document.getElementById(id));
+  const bim=document.getElementById('bimSelected'),render=document.getElementById('renderSelected');
+  const showPanel=(id,active)=>{
+    const panel=document.getElementById(id);panel.hidden=!active;
+    panel.querySelectorAll('input,textarea,select,button').forEach(field=>{field.disabled=!active;});
+  };
+  const updateServicePanels=()=>{
+    const cad=cadChoices.some(input=>input.checked);
+    showPanel('templatePreferences',cad||bim.checked);
+    showPanel('templateCADZone',cad);showPanel('templateBIMZone',bim.checked);
+    showPanel('renderPreferences',render.checked);
+    showPanel('interiorPreferences',interior.checked);
+    showPanel('interiorCustomPanel',interior.checked&&customChoice.checked);
+    [...cadChoices,bim].forEach(input=>input.setAttribute('aria-expanded',String(cad||bim.checked)));
+    render.setAttribute('aria-expanded',String(render.checked));
+    interior.setAttribute('aria-expanded',String(interior.checked));
+    customChoice.setAttribute('aria-expanded',String(interior.checked&&customChoice.checked));
+  };
+  [...cadChoices,bim,render,interior,customChoice].forEach(input=>input.addEventListener('change',()=>{
+    updateServicePanels();updateLimits();
+    if(input===interior&&interior.checked)track('cta_click',{cta_id:'interior_design_selected'});
+  }));
+  updateServicePanels();
   document.querySelectorAll('[data-service]').forEach(a=>a.addEventListener('click',()=>{
     const check=[...form.querySelectorAll('[name="Output[]"]')].find(x=>x.value===a.dataset.service);
     if(check && !check.checked){check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));}
@@ -39,7 +60,9 @@
   const setNotice=(text='',type='info',focus=false)=>{notice.textContent=text;notice.className='notice notice-'+type;notice.hidden=!text;if(focus){notice.focus();scrollTo(notice);}};
   const files=new Map([...form.querySelectorAll('input[type=file]')].map(input=>[input,[]]));
   const fileKey=file=>[file.name,file.size,file.lastModified,file.type].join('|');
-  const allFiles=()=>[...files.entries()].flatMap(([input,list])=>list.map(file=>({input,file})));
+  // Hidden template uploads stay selected locally but never count or upload for inactive services.
+  // Use panel visibility because all controls are disabled while the upload is locked.
+  const allFiles=()=>[...files.entries()].filter(([input])=>!input.closest('[hidden]')).flatMap(([input,list])=>list.map(file=>({input,file})));
   const total=()=>allFiles().reduce((sum,x)=>sum+x.file.size,0);
   const needsCloud=()=>allFiles().some(x=>x.file.size>MAX_FILE)||total()>MAX_TOTAL;
   const bytes=value=>value>=1024*1024?(value/1024/1024).toFixed(1)+' MB':Math.max(1,Math.round(value/1024))+' KB';
@@ -125,7 +148,7 @@
   const lock=locked=>{
     form.setAttribute('aria-busy',String(locked));
     form.querySelectorAll('input,textarea,select,button').forEach(x=>{if(locked){x.dataset.wasDisabled=String(x.disabled);x.disabled=true;}else{x.disabled=x.dataset.wasDisabled==='true';delete x.dataset.wasDisabled;}});
-    if(!locked){submit.disabled=submitted;updateInterior();}
+    if(!locked){submit.disabled=submitted;updateServicePanels();}
   };
   form.addEventListener('submit',async e=>{
     e.preventDefault();if(sending||submitted)return;

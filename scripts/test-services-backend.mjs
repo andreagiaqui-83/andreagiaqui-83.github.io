@@ -29,3 +29,10 @@ test('Point-cloud links preserve any original format, reach both emails and stor
   const saved=JSON.parse(f.entries.get('quotes/'+ss.sessionId+'/request.json'));assert.equal(saved.fields.Nuvola_di_punti_link_cloud,link);assert.equal(saved.pointCloudLink,link);
  }}finally{global.fetch=old;}
 });
+
+test('Render views and interior styles reach stored request and both confirmation emails',async()=>{
+ const f=fixture();f.env.SEND_CUSTOMER_COPY='true';const ss=await session(f),calls=[],old=global.fetch;
+ const fields={...data(),'Output[]':['Interior Design','Render fotorealistici / viste prospettiche'],'Interior_Design_stili[]':['Japandi','Personalizzata'],'Render_viste[]':['Prospetto singolo','Vista 3D']};
+ global.fetch=async(u,o)=>{calls.push(JSON.parse(o.body));return Response.json({id:'test'});};
+ try{const response=await worker.fetch(req('/api/submit',{...ss,fields}),f.env);assert.equal(response.status,200);assert.equal(calls.length,2);for(const email of calls){assert.ok(email.html.includes('Stili Interior Design da valutare'));assert.ok(email.html.includes('Japandi'));assert.ok(email.html.includes('Viste render richieste'));assert.ok(email.html.includes('Vista 3D'));}const saved=JSON.parse(f.entries.get('quotes/'+ss.sessionId+'/request.json'));assert.deepEqual(saved.fields['Interior_Design_stili[]'],fields['Interior_Design_stili[]']);assert.deepEqual(saved.fields['Render_viste[]'],fields['Render_viste[]']);}finally{global.fetch=old;}
+});

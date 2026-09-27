@@ -5,14 +5,14 @@ La landing principale https://andreagiaquinto.it/ è attiva.
 ## Regole correnti
 - Il servizio da nuvole di punti è attivo: campo link cloud abilitato e incollabile, qualsiasi formato originale tramite cloud, previa verifica di accessibilità e contenuti. I formati cloud non sono limitati da un elenco di estensioni.
 - Su richiesta esplicita del 27 settembre sono pubblicate le tariffe: AutoCAD 2D 0,20 €/m² lordo per piano; +10% della base complessiva per ciascun elaborato aggiuntivo richiesto (copertura, ogni prospetto, ogni sezione, inquadramento territoriale, planimetria DOCFA). Maggiorazioni additive, non composte.
-- AutoCAD 3D o Revit/BIM 0,30 €/m² lordo per piano, con gli elaborati aggiuntivi indicati compresi. Esempio 2 × 100 m² e 7 extra: 68 € in 2D, 60 € in 3D/BIM. Render o pianta Interior Design: 10 € ciascuno. Meccanica, industria e altri ambiti: prezzo su progetto.
+- AutoCAD 3D o Revit/BIM 0,30 €/m² lordo per piano, senza le maggiorazioni del 2D. Esempio 2 × 100 m² e 7 extra: 68 € in 2D, 60 € in 3D/BIM. Render o pianta Interior Design: 10 € ciascuno. Meccanica, industria e altri ambiti: prezzo su progetto.
 - Stili testo, quote, stampa, tavole, cartiglio e personalizzazioni concordate compresi. Non inventare il regime IVA o confronti economici garantiti. Preventivo gratuito prima dell’avvio.
 - Interior Design presenta quattro direzioni stilistiche nominate e spiegate: Minimal contemporaneo, Japandi, Mediterraneo contemporaneo e Organic Modern.
 - È disponibile una quinta proposta personalizzata opzionale con indicazioni libere su stile, materiali, colori, finiture, arredi, illuminazione, atmosfera e riferimenti.
 - La pagina pubblica non deve citare il nome del software interno utilizzato per elaborare le proposte.
 - E-mail: andrea.giaqui@gmail.com. Telefono/WhatsApp: 333 724 0544.
 - La landing /lezioni-autocad/ resta separata.
-- Build: `20260927-services-r1`. Dettagli tecnici e modulo recensioni sono sezioni sempre visibili, senza accordion.
+- Build: `20260927-services-r2`. Dettagli tecnici e modulo recensioni sono sezioni sempre visibili, senza accordion.
 - La compatibilità è descritta tramite DWG/DXF (CAD), IFC (scambio BIM) e PDF (consultazione); formato, versione, contenuti e modificabilità vengono concordati per progetto.
 - Invitare a combinare materiali pertinenti disponibili: planimetrie, misure, fotografie, schizzi, modelli e riferimenti geografici. Tutto il materiale resta facoltativo; non promettere fedeltà assoluta indipendente dalla qualità dei dati.
 - Seguire `AGENTS.md` per preservare SEO, annunci, conversioni, consenso e qualità responsive nelle modifiche future.
@@ -56,3 +56,11 @@ Verificati il 20 settembre 2026. Esempi di software, senza classifiche di diffus
 - I caricamenti diretti di formati riconoscibili come nuvola di punti invitano al link cloud dedicato. Gli altri limiti degli allegati sono invariati.
 - Le quattro direzioni Interior Design e la quinta personalizzata restano disponibili; ogni immagine/pianta è conteggiata a 10 €, non come pacchetto da quattro immagini a 10 €.
 - La nuova immagine è stata generata con lo strumento integrato: stesso edificio rappresentato come nuvola di punti, wireframe CAD e modello BIM su sfondo blu scuro, senza loghi né testo incorporato. Asset: assets/services/nuvola-punti-cad-bim-{768,1440}.webp.
+
+## Modulo guidato — 27 settembre 2026
+- Guida e modulo in quattro passaggi: servizi, materiale e posizione, richieste specifiche, contatti.
+- Template facoltativi sotto i servizi: AutoCAD per 2D/3D, Revit per BIM; dettagli tecnici e posizione restano sempre visibili.
+- Render: selezione multipla facoltativa fra prospetto singolo, tutti i prospetti, vista 3D e altro.
+- Interior Design: quattro stili descritti più scelta personalizzata; testo libero attivo solo per quest’ultima. Sezioni inattive escluse da invio e caricamento, scelte conservate se riattivate.
+- Nuvole di punti: foto interne/esterne, planimetrie/altri elaborati e indirizzo o coordinate fortemente raccomandati, se disponibili.
+- Email sotto il telefono del profilo; richieste particolari concordate insieme.
