@@ -1,12 +1,11 @@
-const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require('node:crypto'),{JSDOM}=require('jsdom');
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),{JSDOM}=require('jsdom');
 const script=fs.readFileSync('assets/plugins/plugins.js','utf8');
-for(const slug of ['yqarch-italiano','express-tools-italiano'])test(slug+': canonical, one H1, synced FAQ, internal paths and direct installer',()=>{
+for(const slug of ['yqarch-italiano','express-tools-italiano'])test(slug+': canonical, one H1, synced FAQ, internal paths and withdrawn downloads',()=>{
  const d=new JSDOM(fs.readFileSync(slug+'/index.html','utf8')).window.document;assert.equal(d.querySelectorAll('h1').length,1);assert.equal(d.querySelector('link[rel=canonical]').href,'https://andreagiaquinto.it/'+slug+'/');
  const graph=JSON.parse(d.querySelector('[type="application/ld+json"]').textContent)['@graph'];const faq=graph.find(x=>x['@type']==='FAQPage');assert.deepEqual([...d.querySelectorAll('#faq details')].map(x=>({q:x.querySelector('summary').textContent,a:x.querySelector('p').textContent})),faq.mainEntity.map(x=>({q:x.name,a:x.acceptedAnswer.text})));
  for(const a of d.querySelectorAll('[href],[src]')){let value=a.getAttribute('href')||a.getAttribute('src');if(value.startsWith('/')){const path=value.split(/[?#]/)[0];assert.ok(fs.existsSync('.'+path+(path.endsWith('/')?'index.html':'')),path);}else if(value.startsWith('#'))assert.ok(d.getElementById(value.slice(1)),value);}
- assert.ok(d.querySelector('a[download][href$=".exe"]'));assert.equal(d.querySelector('#comment-form').method,'post');assert.ok(d.querySelector('#comment-form [type=submit]').disabled);assert.ok(d.querySelector('#comment-form input[name=privacy]').required);assert.ok(d.querySelector('[data-consent-open]'));
+ assert.equal(d.querySelectorAll('a[download],a[href^="/downloads/"]').length,0);assert.match(d.querySelector("#download").textContent,/Download e guide non disponibili/);assert.equal(graph.some(x=>x.softwareVersion||x.downloadUrl),false);assert.equal(d.querySelector('#comment-form').method,'post');assert.ok(d.querySelector('#comment-form [type=submit]').disabled);assert.ok(d.querySelector('#comment-form input[name=privacy]').required);assert.ok(d.querySelector('[data-consent-open]'));
 });
-test('Installer manifest matches the exact source bytes; EXEs retain their PE signatures',()=>{for(const r of JSON.parse(fs.readFileSync('downloads/releases.json'))){const file=fs.readFileSync('.'+r.file);assert.equal(file.length,r.bytes);assert.equal(file.subarray(0,2).toString(),'MZ');assert.equal(crypto.createHash('sha256').update(file).digest('hex'),r.sha256);}});
 test('Guest replies render text safely, retain failed submissions and never emit lead conversions',async()=>{
  const dom=new JSDOM(fs.readFileSync('yqarch-italiano/index.html','utf8'),{url:'https://andreagiaquinto.it/yqarch-italiano/',runScripts:'outside-only'}),w=dom.window,requests=[],events=[];
  w.matchMedia=()=>({matches:true});w.HTMLElement.prototype.scrollIntoView=()=>{};w.AGTracking={track:(...args)=>events.push(args)};let post=0;
