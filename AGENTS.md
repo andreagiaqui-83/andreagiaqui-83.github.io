@@ -9,3 +9,10 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - Descrivere la compatibilità CAD/BIM con formati e versioni concordati; non promettere compatibilità universale o conservazione integrale di ogni funzione nativa. Incoraggiare materiali complementari pertinenti e disponibili, senza renderli obbligatori.
 - Sincronizzare FAQ visibili e dati strutturati. Conservare canonical, metadati, gerarchia dei titoli, immagini ottimizzate e regole in `.github/SERVICES-PUBLICATION.md`.
 - Prima della pubblicazione, eseguire le verifiche pertinenti già presenti e controllare le aree modificate alle larghezze desktop e mobile; verificare che i link legali siano allineati. Aggiornare build e versione CSS quando necessario.
+
+## Footer comune e pagine dei progetti — direttiva del 27 settembre 2026
+- Tutte le landing pubbliche, le guide web e le pagine di servizio usano il footer comune in `partials/site-footer.html` e `assets/site-footer.css`. Eseguire `node scripts/sync-site-footer.cjs` dopo una modifica al componente; conservare il contenuto HTML statico e i collegamenti accessibili senza JavaScript. Aggiungere al generatore le nuove pagine pubbliche.
+- Identità: Andrea Giaquinto, **Disegnatore CAD e BIM**. Telefono +39 333 724 0544, email andrea.giaqui@gmail.com, WhatsApp, Facebook e LinkedIn con icone e link verificati; navigazione incrociata, privacy, preferenze cookie e diritti. Non inventare recapiti, partita IVA o profili.
+- Anche il modulo recensioni delle lezioni resta sempre visibile, senza riquadri richiudibili. Conservare IDs, consenso e invio separato dalle richieste di lezione.
+- I visual dei plugin devono essere professionali e realistici, ottimizzati per dispositivo. Le illustrazioni IA non sono schermate autentiche né lavori consegnati: dichiararne la natura. Non modificare gli installer per un intervento sul sito.
+- Per SEO e ricerca IA: contenuti HTML accessibili, navigazione crawlable, canonical, sitemap e dati strutturati aderenti ai testi. Non promettere indicizzazione, citazioni o ranking; non aggiungere testo nascosto o istruzioni rivolte ai crawler.

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
-BUILD='20260927-services-r5'
+BUILD='20260927-services-r6'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
@@ -17,7 +17,7 @@ def static():
  assert len(s.select('h1'))==1
  assert s.select_one('.hp')['aria-hidden']=='true'
  assert not s.select('img[src*="drive.google"]')
- assert len(s.select('link[rel=stylesheet]'))==2
+ assert len(s.select('link[rel=stylesheet]'))==3
  assert not s.select_one('#pointCloud').has_attr('disabled')
  assert not s.select_one('#pointCloud').has_attr('required')
  assert s.select_one('#nuvole-di-punti img') and s.select_one('#tariffe')
@@ -48,12 +48,13 @@ def static():
  for p in Path('assets/services').glob('*'):
   if p.suffix in ['.avif','.webp','.jpg']:
    with Image.open(p) as im:im.load();assert im.width>0
- # Protected source tree and backend route: byte-level preservation.
- diff=subprocess.check_output(['git','diff',BASELINE,'HEAD','--','lezioni-autocad','cloudflare-worker/src/lessons.js','assets/measurement-config.js','assets/consent.css']).decode()
- assert not diff,'Protected course or shared tracking changed'
+ # The user authorized lesson footer, review visibility and copy changes on 27 September.
+ # Keep all other course assets, backend and tracking byte-for-byte; browser checks cover authorized edits.
+ diff=subprocess.check_output(['git','diff',BASELINE,'HEAD','--','lezioni-autocad',':(exclude)lezioni-autocad/index.html',':(exclude)lezioni-autocad/assets/landing.css',':(exclude)lezioni-autocad/assets/landing.js','cloudflare-worker/src/lessons.js','assets/measurement-config.js','assets/consent.css']).decode()
+ assert not diff,'Protected lesson assets, backend or tracking changed'
  old=BeautifulSoup(subprocess.check_output(['git','show',BASELINE+':index.html']), 'html.parser')
  assert [x.get_text(' ',strip=True) for x in old.select('#reviewsGrid .review-card')]==[x.get_text(' ',strip=True) for x in s.select('#reviewsGrid .review-card')]
- save('static.json',{'status':'PASS','build':BUILD,'baseline':BASELINE,'html_sha256':sha(Path('index.html').read_bytes()),'protected_tree':'lessons and config unchanged; shared consent scope limited to services','review_text':'unchanged','active_css_count':2})
+ save('static.json',{'status':'PASS','build':BUILD,'baseline':BASELINE,'html_sha256':sha(Path('index.html').read_bytes()),'protected_tree':'lesson assets except authorized HTML/CSS/JS, backend and tracking unchanged','review_text':'unchanged','active_css_count':3})
  print('STATIC PASS',flush=True)
 
 def run_browser(base,stage):

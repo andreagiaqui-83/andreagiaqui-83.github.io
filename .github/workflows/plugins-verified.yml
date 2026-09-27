@@ -2,11 +2,16 @@ name: Plugin pages quality and live verification
 on:
   workflow_dispatch:
   push:
-    branches: [main, 'optimize/plugins-*']
+    branches: [main, 'optimize/plugins-*', 'optimize/services-site-*']
     paths:
       - 'yqarch-italiano/**'
       - 'express-tools-italiano/**'
       - 'assets/plugins/**'
+      - 'assets/site-footer.css'
+      - 'partials/**'
+      - 'scripts/sync-site-footer.cjs'
+      - 'lezioni-autocad/**'
+      - '.github/scripts/site_consistency_qa.cjs'
       - 'downloads/**'
       - 'cloudflare-worker/**'
       - 'scripts/test-plugin*'
@@ -34,7 +39,10 @@ jobs:
       - name: Unit and security checks; all submissions are simulated
         run: node --test scripts/test-*.mjs scripts/test-*.cjs
       - name: Desktop and mobile browser verification
-        run: node .github/scripts/plugins_qa.cjs local
+        run: |
+          node scripts/sync-site-footer.cjs --check
+          node .github/scripts/plugins_qa.cjs local
+          node .github/scripts/site_consistency_qa.cjs local
       - name: Wait for public pages
         if: github.ref == 'refs/heads/main'
         run: |
@@ -44,7 +52,7 @@ jobs:
             try:
               for slug in ['yqarch-italiano','express-tools-italiano']:
                 html=urllib.request.urlopen('https://andreagiaquinto.it/'+slug+'/',timeout=15).read().decode()
-                assert '20260927-plugins-r1' in html
+                assert '20260927-plugins-r2' in html
               break
             except Exception:
               if attempt==35:raise
@@ -52,7 +60,9 @@ jobs:
           PY
       - name: Public downloads, API and browser verification
         if: github.ref == 'refs/heads/main'
-        run: node .github/scripts/plugins_qa.cjs live
+        run: |
+          node .github/scripts/plugins_qa.cjs live
+          node .github/scripts/site_consistency_qa.cjs live
       - name: Save verification evidence
         if: always()
         uses: actions/upload-artifact@v4

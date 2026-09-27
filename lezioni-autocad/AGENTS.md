@@ -34,3 +34,6 @@ Ogni intervento deve tenere conto di tutte le ottimizzazioni già implementate. 
 - Non considerare automaticamente la landing pronta per una campagna perché una modifica grafica è riuscita. Il giudizio di prontezza deve riflettere anche stato reale di modulo, consenso, tracking e conversioni.
 
 Le successive istruzioni esplicite dell'utente possono aggiornare queste regole. Non usare questo documento per aggiungere richieste di approvazione a interventi già autorizzati.
+
+## Aggiornamento esplicito — 27 settembre 2026
+Il modulo recensioni deve essere sempre visibile come nella landing servizi. Il fondo pagina deve usare il componente comune del sito, con ruolo “Disegnatore CAD e BIM”, tutti i contatti e i collegamenti alle altre landing. Le immagini restano dichiarate illustrative quando non rappresentano schermate o lavori reali.
