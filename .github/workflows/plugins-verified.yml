@@ -1,0 +1,63 @@
+name: Plugin pages quality and live verification
+on:
+  push:
+    branches: [main, 'optimize/plugins-*']
+    paths:
+      - 'yqarch-italiano/**'
+      - 'express-tools-italiano/**'
+      - 'assets/plugins/**'
+      - 'downloads/**'
+      - 'cloudflare-worker/**'
+      - 'scripts/test-plugin*'
+      - '.github/scripts/plugins_qa.cjs'
+      - '.github/workflows/plugins-verified.yml'
+permissions:
+  contents: read
+concurrency:
+  group: plugins-quality-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies and browsers
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund playwright@1.58.2
+          npx playwright install --with-deps chromium webkit firefox
+      - name: Unit and security checks; all submissions are simulated
+        run: node --test scripts/test-*.mjs scripts/test-*.cjs
+      - name: Desktop and mobile browser verification
+        run: node .github/scripts/plugins_qa.cjs local
+      - name: Wait for public pages and comment API
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python - <<'PY'
+          import time,urllib.request,json
+          for attempt in range(36):
+            try:
+              for slug in ['yqarch-italiano','express-tools-italiano']:
+                html=urllib.request.urlopen('https://andreagiaquinto.it/'+slug+'/',timeout=15).read().decode()
+                assert '20260927-plugins-r1' in html
+              data=json.load(urllib.request.urlopen('https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/plugin-comments?project=yqarch',timeout=15))
+              assert data['ok']
+              break
+            except Exception:
+              if attempt==35:raise
+              time.sleep(10)
+          PY
+      - name: Public downloads, API and browser verification
+        if: github.ref == 'refs/heads/main'
+        run: node .github/scripts/plugins_qa.cjs live
+      - name: Save verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-pages-${{ github.sha }}
+          path: ${{ runner.temp }}/plugins-proof/
+          retention-days: 30
