@@ -49,5 +49,6 @@
     finally{inflight=false;button.disabled=false;}
   });
   // Visitor contents, replies and download actions never emit service/lesson lead conversions.
+  form.querySelector('[type=submit]').disabled=false;
   load(true);
 })();
