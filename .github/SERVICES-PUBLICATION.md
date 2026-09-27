@@ -6,13 +6,14 @@ La landing principale https://andreagiaquinto.it/ è attiva.
 - Il servizio da nuvole di punti è attivo: campo link cloud abilitato e incollabile, qualsiasi formato originale tramite cloud, previa verifica di accessibilità e contenuti. I formati cloud non sono limitati da un elenco di estensioni.
 - Su richiesta esplicita del 27 settembre sono pubblicate le tariffe: AutoCAD 2D 0,20 €/m² lordo per piano; +10% della base complessiva per ciascun elaborato aggiuntivo richiesto (copertura, ogni prospetto, ogni sezione, inquadramento territoriale, planimetria DOCFA). Maggiorazioni additive, non composte.
 - AutoCAD 3D o Revit/BIM 0,30 €/m² lordo per piano, senza le maggiorazioni del 2D. Esempio 2 × 100 m² e 7 extra: 68 € in 2D, 60 € in 3D/BIM. Render o pianta Interior Design: 10 € ciascuno. Meccanica, industria e altri ambiti: prezzo su progetto.
+- Il prezzo resta invariato anche per più tavole dello stesso progetto, per esempio stato di fatto, stato di progetto e tavola comparativa. La precisazione è presente nelle inclusioni e nella FAQ tariffe, con dati strutturati allineati.
 - Stili testo, quote, stampa, tavole, cartiglio e personalizzazioni concordate compresi. Non inventare il regime IVA o confronti economici garantiti. Preventivo gratuito prima dell’avvio.
 - Interior Design presenta quattro direzioni stilistiche nominate e spiegate: Minimal contemporaneo, Japandi, Mediterraneo contemporaneo e Organic Modern.
 - È disponibile una quinta proposta personalizzata opzionale con indicazioni libere su stile, materiali, colori, finiture, arredi, illuminazione, atmosfera e riferimenti.
 - La pagina pubblica non deve citare il nome del software interno utilizzato per elaborare le proposte.
 - E-mail: andrea.giaqui@gmail.com. Telefono/WhatsApp: 333 724 0544.
 - La landing /lezioni-autocad/ resta separata.
-- Build: `20260927-services-r2`. Dettagli tecnici e modulo recensioni sono sezioni sempre visibili, senza accordion.
+- Build: `20260927-services-r3`. Dettagli tecnici e modulo recensioni sono sezioni sempre visibili, senza accordion.
 - La compatibilità è descritta tramite DWG/DXF (CAD), IFC (scambio BIM) e PDF (consultazione); formato, versione, contenuti e modificabilità vengono concordati per progetto.
 - Invitare a combinare materiali pertinenti disponibili: planimetrie, misure, fotografie, schizzi, modelli e riferimenti geografici. Tutto il materiale resta facoltativo; non promettere fedeltà assoluta indipendente dalla qualità dei dati.
 - Seguire `AGENTS.md` per preservare SEO, annunci, conversioni, consenso e qualità responsive nelle modifiche future.
