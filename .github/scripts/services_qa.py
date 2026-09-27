@@ -123,11 +123,11 @@ def run_browser(base,stage):
       for field in target.locator('input:not(.hp),textarea,button').all():
        expect(field).to_be_visible()
        box=field.bounding_box();assert box['x']>=-1 and box['x']+box['width']<=width+1,(width,selector,box)
-     legal=page.locator('.legal-links').evaluate("e=>[...e.children].map(n=>{const r=n.getBoundingClientRect();const t=document.createRange();t.selectNodeContents(n);const b=t.getBoundingClientRect();return {top:r.top,height:r.height,textTop:b.top,textHeight:b.height};})")
+     legal=page.locator('.sf-legal>div').evaluate("e=>[...e.children].map(n=>{const r=n.getBoundingClientRect();const t=document.createRange();t.selectNodeContents(n);const b=t.getBoundingClientRect();return {top:r.top,height:r.height,textTop:b.top,textHeight:b.height};})")
      assert abs(legal[0]['textTop']-legal[1]['textTop'])<=1,(engine,width,legal)
      assert all(x['height']>=44 for x in legal)
      if width in [390,1440]:
-      for selector,name in [('#nuvole-di-punti','point-cloud'),('#tariffe','pricing'),('.point-cloud-field','cloud-field'),('.compatibility-note','compatibility'),('.collaboration-note','collaboration'),('#render','render'),('#preventivo','person'),('.technical-details','technical'),('.review-submit-section','review-form'),('.legal','footer')]:
+      for selector,name in [('#nuvole-di-punti','point-cloud'),('#tariffe','pricing'),('.point-cloud-field','cloud-field'),('.compatibility-note','compatibility'),('.collaboration-note','collaboration'),('#render','render'),('#preventivo','person'),('.technical-details','technical'),('.review-submit-section','review-form'),('.sf-legal','footer')]:
        page.locator(selector).screenshot(path=str(OUT/f'{stage}-{engine}-{width}-{name}.png'))
       for selector,name in [('#consegna-pdf','pdf'),('#faq-nuvole-di-punti','point-cloud'),('#faq-tariffe','pricing'),('#settori-cad-bim','sectors'),('#vantaggi-disegnatore-online','online'),('#compatibilita-software','software')]:
        detail=page.locator(selector)
