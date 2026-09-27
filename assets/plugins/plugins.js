@@ -45,7 +45,7 @@
       const response=await fetch(base,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'omit',body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});
       const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.error||'Invio non confermato. Riprova tra poco.');
       form.reset();cancelReply();requestId=crypto.randomUUID();feedback.textContent='Grazie! Il tuo contributo è stato ricevuto. Sarà visibile dopo la moderazione, con il nome che hai scelto.';
-    }catch(error){feedback.textContent=(error.name==='TimeoutError'||error.name==='TypeError')?'Invio non confermato. Il testo è ancora qui: riprova tra poco.':error.message;}
+    }catch(error){feedback.textContent=(error.name!=='Error')?'Invio non confermato. Il testo è ancora qui: riprova tra poco.':error.message;}
     finally{inflight=false;button.disabled=false;}
   });
   // Visitor contents, replies and download actions never emit service/lesson lead conversions.

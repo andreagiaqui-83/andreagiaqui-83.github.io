@@ -13,7 +13,7 @@ La landing principale https://andreagiaquinto.it/ è attiva.
 - La pagina pubblica non deve citare il nome del software interno utilizzato per elaborare le proposte.
 - E-mail: andrea.giaqui@gmail.com. Telefono/WhatsApp: 333 724 0544.
 - La landing /lezioni-autocad/ resta separata.
-- Build: `20260927-services-r3`. Dettagli tecnici e modulo recensioni sono sezioni sempre visibili, senza accordion.
+- Build: `20260927-services-r4`. Dettagli tecnici e modulo recensioni sono sezioni sempre visibili, senza accordion.
 - La compatibilità è descritta tramite DWG/DXF (CAD), IFC (scambio BIM) e PDF (consultazione); formato, versione, contenuti e modificabilità vengono concordati per progetto.
 - Invitare a combinare materiali pertinenti disponibili: planimetrie, misure, fotografie, schizzi, modelli e riferimenti geografici. Tutto il materiale resta facoltativo; non promettere fedeltà assoluta indipendente dalla qualità dei dati.
 - Seguire `AGENTS.md` per preservare SEO, annunci, conversioni, consenso e qualità responsive nelle modifiche future.
@@ -65,3 +65,8 @@ Verificati il 20 settembre 2026. Esempi di software, senza classifiche di diffus
 - Interior Design: quattro stili descritti più scelta personalizzata; testo libero attivo solo per quest’ultima. Sezioni inattive escluse da invio e caricamento, scelte conservate se riattivate.
 - Nuvole di punti: foto interne/esterne, planimetrie/altri elaborati e indirizzo o coordinate fortemente raccomandati, se disponibili.
 - Email sotto il telefono del profilo; richieste particolari concordate insieme.
+
+## Progetti AutoCAD in italiano — 27 settembre 2026
+- Footer collegato alle nuove landing `/yqarch-italiano/` e `/express-tools-italiano/`.
+- La navigazione servizi, le conversioni e il modulo preventivi conservano il loro comportamento. I commenti dei progetti hanno endpoint e consenso separati.
+- Dettagli e regole di manutenzione in `.github/PLUGINS-PUBLICATION.md`.
