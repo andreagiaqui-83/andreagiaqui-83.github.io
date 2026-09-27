@@ -1,18 +1,27 @@
 {
   "state": "active",
-  "build": "20260921-services-r2",
+  "build": "20260927-services-r1",
   "scope": [
     "/",
     "/index.html"
   ],
   "lessons_path": "/lezioni-autocad/",
   "lessons_unchanged": true,
-  "point_cloud_service": "temporarily unavailable",
-  "point_cloud_form_field": "disabled",
-  "pricing": "No public numeric prices; personalized quote only; hero image contains no tariff amount",
+  "point_cloud_service": "active; original formats through cloud link, data verified before work",
+  "point_cloud_form_field": "enabled; optional URL; native paste",
+  "pricing": {
+    "cad_2d_eur_per_gross_sqm_per_floor": 0.2,
+    "cad_2d_extra_percent_each": 10,
+    "cad_2d_extra_basis": "total base; additive percentages",
+    "cad_3d_or_revit_bim_eur_per_gross_sqm_per_floor": 0.3,
+    "render_or_interior_plan_eur_each": 10,
+    "other_drawings": "price agreed for each project",
+    "vat_status": "not specified by owner"
+  },
   "interior_design": {
     "enabled": true,
-    "included_proposals": [
+    "optional_fifth_custom_proposal": true,
+    "style_directions": [
       {
         "name": "Minimal contemporaneo",
         "meaning": "Linee pulite, essenzialità, palette neutre e funzionalità"
@@ -29,8 +38,7 @@
         "name": "Organic Modern",
         "meaning": "Forme morbide, materiali naturali, texture materiche e toni caldi"
       }
-    ],
-    "optional_fifth_custom_proposal": true
+    ]
   },
   "public_program_reference": "none",
   "telephone": "+393337240544",
@@ -51,7 +59,7 @@
     "sezioni render su richiesta"
   ],
   "pdf_delivery": "Tavole CAD/Revit e immagini render/Interior Design su richiesta, per apertura e condivisione; immagini originali per dettaglio visivo",
-  "production_method": "Ibrido: automazioni e IA con direzione, verifica e rifinitura del disegnatore CAD/BIM",
   "sectors": "Ambiti CAD/BIM raggruppati nella FAQ; supporto al disegno e alla documentazione, fattibilità concordata sul progetto",
-  "online_collaboration": "Incarichi occasionali o continuativi, picchi di lavoro, preventivo e condizioni concordati; nessuna promessa di assenza di contratto o risparmio garantito"
+  "online_collaboration": "Incarichi occasionali o continuativi, picchi di lavoro, preventivo e condizioni concordati; nessuna promessa di assenza di contratto o risparmio garantito",
+  "production_method_faq": "removed at user request on 2026-09-27"
 }

@@ -3,8 +3,12 @@
   'use strict';
   const backend = 'https://cad-bim-preventivi.andrea-giaqui.workers.dev';
   const MAX_FILE = 90 * 1024 * 1024, MAX_TOTAL = 500 * 1024 * 1024;
-  const POINT_CLOUD_AVAILABLE = false;
-  const unsupported = file => !POINT_CLOUD_AVAILABLE && /\.(las|laz|e57|rcp|rcs)$/i.test(file.name);
+  // Point clouds are shared through the dedicated cloud URL, in any original format.
+  const cloudOnly = file => /\.(las|laz|e57|rcp|rcs|pts|ptx|xyz)$/i.test(file.name);
+  const validWebLink = value => {
+    try { const url=new URL(value);return /^https?:$/.test(url.protocol)&&!!url.hostname&&!url.username&&!url.password; }
+    catch (_) { return false; }
+  };
   const track = (event, values = {}) => window.AGTracking?.track(event, {form_id:'service_quote', ...values});
   const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scrollTo = element => element?.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'center'});
@@ -59,10 +63,10 @@
   const addFiles=(input,incoming)=>{
     if(sending)return;
     const list=[...files.get(input)],keys=new Set(list.map(fileKey));let rejected=false,empty=false;
-    for(const file of incoming){if(unsupported(file)){rejected=true;continue;}if(!file.size){empty=true;continue;}if(!keys.has(fileKey(file))){list.push(file);keys.add(fileKey(file));}}
+    for(const file of incoming){if(cloudOnly(file)){rejected=true;continue;}if(!file.size){empty=true;continue;}if(!keys.has(fileKey(file))){list.push(file);keys.add(fileKey(file));}}
     files.set(input,list);input.value='';renderFiles(input);updateLimits();markStart();
     track('cta_click',{cta_id:'file_upload_interaction'});
-    if(rejected)setNotice('I file di nuvole di punti non sono accettati: il servizio è attualmente non disponibile. Gli altri allegati restano selezionati.','warning');
+    if(rejected)setNotice('Per la nuvola di punti incolla un link nel campo “Nuvola di punti — link cloud”. Accetto qualsiasi formato originale tramite cloud. Gli altri allegati restano selezionati.','warning');
     else if(empty)setNotice('Un file vuoto non è stato aggiunto. Controlla il file e selezionalo di nuovo.','warning');
   };
   for(const input of files.keys()){
@@ -74,6 +78,7 @@
   }
   const validate=()=>{
     form.querySelectorAll('[aria-invalid]').forEach(x=>x.removeAttribute('aria-invalid'));
+    form.querySelectorAll('input[type=url]:not(:disabled)').forEach(input=>{input.value=input.value.trim();});
     const outputs=[...form.querySelectorAll('[name="Output[]"]')];
     if(!outputs.some(x=>x.checked)){setNotice('Seleziona almeno un servizio, oppure “Altro / da valutare”.','warning');outputs[0].focus();return false;}
     const phone=form.elements.Telefono_WhatsApp;
@@ -86,7 +91,7 @@
       form.reportValidity();return false;
     }
     for(const input of form.querySelectorAll('input[type=url]:not(:disabled)')){
-      if(input.value && !/^https?:\/\//i.test(input.value)){input.setAttribute('aria-invalid','true');input.closest('details')?.setAttribute('open','');setNotice('Inserisci un collegamento che inizi con https:// o http://.','warning');input.focus();return false;}
+      if(input.value && !validWebLink(input.value)){input.setAttribute('aria-invalid','true');input.closest('details')?.setAttribute('open','');setNotice('Inserisci un collegamento completo che inizi con https:// o http://, senza nome utente o password nell’indirizzo.','warning');input.focus();return false;}
     }
     return true;
   };
@@ -95,7 +100,6 @@
     const result={};
     for(const [key,value] of new FormData(form)){
       if(value instanceof File || key.startsWith('_'))continue;
-      if(key==='Nuvola_di_punti_link_cloud' && !POINT_CLOUD_AVAILABLE)continue;
       if(result[key]===undefined)result[key]=value;else result[key]=[].concat(result[key],value);
     }
     return result;

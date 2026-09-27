@@ -5,10 +5,9 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-from playwright.sync_api import sync_playwright, expect
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
-BUILD='20260921-services-r2'
+BUILD='20260927-services-r1'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
@@ -19,7 +18,13 @@ def static():
  assert s.select_one('.hp')['aria-hidden']=='true'
  assert not s.select('img[src*="drive.google"]')
  assert len(s.select('link[rel=stylesheet]'))==2
- assert s.select_one('#pointCloud').has_attr('disabled')
+ assert not s.select_one('#pointCloud').has_attr('disabled')
+ assert not s.select_one('#pointCloud').has_attr('required')
+ assert s.select_one('#nuvole-di-punti img') and s.select_one('#tariffe')
+ assert not s.select_one('#metodo-ibrido')
+ assert not s.select('[href="#metodo-ibrido"]')
+ assert '0,20 €' in s.select_one('#tariffe').get_text() and '0,30 €' in s.select_one('#tariffe').get_text()
+ assert '68 €' in s.select_one('.pricing-example').get_text() and '60 €' in s.select_one('.pricing-example').get_text()
  assert len(s.select('#interior-design .interior-style-card'))==4
  assert s.select_one('textarea[name="Interior_Design_5a_proposta_personalizzata"]')
  for n in ['Minimal contemporaneo','Japandi','Mediterraneo contemporaneo','Organic Modern']:assert n in s.select_one('#interior-design').get_text()
@@ -34,7 +39,6 @@ def static():
  active=[Path('index.html'),Path('assets/services/services.js'),Path('assets/services/services.css'),Path('assets/measurement.js'),Path('assets/measurement-config.js'),Path('reviews-carousel.js'),Path('favicon.svg')]
  for p in active:
   text=p.read_text();assert not re.search(r'las2mesh',text,re.I),p
-  assert not re.search(r'\d[\d.,]*\s*(?:€|€/|euro)|€\s*\d',text,re.I),p
  for tag in s.select('[src],[href]'):
   value=tag.get('src') or tag.get('href')
   if not value or value.startswith(('http:','https:','mailto:','tel:','#')):continue
@@ -53,6 +57,7 @@ def static():
  print('STATIC PASS',flush=True)
 
 def run_browser(base,stage):
+ from playwright.sync_api import sync_playwright, expect
  result=[]
  with sync_playwright() as p:
   for engine,sizes in [('chromium',[(320,740),(360,800),(375,812),(390,844),(393,852),(412,915),(430,932),(600,900),(768,1024),(820,1180),(1024,768),(1366,768),(1440,900),(1920,1080)]),('webkit',[(390,844),(1440,900)]),('firefox',[(390,844),(1440,900)])]:
@@ -90,7 +95,7 @@ def run_browser(base,stage):
       axe=page.evaluate("async()=>await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})")
       save(f'{stage}-accessibility-{width}.json',axe)
       assert not axe['violations'],[(x['id'],[n['target'] for n in x['nodes']]) for x in axe['violations']]
-     expect(page.locator('#pointCloud')).to_be_disabled()
+     expect(page.locator('#pointCloud')).to_be_enabled()
      if not page.evaluate('document.documentElement.scrollWidth<=innerWidth+1'):
       overflow=page.evaluate("[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width&&r.right>innerWidth+1&&getComputedStyle(e).position==='absolute';}).map(e=>({tag:e.tagName,id:e.id,class:e.className,right:e.getBoundingClientRect().right,width:e.getBoundingClientRect().width}))")
       page.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-overflow.png'),full_page=True)
@@ -121,9 +126,9 @@ def run_browser(base,stage):
      assert abs(legal[0]['textTop']-legal[1]['textTop'])<=1,(engine,width,legal)
      assert all(x['height']>=44 for x in legal)
      if width in [390,1440]:
-      for selector,name in [('.compatibility-note','compatibility'),('.collaboration-note','collaboration'),('#render','render'),('#preventivo','person'),('.technical-details','technical'),('.review-submit-section','review-form'),('.legal','footer')]:
+      for selector,name in [('#nuvole-di-punti','point-cloud'),('#tariffe','pricing'),('.point-cloud-field','cloud-field'),('.compatibility-note','compatibility'),('.collaboration-note','collaboration'),('#render','render'),('#preventivo','person'),('.technical-details','technical'),('.review-submit-section','review-form'),('.legal','footer')]:
        page.locator(selector).screenshot(path=str(OUT/f'{stage}-{engine}-{width}-{name}.png'))
-      for selector,name in [('#consegna-pdf','pdf'),('#metodo-ibrido','hybrid'),('#settori-cad-bim','sectors'),('#vantaggi-disegnatore-online','online'),('#compatibilita-software','software')]:
+      for selector,name in [('#consegna-pdf','pdf'),('#faq-nuvole-di-punti','point-cloud'),('#faq-tariffe','pricing'),('#settori-cad-bim','sectors'),('#vantaggi-disegnatore-online','online'),('#compatibilita-software','software')]:
        detail=page.locator(selector)
        detail.locator('summary').click()
        detail.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq-{name}.png'))
@@ -160,19 +165,20 @@ def run_browser(base,stage):
      page.get_by_role('button',name='Rimuovi test-a.pdf',exact=True).click();expect(page.locator('#projectDropzone .selected-file')).to_have_count(1)
      page.locator('#projectFiles').set_input_files({'name':'cloud.las','mimeType':'application/octet-stream','buffer':b'las-test'})
      expect(page.locator('#projectDropzone .selected-file')).to_have_count(1)
-     expect(page.locator('#fileWarning')).to_contain_text('non disponibile')
+     expect(page.locator('#fileWarning')).to_contain_text('link cloud')
+     page.locator('#pointCloud').fill('https://cloud.example.invalid/private-point-cloud.custom?format=original')
      f=page.locator('#quoteForm');f.locator('[name=Nome_cognome]').fill('Test riservato');f.locator('[name=email]').fill('private@example.invalid');f.locator('[name=Consenso_privacy]').check()
      page.get_by_role('button',name='Preferenze cookie',exact=True).click();page.get_by_role('button',name='Accetta tutti',exact=True).click()
      assert len([u for u in google if '/gtag/js' in u])==1
      consent=page.evaluate('window.AGTracking.getConsent()');assert consent['analytics'] and consent['marketing']
      page.locator('#quoteSubmit').click();expect(page.locator('#grazie')).to_be_visible();assert len(posts)==1
      assert posts[0]['fields']['Interior_Design_5a_proposta_personalizzata'].startswith('Test riservato')
-     assert 'Nuvola_di_punti_link_cloud' not in posts[0]['fields']
+     assert posts[0]['fields']['Nuvola_di_punti_link_cloud']=='https://cloud.example.invalid/private-point-cloud.custom?format=original'
      events=page.evaluate('window.dataLayer.filter(x=>x[0]==="event").map(x=>({name:x[1],data:x[2]}))')
      assert len([e for e in events if e['name']=='page_view'])==1
      assert len([e for e in events if e['name']=='service_quote_success'])==1
      assert not [e for e in events if e['name']=='generate_lead']
-     serialized=json.dumps(events);assert 'private@example' not in serialized and 'riservato' not in serialized and 'test-b' not in serialized
+     serialized=json.dumps(events);assert 'private@example' not in serialized and 'riservato' not in serialized and 'test-b' not in serialized and 'private-point-cloud' not in serialized
      assert not errors,errors
      assert not bad,bad
      vitals=page.evaluate('({lab:window.__qaVitals,navigation:performance.getEntriesByType("navigation").map(n=>({ttfb:n.responseStart-n.requestStart,domContentLoaded:n.domContentLoadedEventEnd-n.startTime})),resources:performance.getEntriesByType("resource").length})')

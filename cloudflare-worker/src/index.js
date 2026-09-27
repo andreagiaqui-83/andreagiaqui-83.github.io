@@ -129,7 +129,7 @@ async function uploadFile(request, env, origin, sessionId) {
   let rawName;
   try { rawName = decodeURIComponent(request.headers.get('X-File-Name') || 'file'); }
   catch (_) { return json({ok:false,error:'Nome file non valido.'},400,origin,env); }
-  if (/\.(las|laz|e57|rcp|rcs)$/i.test(rawName)) return json({ok:false,error:'Il servizio da nuvola di punti è attualmente non disponibile.'},400,origin,env);
+  if (/\.(las|laz|e57|rcp|rcs|pts|ptx|xyz)$/i.test(rawName)) return json({ok:false,error:'Per la nuvola di punti usa il campo link cloud dedicato; puoi condividere qualsiasi formato originale.'},400,origin,env);
   const fieldName = request.headers.get('X-Field-Name') || 'Allegato';
   const declaredSize = Number(request.headers.get('X-File-Size') || request.headers.get('Content-Length') || 0);
   if (!Number.isSafeInteger(declaredSize) || declaredSize <= 0) return json({ ok: false, error: 'Dimensione file non valida.' }, 400, origin, env);
@@ -300,8 +300,15 @@ async function submitQuote(request, env, origin) {
   const outputs = [].concat(fields['Output[]'] || []);
   const validOutputs = new Set(['Elaborati AutoCAD 2D','Modello AutoCAD 3D','Planimetria DOCFA in AutoCAD','Modello Revit / BIM 3D','Disegno meccanico AutoCAD','Render fotorealistici / viste prospettiche','Visualizzazioni orbitali / sequenze 360°','Interior Design','Altro']);
   if (name.length < 2 || name.length > 120 || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || fields.Consenso_privacy !== 'Acconsento' || !outputs.length || !outputs.every(x=>validOutputs.has(x))) return json({ok:false,error:'Controlla nome, email, servizio e informativa privacy.'},400,origin,env);
-  if (fields.Nuvola_di_punti_link_cloud) return json({ok:false,error:'Il servizio da nuvola di punti è attualmente non disponibile.'},400,origin,env);
-  for (const key of ['Link_cloud_materiale_completo','Google_Maps_Earth']) if (fields[key] && !/^https?:\/\//i.test(fields[key])) return json({ok:false,error:'Collegamento non valido.'},400,origin,env);
+  for (const key of ['Nuvola_di_punti_link_cloud','Link_cloud_materiale_completo','Google_Maps_Earth']) {
+    if (!fields[key]) continue;
+    try {
+      if (typeof fields[key] !== 'string' || fields[key].length > 2000) throw new Error('Invalid URL field');
+      fields[key]=fields[key].trim();
+      const url=new URL(fields[key]);
+      if (!/^https?:$/.test(url.protocol) || !url.hostname || url.username || url.password) throw new Error('Invalid URL');
+    } catch (_) { return json({ok:false,error:'Inserisci un collegamento HTTP o HTTPS completo e valido, senza credenziali nell’indirizzo.'},400,origin,env); }
+  }
   if (['Telefono','WhatsApp'].includes(fields.Contatto_preferito) && !String(fields.Telefono_WhatsApp || '').trim()) return json({ok:false,error:'Inserisci il recapito telefonico.'},400,origin,env);
   const fingerprint = await hmac(env.SIGNING_SECRET, JSON.stringify(fields));
   if (session.submitFingerprint && session.submitFingerprint !== fingerprint) return json({ok:false,error:'La richiesta è già stata elaborata con altri dati. Avvia una nuova richiesta.'},409,origin,env);
@@ -312,6 +319,8 @@ async function submitQuote(request, env, origin) {
   for (const file of session.files || []) uploads.push({ ...file, downloadUrl: await makeDownloadUrl(request, env, file.key) });
 
   const cloudLink = String(fields.Link_cloud_materiale_completo || '').trim();
+  const pointCloudLink = String(fields.Nuvola_di_punti_link_cloud || '').trim();
+  const pointCloudHtml = pointCloudLink ? `<p><strong>Nuvola di punti — link cloud:</strong><br><a href="${escapeHtml(pointCloudLink)}">${escapeHtml(pointCloudLink)}</a></p>` : '';
   const ownerHtml = `
     <div style="font-family:Arial,sans-serif;color:#172033;line-height:1.5">
       <h2 style="margin:0 0 18px">Nuova richiesta preventivo AutoCAD / Revit</h2>
@@ -319,6 +328,7 @@ async function submitQuote(request, env, origin) {
       <h3 style="margin:24px 0 8px">Allegati</h3>
       ${attachmentList(uploads)}
       ${cloudLink ? `<p style="margin-top:16px"><strong>Link cloud al materiale completo:</strong><br><a href="${escapeHtml(cloudLink)}">${escapeHtml(cloudLink)}</a></p>` : ''}
+      ${pointCloudHtml}
       ${uploads.length ? '<p style="color:#64748b;font-size:13px">I link agli allegati scadono dopo 30 giorni.</p>' : ''}
     </div>`;
 
@@ -343,6 +353,7 @@ async function submitQuote(request, env, origin) {
         <h3 style="margin:24px 0 8px">Materiale inviato</h3>
         <p>${uploads.length ? `${uploads.length} file caricati correttamente (${escapeHtml(formatFileSize(uploads.reduce((s, f) => s + Number(f.size || 0), 0)))} complessivi).` : 'Nessun file caricato direttamente dal modulo.'}</p>
         ${cloudLink ? `<p><strong>Link cloud indicato:</strong><br><a href="${escapeHtml(cloudLink)}">${escapeHtml(cloudLink)}</a></p>` : ''}
+        ${pointCloudHtml}
         <p style="margin-top:26px"><strong>Andrea Giaquinto</strong><br>Disegnatore AutoCAD e Revit · CAD | BIM | CONSULENZA<br><a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a><br><a href="tel:+393337240544">+39 333 724 0544</a> · WhatsApp / Telegram</p>
       </div>`;
     try {
@@ -365,6 +376,7 @@ async function submitQuote(request, env, origin) {
     fields,
     files: session.files || [],
     cloudLink,
+    pointCloudLink,
     customerCopySent,
   }), { httpMetadata: { contentType: 'application/json' } });
 
