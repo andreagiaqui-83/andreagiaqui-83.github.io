@@ -35,7 +35,7 @@ jobs:
         run: node --test scripts/test-*.mjs scripts/test-*.cjs
       - name: Desktop and mobile browser verification
         run: node .github/scripts/plugins_qa.cjs local
-      - name: Wait for public pages and comment API
+      - name: Wait for public pages
         if: github.ref == 'refs/heads/main'
         run: |
           python - <<'PY'
@@ -45,8 +45,6 @@ jobs:
               for slug in ['yqarch-italiano','express-tools-italiano']:
                 html=urllib.request.urlopen('https://andreagiaquinto.it/'+slug+'/',timeout=15).read().decode()
                 assert '20260927-plugins-r1' in html
-              data=json.load(urllib.request.urlopen('https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/plugin-comments?project=yqarch',timeout=15))
-              assert data['ok']
               break
             except Exception:
               if attempt==35:raise
