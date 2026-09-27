@@ -1,6 +1,6 @@
 // Keep real, crawlable footer HTML in every public page. No runtime include or extra request.
 const fs=require('node:fs');
-const files=['index.html','lezioni-autocad/index.html','yqarch-italiano/index.html','express-tools-italiano/index.html','privacy/index.html','404.html'];
+const files=['index.html','lezioni-autocad/index.html','yqarch-italiano/index.html','express-tools-italiano/index.html','express-tools-italiano/guida/index.html','downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html','privacy/index.html','404.html'];
 const footer=fs.readFileSync('partials/site-footer.html','utf8').trim();
 const css='<link rel="stylesheet" href="/assets/site-footer.css?v=20260927-r1">';
 const check=process.argv.includes('--check');
