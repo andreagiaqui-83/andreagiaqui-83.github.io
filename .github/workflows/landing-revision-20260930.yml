@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/landing-revision-20260930.yml'
       - '.github/scripts/landing-update-20260930.py'
+      - '.github/scripts/landing-polish-20260930.py'
       - 'scripts/qa-landing-20260930.cjs'
       - 'scripts/test-site-navigation.cjs'
       - 'scripts/test-property-deliverables.mjs'
@@ -31,13 +32,14 @@ jobs:
         id: apply
         run: |
           python .github/scripts/landing-update-20260930.py
+          python .github/scripts/landing-polish-20260930.py
           node scripts/sync-page-navigation.cjs --check
           node scripts/sync-site-footer.cjs --check
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html lezioni-autocad/index.html lezioni-autocad/AGENTS.md yqarch-italiano/index.html express-tools-italiano/index.html express-tools-italiano/guida/index.html downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html downloads/yqarch/YQArch_Italiano_3.64_REPORT.html downloads/express-tools/Express_Tools_Italiano_3.2-rc1_Report.html assets/services/services.css assets/site-footer.css partials/site-footer.html scripts/site-pages.json scripts/sync-page-navigation.cjs scripts/sync-site-footer.cjs privacy/index.html 404.html report-google AGENTS.md sitemap.xml .github/PLUGINS-PUBLICATION.md .github/SERVICES-PUBLICATION.md .github/services-publication.json .github/scripts/plugins_qa.cjs .github/scripts/services_qa.py .github/scripts/site_consistency_qa.cjs
+          git add index.html lezioni-autocad/index.html lezioni-autocad/AGENTS.md yqarch-italiano/index.html express-tools-italiano/index.html express-tools-italiano/guida/index.html downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html downloads/yqarch/YQArch_Italiano_3.64_REPORT.html downloads/express-tools/Express_Tools_Italiano_3.2-rc1_Report.html assets/services/services.css assets/site-footer.css partials/site-footer.html scripts/site-pages.json scripts/sync-page-navigation.cjs scripts/sync-site-footer.cjs scripts/qa-landing-20260930.cjs privacy/index.html 404.html report-google AGENTS.md sitemap.xml .github/PLUGINS-PUBLICATION.md .github/SERVICES-PUBLICATION.md .github/services-publication.json .github/scripts/plugins_qa.cjs .github/scripts/services_qa.py .github/scripts/site_consistency_qa.cjs
           if ! git diff --cached --quiet; then
-            git commit -m 'Revise visual services, clean shared footer and captions, add explicit parent navigation'
+            git commit -m 'Complete candidate metadata and test-harness correction'
             git push origin HEAD:revisione-landing-20260930
           fi
           git rev-parse HEAD
