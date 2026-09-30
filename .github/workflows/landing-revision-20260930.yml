@@ -1,0 +1,29 @@
+name: Landing revision 20260930
+on:
+  push:
+    branches: [revisione-landing-20260930]
+    paths:
+      - '.github/workflows/landing-revision-20260930.yml'
+      - 'scripts/revise-landing-20260930.cjs'
+      - 'scripts/qa-landing-20260930.cjs'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Export verified working snapshot
+        run: git archive --format=zip HEAD -o /tmp/landing-source.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: landing-source
+          path: /tmp/landing-source.zip
+          retention-days: 3
+      - run: npm ci --no-audit --no-fund
+      - name: Existing regression suite
+        run: npm test
