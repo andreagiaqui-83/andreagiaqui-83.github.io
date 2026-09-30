@@ -17,6 +17,8 @@ on:
       - 'scripts/test-site-navigation.cjs'
       - 'scripts/test-property-deliverables.mjs'
       - 'scripts/qa-landing-20260930.cjs'
+      - 'scripts/qa-form-guidance.cjs'
+      - 'scripts/test-form-guidance.mjs'
       - 'lezioni-autocad/**'
       - '.github/scripts/site_consistency_qa.cjs'
       - 'downloads/**'
@@ -52,6 +54,7 @@ jobs:
           node .github/scripts/plugins_qa.cjs local
           node .github/scripts/site_consistency_qa.cjs local
           node scripts/qa-landing-20260930.cjs local
+          node scripts/qa-form-guidance.cjs local
       - name: Wait for public pages
         if: github.ref == 'refs/heads/main'
         run: |
@@ -73,6 +76,7 @@ jobs:
           node .github/scripts/plugins_qa.cjs live
           node .github/scripts/site_consistency_qa.cjs live
           node scripts/qa-landing-20260930.cjs live
+          node scripts/qa-form-guidance.cjs live
       - name: Save verification evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -81,4 +85,5 @@ jobs:
           path: |
             ${{ runner.temp }}/plugins-proof/
             ${{ runner.temp }}/landing-proof/
+            ${{ runner.temp }}/form-guidance-proof/
           retention-days: 30

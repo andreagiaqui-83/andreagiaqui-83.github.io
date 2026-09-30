@@ -27,23 +27,36 @@
   const interior=document.getElementById('interiorSelected'),customChoice=document.getElementById('interiorCustomSelected');
   const cadChoices=['cad2dSelected','cad3dSelected'].map(id=>document.getElementById(id));
   const bim=document.getElementById('bimSelected'),render=document.getElementById('renderSelected');
+  const mechanical=document.getElementById('mechanicalSelected'),other=document.getElementById('otherSelected');
+  const renderCustom=document.getElementById('renderCustomSelected');
   const showPanel=(id,active)=>{
-    const panel=document.getElementById(id);panel.hidden=!active;
+    const panel=document.getElementById(id);if(!panel)return;panel.hidden=!active;
     panel.querySelectorAll('input,textarea,select,button').forEach(field=>{field.disabled=!active;});
   };
   const updateServicePanels=()=>{
     const cad=cadChoices.some(input=>input.checked);
+    showPanel('drawingPreferences',cad||bim.checked);
+    showPanel('cad2dGuidance',cadChoices[0].checked);
+    showPanel('cad3dGuidance',cadChoices[1].checked);
+    showPanel('bimGuidance',bim.checked);
     showPanel('templatePreferences',cad||bim.checked);
     showPanel('templateCADZone',cad);showPanel('templateBIMZone',bim.checked);
+    showPanel('mechanicalPreferences',!!mechanical?.checked);
+    showPanel('otherPreferences',!!other?.checked);
     showPanel('renderPreferences',render.checked);
+    // Nested controls must be evaluated after the parent, which enables its descendants.
+    showPanel('renderCustomPanel',render.checked&&!!renderCustom?.checked);
     showPanel('interiorPreferences',interior.checked);
     showPanel('interiorCustomPanel',interior.checked&&customChoice.checked);
     [...cadChoices,bim].forEach(input=>input.setAttribute('aria-expanded',String(cad||bim.checked)));
+    mechanical?.setAttribute('aria-expanded',String(mechanical.checked));
+    other?.setAttribute('aria-expanded',String(other.checked));
+    renderCustom?.setAttribute('aria-expanded',String(render.checked&&renderCustom.checked));
     render.setAttribute('aria-expanded',String(render.checked));
     interior.setAttribute('aria-expanded',String(interior.checked));
     customChoice.setAttribute('aria-expanded',String(interior.checked&&customChoice.checked));
   };
-  [...cadChoices,bim,render,interior,customChoice].forEach(input=>input.addEventListener('change',()=>{
+  [...cadChoices,bim,render,interior,customChoice,mechanical,other,renderCustom].filter(Boolean).forEach(input=>input.addEventListener('change',()=>{
     updateServicePanels();updateLimits();
     if(input===interior&&interior.checked)track('cta_click',{cta_id:'interior_design_selected'});
   }));

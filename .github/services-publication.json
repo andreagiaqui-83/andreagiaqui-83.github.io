@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260930-services-r7",
+  "build": "20260930-services-r8",
   "scope": [
     "/",
     "/index.html"
@@ -43,8 +43,8 @@
   "public_program_reference": "none",
   "telephone": "+393337240544",
   "email": "andrea.giaqui@gmail.com",
-  "baseline": "4256fc2b2badccf910dd4d70af918df209443d22",
-  "technical_details_always_visible": true,
+  "baseline": "d7fd076a3f88e74bd5a27f277f60c1e95ffddcc0",
+  "technical_details_always_visible": false,
   "review_form_always_visible": true,
   "exchange_formats": [
     "DWG/DXF for CAD",
@@ -67,5 +67,13 @@
   "sectors": "Ambiti CAD/BIM raggruppati nella FAQ; supporto al disegno e alla documentazione, fattibilità concordata sul progetto",
   "online_collaboration": "Incarichi occasionali o continuativi, picchi di lavoro, preventivo e condizioni concordati; nessuna promessa di assenza di contratto o risparmio garantito",
   "production_method_faq": "removed at user request on 2026-09-27",
-  "lessons_scope": "footer e didascalia; offerta, modulo, recensioni, backend e tracciamento invariati"
+  "lessons_scope": "breadcrumb Home; other content and functionality unchanged",
+  "location_always_visible": true,
+  "technical_details_condition": "AutoCAD 2D / AutoCAD 3D / Revit-BIM selected",
+  "conditional_text_fields": [
+    "Indicazioni_output",
+    "Render_personalizzato",
+    "Indicazioni_disegno_meccanico",
+    "Richiesta_personalizzata"
+  ]
 }

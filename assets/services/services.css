@@ -95,3 +95,12 @@
 @media(max-width:900px){.render-layout{gap:30px}.property-service{padding:24px}.property-close{align-items:flex-start;flex-direction:column;gap:20px}}
 @media(max-width:800px){.render-layout{grid-template-columns:1fr}.render-visual{max-width:680px;width:100%}.render-copy{max-width:680px}.render-copy h2{font-size:clamp(32px,6vw,44px)}}
 @media(max-width:600px){.property-services,.property-extras{grid-template-columns:1fr}.property-service{padding:23px 20px}.property-service h3{font-size:22px}.property-offer{margin-top:30px}.property-extras{gap:28px;padding-block:28px}.property-close .button{width:100%}.property-close br{display:none}.property-close strong::before{content:' '}.property-note{font-size:13px}.interior-intro{font-size:15px}.render-copy .button{max-width:100%}}
+
+/* Guided requests: reveal without stealing focus; keep labels and help outside placeholders. */
+.reviews-toolbar{align-items:center;flex-wrap:wrap}.reviews-actions{margin-right:auto}.reviews-actions .button{max-width:100%}
+#lascia-recensione{scroll-margin-top:100px}
+.drawing-guidance{margin:0 0 22px;padding:0 0 0 16px;border-left:3px solid var(--accent)}
+.drawing-guidance p{font-size:14px;line-height:1.75;color:var(--ink);margin:12px 0}
+.custom-request-panel{margin-top:24px;padding-top:22px;border-top:1px solid #afc7c1}
+.service-options-panel textarea{min-height:150px}.service-details-note{margin:22px 0 0}
+@media(max-width:600px){.drawing-guidance{padding-left:12px}.drawing-guidance p{font-size:13px}.reviews-actions{flex:0 0 100%}.reviews-actions .button{width:100%}}
