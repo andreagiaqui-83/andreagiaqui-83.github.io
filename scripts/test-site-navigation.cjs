@@ -6,8 +6,8 @@ function scan(dir='.') {return fs.readdirSync(dir,{withFileTypes:true}).flatMap(
 test('Every public HTML page is registered and every secondary page declares its parent',()=>{
  assert.deepEqual([...entries.map(e=>e.file)].sort(),scan().sort());assert.equal(new Set(entries.map(e=>e.file)).size,entries.length);
  for(const e of entries){const d=docs.get(e.file);assert.equal(d.querySelectorAll('h1').length,1,e.file);const ids=[...d.querySelectorAll('[id]')].map(n=>n.id);assert.equal(ids.length,new Set(ids).size,e.file+' duplicate IDs');
- if(e.kind==='landing'){assert.equal(d.querySelectorAll('.page-back-button').length,0);continue;}
- assert.ok(e.parent?.label?.startsWith('Torna '),e.file);const u=new URL(e.parent.href,'https://andreagiaquinto.it');assert.equal(u.origin,'https://andreagiaquinto.it');assert.equal(u.username,'');
+ if(e.kind==='landing'){assert.equal(d.querySelectorAll('.page-return').length,0);if(e.file!=='index.html')assert.equal(d.querySelectorAll('.breadcrumb [data-home-link]').length,1);continue;}
+ assert.ok(e.parent?.label?.startsWith('Torna ')||(e.parent?.href==='/'&&e.parent.label==='Home'),e.file);const u=new URL(e.parent.href,'https://andreagiaquinto.it');assert.equal(u.origin,'https://andreagiaquinto.it');assert.equal(u.username,'');
  let dest=u.pathname.slice(1);if(!dest||dest.endsWith('/'))dest+='index.html';assert.ok(fs.existsSync(dest),e.file+' destination');
  const links=[...d.querySelectorAll('.page-back-button')];assert.equal(links.length,2,e.file);for(const a of links){assert.equal(a.getAttribute('href'),e.parent.href);assert.ok(a.textContent.includes(e.parent.label));assert.equal(a.hasAttribute('onclick'),false);}
  assert.ok(d.querySelector('[data-page-return="top"]').compareDocumentPosition(d.querySelector('h1'))&4,e.file+' top link');

@@ -52,7 +52,7 @@
     "kind": "service",
     "parent": {
       "href": "/",
-      "label": "Torna ai servizi di Andrea"
+      "label": "Home"
     }
   },
   {
@@ -60,7 +60,7 @@
     "kind": "service",
     "parent": {
       "href": "/",
-      "label": "Torna alla pagina principale"
+      "label": "Home"
     }
   },
   {
@@ -68,7 +68,7 @@
     "kind": "service",
     "parent": {
       "href": "/",
-      "label": "Torna al sito principale"
+      "label": "Home"
     }
   },
   {

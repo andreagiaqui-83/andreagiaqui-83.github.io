@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260930-services-r8",
+  "build": "20260930-services-r9",
   "scope": [
     "/",
     "/index.html"
@@ -43,7 +43,7 @@
   "public_program_reference": "none",
   "telephone": "+393337240544",
   "email": "andrea.giaqui@gmail.com",
-  "baseline": "d7fd076a3f88e74bd5a27f277f60c1e95ffddcc0",
+  "baseline": "1b6225c69b0f3ac7445d0c2f80f4635838bb845c",
   "technical_details_always_visible": false,
   "review_form_always_visible": true,
   "exchange_formats": [
@@ -74,6 +74,9 @@
     "Indicazioni_output",
     "Render_personalizzato",
     "Indicazioni_disegno_meccanico",
-    "Richiesta_personalizzata"
-  ]
+    "Richiesta_personalizzata",
+    "Indicazioni_planimetria_DOCFA"
+  ],
+  "docfa_scope": "Supporto grafico; firma e presentazione restano al professionista abilitato",
+  "home_navigation": "Common page-back-button style for every Home and parent link"
 }

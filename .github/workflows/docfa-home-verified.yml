@@ -1,0 +1,70 @@
+name: DOCFA and Home navigation verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'assets/**'
+      - 'lezioni-autocad/**'
+      - 'yqarch-italiano/**'
+      - 'express-tools-italiano/**'
+      - 'cloudflare-worker/**'
+      - 'scripts/**'
+      - '.github/workflows/docfa-home-verified.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: docfa-home-verification-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install test dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund playwright@1.58.2
+          npx playwright install --with-deps chromium firefox webkit
+      - name: Unit, backend and privacy tests with mocked email
+        run: |
+          set -o pipefail
+          npm test | tee "$RUNNER_TEMP/docfa-home-unit.txt"
+      - name: Verify local form and common Home appearance
+        run: node scripts/qa-docfa-home.cjs local
+      - name: Wait for matching public page builds
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python - <<'PY'
+          import pathlib,re,time,urllib.request
+          pages=['index.html','lezioni-autocad/index.html']
+          for attempt in range(20):
+              try:
+                  for file in pages:
+                      expected=re.search(r'data-build="([^"]+)"',pathlib.Path(file).read_text()).group(1)
+                      url='https://andreagiaquinto.it/'+file.replace('index.html','')
+                      html=urllib.request.urlopen(url+'?verification='+str(time.time()),timeout=20).read().decode()
+                      assert 'data-build="'+expected+'"' in html
+                  break
+              except Exception as error:
+                  print('Waiting for public build:',str(error),flush=True)
+                  if attempt==19: raise
+                  time.sleep(15)
+          PY
+      - name: Verify public pages without real writes
+        if: github.ref == 'refs/heads/main'
+        run: node scripts/qa-docfa-home.cjs live
+      - name: Save actual verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docfa-home-verification
+          path: |
+            ${{ runner.temp }}/docfa-home-proof/
+            ${{ runner.temp }}/docfa-home-unit.txt
+          retention-days: 14

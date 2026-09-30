@@ -31,3 +31,8 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - «Altro» nei render apre `Render_personalizzato`; Disegno meccanico apre `Indicazioni_disegno_meccanico`; «Altro / da valutare» apre `Richiesta_personalizzata`. Ogni nuovo testo è facoltativo, massimo 3000 caratteri, validato anche dal backend.
 - Nascondere e disabilitare i campi inattivi senza cancellarne il testo nella pagina; riattivarli con le scelte precedenti. Nessun autofocus al cambio servizio; ripristino dopo errore e azzeramento solo dopo invio confermato.
 - Il breadcrumb «Home / Lezioni AutoCAD» precede il titolo delle lezioni. Il collegamento Home deve funzionare anche senza JavaScript.
+
+## DOCFA e navigazione Home — 30 settembre 2026
+- Planimetrie DOCFA apre `docfaPreferences` con il campo `Indicazioni_planimetria_DOCFA`: facoltativo, massimo 3000 caratteri, validato e trasmesso soltanto per il servizio attivo. Conservazione temporanea in pagina, esclusione quando deselezionato, reset soltanto dopo invio riuscito. Nessun dato catastale nei tracciamenti.
+- Il servizio DOCFA è supporto grafico al professionista, non una pratica completa con firma e presentazione. Chiedere dati identificativi, rilievo e riferimenti pertinenti, senza richiedere credenziali o documenti d’identità. Per testi e aggiornamenti consultare le fonti annotate in `.github/DOCFA-CONTENT-SOURCES.md`.
+- Home e ritorni alle pagine di riferimento usano la medesima classe `page-back-button` in `assets/site-footer.css`; niente varianti locali concorrenti in CSS delle lezioni o dei plugin. I collegamenti Home sono marcati `data-home-link` e generati da `sync-page-navigation.cjs`. Guide e report conservano il collegamento al proprio plugin o pagina madre.

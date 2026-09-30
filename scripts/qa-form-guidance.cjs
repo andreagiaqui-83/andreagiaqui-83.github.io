@@ -34,7 +34,7 @@ async function axe(page,selectors){await page.addScriptTag({path:'node_modules/a
   browser=await type.launch();
   for(const width of widths){
    const env=await context(browser,width),page=await env.ctx.newPage();
-   await open(page,'/');assert.equal(await page.locator('body').getAttribute('data-build'),'20260930-services-r8');
+   await open(page,'/');assert.equal(await page.locator('body').getAttribute('data-build'),'20260930-services-r9');
    await shown(page,'drawingPreferences',false);await shown(page,'mechanicalPreferences',false);await shown(page,'otherPreferences',false);
    assert.equal(await page.locator('[name="Google_Maps_Earth"]').count(),0);
    assert.equal(await page.locator('.technical-details input').count(),2);assert.equal(await page.locator('.technical-details textarea').count(),0);
@@ -72,7 +72,7 @@ async function axe(page,selectors){await page.addScriptTag({path:'node_modules/a
     for(const id of ['drawingDetails','renderCustom','mechanicalDetails','otherDetails','interiorCustom'])assert.equal(await page.locator('#'+id).inputValue(),'');
    }
    report.push({engine,width,page:'home',status:'PASS',form:'visibility, preserved values, optional fields, bounds, accessibility',mockedSubmit:width===390});
-   await open(page,'/lezioni-autocad/');assert.equal(await page.locator('body').getAttribute('data-build'),'20260930-autocad-v17.10');
+   await open(page,'/lezioni-autocad/');assert.equal(await page.locator('body').getAttribute('data-build'),'20260930-autocad-v17.11');
    const home=page.locator('.breadcrumb a[href="/"]');assert.equal(await home.isVisible(),true);const box=await home.boundingBox();assert.ok(box.height>=44&&box.x>=0&&box.x+box.width<=width+1);assert.ok(box.y<(await page.locator('h1').boundingBox()).y);
    await home.focus();assert.equal(await home.evaluate(e=>e===document.activeElement),true);await axe(page,['.breadcrumb']);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'lessons overflow');
    if(engine==='chromium'&&[320,390,768,1440].includes(width)){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({animations:'disabled',path:path.join(out,`${stage}-lessons-home-${width}.png`)});}
