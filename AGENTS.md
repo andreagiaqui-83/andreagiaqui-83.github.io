@@ -4,7 +4,7 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 
 - La homepage è la landing dei servizi; `/lezioni-autocad/` è una landing separata, con istruzioni proprie. Conservare collegamenti, ancore usate negli annunci, parametri di attribuzione e distinzione degli eventi di conversione.
 - Per i servizi, `service_quote_success` scatta solo dopo l’invio riuscito. Non alterare raccolta del consenso o protezione dei dati nei tracciamenti.
-- Mantenere sempre visibili la sezione “Dettagli tecnici e posizione” e il modulo recensioni. Gli allegati e i dettagli tecnici restano facoltativi. I template sono stati spostati sotto la selezione servizi su richiesta dell’utente: mostrarli soltanto per AutoCAD 2D/3D o Revit/BIM, con i relativi campi facoltativi.
+- Mantenere sempre visibili la posizione dell’immobile (indirizzo e coordinate, senza campo Google Maps/Earth) e il modulo recensioni. Le specifiche CAD/BIM compaiono sotto i servizi quando si seleziona AutoCAD 2D, AutoCAD 3D o Revit/BIM. Allegati e dettagli restano facoltativi. I template sono stati spostati sotto la selezione servizi su richiesta dell’utente: mostrarli soltanto per AutoCAD 2D/3D o Revit/BIM, con i relativi campi facoltativi.
 - Conservare nomi/ID dei campi e contratti con il backend, salvo una modifica funzionale esplicitamente richiesta. Verificare gli invii con test simulati, senza produrre richieste o recensioni reali.
 - Descrivere la compatibilità CAD/BIM con formati e versioni concordati; non promettere compatibilità universale o conservazione integrale di ogni funzione nativa. Incoraggiare materiali complementari pertinenti e disponibili, senza renderli obbligatori.
 - Sincronizzare FAQ visibili e dati strutturati. Conservare canonical, metadati, gerarchia dei titoli, immagini ottimizzate e regole in `.github/SERVICES-PUBLICATION.md`.
@@ -24,3 +24,10 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - Ogni pagina secondaria, guida o rapporto deve dichiarare la pagina di riferimento in `scripts/site-pages.json` e includere pulsanti di ritorno ben visibili in alto e in basso. Usare link HTML espliciti e descrittivi, non `history.back()` o referrer non verificati.
 - Dopo aggiunte o aggiornamenti eseguire `node scripts/sync-page-navigation.cjs` e `node scripts/sync-site-footer.cjs`; registrare tutte le nuove pagine HTML, escluse soltanto verifiche di proprietà e frammenti di template. I test devono essere superati prima della pubblicazione; ogni pagina secondaria deve avere una destinazione di ritorno valida.
 - Home: render e planimetrie commerciali si rivolgono anche ad agenzie, property manager, proprietari, imprese e piccoli studi. Preservare gli altri servizi tecnici, i quattro stili e la quinta proposta. Le nuove preferenze visuali usano il contratto esistente `Render_viste[]`: non modificare nomi/ID o backend senza necessità.
+
+## Richieste guidate — aggiornamento del 30 settembre 2026
+- Dal carosello recensioni della home, il link «Lascia la tua recensione» porta a `#lascia-recensione`, senza invii né eventi lead.
+- Specifiche CAD/BIM: mantenere `Indicazioni_output`, con istruzioni pertinenti alle selezioni attive; template esistenti conservati subito dopo.
+- «Altro» nei render apre `Render_personalizzato`; Disegno meccanico apre `Indicazioni_disegno_meccanico`; «Altro / da valutare» apre `Richiesta_personalizzata`. Ogni nuovo testo è facoltativo, massimo 3000 caratteri, validato anche dal backend.
+- Nascondere e disabilitare i campi inattivi senza cancellarne il testo nella pagina; riattivarli con le scelte precedenti. Nessun autofocus al cambio servizio; ripristino dopo errore e azzeramento solo dopo invio confermato.
+- Il breadcrumb «Home / Lezioni AutoCAD» precede il titolo delle lezioni. Il collegamento Home deve funzionare anche senza JavaScript.

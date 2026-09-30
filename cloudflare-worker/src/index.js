@@ -19,6 +19,9 @@ const FIELD_LABELS = {
   Interior_Design_5a_proposta_personalizzata: 'Quinta proposta Interior Design personalizzata',
   'Interior_Design_stili[]': 'Stili Interior Design da valutare',
   'Render_viste[]': 'Viste render richieste',
+  Render_personalizzato: 'Render personalizzato',
+  Indicazioni_disegno_meccanico: 'Indicazioni per il disegno meccanico',
+  Richiesta_personalizzata: 'Richiesta personalizzata',
   Data_indicativa_consegna: 'Data indicativa di consegna',
   Professione: 'Professione',
   Note_conclusive: 'Note conclusive',
@@ -296,13 +299,26 @@ async function submitQuote(request, env, origin) {
   const session = await readSession(env, sessionId);
   if (!session) return json({ ok: false, error: 'Sessione non trovata.' }, 404, origin, env);
   const fields = body.fields;
-  if (!fields || typeof fields !== 'object' || Array.isArray(fields) || Object.keys(fields).length > 35 || JSON.stringify(fields).length > 24000 || String(body.website || '').trim()) return json({ok:false,error:'Dati della richiesta non validi.'},400,origin,env);
+  if (!fields || typeof fields !== 'object' || Array.isArray(fields) || Object.keys(fields).length > 35 || JSON.stringify(fields).length > 48000 || String(body.website || '').trim()) return json({ok:false,error:'Dati della richiesta non validi.'},400,origin,env);
   for (const value of Object.values(fields)) if (typeof value !== 'string' && !(Array.isArray(value) && value.length <= 12 && value.every(x => typeof x === 'string'))) return json({ok:false,error:'Formato campo non valido.'},400,origin,env);
   const name = String(fields.Nome_cognome || '').trim();
   const email = getCustomerEmail(fields);
   const outputs = [].concat(fields['Output[]'] || []);
   const validOutputs = new Set(['Elaborati AutoCAD 2D','Modello AutoCAD 3D','Planimetria DOCFA in AutoCAD','Modello Revit / BIM 3D','Disegno meccanico AutoCAD','Render fotorealistici / viste prospettiche','Visualizzazioni orbitali / sequenze 360°','Interior Design','Altro']);
   if (name.length < 2 || name.length > 120 || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || fields.Consenso_privacy !== 'Acconsento' || !outputs.length || !outputs.every(x=>validOutputs.has(x))) return json({ok:false,error:'Controlla nome, email, servizio e informativa privacy.'},400,origin,env);
+  // New optional descriptions are bounded and never retained for inactive services.
+  // Keep legacy fields/clients compatible, including Indicazioni_output and old map links.
+  const detailOptions = {
+    Render_personalizzato: outputs.includes('Render fotorealistici / viste prospettiche') && [].concat(fields['Render_viste[]'] || []).includes('Altro'),
+    Indicazioni_disegno_meccanico: outputs.includes('Disegno meccanico AutoCAD'),
+    Richiesta_personalizzata: outputs.includes('Altro'),
+  };
+  for (const [key, active] of Object.entries(detailOptions)) {
+    if (fields[key] !== undefined && (typeof fields[key] !== 'string' || fields[key].length > 3000)) {
+      return json({ok:false,error:'Ogni descrizione personalizzata può contenere al massimo 3000 caratteri di testo.'},400,origin,env);
+    }
+    if (!active) delete fields[key];
+  }
   for (const key of ['Nuvola_di_punti_link_cloud','Link_cloud_materiale_completo','Google_Maps_Earth']) {
     if (!fields[key]) continue;
     try {

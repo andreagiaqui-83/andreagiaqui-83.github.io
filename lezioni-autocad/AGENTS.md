@@ -37,3 +37,6 @@ Le successive istruzioni esplicite dell'utente possono aggiornare queste regole.
 
 ## Aggiornamento esplicito — 27 settembre 2026
 Il modulo recensioni deve essere sempre visibile come nella landing servizi. Il fondo pagina deve usare il componente comune del sito, con ruolo “Disegnatore CAD e BIM”, tutti i contatti e i collegamenti alle altre landing. Le immagini non devono essere presentate come schermate o lavori reali se non lo sono. La direttiva del 30 settembre 2026 richiede didascalie descrittive, senza diciture «illustrativa» o riferimenti all’IA, e il footer senza pulsante LinkedIn.
+
+## Navigazione — 30 settembre 2026
+Conservare il percorso «Home / Lezioni AutoCAD» sopra il riquadro iniziale, con Home collegata alla pagina principale tramite link HTML statico, visibile anche su mobile e senza JavaScript.
