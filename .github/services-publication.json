@@ -1,12 +1,12 @@
 {
   "state": "active",
-  "build": "20260927-services-r1",
+  "build": "20260930-services-r7",
   "scope": [
     "/",
     "/index.html"
   ],
   "lessons_path": "/lezioni-autocad/",
-  "lessons_unchanged": true,
+  "lessons_unchanged": false,
   "point_cloud_service": "active; original formats through cloud link, data verified before work",
   "point_cloud_form_field": "enabled; optional URL; native paste",
   "pricing": {
@@ -43,7 +43,7 @@
   "public_program_reference": "none",
   "telephone": "+393337240544",
   "email": "andrea.giaqui@gmail.com",
-  "baseline": "3faaa38312710c8c6bf9ed697e30b126a42838e3",
+  "baseline": "4256fc2b2badccf910dd4d70af918df209443d22",
   "technical_details_always_visible": true,
   "review_form_always_visible": true,
   "exchange_formats": [
@@ -56,10 +56,16 @@
   "render_deliverables": [
     "prospetti",
     "viste 3D render",
-    "sezioni render su richiesta"
+    "sezioni render su richiesta",
+    "planimetrie commerciali 2D",
+    "planimetrie 3D arredate",
+    "virtual staging controllato",
+    "prima/dopo proposta di ristrutturazione",
+    "video e walkthrough brevi su preventivo"
   ],
   "pdf_delivery": "Tavole CAD/Revit e immagini render/Interior Design su richiesta, per apertura e condivisione; immagini originali per dettaglio visivo",
   "sectors": "Ambiti CAD/BIM raggruppati nella FAQ; supporto al disegno e alla documentazione, fattibilità concordata sul progetto",
   "online_collaboration": "Incarichi occasionali o continuativi, picchi di lavoro, preventivo e condizioni concordati; nessuna promessa di assenza di contratto o risparmio garantito",
-  "production_method_faq": "removed at user request on 2026-09-27"
+  "production_method_faq": "removed at user request on 2026-09-27",
+  "lessons_scope": "footer e didascalia; offerta, modulo, recensioni, backend e tracciamento invariati"
 }

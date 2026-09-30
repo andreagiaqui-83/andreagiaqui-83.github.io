@@ -70,3 +70,6 @@ Verificati il 20 settembre 2026. Esempi di software, senza classifiche di diffus
 - Footer collegato alle nuove landing `/yqarch-italiano/` e `/express-tools-italiano/`.
 - La navigazione servizi, le conversioni e il modulo preventivi conservano il loro comportamento. I commenti dei progetti hanno endpoint e consenso separati.
 - Dettagli e regole di manutenzione in `.github/PLUGINS-PUBLICATION.md`.
+
+## Aggiornamento 30 settembre 2026
+Footer comune senza pulsante LinkedIn; didascalie descrittive senza formule illustrative o riferimenti IA. Ogni pagina secondaria ha pulsanti statici di ritorno in alto e in basso, con destinazioni registrate in `scripts/site-pages.json`. Tariffe e installer invariati. La home amplia render, planimetrie commerciali e virtual staging senza alterare endpoint, consenso, tracciamento o nomi dei campi. I report tecnici mantengono contenuti e limiti dichiarati; cambiano soltanto navigazione, contenitore responsive delle tabelle e footer.

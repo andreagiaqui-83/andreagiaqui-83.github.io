@@ -36,4 +36,4 @@ Ogni intervento deve tenere conto di tutte le ottimizzazioni già implementate. 
 Le successive istruzioni esplicite dell'utente possono aggiornare queste regole. Non usare questo documento per aggiungere richieste di approvazione a interventi già autorizzati.
 
 ## Aggiornamento esplicito — 27 settembre 2026
-Il modulo recensioni deve essere sempre visibile come nella landing servizi. Il fondo pagina deve usare il componente comune del sito, con ruolo “Disegnatore CAD e BIM”, tutti i contatti e i collegamenti alle altre landing. Le immagini restano dichiarate illustrative quando non rappresentano schermate o lavori reali.
+Il modulo recensioni deve essere sempre visibile come nella landing servizi. Il fondo pagina deve usare il componente comune del sito, con ruolo “Disegnatore CAD e BIM”, tutti i contatti e i collegamenti alle altre landing. Le immagini non devono essere presentate come schermate o lavori reali se non lo sono. La direttiva del 30 settembre 2026 richiede didascalie descrittive, senza diciture «illustrativa» o riferimenti all’IA, e il footer senza pulsante LinkedIn.
