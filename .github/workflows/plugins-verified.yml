@@ -4,12 +4,19 @@ on:
   push:
     branches: [main, 'optimize/plugins-*', 'optimize/services-site-*']
     paths:
+      - 'index.html'
       - 'yqarch-italiano/**'
       - 'express-tools-italiano/**'
       - 'assets/plugins/**'
+      - 'assets/services/**'
       - 'assets/site-footer.css'
       - 'partials/**'
       - 'scripts/sync-site-footer.cjs'
+      - 'scripts/sync-page-navigation.cjs'
+      - 'scripts/site-pages.json'
+      - 'scripts/test-site-navigation.cjs'
+      - 'scripts/test-property-deliverables.mjs'
+      - 'scripts/qa-landing-20260930.cjs'
       - 'lezioni-autocad/**'
       - '.github/scripts/site_consistency_qa.cjs'
       - 'downloads/**'
@@ -25,7 +32,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,18 +48,20 @@ jobs:
       - name: Desktop and mobile browser verification
         run: |
           node scripts/sync-site-footer.cjs --check
+          node scripts/sync-page-navigation.cjs --check
           node .github/scripts/plugins_qa.cjs local
           node .github/scripts/site_consistency_qa.cjs local
+          node scripts/qa-landing-20260930.cjs local
       - name: Wait for public pages
         if: github.ref == 'refs/heads/main'
         run: |
           python - <<'PY'
-          import time,urllib.request,json
+          import time,urllib.request
           for attempt in range(36):
             try:
               for slug in ['yqarch-italiano','express-tools-italiano']:
                 html=urllib.request.urlopen('https://andreagiaquinto.it/'+slug+'/',timeout=15).read().decode()
-                assert '20260927-plugins-r4' in html
+                assert '20260930-plugins-r5' in html
               break
             except Exception:
               if attempt==35:raise
@@ -63,10 +72,13 @@ jobs:
         run: |
           node .github/scripts/plugins_qa.cjs live
           node .github/scripts/site_consistency_qa.cjs live
+          node scripts/qa-landing-20260930.cjs live
       - name: Save verification evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: plugin-pages-${{ github.sha }}
-          path: ${{ runner.temp }}/plugins-proof/
+          path: |
+            ${{ runner.temp }}/plugins-proof/
+            ${{ runner.temp }}/landing-proof/
           retention-days: 30
