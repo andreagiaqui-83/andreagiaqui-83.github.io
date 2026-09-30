@@ -1,0 +1,108 @@
+name: DOCFA and Home candidate
+on:
+  push:
+    branches: [revisione-docfa-home-20260930]
+    paths:
+      - '.github/scripts/docfa-home-build.py'
+      - '.github/workflows/docfa-home-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    outputs:
+      candidate: ${{ steps.build.outputs.candidate }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Apply scoped changes only to the candidate branch
+        id: build
+        run: |
+          test "$GITHUB_REF" = refs/heads/revisione-docfa-home-20260930
+          git diff --exit-code 1b6225c69b0f3ac7445d0c2f80f4635838bb845c HEAD -- index.html assets/services/services.js assets/site-footer.css cloudflare-worker/src/index.js scripts/sync-page-navigation.cjs
+          python .github/scripts/docfa-home-build.py
+          node --check assets/services/services.js
+          node --check cloudflare-worker/src/index.js
+          node --check scripts/sync-page-navigation.cjs
+          node --check scripts/test-docfa-home.mjs
+          node --check scripts/qa-docfa-home.cjs
+          node scripts/sync-page-navigation.cjs --check
+          node scripts/sync-site-footer.cjs --check
+          git diff --check
+          test -z "$(git diff --name-only -- .github/workflows)"
+          git rm .github/scripts/docfa-home-build.py
+          git add -u
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Add optional DOCFA specifications and unify Home navigation without changing prices'
+          git push origin HEAD:revisione-docfa-home-20260930
+          echo "candidate=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          git rev-parse HEAD > "$RUNNER_TEMP/docfa-home-commit.txt"
+          git archive --format=zip HEAD -o "$RUNNER_TEMP/docfa-home-source.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docfa-home-source
+          path: |
+            ${{ runner.temp }}/docfa-home-source.zip
+            ${{ runner.temp }}/docfa-home-commit.txt
+          retention-days: 14
+  verify:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [docfa-home, shared-pages, existing-form]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.candidate }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install test dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund playwright@1.58.2
+          npx playwright install --with-deps chromium firefox webkit
+          python -m pip install beautifulsoup4 pillow requests playwright==1.58.0
+      - name: Verify new DOCFA form and Home appearance
+        if: matrix.suite == 'docfa-home'
+        run: |
+          set -o pipefail
+          npm test | tee "$RUNNER_TEMP/docfa-home-unit.txt"
+          node scripts/qa-docfa-home.cjs local
+      - name: Existing plugin and shared-page regression
+        if: matrix.suite == 'shared-pages'
+        run: |
+          node .github/scripts/plugins_qa.cjs local
+          node .github/scripts/site_consistency_qa.cjs local
+          node scripts/qa-landing-20260930.cjs local
+      - name: Existing home and guided-form regression
+        if: matrix.suite == 'existing-form'
+        run: |
+          python .github/scripts/services_qa.py local
+          node scripts/qa-form-guidance.cjs local
+      - name: Save actual evidence, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docfa-home-${{ matrix.suite }}-proof
+          path: |
+            ${{ runner.temp }}/docfa-home-proof/
+            ${{ runner.temp }}/docfa-home-unit.txt
+            ${{ runner.temp }}/plugins-proof/
+            ${{ runner.temp }}/landing-proof/
+            ${{ runner.temp }}/services-restored-proof/
+            ${{ runner.temp }}/form-guidance-proof/
+          retention-days: 14
