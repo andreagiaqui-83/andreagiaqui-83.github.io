@@ -7,9 +7,10 @@ const live=process.argv.includes('live'),out=path.join(process.env.RUNNER_TEMP||
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript','.avif':'image/avif','.webp':'image/webp','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon'};
 let server;const base=live?'https://andreagiaquinto.it':'http://127.0.0.1:8779';
 const routeFor=f=>'/'+(f.endsWith('index.html')?f.slice(0,-10):f);
-if(!live)server=http.createServer((req,res)=>{let name=new URL(req.url,base).pathname;if(name.endsWith('/'))name+='index.html';try{const file=path.join(process.cwd(),decodeURIComponent(name));res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'});res.end(fs.readFileSync(file));}catch{res.writeHead(404);res.end();}}).listen(8779,'127.0.0.1');
+if(!live)server=http.createServer((req,res)=>{let name=new URL(req.url,base).pathname;if(name.endsWith('/'))name+='index.html';try{const file=path.join(process.cwd(),decodeURIComponent(name));const bytes=fs.readFileSync(file);res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'});res.end(bytes);}catch{res.writeHead(404);res.end();}}).listen(8779,'127.0.0.1');
 const safeName=s=>s.replace(/[^a-z0-9]+/gi,'-');
 (async()=>{const report=[];try{
+ if(!live){const missing=await fetch(base+'/__qa_missing_resource__.txt');assert.equal(missing.status,404,'Test server must handle absent files without crashing');}
  for(const [engine,type] of Object.entries({chromium,firefox,webkit})){
   const browser=await type.launch();
   for(const entry of entries){const widths=entry.file==='index.html'?[320,360,390,430,768,1024,1440,1920]:[320,1440];
