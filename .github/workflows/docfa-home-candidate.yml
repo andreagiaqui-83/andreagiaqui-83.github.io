@@ -3,7 +3,6 @@ on:
   push:
     branches: [revisione-docfa-home-20260930]
     paths:
-      - '.github/scripts/docfa-home-build.py'
       - '.github/workflows/docfa-home-candidate.yml'
   workflow_dispatch:
 permissions:
@@ -24,12 +23,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Apply scoped changes only to the candidate branch
+      - name: Finalize only the already assembled candidate
         id: build
         run: |
           test "$GITHUB_REF" = refs/heads/revisione-docfa-home-20260930
-          git diff --exit-code 1b6225c69b0f3ac7445d0c2f80f4635838bb845c HEAD -- index.html assets/services/services.js assets/site-footer.css cloudflare-worker/src/index.js scripts/sync-page-navigation.cjs
-          python .github/scripts/docfa-home-build.py
+          git merge-base --is-ancestor 8d1df5585ad3397dca14aeae62161396d81d279c HEAD
+          python - <<'PY'
+          from pathlib import Path
+          path=Path('assets/plugins/plugins.css')
+          css=path.read_text()
+          css=css.replace('.breadcrumb{margin-bottom:24px;font-size:12px}','')
+          assert '.breadcrumb' not in css
+          path.write_text(css)
+          path=Path('index.html')
+          html=path.read_text()
+          assert 'id="docfaPreferences"' in html
+          html=html.replace('visura ed eventuali elaborato planimetrico ed elenco subalterni','visura e, se disponibili, elaborato planimetrico ed elenco dei subalterni')
+          path.write_text(html)
+          PY
           node --check assets/services/services.js
           node --check cloudflare-worker/src/index.js
           node --check scripts/sync-page-navigation.cjs
@@ -39,12 +50,13 @@ jobs:
           node scripts/sync-site-footer.cjs --check
           git diff --check
           test -z "$(git diff --name-only -- .github/workflows)"
-          git rm .github/scripts/docfa-home-build.py
           git add -u
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Add optional DOCFA specifications and unify Home navigation without changing prices'
-          git push origin HEAD:revisione-docfa-home-20260930
+          if ! git diff --cached --quiet; then
+            git commit -m 'Remove last local mobile breadcrumb override and refine DOCFA wording'
+            git push origin HEAD:revisione-docfa-home-20260930
+          fi
           echo "candidate=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           git rev-parse HEAD > "$RUNNER_TEMP/docfa-home-commit.txt"
           git archive --format=zip HEAD -o "$RUNNER_TEMP/docfa-home-source.zip"
@@ -66,6 +78,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           ref: ${{ needs.prepare.outputs.candidate }}
       - uses: actions/setup-node@v4
         with:
