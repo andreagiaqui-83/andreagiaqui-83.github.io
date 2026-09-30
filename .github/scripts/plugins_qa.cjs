@@ -21,7 +21,7 @@ if(!live)server=http.createServer((req,res)=>{let name=decodeURIComponent(new UR
    page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
    await page.route(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/,async route=>{google.push(route.request().url());await route.fulfill({status:200,body:''});});
    await page.route('**/api/plugin-comments?**',async route=>{if(route.request().method()==='POST'){posts.push(route.request().postDataJSON());await route.fulfill({json:{ok:true,pending:true}});}else await route.fulfill({json:{ok:true,comments:[{id:'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',name:'Visitatore di prova',text:'Come posso consultare la guida offline?',kind:'Domanda',environment:'Dati simulati per la verifica',createdAt:'2026-09-27T10:00:00Z'}],nextCursor:null}});});
-   const response=await page.goto(base+'/'+slug+'/',{waitUntil:'networkidle'});assert.equal(response.status(),200);assert.equal(await page.locator('body').getAttribute('data-build'),'20260927-plugins-r4');assert.equal(google.length,0);
+   const response=await page.goto(base+'/'+slug+'/',{waitUntil:'networkidle'});assert.equal(response.status(),200);assert.equal(await page.locator('body').getAttribute('data-build'),'20260930-plugins-r5');assert.equal(google.length,0);
    await page.getByRole('button',{name:'Rifiuta facoltativi'}).click();assert.equal(google.length,0);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),engine+' '+width+' '+slug+' overflow');
    assert.equal(await page.locator('h1').count(),1);

@@ -5,3 +5,14 @@ footer.site-footer{display:block;position:relative;background:#0b2130;color:#edf
 @media(max-width:900px){.site-footer .sf-top{grid-template-columns:1fr;gap:30px}.site-footer .sf-intro br{display:block}.site-footer .sf-nav>.sf-label{flex-basis:100%;margin-bottom:8px}.site-footer .sf-legal{align-items:flex-start;flex-direction:column;gap:10px}}
 @media(max-width:600px){.site-footer .sf-wrap{width:calc(100% - 36px)}.site-footer .sf-top{padding:32px 0 26px;gap:26px}.site-footer .sf-name{font-size:22px}.site-footer .sf-details{flex-direction:column;gap:0}.site-footer .sf-details a{font-size:14px}.site-footer .sf-social{display:grid;grid-template-columns:1fr;max-width:340px}.site-footer .sf-social-link{justify-content:flex-start;padding-inline:14px;font-size:13px}.site-footer .sf-nav{display:grid;grid-template-columns:1fr;gap:0;padding:20px 0}.site-footer .sf-legal{padding-bottom:96px}.site-footer .sf-legal p{font-size:11px}}
 @media print{footer.site-footer{display:none}}
+
+/* Secondary pages: prominent static parent links, never history.back(). */
+.page-return{display:block;position:static;max-width:100%;clear:both;text-align:left}
+.page-return-top{margin:0 0 24px}.page-return-bottom{margin:36px 0 12px;padding-top:22px;border-top:1px solid #b9cbd0}
+.page-return .page-back-button{display:inline-flex;align-items:center;justify-content:flex-start;gap:10px;box-sizing:border-box;min-height:48px;max-width:100%;padding:12px 18px;margin:0;border:1px solid #0e6572;border-radius:9px;background:#0e6572;color:#fff;font:650 15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:normal;text-decoration:none;white-space:normal;overflow-wrap:anywhere;text-align:left}
+.page-return .page-back-button:hover{background:#104a55;color:#fff;border-color:#104a55}
+.page-return .page-back-button:focus-visible{outline:3px solid #ad5700;outline-offset:4px}
+.page-return .page-back-button>span:first-child{flex-shrink:0;font-size:20px}
+.page-return .page-back-button>span:last-child{min-width:0}
+@media(max-width:600px){.page-return .page-back-button{font-size:14px;padding:12px 15px;min-height:48px}.page-return-bottom{margin-top:28px}}
+@media print{.page-return{display:none}}

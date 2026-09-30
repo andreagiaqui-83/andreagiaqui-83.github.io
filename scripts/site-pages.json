@@ -1,0 +1,90 @@
+[
+  {
+    "file": "index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "lezioni-autocad/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "yqarch-italiano/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "express-tools-italiano/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "express-tools-italiano/guida/index.html",
+    "kind": "guide",
+    "parent": {
+      "href": "/express-tools-italiano/",
+      "label": "Torna a Express Tools Italiano"
+    }
+  },
+  {
+    "file": "downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html",
+    "kind": "guide",
+    "parent": {
+      "href": "https://andreagiaquinto.it/yqarch-italiano/",
+      "label": "Torna a YQArch Italiano"
+    }
+  },
+  {
+    "file": "downloads/yqarch/YQArch_Italiano_3.64_REPORT.html",
+    "kind": "report",
+    "parent": {
+      "href": "https://andreagiaquinto.it/yqarch-italiano/",
+      "label": "Torna a YQArch Italiano"
+    }
+  },
+  {
+    "file": "downloads/express-tools/Express_Tools_Italiano_3.2-rc1_Report.html",
+    "kind": "report",
+    "parent": {
+      "href": "https://andreagiaquinto.it/express-tools-italiano/",
+      "label": "Torna a Express Tools Italiano"
+    }
+  },
+  {
+    "file": "privacy/index.html",
+    "kind": "service",
+    "parent": {
+      "href": "/",
+      "label": "Torna ai servizi di Andrea"
+    }
+  },
+  {
+    "file": "404.html",
+    "kind": "service",
+    "parent": {
+      "href": "/",
+      "label": "Torna alla pagina principale"
+    }
+  },
+  {
+    "file": "report-google/index.html",
+    "kind": "service",
+    "parent": {
+      "href": "/",
+      "label": "Torna al sito principale"
+    }
+  },
+  {
+    "file": "report-google/privacy/index.html",
+    "kind": "service",
+    "parent": {
+      "href": "/report-google/",
+      "label": "Torna a Report Google"
+    }
+  },
+  {
+    "file": "report-google/termini/index.html",
+    "kind": "service",
+    "parent": {
+      "href": "/report-google/",
+      "label": "Torna a Report Google"
+    }
+  }
+]
