@@ -28,6 +28,7 @@
   const cadChoices=['cad2dSelected','cad3dSelected'].map(id=>document.getElementById(id));
   const bim=document.getElementById('bimSelected'),render=document.getElementById('renderSelected');
   const mechanical=document.getElementById('mechanicalSelected'),other=document.getElementById('otherSelected');
+  const docfa=document.getElementById('docfaSelected');
   const renderCustom=document.getElementById('renderCustomSelected');
   const showPanel=(id,active)=>{
     const panel=document.getElementById(id);if(!panel)return;panel.hidden=!active;
@@ -42,6 +43,7 @@
     showPanel('templatePreferences',cad||bim.checked);
     showPanel('templateCADZone',cad);showPanel('templateBIMZone',bim.checked);
     showPanel('mechanicalPreferences',!!mechanical?.checked);
+    showPanel('docfaPreferences',!!docfa?.checked);
     showPanel('otherPreferences',!!other?.checked);
     showPanel('renderPreferences',render.checked);
     // Nested controls must be evaluated after the parent, which enables its descendants.
@@ -50,13 +52,14 @@
     showPanel('interiorCustomPanel',interior.checked&&customChoice.checked);
     [...cadChoices,bim].forEach(input=>input.setAttribute('aria-expanded',String(cad||bim.checked)));
     mechanical?.setAttribute('aria-expanded',String(mechanical.checked));
+    docfa?.setAttribute('aria-expanded',String(docfa.checked));
     other?.setAttribute('aria-expanded',String(other.checked));
     renderCustom?.setAttribute('aria-expanded',String(render.checked&&renderCustom.checked));
     render.setAttribute('aria-expanded',String(render.checked));
     interior.setAttribute('aria-expanded',String(interior.checked));
     customChoice.setAttribute('aria-expanded',String(interior.checked&&customChoice.checked));
   };
-  [...cadChoices,bim,render,interior,customChoice,mechanical,other,renderCustom].filter(Boolean).forEach(input=>input.addEventListener('change',()=>{
+  [...cadChoices,bim,render,interior,customChoice,mechanical,other,renderCustom,docfa].filter(Boolean).forEach(input=>input.addEventListener('change',()=>{
     updateServicePanels();updateLimits();
     if(input===interior&&interior.checked)track('cta_click',{cta_id:'interior_design_selected'});
   }));

@@ -22,6 +22,7 @@ const FIELD_LABELS = {
   Render_personalizzato: 'Render personalizzato',
   Indicazioni_disegno_meccanico: 'Indicazioni per il disegno meccanico',
   Richiesta_personalizzata: 'Richiesta personalizzata',
+  Indicazioni_planimetria_DOCFA: 'Indicazioni per la planimetria catastale DOCFA',
   Data_indicativa_consegna: 'Data indicativa di consegna',
   Professione: 'Professione',
   Note_conclusive: 'Note conclusive',
@@ -312,6 +313,7 @@ async function submitQuote(request, env, origin) {
     Render_personalizzato: outputs.includes('Render fotorealistici / viste prospettiche') && [].concat(fields['Render_viste[]'] || []).includes('Altro'),
     Indicazioni_disegno_meccanico: outputs.includes('Disegno meccanico AutoCAD'),
     Richiesta_personalizzata: outputs.includes('Altro'),
+    Indicazioni_planimetria_DOCFA: outputs.includes('Planimetria DOCFA in AutoCAD'),
   };
   for (const [key, active] of Object.entries(detailOptions)) {
     if (fields[key] !== undefined && (typeof fields[key] !== 'string' || fields[key].length > 3000)) {

@@ -79,8 +79,3 @@ html[data-visual-preview="without-render"] .visual-section{display:none}
 
 /* The review form is always visible, on every screen size. */
 .review-details>h3{font-size:clamp(19px,2.3vw,24px);line-height:1.35;margin:0;padding:26px 0 14px}.review-details .review-submit-box{padding-top:8px}.review-details .review-submit-box>div>h3{font-size:17px}
-
-/* Explicit parent link above the hero, also usable without JavaScript. */
-.breadcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 20px;font-size:13px;line-height:1.5;color:#b5c7d5}
-.breadcrumb a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #476071;border-radius:8px;color:#d2f8ff;font-weight:700;text-decoration:none}
-.breadcrumb a:hover{background:#173e50;color:#fff}.breadcrumb a:focus-visible{outline:3px solid #6eedfa;outline-offset:3px}

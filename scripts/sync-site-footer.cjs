@@ -2,7 +2,7 @@
 const fs=require('node:fs');
 const files=JSON.parse(fs.readFileSync('scripts/site-pages.json','utf8')).map(page=>page.file);
 const footer=fs.readFileSync('partials/site-footer.html','utf8').trim();
-const css='<link rel="stylesheet" href="/assets/site-footer.css?v=20260930-r2">';
+const css='<link rel="stylesheet" href="/assets/site-footer.css?v=20260930-r3">';
 const check=process.argv.includes('--check');
 for(const file of files){const before=fs.readFileSync(file,'utf8');let after=before;
  if(/<footer\b[\s\S]*?<\/footer>/.test(after))after=after.replace(/<footer\b[\s\S]*?<\/footer>/,()=>footer);
