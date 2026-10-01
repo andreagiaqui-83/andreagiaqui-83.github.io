@@ -2,7 +2,7 @@ name: Plugin pages quality and live verification
 on:
   workflow_dispatch:
   push:
-    branches: [main, 'optimize/plugins-*', 'optimize/services-site-*']
+    branches: [main, 'release/yqarch-*', 'optimize/plugins-*', 'optimize/services-site-*']
     paths:
       - 'index.html'
       - 'yqarch-italiano/**'
@@ -64,7 +64,9 @@ jobs:
             try:
               for slug in ['yqarch-italiano','express-tools-italiano']:
                 html=urllib.request.urlopen('https://andreagiaquinto.it/'+slug+'/',timeout=15).read().decode()
-                assert '20260930-plugins-r5' in html
+                import pathlib,re
+                expected=re.search(r'data-build="([^"]+)"',pathlib.Path(slug+'/index.html').read_text()).group(1)
+                assert 'data-build="'+expected+'"' in html
               break
             except Exception:
               if attempt==35:raise

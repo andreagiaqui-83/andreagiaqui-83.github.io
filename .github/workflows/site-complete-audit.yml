@@ -1,0 +1,67 @@
+name: Complete site audit
+on:
+  push:
+    branches: [main, 'release/yqarch-*']
+    paths:
+      - '**/*.html'
+      - 'assets/**'
+      - 'scripts/audit-site.cjs'
+      - 'scripts/test-public-integrity.cjs'
+      - 'scripts/site-pages.json'
+      - '.github/workflows/site-complete-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: complete-audit-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund playwright@1.58.2
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Complete local audit without external writes
+        env:
+          QA_ENGINES: ${{ matrix.engine }}
+        run: node scripts/audit-site.cjs local
+      - name: Wait for exact published documents
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,time,urllib.request
+          files=[e['file'] for e in json.loads(pathlib.Path('scripts/site-pages.json').read_text()) if e['file']!='404.html']
+          for attempt in range(30):
+              try:
+                  for file in files:
+                      request=urllib.request.Request('https://andreagiaquinto.it/'+file+'?audit='+str(time.time()),headers={'Cache-Control':'no-cache'})
+                      online=urllib.request.urlopen(request,timeout=25).read()
+                      assert hashlib.sha256(online).digest()==hashlib.sha256(pathlib.Path(file).read_bytes()).digest(),file
+                  break
+              except Exception as e:
+                  print('Waiting:',str(e),flush=True)
+                  if attempt==29: raise
+                  time.sleep(10)
+          PY
+      - name: Complete live audit without external writes
+        if: github.ref == 'refs/heads/main'
+        env:
+          QA_ENGINES: ${{ matrix.engine }}
+        run: node scripts/audit-site.cjs live
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: complete-site-${{ matrix.engine }}-${{ github.sha }}
+          path: ${{ runner.temp }}/site-audit/
+          retention-days: 30
