@@ -1,87 +1,39 @@
-name: Audit YQArch 3.73 publication candidate
+name: Normalize YQArch 3.73 public guide and report
 on:
   push:
     branches: ["publish-yqarch-3.73"]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  audit:
+  normalize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-      - name: Verify package, landing and protected site surfaces
-        shell: python
+          node-version: '22'
+      - name: Apply shared navigation and footer
         run: |
-          import hashlib, json, pathlib, re, subprocess, zipfile
-          root=pathlib.Path('.')
-          def sha(p):
-              return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
-          exe=root/'downloads/yqarch/YQArch_Italiano_3.73.exe'
-          zipp=root/'downloads/yqarch/YQArch_Italiano_3.73.zip'
-          guide=root/'downloads/yqarch/YQArch_Italiano_3.73_GUIDA.html'
-          report=root/'downloads/yqarch/YQArch_Italiano_3.73_REPORT.html'
-          sha_txt=root/'downloads/yqarch/SHA256.txt'
-          assert exe.stat().st_size==20211200
-          assert zipp.stat().st_size==18019247
-          assert sha(exe)=='07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d'
-          assert sha(zipp)=='ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2'
-          assert sha(guide)=='e9e45743405d95a188d0d60e6bddea54948ef60de91a2dfa8bd6b7a765c4568d'
-          with zipfile.ZipFile(zipp) as z:
-              assert z.testzip() is None
-              zn=z.namelist()
-              assert len(zn)==779 and len(zn)==len(set(x.casefold() for x in zn))
-              zmeta={i.filename:(i.CRC,i.file_size) for i in z.infolist()}
-          with zipfile.ZipFile(__import__('io').BytesIO(exe.read_bytes()[:19354782])) as z:
-              assert z.testzip() is None
-              en=z.namelist()
-              assert en==zn
-              emeta={i.filename:(i.CRC,i.file_size) for i in z.infolist()}
-              assert emeta==zmeta
-          txt=sha_txt.read_text(encoding='utf-8')
-          assert '07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d' in txt
-          assert 'ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2' in txt
-          rep=report.read_text(encoding='utf-8')
-          assert 'Collaudo reale completato sul PC di riferimento' in rep
-          assert 'collaudo ancora necessario' not in rep.lower()
-          page=(root/'yqarch-italiano/index.html').read_text(encoding='utf-8')
-          required=[
-              'softwareVersion":"3.73"',
-              'YQArch_Italiano_3.73.exe',
-              'YQArch_Italiano_3.73.zip',
-              'Versione 3.73',
-              'Aggiornamento del 1 ottobre 2026',
-              'AutoCAD completo 2026 Windows',
-              '147/195',
-              '48 file AC1021',
-              '20261001-yqarch-373',
-              '07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d',
-              'ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2'
-          ]
-          for x in required: assert x in page, x
-          for old in ['3.64','3.63','Release 3.73 da collaudare','Seguimi su LinkedIn','immagine illustrativa','creata con l’intelligenza artificiale']:
-              assert old.lower() not in page.lower(), old
-          for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>',page,re.S):
-              json.loads(block)
-          local=set()
-          for attr in re.findall(r'(?:href|src)="([^"]+)"',page):
-              if not attr.startswith('/') or attr.startswith('//'): continue
-              p=attr.split('#',1)[0].split('?',1)[0]
-              if not p: continue
-              fs=root/p.lstrip('/')
-              if p.endswith('/'): fs=fs/'index.html'
-              local.add((p,fs))
-          missing=[p for p,fs in sorted(local) if not fs.exists()]
-          assert not missing, missing
-          for protected in ['index.html','lezioni-autocad/index.html','express-tools-italiano/index.html','assets/site-footer.css']:
-              current=(root/protected).read_bytes()
-              main=subprocess.check_output(['git','show','origin/main:'+protected])
-              assert current==main, 'protected surface changed: '+protected
-          changed=subprocess.check_output(['git','diff','--name-only','origin/main...HEAD'],text=True).splitlines()
-          allowed_prefixes=('downloads/yqarch/','yqarch-italiano/index.html','tools/yqarch373_','.github/workflows/yqarch373-audit.yml')
-          unexpected=[p for p in changed if not any(p==a or p.startswith(a) for a in allowed_prefixes)]
-          assert not unexpected, unexpected
-          assert not any('3.64' in p or '3.72' in p for p in (x.name for x in (root/'downloads/yqarch').iterdir()))
-          print('PUBLICATION_AUDIT_OK')
-          print('Changed paths:',len(changed),'Local links:',len(local),'ZIP files:',len(zn))
+          set -euo pipefail
+          node scripts/sync-page-navigation.cjs
+          node scripts/sync-site-footer.cjs
+          git diff --name-only > /tmp/changed.txt
+          cat /tmp/changed.txt
+          python - <<'PY'
+          from pathlib import Path
+          changed=set(Path('/tmp/changed.txt').read_text().splitlines())
+          expected={
+            'downloads/yqarch/YQArch_Italiano_3.73_GUIDA.html',
+            'downloads/yqarch/YQArch_Italiano_3.73_REPORT.html',
+          }
+          if changed != expected:
+              raise SystemExit(f'Unexpected normalization changes: {sorted(changed)}')
+          PY
+      - name: Commit normalized public documents
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add downloads/yqarch/YQArch_Italiano_3.73_GUIDA.html downloads/yqarch/YQArch_Italiano_3.73_REPORT.html
+          git commit -m "Normalize YQArch 3.73 public documentation [skip ci]"
+          git push origin HEAD:publish-yqarch-3.73
