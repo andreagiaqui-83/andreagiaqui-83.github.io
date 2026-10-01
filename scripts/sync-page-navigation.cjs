@@ -17,7 +17,7 @@ for(const entry of entries){
  const u=new URL(entry.parent.href,'https://andreagiaquinto.it');
  if(u.origin!=='https://andreagiaquinto.it'||u.username||u.password)throw new Error('Destinazione esterna non ammessa: '+entry.file);
  for(const position of ['top','bottom']){
-  const legacy=position==='top'&&entry.file.includes('YQArch_Italiano_3.64_GUIDA')?' guide-back':'';
+  const legacy=position==='top'&&/YQArch_Italiano_[0-9.]+_GUIDA\.html$/.test(entry.file)?' guide-back':'';
   const block=`<!-- PAGE-RETURN-${position}:START --><div class="page-return page-return-${position}" data-page-return="${position}"><a class="page-back-button${legacy}" ${u.pathname==='/'?'data-home-link aria-label="Home — torna alla pagina principale di Andrea Giaquinto" ':''}href="${escape(entry.parent.href)}"><span aria-hidden="true">←</span><span>${escape(entry.parent.label)}</span></a></div><!-- PAGE-RETURN-${position}:END -->`;
   const pattern=new RegExp(`<!-- PAGE-RETURN-${position}:START -->[\\s\\S]*?<!-- PAGE-RETURN-${position}:END -->`,'g');
   if(pattern.test(after)){pattern.lastIndex=0;after=after.replace(pattern,()=>block);}
