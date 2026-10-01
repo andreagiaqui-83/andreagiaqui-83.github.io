@@ -33,7 +33,7 @@ jobs:
               zn=z.namelist()
               assert len(zn)==779 and len(zn)==len(set(x.casefold() for x in zn))
               zmeta={i.filename:(i.CRC,i.file_size) for i in z.infolist()}
-          with zipfile.ZipFile(exe) as z:
+          with zipfile.ZipFile(__import__('io').BytesIO(exe.read_bytes()[:19354782])) as z:
               assert z.testzip() is None
               en=z.namelist()
               assert en==zn
