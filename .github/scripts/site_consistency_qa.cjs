@@ -1,7 +1,7 @@
 // Published-page regression: all form submissions and analytics requests are intercepted.
 const {chromium,webkit,firefox}=require('playwright'),fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const live=process.argv[2]==='live',base=live?'https://andreagiaquinto.it':'http://127.0.0.1:8768',out=path.join(process.env.RUNNER_TEMP||'/tmp','plugins-proof');fs.mkdirSync(out,{recursive:true});
-const pages=['/','/lezioni-autocad/','/yqarch-italiano/','/express-tools-italiano/','/express-tools-italiano/guida/','/downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html','/privacy/','/404.html'];
+const pages=['/','/lezioni-autocad/','/yqarch-italiano/','/express-tools-italiano/','/express-tools-italiano/guida/','/downloads/yqarch/YQArch_Italiano_3.73_GUIDA.html','/privacy/','/404.html'];
 const mime={'.html':'text/html','.css':'text/css','.js':'application/javascript','.webp':'image/webp','.avif':'image/avif','.svg':'image/svg+xml'};
 let server;if(!live)server=http.createServer((req,res)=>{let file=decodeURIComponent(new URL(req.url,base).pathname);if(file.endsWith('/'))file+='index.html';try{res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'});res.end(fs.readFileSync(path.join(process.cwd(),file)));}catch{res.writeHead(404);res.end();}}).listen(8768,'127.0.0.1');
 (async()=>{const report=[];try{
