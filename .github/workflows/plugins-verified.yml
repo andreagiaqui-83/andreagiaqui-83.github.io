@@ -34,7 +34,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -51,10 +51,14 @@ jobs:
         run: |
           node scripts/sync-site-footer.cjs --check
           node scripts/sync-page-navigation.cjs --check
-          node .github/scripts/plugins_qa.cjs local
-          node .github/scripts/site_consistency_qa.cjs local
-          node scripts/qa-landing-20260930.cjs local
-          node scripts/qa-form-guidance.cjs local
+      - name: Local plugin interactions
+        run: node .github/scripts/plugins_qa.cjs local
+      - name: Local cross-page consistency
+        run: node .github/scripts/site_consistency_qa.cjs local
+      - name: Local landing interactions
+        run: node scripts/qa-landing-20260930.cjs local
+      - name: Local guided form interactions
+        run: node scripts/qa-form-guidance.cjs local
       - name: Wait for public pages
         if: github.ref == 'refs/heads/main'
         run: |
@@ -74,11 +78,16 @@ jobs:
           PY
       - name: Public downloads, API and browser verification
         if: github.ref == 'refs/heads/main'
-        run: |
-          node .github/scripts/plugins_qa.cjs live
-          node .github/scripts/site_consistency_qa.cjs live
-          node scripts/qa-landing-20260930.cjs live
-          node scripts/qa-form-guidance.cjs live
+        run: node .github/scripts/plugins_qa.cjs live
+      - name: Live cross-page consistency
+        if: github.ref == 'refs/heads/main'
+        run: node .github/scripts/site_consistency_qa.cjs live
+      - name: Live landing interactions
+        if: github.ref == 'refs/heads/main'
+        run: node scripts/qa-landing-20260930.cjs live
+      - name: Live guided form interactions
+        if: github.ref == 'refs/heads/main'
+        run: node scripts/qa-form-guidance.cjs live
       - name: Save verification evidence
         if: always()
         uses: actions/upload-artifact@v4

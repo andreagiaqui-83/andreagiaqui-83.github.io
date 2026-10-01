@@ -4,9 +4,10 @@ const live=process.argv[2]==='live',base=live?'https://andreagiaquinto.it':'http
 const pages=['/','/lezioni-autocad/','/yqarch-italiano/','/express-tools-italiano/','/express-tools-italiano/guida/','/downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html','/privacy/','/404.html'];
 const mime={'.html':'text/html','.css':'text/css','.js':'application/javascript','.webp':'image/webp','.avif':'image/avif','.svg':'image/svg+xml'};
 let server;if(!live)server=http.createServer((req,res)=>{let file=decodeURIComponent(new URL(req.url,base).pathname);if(file.endsWith('/'))file+='index.html';try{res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'});res.end(fs.readFileSync(path.join(process.cwd(),file)));}catch{res.writeHead(404);res.end();}}).listen(8768,'127.0.0.1');
+const activeBrowsers=new Set();
 (async()=>{const report=[];try{
 for(const[engine,type]of Object.entries({chromium,webkit,firefox})){
- const browser=await type.launch();
+ const browser=await type.launch();activeBrowsers.add(browser);
  for(const url of pages){const lesson=url==='/lezioni-autocad/';const widths=lesson&&engine==='chromium'?[320,360,375,390,412,430,600,768,800,1024,1366,1440,1920]:[320,1440];
  for(const width of widths){const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await context.newPage(),errors=[],posts=[],google=[];let failReview=true;
  await page.addInitScript(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async value=>{window.__copied=value;}}}));
@@ -26,4 +27,4 @@ for(const[engine,type]of Object.entries({chromium,webkit,firefox})){
  await page.locator('.site-footer [data-consent-open]').click();assert.ok(await page.getByRole('button',{name:'Rifiuta facoltativi'}).isVisible());await page.getByRole('button',{name:'Rifiuta facoltativi'}).click();assert.deepEqual(google,[]);assert.deepEqual(errors,[]);report.push({engine,width,url,status:'PASS'});await context.close();
  }}await browser.close();}
 fs.writeFileSync(path.join(out,(live?'live':'candidate')+'-site-consistency.json'),JSON.stringify(report,null,2));console.log('SITE CONSISTENCY VERIFIED',report.length);
-}catch(e){console.error(e);process.exitCode=1;}finally{server?.close();}})();
+}catch(e){console.error(e);process.exitCode=1;}finally{for(const browser of activeBrowsers)await browser.close().catch(()=>{});server?.close();}})();

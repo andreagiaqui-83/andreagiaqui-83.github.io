@@ -4,17 +4,18 @@ const live=process.argv[2]==='live',base=live?'https://andreagiaquinto.it':'http
 const mime={'.html':'text/html','.css':'text/css','.js':'application/javascript','.svg':'image/svg+xml','.png':'image/png','.exe':'application/octet-stream','.txt':'text/plain'};
 let server;
 if(!live)server=http.createServer((req,res)=>{let name=decodeURIComponent(new URL(req.url,base).pathname);if(name.endsWith('/'))name+='index.html';const target=path.join(root,name);try{const bytes=fs.readFileSync(target);res.writeHead(200,{'Content-Type':mime[path.extname(target)]||'application/octet-stream'});res.end(bytes);}catch{res.writeHead(404);res.end('Missing');}}).listen(8767,'127.0.0.1');
+const activeBrowsers=new Set();
 (async()=>{try{
  const report=[];
  if(live){for(const release of JSON.parse(fs.readFileSync('downloads/releases.json'))){const response=await fetch(base+release.file);assert.equal(response.status,200);const bytes=Buffer.from(await response.arrayBuffer());assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),release.sha256);report.push({download:release.file,bytes:bytes.length,sha256:'PASS'});}
   // Read the API through the actual browser client, as visitors do. No real POSTs.
-  const probe=await chromium.launch(),probePage=await probe.newPage();
+  const probe=await chromium.launch();activeBrowsers.add(probe);const probePage=await probe.newPage();
   await probePage.goto(base+'/yqarch-italiano/',{waitUntil:'networkidle'});
   for(const project of ['yqarch','express-tools']){const result=await probePage.evaluate(async project=>{const r=await fetch('https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/plugin-comments?project='+project,{credentials:'omit'});return {status:r.status,ok:(await r.json()).ok};},project);assert.equal(result.status,200);assert.equal(result.ok,true);report.push({api:project,status:'PASS'});}
   await probe.close();
  }
  for(const [engine,type] of Object.entries({chromium,webkit,firefox})){
-  const browser=await type.launch();
+  const browser=await type.launch();activeBrowsers.add(browser);
   for(const width of [320,390,768,1440])for(const slug of ['yqarch-italiano','express-tools-italiano']){
    const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1}),page=await context.newPage(),errors=[],google=[],posts=[];
    page.on('pageerror',e=>errors.push(e.message));
@@ -36,4 +37,4 @@ if(!live)server=http.createServer((req,res)=>{let name=decodeURIComponent(new UR
   const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage();await page.goto(base+'/express-tools-italiano/guida/',{waitUntil:'networkidle'});await page.getByRole('button',{name:'Rifiuta facoltativi'}).click();assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await context.close();await browser.close();
  }
  fs.writeFileSync(path.join(out,(live?'live':'candidate')+'-report.json'),JSON.stringify(report,null,2));console.log('PLUGIN PAGES VERIFIED',report.length);
-}catch(error){console.error(error);process.exitCode=1;}finally{if(server)server.close();}})();
+}catch(error){console.error(error);process.exitCode=1;}finally{for(const browser of activeBrowsers)await browser.close().catch(()=>{});if(server)server.close();}})();

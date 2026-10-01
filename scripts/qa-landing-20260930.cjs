@@ -9,10 +9,11 @@ let server;const base=live?'https://andreagiaquinto.it':'http://127.0.0.1:8779';
 const routeFor=f=>'/'+(f.endsWith('index.html')?f.slice(0,-10):f);
 if(!live)server=http.createServer((req,res)=>{let name=new URL(req.url,base).pathname;if(name.endsWith('/'))name+='index.html';try{const file=path.join(process.cwd(),decodeURIComponent(name));const bytes=fs.readFileSync(file);res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'});res.end(bytes);}catch{res.writeHead(404);res.end();}}).listen(8779,'127.0.0.1');
 const safeName=s=>s.replace(/[^a-z0-9]+/gi,'-');
+const activeBrowsers=new Set();
 (async()=>{const report=[];try{
  if(!live){const missing=await fetch(base+'/__qa_missing_resource__.txt');assert.equal(missing.status,404,'Test server must handle absent files without crashing');}
  for(const [engine,type] of Object.entries({chromium,firefox,webkit})){
-  const browser=await type.launch();
+  const browser=await type.launch();activeBrowsers.add(browser);
   for(const entry of entries){const widths=entry.file==='index.html'?[320,360,390,430,768,1024,1440,1920]:[320,1440];
    for(const width of widths){
     const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await ctx.newPage(),errors=[],google=[],writes=[];page.on('pageerror',e=>errors.push(e.message));
@@ -36,5 +37,5 @@ const safeName=s=>s.replace(/[^a-z0-9]+/gi,'-');
   await ctx.close();await browser.close();
  }
  fs.writeFileSync(path.join(out,(live?'live':'candidate')+'-revision.json'),JSON.stringify(report,null,2));console.log('REVISION VERIFIED',report.length);
- }catch(e){fs.writeFileSync(path.join(out,'failure.txt'),String(e.stack||e));console.error(e);process.exitCode=1;}finally{server?.close();}
+ }catch(e){fs.writeFileSync(path.join(out,'failure.txt'),String(e.stack||e));console.error(e);process.exitCode=1;}finally{for(const browser of activeBrowsers)await browser.close().catch(()=>{});server?.close();}
 })();
