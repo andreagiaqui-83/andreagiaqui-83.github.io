@@ -1,0 +1,37 @@
+YQArch Italiano 3.73 — Verifiche finali
+Data: 01/10/2026
+
+COLLAUDO REALE
+- Installazione/aggiornamento 3.73 completati sul PC di riferimento: PASS.
+- AutoCAD 2026: caricamento/Ribbon/inserimento diretto blocchi confermati dall'utente: PASS.
+- Il collaudo non viene esteso automaticamente a tutti i 646 comandi o ad altre combinazioni AutoCAD/Windows.
+
+CORREZIONE INSTALLER
+- Regressione 3.72 System.Int32 individuata nella collisione PowerShell $script:V / $v.
+- Correzione 3.73: $script:VerifiedUnchanged + $menuVersion + .ContainsKey().
+- Backup, journal e rollback restano attivi.
+
+TEST AUTOMATICI
+- 184/184 logica/API simulate/regressioni: PASS.
+- 71/71 statico/risorse/guida/Ribbon/catalogo/installer: PASS.
+- 31/31 packaging EXE/ZIP: PASS.
+- Suite ripetute sull'EXE estratto: 184/184 + 71/71 PASS.
+- Seconda ricostruzione: EXE e ZIP identici byte-per-byte.
+
+PROTEZIONI
+- Ribbon: 10 pannelli, 130 accessi diretti.
+- Inserimento: Seleziona -> Inserisci -> punto -> creazione/verifica -> fine.
+- Guida: 646 schede.
+- Catalogo: 195 DWG + 195 anteprime.
+- Formati: AC1009=16, AC1014=2, AC1018=129, AC1021=48.
+- AutoCAD 2004-2006: 147/195 leggibili; 48 AC1021 richiedono AutoCAD 2007+.
+
+HASH
+EXE SHA-256: 07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d
+ZIP SHA-256: ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2
+
+LIMITI
+- Nessuna certificazione Autodesk.
+- EXE non firmato Authenticode: SmartScreen può mostrare un avviso di reputazione.
+- Non disattivare le protezioni di Windows o AutoCAD.
+- 3.72 esclusa dalla distribuzione; 3.71 conservata come rollback.
