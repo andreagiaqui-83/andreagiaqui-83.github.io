@@ -1,3 +1,4 @@
+# YQArch 3.73 candidate QA
 name: Plugin pages quality and live verification
 on:
   workflow_dispatch:
