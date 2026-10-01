@@ -1,0 +1,40 @@
+name: Site performance comparison
+on:
+  push:
+    branches: ['release/yqarch-*']
+    paths:
+      - 'yqarch-italiano/**'
+      - 'scripts/audit-performance.cjs'
+      - '.github/workflows/site-performance-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund lighthouse@12.8.2
+          git worktree add "$RUNNER_TEMP/site-before" origin/main
+      - name: Measure unchanged production baseline
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node scripts/audit-performance.cjs "$RUNNER_TEMP/site-before" before
+      - name: Measure candidate under the same conditions
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node scripts/audit-performance.cjs . after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-performance-${{ github.sha }}
+          path: ${{ runner.temp }}/performance-proof/
+          retention-days: 30

@@ -14,3 +14,10 @@ Landing: `/yqarch-italiano/` e `/express-tools-italiano/`. Guida pratica Express
 
 ## Aggiornamento 30 settembre 2026
 Footer comune senza pulsante LinkedIn; didascalie descrittive senza formule illustrative o riferimenti IA. Ogni pagina secondaria ha pulsanti statici di ritorno in alto e in basso, con destinazioni registrate in `scripts/site-pages.json`. Tariffe e installer invariati. La home amplia render, planimetrie commerciali e virtual staging senza alterare endpoint, consenso, tracciamento o nomi dei campi. I report tecnici mantengono contenuti e limiti dichiarati; cambiano soltanto navigazione, contenitore responsive delle tabelle e footer.
+
+## Release YQArch 3.73 — 1 ottobre 2026
+- La 3.73 è stata collaudata dall’autore su AutoCAD 2026 italiano: installazione/aggiornamento, Ribbon e inserimento diretto. Non estendere questa evidenza a tutti i comandi o ad altri ambienti.
+- Pubblicare soltanto EXE e ZIP approvati, senza ricostruirli. La 3.72 non va pubblicata; conservare la 3.71 come rollback. Non rimuovere gli archivi già presenti.
+- Il manifest include sia EXE sia ZIP. Guida (646 schede), schema Ribbon, catalogo, rapporto, note, compatibilità e SHA devono avere link validi e navigazione comune.
+- `finalize-release-assets.yml` ricongiunge eventuali parti di trasporto su un branch `release/**`, verifica dimensioni e SHA prima di salvare i file e rimuove le parti dal tree corrente. Non compila o modifica gli installer.
+- Eseguire i test esistenti e `node scripts/audit-site.cjs local`; dopo la pubblicazione ripetere con `live`. Il controllo completo intercetta scritture e analytics. I documenti archiviati mantengono `noindex,follow`.

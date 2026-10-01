@@ -1,0 +1,35 @@
+name: Finalize approved release binaries
+on:
+  push:
+    branches: ['release/**']
+    paths: ['.github/release-assets/**']
+permissions:
+  contents: read
+concurrency:
+  group: finalize-assets-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  finalize:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/')
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Verify original bytes and remove transport parts
+        run: python .github/scripts/assemble-release-assets.py
+      - name: Commit only verified download files and removed transport parts
+        env:
+          RELEASE_BRANCH: ${{ github.ref_name }}
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          git add downloads/ .github/release-assets/
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Finalize approved binary bytes and remove transport parts'
+          git push origin "HEAD:$RELEASE_BRANCH"

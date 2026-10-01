@@ -1,12 +1,21 @@
 [
   {
     "project": "yqarch",
-    "version": "3.64",
-    "file": "/downloads/yqarch/YQArch_Italiano_3.64.exe",
-    "sha256": "6ed121ec822ba503ed139a2a5594593d6c609c6293eea5486fd55f4ca44a7906",
+    "version": "3.73",
+    "file": "/downloads/yqarch/YQArch_Italiano_3.73.exe",
+    "sha256": "07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d",
     "bytes": 20211200,
-    "status": "da collaudare in AutoCAD",
-    "date": "2026-09-27"
+    "status": "collaudata su AutoCAD 2026 italiano: installazione, Ribbon e inserimento blocchi",
+    "date": "2026-10-01"
+  },
+  {
+    "project": "yqarch",
+    "version": "3.73",
+    "file": "/downloads/yqarch/YQArch_Italiano_3.73.zip",
+    "sha256": "ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2",
+    "bytes": 18019247,
+    "status": "collaudata su AutoCAD 2026 italiano: installazione, Ribbon e inserimento blocchi",
+    "date": "2026-10-01"
   },
   {
     "project": "express-tools",

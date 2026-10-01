@@ -1,49 +1,26 @@
 name: Test Cloudflare quote backend
-
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
+      - 'cloudflare-worker/**'
+      - 'scripts/test-*.mjs'
       - '.github/workflows/test-cloudflare-backend.yml'
-
+permissions:
+  contents: read
 jobs:
-  smoke-test:
+  simulated-backend:
     runs-on: ubuntu-latest
     steps:
-      - name: Health check
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --no-audit --no-fund
+      - name: Backend and security tests with simulated storage and email
+        run: node --test scripts/test-*.mjs
+      - name: Read-only public health check
         run: |
-          set -euo pipefail
-          curl -fsS https://cad-bim-preventivi.andrea-giaqui.workers.dev/health | tee health.json
-          grep -q '"ok":true' health.json
-
-      - name: Session, upload, delete and submit test
-        run: |
-          set -euo pipefail
-          BASE='https://cad-bim-preventivi.andrea-giaqui.workers.dev'
-          SESSION=$(curl -fsS -X POST "$BASE/api/session" -H 'Origin: https://andreagiaqui-83.github.io')
-          echo "$SESSION" | tee session.json
-          ID=$(python -c 'import json; print(json.load(open("session.json"))["sessionId"])')
-          TOKEN=$(python -c 'import json; print(json.load(open("session.json"))["token"])')
-          printf 'test backend preventivo' > test.txt
-          UPLOAD=$(curl -fsS -X PUT "$BASE/api/upload/$ID" \
-            -H 'Origin: https://andreagiaqui-83.github.io' \
-            -H "X-Session-Token: $TOKEN" \
-            -H 'X-File-Name: test.txt' \
-            -H 'X-Field-Name: Test' \
-            -H 'X-File-Size: 22' \
-            -H 'Content-Type: text/plain' \
-            --data-binary @test.txt)
-          echo "$UPLOAD" | tee upload.json
-          grep -q '"ok":true' upload.json
-          KEY=$(python -c 'import json; print(json.load(open("upload.json"))["file"]["key"])')
-          SUBMIT=$(curl -fsS -X POST "$BASE/api/submit" \
-            -H 'Origin: https://andreagiaqui-83.github.io' \
-            -H 'Content-Type: application/json' \
-            --data-binary "{\"sessionId\":\"$ID\",\"token\":\"$TOKEN\",\"fields\":{\"Nome\":\"Test automatico\",\"Email\":\"andrea.giaqui@gmail.com\",\"Indicazioni_lavoro\":\"Test tecnico automatico del nuovo backend.\"}}")
-          echo "$SUBMIT" | tee submit.json
-          grep -q '"ok":true' submit.json
-          curl -fsS -X DELETE "$BASE/api/upload/$ID" \
-            -H 'Origin: https://andreagiaqui-83.github.io' \
-            -H "X-Session-Token: $TOKEN" \
-            -H 'Content-Type: application/json' \
-            --data-binary "{\"key\":\"$KEY\"}" | tee delete.json
+          curl --fail --silent --show-error --max-time 20 https://cad-bim-preventivi.andrea-giaqui.workers.dev/health > health.json
+          node -e "if(JSON.parse(require('fs').readFileSync('health.json')).ok!==true)process.exit(1)"
