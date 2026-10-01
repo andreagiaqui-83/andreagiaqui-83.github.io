@@ -78,3 +78,12 @@ jobs:
           if tail_sha != '015b007a67a7a96bd4111233c1a8c6a86ffac3ef82ecf06408e998ecbd73e309':
               raise SystemExit('3.64 launcher tail differs from tested 3.71 launcher')
           print('AUDIT_OK')
+      - name: Export 3.64 baseline for local delta generation
+        uses: actions/upload-artifact@v4
+        with:
+          name: yqarch364-baseline
+          path: |
+            downloads/yqarch/YQArch_Italiano_3.64.exe
+            downloads/yqarch/YQArch_Italiano_3.64.zip
+          retention-days: 1
+          compression-level: 0
