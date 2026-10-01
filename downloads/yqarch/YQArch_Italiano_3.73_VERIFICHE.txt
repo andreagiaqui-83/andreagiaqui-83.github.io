@@ -1,6 +1,7 @@
 YQArch Italiano 3.73 — Verifiche finali
 Data: 01/10/2026
-Baseline operativa collaudata dall'utente: YQArch Italiano 3.71
+Baseline operativa di partenza: YQArch Italiano 3.71
+Collaudo reale finale: YQArch Italiano 3.73 su AutoCAD 2026 italiano — esito positivo
 
 CORREZIONE CRITICA INSTALLER
 - La 3.72 falliva in Aggiornamento profili quando erano presenti più profili AutoCAD.
@@ -40,4 +41,5 @@ LIMITI
 - Questo ambiente non esegue Windows o AutoCAD; il collaudo reale della 3.73 sul PC dell'utente resta necessario.
 - I test automatici non costituiscono certificazione Autodesk.
 - L'EXE non è firmato Authenticode, quindi SmartScreen può mostrare un avviso di reputazione.
-- La 3.72 non deve essere pubblicata; la 3.71 resta rollback collaudato fino al test reale positivo della 3.73.
+- Collaudo reale 3.73 completato con esito positivo: installazione/aggiornamento, Ribbon e inserimento blocchi funzionanti.
+- La 3.72 non deve essere pubblicata; la 3.71 resta conservata come rollback.
