@@ -2,7 +2,7 @@ name: Plugin pages quality and live verification
 on:
   workflow_dispatch:
   push:
-    branches: [main, 'optimize/plugins-*', 'optimize/services-site-*']
+    branches: [main, 'optimize/plugins-*', 'optimize/services-site-*', 'publish-yqarch-3.73']
     paths:
       - 'index.html'
       - 'yqarch-italiano/**'
