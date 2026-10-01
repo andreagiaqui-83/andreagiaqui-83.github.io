@@ -1,9 +1,12 @@
-# YQArch Italiano 3.73 — Release definitiva candidata alla pubblicazione
+# YQArch Italiano 3.73 — Release definitiva
 
 ## Base della release
 La 3.73 nasce dalla **3.71 collaudata sul PC dell'utente**, nella quale risultano funzionanti la Ribbon aggiornata e l'inserimento diretto dei blocchi. Non viene riscritta l'architettura che ha risolto quei due problemi.
 
 La Ribbon conserva il layout della 3.71: **10 pannelli**, ciascuno con **3 icone grandi + 10 piccole** (130 accessi diretti complessivi), oltre alle **23 categorie** e alle **547 voci** disponibili nelle espansioni.
+
+## Collaudo reale completato
+La release 3.73 è stata installata e verificata con esito positivo sul PC di riferimento con **AutoCAD 2026 italiano**. Sono stati confermati l'aggiornamento dell'installazione, la Ribbon e l'inserimento diretto dei blocchi.
 
 ## Correzione critica rispetto alla 3.72
 La 3.72 poteva interrompersi durante **Aggiornamento profili** quando erano presenti più profili AutoCAD. La causa era una collisione tra la tabella PowerShell `$script:V` e la variabile di ciclo `$v`: PowerShell tratta i nomi delle variabili senza distinzione tra maiuscole e minuscole. La 3.73 usa `$script:VerifiedUnchanged` e `$menuVersion`, verifica la tabella con `.ContainsKey()` e include un test anti-regressione specifico. Il rollback della 3.72 resta valido: in caso di errore i file già modificati vengono ripristinati dal journal.
