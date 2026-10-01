@@ -23,7 +23,7 @@ test('Shared footer, clean captions and working cookie controls remain synchroni
  cp.execFileSync(process.execPath,['scripts/sync-page-navigation.cjs','--check']);cp.execFileSync(process.execPath,['scripts/sync-site-footer.cjs','--check']);
 });
 test('Plugin installers remain byte-identical to the approved baseline',()=>{
- const expected={'downloads/yqarch/YQArch_Italiano_3.64.exe':'6ed121ec822ba503ed139a2a5594593d6c609c6293eea5486fd55f4ca44a7906','downloads/express-tools/Express_Tools_Italiano_3.2-rc1.exe':'25e0380fa0e580ac556e353dc2ca2c50e34f62edefd3544cfa7f8b13f692e144'};
+ const expected={'downloads/yqarch/YQArch_Italiano_3.73.exe':'07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d','downloads/express-tools/Express_Tools_Italiano_3.2-rc1.exe':'25e0380fa0e580ac556e353dc2ca2c50e34f62edefd3544cfa7f8b13f692e144'};
  for(const [file,hash] of Object.entries(expected))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),hash,file);
 });
 test('Commercial offer preserves section anchors, four styles and optional request contracts',()=>{
