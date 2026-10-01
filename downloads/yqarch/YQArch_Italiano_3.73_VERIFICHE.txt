@@ -1,0 +1,43 @@
+YQArch Italiano 3.73 — Verifiche finali
+Data: 01/10/2026
+Baseline operativa collaudata dall'utente: YQArch Italiano 3.71
+
+CORREZIONE CRITICA INSTALLER
+- La 3.72 falliva in Aggiornamento profili quando erano presenti più profili AutoCAD.
+- Causa: PowerShell non distingue maiuscole/minuscole nei nomi delle variabili; $script:V e $v collidevano.
+- Correzione 3.73: $script:VerifiedUnchanged + $menuVersion + verifica .ContainsKey().
+- Backup, journal e rollback restano attivi.
+
+TEST PRIMA DEL PACKAGING
+- 184/184 test di logica, API simulate e regressioni: PASS.
+- 71/71 controlli statici, risorse, guida, Ribbon, catalogo e installer: PASS.
+- py_compile dei sorgenti Python di sviluppo: PASS.
+
+TEST SUL VERO EXE/ZIP
+- 31/31 verifiche di packaging: PASS.
+- EXE e ZIP: stessi percorsi e stessi file byte-per-byte.
+- Manifest SHA-256 completo e coerente.
+- CRC ZIP completo: PASS.
+- Riestrazione completa del vero EXE: PASS.
+- Sui sorgenti estratti dal vero EXE: 184/184 test PASS e 71/71 controlli statici PASS.
+- Seconda ricostruzione indipendente: EXE e ZIP identici byte-per-byte.
+
+PROTEZIONI ANTI-REGRESSIONE
+- Ribbon: 10 pannelli, 3 icone grandi + 10 piccole per pannello, 130 accessi diretti.
+- 933 relazioni OPC del CUIx risolte.
+- Flusso blocchi preservato: Seleziona -> Inserisci -> punto -> creazione/verifica -> fine.
+- Riapertura catalogo solo opt-in dopo commit riuscito.
+- 646 schede guida univoche.
+- 195 DWG + 195 anteprime.
+- Formati DWG: AC1009=16, AC1014=2, AC1018=129, AC1021=48.
+- AutoCAD 2004-2006: 147/195 blocchi leggibili; 48 AC1021 richiedono AutoCAD 2007+.
+
+HASH
+EXE SHA-256: 07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d
+ZIP SHA-256: ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2
+
+LIMITI
+- Questo ambiente non esegue Windows o AutoCAD; il collaudo reale della 3.73 sul PC dell'utente resta necessario.
+- I test automatici non costituiscono certificazione Autodesk.
+- L'EXE non è firmato Authenticode, quindi SmartScreen può mostrare un avviso di reputazione.
+- La 3.72 non deve essere pubblicata; la 3.71 resta rollback collaudato fino al test reale positivo della 3.73.
