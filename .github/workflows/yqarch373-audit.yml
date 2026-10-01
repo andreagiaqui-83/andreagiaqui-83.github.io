@@ -1,78 +1,87 @@
-name: Build exact YQArch 3.73 publication
+name: Audit YQArch 3.73 publication candidate
 on:
   push:
     branches: ["publish-yqarch-3.73"]
 permissions:
-  contents: write
+  contents: read
 jobs:
-  build:
+  audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download exact user-tested 3.73 ZIP
-        shell: bash
-        run: |
-          set -euo pipefail
-          curl --fail --location --retry 3 --retry-delay 2 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-29cc-8210-bee8-47cf122a617d/raw?se=2026-10-01T09%3A56%3A54Z&sp=r&sv=2026-02-06&sr=b&scid=26028106-113d-551e-8d82-8e9d1d674872&skoid=9b41a688-1b44-4731-856e-b0efcf3660ed&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-01T03%3A55%3A53Z&ske=2026-10-02T03%3A55%3A53Z&sks=b&skv=2026-02-06&sig=LlIwqtMfUPDJmDD0sIJphEh9FCgVjhwM8qaLjq9FJxw%3D' -o /tmp/YQArch_Italiano_3.73.zip
-          echo "ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2  /tmp/YQArch_Italiano_3.73.zip" | sha256sum -c -
-      - name: Rebuild exact EXE from verified published launcher
+        with:
+          fetch-depth: 0
+      - name: Verify package, landing and protected site surfaces
         shell: python
         run: |
-          import hashlib, io, pathlib, struct, zipfile
+          import hashlib, json, pathlib, re, subprocess, zipfile
           root=pathlib.Path('.')
-          base_path=root/'downloads/yqarch/YQArch_Italiano_3.64.exe'
-          zip_path=pathlib.Path('/tmp/YQArch_Italiano_3.73.zip')
-          base=base_path.read_bytes()
-          plain=zip_path.read_bytes()
-          def sha(b): return hashlib.sha256(b).hexdigest()
-          assert sha(base)=='6ed121ec822ba503ed139a2a5594593d6c609c6293eea5486fd55f4ca44a7906'
-          assert sha(plain)=='ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2'
-          with zipfile.ZipFile(io.BytesIO(plain),'r') as src:
-              assert src.testzip() is None
-              names=[i.filename for i in src.infolist()]
-              assert len(names)==779 and len(names)==len(set(n.casefold() for n in names))
-              script=src.read('Sviluppo/installer_373.ps1')
-              guide=src.read('YQArchItaliano/sys/YQArch_Italiano_Guida.html')
-              eocd=base.rfind(b'PK\x05\x06')
-              fields=struct.unpack_from('<4s4H2LH',base,eocd)
-              end=eocd+22+fields[-1]; start=eocd-fields[5]-fields[6]
-              assert (start,end)==(1033568,19354782)
-              capacity=end-start
-              assert len(plain)<=capacity
-              target=io.BytesIO(b'\0'*(capacity-len(plain))); target.seek(capacity-len(plain))
-              with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
-                  for info in src.infolist():
-                      ni=zipfile.ZipInfo(info.filename,(2026,10,1,0,0,0))
-                      ni.external_attr=0o100644<<16
-                      z.writestr(ni,src.read(info.filename),compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
-              embedded=target.getvalue()
-          prefix=bytearray(base[:start])
-          a0=base.index(b'\xef\xbb\xbfparam('); b0=base.index(b'\0',a0)
-          assert len(script)+2<=b0-a0
-          prefix[a0:b0]=script+b'# '+b' '*(b0-a0-len(script)-2)
-          old=b'YQArch Italiano 3.64 - Errore avvio'
-          assert prefix.count(old)==1
-          loc=prefix.index(old)
-          prefix[loc:loc+len(old)]=old.replace(b'3.64',b'3.73')
-          exe=bytes(prefix)+embedded+base[end:]
-          assert len(exe)==20211200
+          def sha(p):
+              return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+          exe=root/'downloads/yqarch/YQArch_Italiano_3.73.exe'
+          zipp=root/'downloads/yqarch/YQArch_Italiano_3.73.zip'
+          guide=root/'downloads/yqarch/YQArch_Italiano_3.73_GUIDA.html'
+          report=root/'downloads/yqarch/YQArch_Italiano_3.73_REPORT.html'
+          sha_txt=root/'downloads/yqarch/SHA256.txt'
+          assert exe.stat().st_size==20211200
+          assert zipp.stat().st_size==18019247
           assert sha(exe)=='07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d'
-          out=root/'downloads/yqarch'
-          (out/'YQArch_Italiano_3.73.exe').write_bytes(exe)
-          (out/'YQArch_Italiano_3.73.zip').write_bytes(plain)
-          (out/'YQArch_Italiano_3.73_GUIDA.html').write_bytes(guide)
+          assert sha(zipp)=='ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2'
           assert sha(guide)=='e9e45743405d95a188d0d60e6bddea54948ef60de91a2dfa8bd6b7a765c4568d'
-          print('EXACT_BUILD_OK',sha(exe),sha(plain),sha(guide))
-      - name: Replace obsolete public 3.64 package
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -f downloads/yqarch/YQArch_Italiano_3.64.exe
-          rm -f downloads/yqarch/YQArch_Italiano_3.64.zip
-          rm -f downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html
-          rm -f downloads/yqarch/YQArch_Italiano_3.64_REPORT.html
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/yqarch
-          git commit -m "Stage exact YQArch Italiano 3.73 package [skip ci]"
-          git push origin HEAD:publish-yqarch-3.73
+          with zipfile.ZipFile(zipp) as z:
+              assert z.testzip() is None
+              zn=z.namelist()
+              assert len(zn)==779 and len(zn)==len(set(x.casefold() for x in zn))
+              zmeta={i.filename:(i.CRC,i.file_size) for i in z.infolist()}
+          with zipfile.ZipFile(exe) as z:
+              assert z.testzip() is None
+              en=z.namelist()
+              assert en==zn
+              emeta={i.filename:(i.CRC,i.file_size) for i in z.infolist()}
+              assert emeta==zmeta
+          txt=sha_txt.read_text(encoding='utf-8')
+          assert '07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d' in txt
+          assert 'ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2' in txt
+          rep=report.read_text(encoding='utf-8')
+          assert 'Collaudo reale completato sul PC di riferimento' in rep
+          assert 'collaudo ancora necessario' not in rep.lower()
+          page=(root/'yqarch-italiano/index.html').read_text(encoding='utf-8')
+          required=[
+              'softwareVersion":"3.73"',
+              'YQArch_Italiano_3.73.exe',
+              'YQArch_Italiano_3.73.zip',
+              'Versione 3.73',
+              'Aggiornamento del 1 ottobre 2026',
+              'AutoCAD completo 2026 Windows',
+              '147/195',
+              '48 file AC1021',
+              '20261001-yqarch-373',
+              '07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d',
+              'ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2'
+          ]
+          for x in required: assert x in page, x
+          for old in ['3.64','3.63','Release 3.73 da collaudare','Seguimi su LinkedIn','immagine illustrativa','creata con l’intelligenza artificiale']:
+              assert old.lower() not in page.lower(), old
+          for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>',page,re.S):
+              json.loads(block)
+          local=set()
+          for attr in re.findall(r'(?:href|src)="([^"]+)"',page):
+              if not attr.startswith('/') or attr.startswith('//'): continue
+              p=attr.split('#',1)[0].split('?',1)[0]
+              if not p: continue
+              fs=root/p.lstrip('/')
+              if p.endswith('/'): fs=fs/'index.html'
+              local.add((p,fs))
+          missing=[p for p,fs in sorted(local) if not fs.exists()]
+          assert not missing, missing
+          for protected in ['index.html','lezioni-autocad/index.html','express-tools-italiano/index.html','assets/site-footer.css']:
+              current=(root/protected).read_bytes()
+              main=subprocess.check_output(['git','show','origin/main:'+protected])
+              assert current==main, 'protected surface changed: '+protected
+          changed=subprocess.check_output(['git','diff','--name-only','origin/main...HEAD'],text=True).splitlines()
+          allowed_prefixes=('downloads/yqarch/','yqarch-italiano/index.html','tools/yqarch373_','.github/workflows/yqarch373-audit.yml')
+          unexpected=[p for p in changed if not any(p==a or p.startswith(a) for a in allowed_prefixes)]
+          assert not unexpected, unexpected
+          assert not any('3.64' in p or '3.72' in p for p in (x.name for x in (root/'downloads/yqarch').iterdir()))
+          print('PUBLICATION_AUDIT_OK')
+          print('Changed paths:',len(changed),'Local links:',len(local),'ZIP files:',len(zn))
