@@ -1,0 +1,3 @@
+YQArch Italiano 3.73
+YQArch_Italiano_3.73.exe  SHA-256  07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d
+YQArch_Italiano_3.73.zip  SHA-256  ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2
