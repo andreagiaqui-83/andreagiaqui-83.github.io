@@ -38,7 +38,7 @@ EXE SHA-256: 07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d
 ZIP SHA-256: ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2
 
 LIMITI
-- Questo ambiente non esegue Windows o AutoCAD; il collaudo reale della 3.73 sul PC dell'utente resta necessario.
+- Questo ambiente non esegue Windows o AutoCAD. Il collaudo reale della 3.73 è stato completato dall'utente su AutoCAD 2026 italiano; le altre combinazioni richiedono prove specifiche.
 - I test automatici non costituiscono certificazione Autodesk.
 - L'EXE non è firmato Authenticode, quindi SmartScreen può mostrare un avviso di reputazione.
 - Collaudo reale 3.73 completato con esito positivo: installazione/aggiornamento, Ribbon e inserimento blocchi funzionanti.
