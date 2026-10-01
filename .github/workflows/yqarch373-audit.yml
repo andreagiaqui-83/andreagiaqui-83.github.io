@@ -1,0 +1,80 @@
+name: YQArch 3.73 package audit
+on:
+  push:
+    branches: ["publish-yqarch-3.73"]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit 3.64 baseline against 3.73
+        shell: python
+        run: |
+          import base64, gzip, hashlib, json, pathlib, struct, zipfile
+          parts = sorted(pathlib.Path('tools').glob('yqarch373_manifest.part*'))
+          if len(parts) != 7:
+              raise SystemExit(f'Expected 7 manifest parts, found {len(parts)}')
+          b64 = ''.join(p.read_text() for p in parts)
+          if hashlib.sha256(b64.encode()).hexdigest() != 'f6a683774b84fbbf1e90be2f1eae985e1b6d46b904fe84f5420a914a5ac84429':
+              raise SystemExit('Manifest base64 hash mismatch')
+          decoded = gzip.decompress(base64.b64decode(b64))
+          if hashlib.sha256(decoded).hexdigest() != 'c521c730e08df7d443897030b333764709e192500c79974cb131d2f8fc5633f5':
+              raise SystemExit('Manifest JSON hash mismatch')
+          manifest = json.loads(decoded.decode('utf-8'))
+          expected = {p:(s,h) for p,s,h in manifest}
+          base = pathlib.Path('/tmp/yq364')
+          base.mkdir(parents=True, exist_ok=True)
+          with zipfile.ZipFile('downloads/yqarch/YQArch_Italiano_3.64.zip') as z:
+              bad = z.testzip()
+              if bad: raise SystemExit('3.64 ZIP CRC failure: '+bad)
+              z.extractall(base)
+          actual = {}
+          for p in base.rglob('*'):
+              if p.is_file():
+                  rel = p.relative_to(base).as_posix()
+                  raw = p.read_bytes()
+                  actual[rel] = (len(raw), hashlib.sha256(raw).hexdigest())
+          changed=[]; missing=[]; same=[]; obsolete=[]
+          for p,(s,h) in expected.items():
+              if p not in actual: missing.append((p,s,h))
+              elif actual[p] == (s,h): same.append((p,s,h))
+              else: changed.append((p,s,h,actual[p][0],actual[p][1]))
+          for p,(s,h) in actual.items():
+              if p not in expected: obsolete.append((p,s,h))
+          print(f'PAYLOAD expected={len(expected)} same={len(same)} changed={len(changed)} missing={len(missing)} obsolete={len(obsolete)}')
+          print(f'PAYLOAD_SIZES changed_new={sum(x[1] for x in changed)} missing_new={sum(x[1] for x in missing)} obsolete_old={sum(x[1] for x in obsolete)}')
+          for x in changed: print('CHANGED\t'+str(x[1])+'\t'+x[0])
+          for x in missing: print('MISSING\t'+str(x[1])+'\t'+x[0])
+          for x in obsolete: print('OBSOLETE\t'+str(x[1])+'\t'+x[0])
+
+          exe = pathlib.Path('downloads/yqarch/YQArch_Italiano_3.64.exe').read_bytes()
+          exe_sha = hashlib.sha256(exe).hexdigest()
+          print('BASE_EXE_SHA256', exe_sha)
+          if exe_sha != '6ed121ec822ba503ed139a2a5594593d6c609c6293eea5486fd55f4ca44a7906':
+              raise SystemExit('Published 3.64 EXE hash differs from landing page')
+          eocd = exe.rfind(b'PK\x05\x06')
+          fields = struct.unpack_from('<4s4H2LH', exe, eocd)
+          end = eocd + 22 + fields[-1]
+          start = eocd - fields[5] - fields[6]
+          print('BASE_EXE_PAYLOAD_RANGE', start, end)
+          if (start,end) != (1033568,19354782):
+              raise SystemExit('3.64 launcher allocation differs')
+          a0 = exe.index(b'\xef\xbb\xbfparam(')
+          b0 = exe.index(b'\0',a0)
+          title = b'YQArch Italiano 3.64 - Errore avvio'
+          loc = exe.index(title)
+          norm = bytearray(exe[:start])
+          norm[a0:b0] = b'\0' * (b0-a0)
+          norm[loc:loc+len(title)] = b'\0' * len(title)
+          norm_sha = hashlib.sha256(norm).hexdigest()
+          tail_sha = hashlib.sha256(exe[end:]).hexdigest()
+          print('LAUNCHER_SCRIPT_SLOT', a0, b0, b0-a0)
+          print('LAUNCHER_NORM_SHA256', norm_sha)
+          print('LAUNCHER_TAIL_SHA256', tail_sha)
+          if norm_sha != 'ac697dc2dc1720f3e95649e86ee8e189e8040c2511a93edb22ea765c526f0674':
+              raise SystemExit('3.64 immutable launcher differs from tested 3.71 launcher')
+          if tail_sha != '015b007a67a7a96bd4111233c1a8c6a86ffac3ef82ecf06408e998ecbd73e309':
+              raise SystemExit('3.64 launcher tail differs from tested 3.71 launcher')
+          print('AUDIT_OK')
