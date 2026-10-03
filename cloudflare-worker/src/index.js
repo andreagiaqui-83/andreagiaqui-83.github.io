@@ -1,5 +1,6 @@
 import { pluginComments } from './plugin-comments.js';
 import { submitLesson } from './lessons.js';
+import { submitContact } from './contact.js';
 const MAX_FILE_BYTES = 90 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 500 * 1024 * 1024;
 const SESSION_TTL_SECONDS = 60 * 60 * 6;
@@ -408,7 +409,7 @@ async function submitQuote(request, env, origin) {
 }
 
 async function cleanup(env) {
-  for (const [prefix, days] of [['lessons/',30],['lesson-rate/',2],['review-rate/',2],['quote-rate/',2],['reviews-pending/',90],['plugin-comments-pending/',90],['plugin-comment-requests/',90],['plugin-comment-rate/',2]]) {
+  for (const [prefix, days] of [['contacts/',30],['contact-rate/',2],['lessons/',30],['lesson-rate/',2],['review-rate/',2],['quote-rate/',2],['reviews-pending/',90],['plugin-comments-pending/',90],['plugin-comment-requests/',90],['plugin-comment-rate/',2]]) {
     let cursor;
     do {
       const listed=await env.QUOTE_FILES.list({prefix,limit:1000,cursor});
@@ -600,6 +601,7 @@ export default {
     const url = new URL(request.url);
     if (['/api/plugin-comments','/api/plugin-comment-manage'].includes(url.pathname) && ['GET','POST'].includes(request.method)) return pluginComments(request,env,origin,{json,sendEmail,hmac,escapeHtml});
     if (url.pathname === '/health') return json({ ok: true, service: 'cad-bim-quote-backend' }, 200, origin, env);
+    if (url.pathname === '/api/contact' && request.method === 'POST') return submitContact(request, env, origin, {json,sendEmail,hmac,escapeHtml});
     if (url.pathname === '/api/lessons' && request.method === 'POST') return submitLesson(request, env, origin, {json,sendEmail,hmac,escapeHtml});
     if (url.pathname === '/api/session' && request.method === 'POST') return createSession(request, env, origin);
     if (url.pathname.startsWith('/api/upload/') && request.method === 'PUT') return uploadFile(request, env, origin, url.pathname.split('/').pop());

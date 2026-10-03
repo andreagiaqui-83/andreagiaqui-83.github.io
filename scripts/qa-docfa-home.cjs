@@ -25,7 +25,7 @@ async function style(a){return a.evaluate(e=>{const s=getComputedStyle(e);return
 (async()=>{await start();try{
  for(const [engine,type]of Object.entries({chromium,firefox,webkit})){
   browser=await type.launch();
-  for(const width of widths){const env=await context(width),page=await env.ctx.newPage();await open(page,'index.html');assert.equal(await page.locator('body').getAttribute('data-build'),'20260930-services-r9');
+  for(const width of widths){const env=await context(width),page=await env.ctx.newPage();await open(page,'index.html');assert.equal(await page.locator('body').getAttribute('data-build'),'20261003-services-r10');
    const panel=page.locator('#docfaPreferences'),field=page.locator('#docfaDetails'),choice=page.locator('#docfaSelected');assert.equal(await panel.isVisible(),false);assert.equal(await field.isDisabled(),true);
    await choice.focus();await page.keyboard.press('Space');assert.equal(await choice.getAttribute('aria-expanded'),'true');assert.equal(await panel.isVisible(),true);assert.equal(await choice.evaluate(e=>e===document.activeElement),true);assert.equal(await page.locator('#drawingPreferences').isVisible(),false);assert.equal(await page.locator('#templatePreferences').isVisible(),false);
    await field.fill('RISERVATO foglio 12, particella 345, subalterno 6; altezza 2,70 m.');await choice.uncheck();assert.equal(await panel.isVisible(),false);assert.equal(await field.isDisabled(),true);assert.equal(await page.evaluate(()=>new FormData(document.querySelector('#quoteForm')).has('Indicazioni_planimetria_DOCFA')),false);

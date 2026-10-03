@@ -19,8 +19,8 @@
     "file": "express-tools-italiano/guida/index.html",
     "kind": "guide",
     "parent": {
-      "href": "/express-tools-italiano/",
-      "label": "Torna a Express Tools Italiano"
+      "href": "/ag-cad-tools/",
+      "label": "Torna ad AG CAD Tools"
     }
   },
   {
@@ -43,8 +43,8 @@
     "file": "downloads/express-tools/Express_Tools_Italiano_3.2-rc1_Report.html",
     "kind": "report",
     "parent": {
-      "href": "https://andreagiaquinto.it/express-tools-italiano/",
-      "label": "Torna a Express Tools Italiano"
+      "href": "/ag-cad-tools/",
+      "label": "Torna ad AG CAD Tools"
     }
   },
   {
@@ -149,6 +149,58 @@
     "parent": {
       "href": "https://andreagiaquinto.it/yqarch-italiano/",
       "label": "Torna a YQArch Italiano"
+    }
+  },
+  {
+    "file": "ag-cad-tools/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "blockhub-cad/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "contatti/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "portfolio/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "recensioni/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "downloads/ag-cad-tools/AG_CAD_Tools_Help.html",
+    "kind": "guide",
+    "parent": {
+      "href": "/ag-cad-tools/",
+      "label": "Torna ad AG CAD Tools"
+    }
+  },
+  {
+    "file": "downloads/ag-cad-tools/AG_CAD_Tools_Compatibilita.html",
+    "kind": "guide",
+    "parent": {
+      "href": "/ag-cad-tools/",
+      "label": "Torna ad AG CAD Tools"
+    }
+  },
+  {
+    "file": "downloads/ag-cad-tools/AG_CAD_Tools_Sostieni.html",
+    "kind": "guide",
+    "parent": {
+      "href": "/ag-cad-tools/",
+      "label": "Torna ad AG CAD Tools"
+    }
+  },
+  {
+    "file": "downloads/ag-cad-tools/RAPPORTO_AG_CAD_Tools_2.0.html",
+    "kind": "report",
+    "parent": {
+      "href": "/ag-cad-tools/",
+      "label": "Torna ad AG CAD Tools"
     }
   }
 ]

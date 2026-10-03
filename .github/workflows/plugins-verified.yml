@@ -2,7 +2,7 @@ name: Plugin pages quality and live verification
 on:
   workflow_dispatch:
   push:
-    branches: [main, 'release/yqarch-*', 'optimize/plugins-*', 'optimize/services-site-*']
+    branches: [main, 'release/yqarch-*', 'release/site-*', 'optimize/plugins-*', 'optimize/services-site-*']
     paths:
       - 'index.html'
       - 'yqarch-italiano/**'
@@ -51,6 +51,8 @@ jobs:
         run: |
           node scripts/sync-site-footer.cjs --check
           node scripts/sync-page-navigation.cjs --check
+      - name: New site paths, private contacts and navigation
+        run: node scripts/qa-site-expansion.cjs local
       - name: Local plugin interactions
         run: node .github/scripts/plugins_qa.cjs local
       - name: Local cross-page consistency
@@ -66,7 +68,7 @@ jobs:
           import time,urllib.request
           for attempt in range(36):
             try:
-              for slug in ['yqarch-italiano','express-tools-italiano']:
+              for slug in ['yqarch-italiano','ag-cad-tools']:
                 html=urllib.request.urlopen('https://andreagiaquinto.it/'+slug+'/',timeout=15).read().decode()
                 import pathlib,re
                 expected=re.search(r'data-build="([^"]+)"',pathlib.Path(slug+'/index.html').read_text()).group(1)
@@ -79,6 +81,9 @@ jobs:
       - name: Public downloads, API and browser verification
         if: github.ref == 'refs/heads/main'
         run: node .github/scripts/plugins_qa.cjs live
+      - name: Live new site paths and simulated contact form
+        if: github.ref == 'refs/heads/main'
+        run: node scripts/qa-site-expansion.cjs live
       - name: Live cross-page consistency
         if: github.ref == 'refs/heads/main'
         run: node .github/scripts/site_consistency_qa.cjs live

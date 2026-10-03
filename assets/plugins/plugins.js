@@ -2,6 +2,7 @@
   'use strict';
   const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('#page-nav');
   menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));nav.classList.toggle('is-open',open);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu?.getAttribute('aria-expanded')==='true'){menu.setAttribute('aria-expanded','false');nav.classList.remove('is-open');menu.focus();}});
   nav?.addEventListener('click',e=>{if(e.target.closest('a')){menu.setAttribute('aria-expanded','false');nav.classList.remove('is-open');}});
   document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{
     try{await navigator.clipboard.writeText(button.dataset.copy);button.textContent='Copiato';}catch{button.textContent='Seleziona e copia il dato qui sopra';}

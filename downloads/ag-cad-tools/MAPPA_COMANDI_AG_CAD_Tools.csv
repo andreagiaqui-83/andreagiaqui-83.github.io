@@ -1,0 +1,211 @@
+﻿Comando precedente (alias compatibile);Nuovo comando;Nome italiano;Categoria
+CTI;AGCADTOOLS;Launcher o alias;Servizio / alias
+CTI_-BLOCCOXRIF;AG_-BLOCCOXRIF;Launcher o alias;Servizio / alias
+CTI_-CAMBIACASO;AG_-CAMBIACASO;Launcher o alias;Servizio / alias
+CTI_-LISTAXRIF;AG_-LISTAXRIF;Launcher o alias;Servizio / alias
+CTI_-MODALITAREINDIRIZZA;AG_-MODALITAREINDIRIZZA;Launcher o alias;Servizio / alias
+CTI_-ORDINACOLORI;AG_-ORDINACOLORI;Launcher o alias;Servizio / alias
+CTI_-SOSTITUISCIBLOCCO;AG_-SOSTITUISCIBLOCCO;Launcher o alias;Servizio / alias
+CTI_-UNISCILAYOUT;AG_-UNISCILAYOUT;Launcher o alias;Servizio / alias
+CTI_3DFACE_IN_STL;AG_3DFACE_IN_STL;Facce 3D in STL;3D ed elevazioni
+CTI_ADATTATESTO;AG_ADATTATESTO;Adatta testo;Testo
+CTI_AGGIORNA_CARTIGLIO;AG_AGGIORNA_CARTIGLIO;Aggiorna cartiglio;Layout e stampa
+CTI_AGGIUNGIVARSCRIPT;AG_AGGIUNGIVARSCRIPT;Aggiungi variabili;File e sistema
+CTI_AGGIUNGI_VERTICI;AG_AGGIUNGI_VERTICI;Aggiungi vertici;Polilinee e allineamenti
+CTI_AIUTOSTRUMENTI;AG_AIUTOSTRUMENTI;Guida strumenti;Guida e supporto
+CTI_ALLINEASPAZI;AG_ALLINEASPAZI;Allinea spazi;Layout e stampa
+CTI_ALLINEA_TESTI;AG_ALLINEA_TESTI;Allinea testi;Testo
+CTI_ALLINEA_TESTO_RIFERIMENTO;AG_ALLINEA_TESTO_RIFERIMENTO;Allinea testo al riferimento;Testo
+CTI_ANGOLI_POLILINEA;AG_ANGOLI_POLILINEA;Angoli della polilinea;Misure e quote
+CTI_APPIATTISCI;AG_APPIATTISCI;Appiattisci;3D ed elevazioni
+CTI_APPTESTOREMOTO;AG_APPTESTOREMOTO;Editor testo remoto;Testo
+CTI_ARCO_IN_SEGMENTI;AG_ARCO_IN_SEGMENTI;Arco in segmenti;Polilinee e allineamenti
+CTI_AREA_MULTIUNITA;AG_AREA_MULTIUNITA;Area in più unità;Misure e quote
+CTI_AREE_MULTIPLE;AG_AREE_MULTIPLE;Somma aree;Misure e quote
+CTI_ARROTONDA_TESTI;AG_ARROTONDA_TESTI;Arrotonda testi numerici;Testo
+CTI_ASSE_TRA_BORDI;AG_ASSE_TRA_BORDI;Asse fra due bordi;Polilinee e allineamenti
+CTI_ATTRIBUTI_IN_TESTO;AG_ATTRIBUTI_IN_TESTO;Attributi in testo;Blocchi e attributi
+CTI_ATTRIBUTOGLOBALE;AG_ATTRIBUTOGLOBALE;Attributo globale;Dati e scambio
+CTI_BLOCCA_VALORE_QUOTA;AG_BLOCCA_VALORE_QUOTA;Blocca valore della quota;Misure e quote
+CTI_BLOCCHI_SU_ALLINEAMENTO;AG_BLOCCHI_SU_ALLINEAMENTO;Blocchi sull'allineamento;Polilinee e allineamenti
+CTI_BLOCCHI_SU_MEZZERIE;AG_BLOCCHI_SU_MEZZERIE;Blocchi sulle mezzerie;Blocchi e attributi
+CTI_BLOCCHI_SU_NODI;AG_BLOCCHI_SU_NODI;Blocchi sui nodi;Blocchi e attributi
+CTI_BLOCCHI_SU_TESTI;AG_BLOCCHI_SU_TESTI;Blocchi sui testi;Blocchi e attributi
+CTI_BLOCCHI_SU_VERTICI;AG_BLOCCHI_SU_VERTICI;Blocchi sui vertici;Blocchi e attributi
+CTI_BLOCCOXRIF;AG_BLOCCOXRIF;Blocco in xrif;Blocchi e attributi
+CTI_BLOCCO_A_QUOTA_TESTO;AG_BLOCCO_A_QUOTA_TESTO;Blocco alla quota del testo;Blocchi e attributi
+CTI_CALCOLA_TESTI_NUMERICI;AG_CALCOLA_TESTI_NUMERICI;Calcola testi numerici;Testo
+CTI_CAMBIACASO;AG_CAMBIACASO;Maiuscole/minuscole;Testo
+CTI_CAMBIAURL;AG_CAMBIAURL;Modifica URL;Dati e scambio
+CTI_CANCELLA_DENTRO;AG_CANCELLA_DENTRO;Cancella dentro il contorno;Modifica
+CTI_CERCA_TESTI;AG_CERCA_TESTI;Cerca testi;Testo
+CTI_CHIUDIVELOCE;AG_CHIUDIVELOCE;Chiudi veloce;File e sistema
+CTI_CONTABLOCCHI;AG_CONTABLOCCHI;Conteggia blocchi;Blocchi e attributi
+CTI_CONTORNATESTO;AG_CONTORNATESTO;Contorna testo;Testo
+CTI_CONTROLLA_NUMERAZIONE;AG_CONTROLLA_NUMERAZIONE;Controlla numerazione;Testo
+CTI_CONTROLLO_POLIGONI;AG_CONTROLLO_POLIGONI;Controlla poligoni;Controllo e selezione
+CTI_COPIAMULTIPLA;AG_COPIAMULTIPLA;Copia multipla;Modifica
+CTI_COPIA_CONTENUTO_TESTO;AG_COPIA_CONTENUTO_TESTO;Copia contenuto testo;Testo
+CTI_COPIA_POLIGONI_CHIUSI;AG_COPIA_POLIGONI_CHIUSI;Copia poligoni chiusi;Polilinee e allineamenti
+CTI_COPIA_SU_LAYOUT;AG_COPIA_SU_LAYOUT;Copia su tutti i layout;Layout e stampa
+CTI_CORNICIRASTER;AG_CORNICIRASTER;Cornici raster;Immagini
+CTI_CREAFORMA;AG_CREAFORMA;Crea forma;Disegno e architettura
+CTI_CREATIPOLINEA;AG_CREATIPOLINEA;Crea tipo linea;Disegno e architettura
+CTI_CREA_LAYER_RAPIDO;AG_CREA_LAYER_RAPIDO;Crea layer rapido;Layer e proprietà
+CTI_CSV_IN_TABELLA;AG_CSV_IN_TABELLA;CSV in tabella;Dati e scambio
+CTI_DATAORA;AG_DATAORA;Data e ora;File e sistema
+CTI_DATIESTESI;AG_DATIESTESI;Gestisci XDATA;Dati e scambio
+CTI_DECIMALI_TESTO;AG_DECIMALI_TESTO;Decimali del testo;Testo
+CTI_DETTAGLI_CURVE;AG_DETTAGLI_CURVE;Dettagli delle curve;Polilinee e allineamenti
+CTI_DETTAGLI_LOTTO;AG_DETTAGLI_LOTTO;Dettagli del lotto;Disegno e architettura
+CTI_DIAGNOSTICA;AG_DIAGNOSTICA;Diagnostica AG CAD Tools;Guida e supporto
+CTI_DIAGNOSTICACAD;AG_DIAGNOSTICACAD;Diagnostica CAD;File e sistema
+CTI_DIAGNOSTICA_2_0;AG_DIAGNOSTICA_2_0;Launcher o alias;Servizio / alias
+CTI_DIFFERENZA_TESTI_SOVRAPPOSTI;AG_DIFFERENZA_TESTI_SOVRAPPOSTI;Differenza fra testi sovrapposti;Controllo e selezione
+CTI_DISTANZA_SU_POLILINEA;AG_DISTANZA_SU_POLILINEA;Distanza su polilinea;Misure e quote
+CTI_DIVIDI_LUNGHEZZE;AG_DIVIDI_LUNGHEZZE;Dividi per lunghezze;Modifica
+CTI_ELIMINA_QUOTE_TRATTEGGI;AG_ELIMINA_QUOTE_TRATTEGGI;Elimina quote e tratteggi;Misure e quote
+CTI_ESCLUDIFINESTRA;AG_ESCLUDIFINESTRA;Escludi finestra;Controllo e selezione
+CTI_ESCLUDIINCROCIO;AG_ESCLUDIINCROCIO;Escludi incrocio;Controllo e selezione
+CTI_ESCLUDILINEA;AG_ESCLUDILINEA;Escludi linea;Controllo e selezione
+CTI_ESCLUDIPOLIGONOFINESTRA;AG_ESCLUDIPOLIGONOFINESTRA;Escludi poligono finestra;Controllo e selezione
+CTI_ESCLUDIPOLIGONOINCROCIO;AG_ESCLUDIPOLIGONOINCROCIO;Escludi poligono incrocio;Controllo e selezione
+CTI_ESCLUDIPRECEDENTE;AG_ESCLUDIPRECEDENTE;Escludi precedente;Controllo e selezione
+CTI_ESPLODIBLOCCO;AG_ESPLODIBLOCCO;Esplodi blocco;Blocchi e attributi
+CTI_ESPLODITESTO;AG_ESPLODITESTO;Esplodi testo;Testo
+CTI_ESPORTAATTRIBUTI;AG_ESPORTAATTRIBUTI;Esporta attributi;Dati e scambio
+CTI_ESPORTALISP;AG_ESPORTALISP;Esporta LISP;File e sistema
+CTI_ESPORTA_DATI_LOTTI;AG_ESPORTA_DATI_LOTTI;Esporta dati dei lotti;Dati e scambio
+CTI_ESPORTA_TESTI_XYZ;AG_ESPORTA_TESTI_XYZ;Esporta testi e coordinate;Dati e scambio
+CTI_ESPORTA_VERTICI_CSV;AG_ESPORTA_VERTICI_CSV;Esporta vertici CSV;Rilievo e coordinate
+CTI_ESTENDIBLOCCO;AG_ESTENDIBLOCCO;Estendi su blocco;Blocchi e attributi
+CTI_ETICHETTA_Z_VERTICI;AG_ETICHETTA_Z_VERTICI;Etichetta Z dei vertici;3D ed elevazioni
+CTI_FACCIA3D_IN_POLILINEA;AG_FACCIA3D_IN_POLILINEA;Faccia 3D in polilinea;3D ed elevazioni
+CTI_FORMAINBLOCCO;AG_FORMAINBLOCCO;Forma in blocco;Blocchi e attributi
+CTI_GENERA_LOTTIZZAZIONE;AG_GENERA_LOTTIZZAZIONE;Genera lottizzazione;Disegno e architettura
+CTI_GESTISCIIMMAGINI;AG_GESTISCIIMMAGINI;Editor immagini;Immagini
+CTI_GIUSTIFICATESTO;AG_GIUSTIFICATESTO;Giustifica testo;Testo
+CTI_GRIGLIA_COORDINATE;AG_GRIGLIA_COORDINATE;Griglia coordinate;Rilievo e coordinate
+CTI_IMPORTAATTRIBUTI;AG_IMPORTAATTRIBUTI;Importa attributi;Dati e scambio
+CTI_IMPORTA_PUNTI_TESTO;AG_IMPORTA_PUNTI_TESTO;Importa punti e testi;Dati e scambio
+CTI_INFOBLOCCO;AG_INFOBLOCCO;Info blocco;Blocchi e attributi
+CTI_INFOCAD;AG_INFOCAD;Info CAD;File e sistema
+CTI_INSERISCI_DWG_CARTELLA;AG_INSERISCI_DWG_CARTELLA;Inserisci DWG dalla cartella;File e sistema
+CTI_INTERPOLA_QUOTE_NUMERO;AG_INTERPOLA_QUOTE_NUMERO;Interpola quote per numero;Rilievo e coordinate
+CTI_INTERPOLA_QUOTE_PASSO;AG_INTERPOLA_QUOTE_PASSO;Interpola quote a passo;Rilievo e coordinate
+CTI_INTERPOLA_Z_VERTICI;AG_INTERPOLA_Z_VERTICI;Interpola Z dei vertici;3D ed elevazioni
+CTI_INTERSEZIONI;AG_INTERSEZIONI;Trova intersezioni;Controllo e selezione
+CTI_INTERSEZIONI_PER_LAYER;AG_INTERSEZIONI_PER_LAYER;Intersezioni per layer;Controllo e selezione
+CTI_LEGENDA_LAYER;AG_LEGENDA_LAYER;Legenda layer;Layer e proprietà
+CTI_LINEAINTERUZIONE;AG_LINEAINTERUZIONE;Linea interruzione;Disegno e architettura
+CTI_LINEA_PENDENZA;AG_LINEA_PENDENZA;Linea di pendenza;Rilievo e coordinate
+CTI_LISTADATIESTESI;AG_LISTADATIESTESI;Lista XDATA;Dati e scambio
+CTI_LISTAXRIF;AG_LISTAXRIF;Lista nidificato;Blocchi e attributi
+CTI_LOGDISEGNO;AG_LOGDISEGNO;Log disegno;File e sistema
+CTI_LUNGHEZZE_PER_LAYER;AG_LUNGHEZZE_PER_LAYER;Lunghezze per layer;Misure e quote
+CTI_MANTIENI_DENTRO;AG_MANTIENI_DENTRO;Mantieni dentro il contorno;Modifica
+CTI_MASCHERATESTO;AG_MASCHERATESTO;Maschera testo;Testo
+CTI_MINMAX_NEL_CONTORNO;AG_MINMAX_NEL_CONTORNO;Minimo e massimo nel contorno;Dati e scambio
+CTI_MODALITACONTATTO;AG_MODALITACONTATTO;Modalità contatto;Controllo e selezione
+CTI_MODALITAREINDIRIZZA;AG_MODALITAREINDIRIZZA;Modalità reindirizza;File e sistema
+CTI_MODIFICAALIAS;AG_MODIFICAALIAS;Modifica alias;File e sistema
+CTI_MODIFICAIMMAGINE;AG_MODIFICAIMMAGINE;Modifica immagine;Immagini
+CTI_MODIFICAPOLILINEE;AG_MODIFICAPOLILINEE;Modifica polilinee;Polilinee e allineamenti
+CTI_MODIFICATESTOREMOTO;AG_MODIFICATESTOREMOTO;Modifica testo remoto;Testo
+CTI_MOSTRAURL;AG_MOSTRAURL;Mostra URL;Dati e scambio
+CTI_MTEXT_IN_TESTO;AG_MTEXT_IN_TESTO;Testo multilinea in testo;Testo
+CTI_MURO_STRATIGRAFICO;AG_MURO_STRATIGRAFICO;Muro stratigrafico;Disegno e architettura
+CTI_NORMALIZZA_ESTRUSIONE;AG_NORMALIZZA_ESTRUSIONE;Normalizza estrusione;3D ed elevazioni
+CTI_NUMERATESTI;AG_NUMERATESTI;Numera testi;Testo
+CTI_NUMERA_LOTTI;AG_NUMERA_LOTTI;Numera lotti;Disegno e architettura
+CTI_NUMERA_VERTICI;AG_NUMERA_VERTICI;Numera vertici;Rilievo e coordinate
+CTI_OFFSETMULTIPLO;AG_OFFSETMULTIPLO;Offset multiplo;Modifica
+CTI_OFFSET_DOPPIO;AG_OFFSET_DOPPIO;Offset sui due lati;Modifica
+CTI_OFFSET_QUOTA;AG_OFFSET_QUOTA;Sposta quota Z;Rilievo e coordinate
+CTI_OFFSET_Z_VERTICI;AG_OFFSET_Z_VERTICI;Sposta Z dei vertici;3D ed elevazioni
+CTI_ORDINACOLORI;AG_ORDINACOLORI;Ordina per colore;Layer e proprietà
+CTI_ORIENTATESTO;AG_ORIENTATESTO;Orienta testo;Testo
+CTI_PIANODILAVORO;AG_PIANODILAVORO;Piano di lavoro;UCS e viste
+CTI_PICCHETTAMENTO_PILASTRI;AG_PICCHETTAMENTO_PILASTRI;Picchettamento pilastri;Rilievo e coordinate
+CTI_PLOT2DWG;AG_PLOT2DWG;Importa HPGL;File e sistema
+CTI_PLOTTA_QUOTE_DA_CSV;AG_PLOTTA_QUOTE_DA_CSV;Quote da CSV;Rilievo e coordinate
+CTI_POLIGONO_DA_AREA;AG_POLIGONO_DA_AREA;Poligono da area interna;Polilinee e allineamenti
+CTI_POLILINEA_DA_TESTI;AG_POLILINEA_DA_TESTI;Polilinea dai testi;Polilinee e allineamenti
+CTI_POLILINEA_LISCIA_IN_SEGMENTI;AG_POLILINEA_LISCIA_IN_SEGMENTI;Curva in segmenti;Polilinee e allineamenti
+CTI_POLILINEE_APERTE;AG_POLILINEE_APERTE;Polilinee aperte;Controllo e selezione
+CTI_POLILINEE_CORTE;AG_POLILINEE_CORTE;Polilinee corte;Controllo e selezione
+CTI_PREFISSO_SUFFISSO;AG_PREFISSO_SUFFISSO;Prefisso / suffisso;Testo
+CTI_PRENDISELEZIONE;AG_PRENDISELEZIONE;Selezione layer/tipo;Controllo e selezione
+CTI_PROGRESSIVE_ALLINEAMENTO;AG_PROGRESSIVE_ALLINEAMENTO;Marca progressive;Polilinee e allineamenti
+CTI_PUNTI_CODIFICATI_CSV;AG_PUNTI_CODIFICATI_CSV;Punti codificati in CSV;Rilievo e coordinate
+CTI_QUOTA_AUTOMATICA;AG_QUOTA_AUTOMATICA;Quota automatica;Misure e quote
+CTI_QUOTA_INTERMEDIA;AG_QUOTA_INTERMEDIA;Quota intermedia;Rilievo e coordinate
+CTI_QUOTA_PORTA;AG_QUOTA_PORTA;Quota porta;Disegno e architettura
+CTI_QUOTA_SEGMENTI;AG_QUOTA_SEGMENTI;Quota segmenti;Misure e quote
+CTI_QUOTA_STANZA;AG_QUOTA_STANZA;Quota stanza;Disegno e architettura
+CTI_QUOTE_DA_POLILINEA3D;AG_QUOTE_DA_POLILINEA3D;Quote da polilinea 3D;3D ed elevazioni
+CTI_REINDIRIZZA;AG_REINDIRIZZA;Reindirizza percorsi;File e sistema
+CTI_RETINOAVANZATO;AG_RETINOAVANZATO;Retino avanzato;Disegno e architettura
+CTI_RETTANGOLO_3P;AG_RETTANGOLO_3P;Rettangolo per tre punti;Disegno e architettura
+CTI_RIASSOCIAQUOTE;AG_RIASSOCIAQUOTE;Ripristina quote;Misure e quote
+CTI_RIDUCI_VERTICI;AG_RIDUCI_VERTICI;Riduci vertici;Polilinee e allineamenti
+CTI_RIPRISTINADISEGNO;AG_RIPRISTINADISEGNO;Ripristina disegno;File e sistema
+CTI_RITAGLIAOGGETTI;AG_RITAGLIAOGGETTI;Ritaglia oggetti;Modifica
+CTI_RUOTAUCS;AG_RUOTAUCS;Ruota UCS;UCS e viste
+CTI_RUOTA_BLOCCHI_2P;AG_RUOTA_BLOCCHI_2P;Ruota blocchi per due punti;Blocchi e attributi
+CTI_RUOTA_COME_RIFERIMENTO;AG_RUOTA_COME_RIFERIMENTO;Ruota come riferimento;Modifica
+CTI_RUOTA_TESTO_2P;AG_RUOTA_TESTO_2P;Ruota testo per due punti;Testo
+CTI_RUOTA_TESTO_LAYOUT;AG_RUOTA_TESTO_LAYOUT;Ruota testo per il layout;Testo
+CTI_SALVATUTTO;AG_SALVATUTTO;Salva tutto;File e sistema
+CTI_SCALABLOCCHI;AG_SCALABLOCCHI;Scala blocchi;Blocchi e attributi
+CTI_SCALABLOCCOCARTA;AG_SCALABLOCCOCARTA;Scala blocco carta;Blocchi e attributi
+CTI_SCALATESTO;AG_SCALATESTO;Scala testo;Testo
+CTI_SCALATESTOCARTA;AG_SCALATESTOCARTA;Scala testo carta;Testo
+CTI_SCALAVISTA;AG_SCALAVISTA;Scala finestra;Layout e stampa
+CTI_SCALA_IMMAGINE_CONTORNO;AG_SCALA_IMMAGINE_CONTORNO;Scala immagine sul contorno;Immagini
+CTI_SCALA_LINEE_CENTRO;AG_SCALA_LINEE_CENTRO;Scala linee dal centro;Modifica
+CTI_SCALA_PER_RIFERIMENTO;AG_SCALA_PER_RIFERIMENTO;Scala per riferimento;Modifica
+CTI_SCAMBIA_TESTI;AG_SCAMBIA_TESTI;Scambia testi;Testo
+CTI_SELEZIONECONTATTO;AG_SELEZIONECONTATTO;Seleziona a contatto;Controllo e selezione
+CTI_SELEZIONEFILTRO;AG_SELEZIONEFILTRO;Selezione filtro;Controllo e selezione
+CTI_SELEZIONERAPIDA;AG_SELEZIONERAPIDA;Selezione rapida;Controllo e selezione
+CTI_SEPARATESTI;AG_SEPARATESTI;Trova sovrapposizioni;Testo
+CTI_SINCRONIZZAVISTE;AG_SINCRONIZZAVISTE;Sincronizza viste;Layout e stampa
+CTI_SMASCHERATESTO;AG_SMASCHERATESTO;Rimuovi maschera;Testo
+CTI_SOSTIENI;AG_SOSTIENI;Sostieni progetti;Guida e supporto
+CTI_SOSTITUISCIBLOCCO;AG_SOSTITUISCIBLOCCO;Sostituisci blocco;Blocchi e attributi
+CTI_SOSTITUISCIURL;AG_SOSTITUISCIURL;Sostituisci URL;Dati e scambio
+CTI_SOSTITUISCI_CON_MODELLO;AG_SOSTITUISCI_CON_MODELLO;Sostituisci con modello;Modifica
+CTI_SOVRAPPONIIMMAGINI;AG_SOVRAPPONIIMMAGINI;Sovrapposizione immagini;Immagini
+CTI_SPEZZAINCROCI;AG_SPEZZAINCROCI;Spezza alle intersezioni;Polilinee e allineamenti
+CTI_SPOSTABAK;AG_SPOSTABAK;Sposta BAK;File e sistema
+CTI_SPOSTA_LAYER_CORRENTE;AG_SPOSTA_LAYER_CORRENTE;Porta sul layer corrente;Layer e proprietà
+CTI_STIRAMULTIPLO;AG_STIRAMULTIPLO;Stira multiplo;Modifica
+CTI_SUPERFICIELISP;AG_SUPERFICIELISP;Esplora LISP;File e sistema
+CTI_TABELLA_VERTICI;AG_TABELLA_VERTICI;Tabella vertici;Rilievo e coordinate
+CTI_TAGLIABLOCCO;AG_TAGLIABLOCCO;Taglia su blocco;Blocchi e attributi
+CTI_TAGLIAESTENDI;AG_TAGLIAESTENDI;Taglia/estendi;Modifica
+CTI_TAGLIAESTESO;AG_TAGLIAESTESO;Taglia esteso;Modifica
+CTI_TAGLIA_ALLINEAMENTO_PROGRESSIVE;AG_TAGLIA_ALLINEAMENTO_PROGRESSIVE;Taglia per progressive;Polilinee e allineamenti
+CTI_TESTI_PER_ALTEZZA;AG_TESTI_PER_ALTEZZA;Testi per altezza;Testo
+CTI_TESTI_SOVRAPPOSTI;AG_TESTI_SOVRAPPOSTI;Testi sovrapposti;Controllo e selezione
+CTI_TESTOREMOTO;AG_TESTOREMOTO;Testo remoto;Testo
+CTI_TESTO_DA_QUOTA_Z;AG_TESTO_DA_QUOTA_Z;Testo dalla quota Z;3D ed elevazioni
+CTI_TESTO_SU_GRIGLIA;AG_TESTO_SU_GRIGLIA;Testo sulla griglia;Rilievo e coordinate
+CTI_TESTO_SU_NODO;AG_TESTO_SU_NODO;Testo sul nodo;Testo
+CTI_TESTO_SU_POLILINEA;AG_TESTO_SU_POLILINEA;Testo sulla polilinea;Testo
+CTI_TROVASOVRAPPOSIZIONI;AG_TROVASOVRAPPOSIZIONI;Launcher o alias;Servizio / alias
+CTI_TROVA_TAG;AG_TROVA_TAG;Trova tag attributo;Blocchi e attributi
+CTI_UCS_ANTERIORE;AG_UCS_ANTERIORE;UCS anteriore;UCS e viste
+CTI_UCS_DESTRA;AG_UCS_DESTRA;UCS destra;UCS e viste
+CTI_UCS_INFERIORE;AG_UCS_INFERIORE;UCS inferiore;UCS e viste
+CTI_UCS_POSTERIORE;AG_UCS_POSTERIORE;UCS posteriore;UCS e viste
+CTI_UCS_SINISTRA;AG_UCS_SINISTRA;UCS sinistra;UCS e viste
+CTI_UCS_SUPERIORE;AG_UCS_SUPERIORE;UCS superiore;UCS e viste
+CTI_UNISCILAYOUT;AG_UNISCILAYOUT;Unisci layout;Layout e stampa
+CTI_UNISCI_INTERSEZIONE;AG_UNISCI_INTERSEZIONE;Unisci all'intersezione;Polilinee e allineamenti
+CTI_UTILITALISP;AG_UTILITALISP;Utilità LISP;File e sistema
+CTI_VARIABILIASCRIPT;AG_VARIABILIASCRIPT;Variabili in script;File e sistema
+CTI_VERTICE_IMMAGINARIO_ARCO;AG_VERTICE_IMMAGINARIO_ARCO;Vertice immaginario dell'arco;Polilinee e allineamenti
+CTI_VERTICI_ALLINEAMENTO;AG_VERTICI_ALLINEAMENTO;Vertici dell'allineamento;Polilinee e allineamenti
+CTI_VERTICI_SU_ALLINEAMENTO;AG_VERTICI_SU_ALLINEAMENTO;Vertici sull'allineamento;Polilinee e allineamenti

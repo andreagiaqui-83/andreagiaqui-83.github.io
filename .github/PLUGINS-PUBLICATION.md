@@ -27,3 +27,8 @@ Footer comune senza pulsante LinkedIn; didascalie descrittive senza formule illu
 - EXE/ZIP 3.78 già ricostruiti e verificati nel progetto; sul sito copiarli senza modificarli. Conservare gli archivi precedenti.
 - Conteggi Ribbon: 10 grandi + 50 piccoli visibili + 70 nel flyout. 23 categorie e 547 voci; guida con 646 schede e limiti dichiarati.
 - Nessuna nuova certificazione di tutte le geometrie o di altri ambienti. Conservare separazione fra prove native 3.77 e verifiche automatiche 3.78.
+
+## AG CAD Tools 2.0 e BlockHub CAD — 3 ottobre 2026
+- AG CAD Tools: 198 strumenti (93 principali, 100 da cinque fonti MIT, 5 personali), 200 schede inclusi servizi; 541 nomi non sono 541 strumenti. Manifest AutoCAD completo 2024–2027 Windows x64 IT/EN, collaudo nativo documentato 2027 italiano e campione di comandi. LT/Mac/Web/altro CAD esclusi.
+- Non presentare AG come traduzione ufficiale né come copia integrale del comportamento Autodesk; fonti, attribuzioni e limiti sono consultabili. Le copie web della documentazione aggiungono navigazione e adattamenti grafici; ZIP/EXE restano identici.
+- BlockHub: pagina e bacheca, nessun download o numero definitivo finché la release è in lavorazione.

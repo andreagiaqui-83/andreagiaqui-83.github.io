@@ -1,7 +1,7 @@
 name: Complete site audit
 on:
   push:
-    branches: [main, 'release/yqarch-*']
+    branches: [main, 'release/yqarch-*', 'release/site-*']
     paths:
       - '**/*.html'
       - 'assets/**'

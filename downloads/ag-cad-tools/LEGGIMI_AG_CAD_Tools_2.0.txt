@@ -1,0 +1,139 @@
+AG CAD TOOLS 2.0 — VERSIONE DEFINITIVA
+Andrea Giaquinto · 3 ottobre 2026 · https://andreagiaquinto.it
+
+198 strumenti in italiano, 16 categorie, 200 voci nel catalogo.
+93 core + 100 Web di provenienza MIT + 5 personali.
+AG sono le iniziali di Andrea Giaquinto.
+
+INSTALLAZIONE O AGGIORNAMENTO
+1. Chiudi AutoCAD.
+2. Avvia AG_CAD_Tools_2.0_Setup.exe e premi Installa, Aggiorna o Ripara,
+   secondo il pulsante mostrato. Anche Ripara installa il payload 2.0.
+3. Al messaggio di successo premi OK: il setup si chiude automaticamente.
+4. Riapri AutoCAD e usa il menu AG CAD Tools, il Ribbon o AGCADTOOLS.
+
+Non occorre disinstallare la RC5 o la precedente CAD Tools Italiano.
+Il setup unico contiene tutti i componenti. Installa/Ripara partono subito,
+senza conferma intermedia. La disinstallazione mantiene la conferma.
+Installazione per utente, nella cartella:
+%APPDATA%\Autodesk\ApplicationPlugins\AGCADTools.bundle
+Nessun Express Tools, HTA, PowerShell o runtime esterno aggiuntivo richiesto.
+Restano necessari i normali componenti richiesti da AutoCAD stesso.
+
+COMANDI PRINCIPALI
+AGCADTOOLS oppure AGCAD: catalogo.
+AG_DIAGNOSTICA: stato del caricamento e delle risorse.
+AG_AIUTOSTRUMENTI: Guida dettagliata, con ricerca e categorie in cima.
+AG_SOSTIENI: sito, supporto e sostegno al progetto.
+Ogni strumento ha una scheda con preparazione, procedura, risultato/limiti
+ed esempio. I vecchi comandi CTI e CTI_ restano validi.
+541 nomi pubblici comprendono strumenti, servizi e alias; non sono 541
+strumenti distinti. Conservati tutti i 330 nomi pubblici storici,
+inclusi i 210 alias CTI. La mappa comandi elenca le corrispondenze.
+
+REQUISITI E COMPATIBILITÀ
+Perimetro del manifest: AutoCAD completo 2024–2027, Windows x64.
+Lingue previste: AutoCAD italiano e inglese; plugin e Guida in italiano.
+Riferimento per nuove installazioni: Windows 11 e requisiti della specifica
+release Autodesk. AutoCAD 2027 richiede Windows 11; Windows 10 è uno scenario
+storico per 2024–2026, con supporto Autodesk concluso il 14 ottobre 2025.
+LISPSYS=1 o 2; dopo una variazione manuale riavviare AutoCAD.
+Il plugin non cambia SECURELOAD, LISPSYS o TRUSTEDPATHS. Se il caricamento
+è bloccato, consultare la sezione Caricamento protetto nella Guida.
+Non è richiesta la disattivazione della sicurezza.
+Fuori perimetro: AutoCAD 2023 e precedenti, LT, Mac/Web, altri CAD DWG,
+Windows 7/8/8.1, sistemi a 32 bit e ARM nativo. Toolset verticali e Windows
+Server non sono dichiarati collaudati.
+
+STATO DELLA RELEASE
+Versione definitiva autorizzata dall'autore il 3 ottobre 2026 dopo aver
+approvato installer, Guida e menu della RC5. La schermata conferma menu
+superiore e Ribbon in AutoCAD 2027 italiano. Le prove precedenti confermano
+caricamento 198/198 e 541/541 e un campione di comandi con buon esito.
+La 2.0 conserva integralmente la logica della RC5; cambiano etichette,
+metadati di release, stato della diagnostica e documentazione generale.
+Versione pubblica 2.0; AppVersion del bundle 2.0.0.6, superiore alla RC5.
+
+Il confronto automatico con la RC5, i test e la compilazione sono registrati
+nel rapporto. Le prove native non identificano tutti i 198 comandi e non
+certificano AutoCAD 2024–2026 o inglese. Nel log ricevuto: ACADVER 26.0s,
+LISPSYS=1, SECURELOAD=0, Windows NT 10.0 Intel64 (build Windows non rilevata).
+Il setup finale ricompilato non è stato eseguito in questo ambiente Linux:
+l'approvazione nativa riguarda la RC5 con la medesima logica.
+Il registro dei collaudi separa quanto confermato da quanto non provato.
+Non sono richiesti nuovi collaudi all'autore per questa promozione.
+
+CONSERVAZIONE E PROTEZIONI
+Impostazioni personali, XData nei DWG, nomi interni dei reattori e chiavi
+storiche restano invariati. Nessuna modifica alla geometria nella promozione.
+Conservati inserimento idempotente del menu e preferenza MENUBAR dell'utente.
+Il setup preserva staging, verifica SHA-256, backup, ripristino in caso di
+errore e recupero delle migrazioni interrotte; blocca modifiche con AutoCAD
+aperto. Gli errori lasciano l'interfaccia aperta con la spiegazione.
+Backup per aggiornamenti della stessa identità:
+%LOCALAPPDATA%\AGCADTools\Installer\BackupPrecedente.bundle
+Backup durante migrazione da CAD Tools Italiano:
+%LOCALAPPDATA%\AGCADTools\Installer\BackupCADToolsItaliano.bundle
+I backup storici restano nelle rispettive cartelle. Se Windows impedisce
+un ripristino, il setup segnala il percorso della copia di sicurezza.
+L'installer non modifica i file di installazione Autodesk.
+Il comando AG_MODIFICAALIAS interviene intenzionalmente nel file acad.pgp
+del profilo, come spiegato nella sua scheda: non confondere il comportamento
+del setup con quello dei singoli strumenti.
+
+ESC/ERRORE E UNDO
+Il runtime libera risorse e ripristina impostazioni temporanee al termine,
+dopo ESC o errore. Le modifiche geometriche già eseguite possono restare
+nel DWG: usare UNDO quando disponibile. Salvataggi, esportazioni, chiusure
+e altri effetti sui file non si annullano con UNDO del disegno.
+Un gruppo UNDO esterno dell'utente non viene chiuso dal plugin.
+SCRIPT/QUIT e azione del launcher partono dopo la liberazione delle risorse.
+Un arresto di AutoCAD/Windows può lasciare lo script temporaneo di
+RIPRISTINADISEGNO. Consultare le limitazioni nelle singole schede.
+
+CONTENUTO DELLA CONSEGNA
+Setup.exe: unico file necessario per installare o aggiornare.
+Consegna.zip: installer, Guida, compatibilità, rapporto, istruzioni,
+registro collaudi, specifiche JSON, testi per il sito, mappa comandi,
+manifest delle 198 funzioni, anteprima, licenze, sorgenti e portabile.
+SHA256_AG_CAD_Tools_2.0.txt: impronte dei file distribuiti.
+Portabile.zip: solo AGCADTools.bundle; per migrare dalla vecchia identità
+usare il setup, perché una copia manuale non effettua la migrazione.
+Le licenze MIT incluse riguardano le rispettive fonti Web; sono conservate
+con attribuzioni e provenienza. Non attribuire automaticamente la licenza
+MIT all'intero progetto. La distribuzione è pubblicata da Andrea Giaquinto;
+non è un prodotto Autodesk.
+Il setup non contiene una firma digitale Authenticode.
+
+PUBBLICAZIONE
+La release è definitiva e pronta per la pubblicazione. I file di questa
+consegna non comportano da soli la messa online del sito.
+La scheda allegata contiene testi, FAQ, specifiche e percorsi suggeriti;
+integrare nel sito rispettandone le regole, verificando i download e gli hash.
+Non presentare come collaudate combinazioni prive di prove native.
+
+RICOSTRUZIONE DAI SORGENTI (SOLO SVILUPPO)
+Python 3.10+, Node.js e Go 1.22+; riferimento Go 1.23.2.
+Pillow è necessario solo per l'anteprima. Il race detector richiede un
+compilatore C. CTI_GO può indicare il percorso dell'eseguibile Go.
+  python tools/genera_finale.py
+  python tools/genera_guida.py
+  python verifiche/verifica_finale.py
+  python verifiche/test_web.py
+  python verifiche/test_personali.py
+  python verifiche/test_integrazione.py
+  python verifiche/test_bootstrap.py
+  python verifiche/test_migrazione_ui.py
+  python verifiche/test_rc4.py
+  python verifiche/verifica_release.py
+  python verifiche/test_continuita_interfaccia.py
+  python verifiche/test_promozione_2_0.py
+  python tools/verifica_riproducibilita.py
+  python tools/build_installer.py
+  python tools/anteprima_installer.py
+  python tools/prepara_consegna.py
+Le baseline storiche incluse sono riferimenti intatti. Non installarle.
+La sola release attiva nei sorgenti è release/AGCADTools.bundle.
+
+Sito: https://andreagiaquinto.it
+WhatsApp: +39 333 724 0544 · Email: andrea.giaqui@gmail.com

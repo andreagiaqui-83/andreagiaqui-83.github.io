@@ -1,4 +1,4 @@
-const PROJECTS = {'yqarch':'YQArch Italiano','express-tools':'Express Tools Italiano'};
+const PROJECTS = {'yqarch':'YQArch Italiano','express-tools':'AG CAD Tools','blockhub-cad':'BlockHub CAD'};
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
 const clean = (v) => typeof v === 'string' ? v.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'').trim() : '';
 const read = async (env,key) => {const obj=await env.QUOTE_FILES.get(key);return obj ? obj.json() : null;};

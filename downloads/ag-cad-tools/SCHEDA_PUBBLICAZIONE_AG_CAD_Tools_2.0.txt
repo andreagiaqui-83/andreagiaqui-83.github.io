@@ -1,0 +1,92 @@
+AG CAD TOOLS 2.0 — SCHEDA DI PUBBLICAZIONE
+Versione definitiva approvata · 3 ottobre 2026
+Pacchetto pronto; integrazione e deploy del sito non eseguiti in questa consegna.
+
+PAGINA E METADATI
+URL proposto: https://andreagiaquinto.it/ag-cad-tools/
+Titolo SEO: AG CAD Tools — 198 strumenti AutoCAD in italiano | Andrea Giaquinto
+Descrizione: 198 strumenti per AutoCAD, menu e guida in italiano, installer
+Windows e 16 categorie. Scarica AG CAD Tools 2.0 di Andrea Giaquinto.
+H1: AG CAD Tools
+Sottotitolo: 198 strumenti per il tuo lavoro in AutoCAD, in italiano.
+Badge: Versione 2.0 · Definitiva
+Autore: Andrea Giaquinto — AG sono le sue iniziali.
+
+TESTO PRINCIPALE
+AG CAD Tools riunisce 198 strumenti per geometria, testi, blocchi, quote,
+layer, layout e file, organizzati in 16 categorie. Il menu superiore,
+il Ribbon e il catalogo rendono accessibili i comandi; la Guida con ricerca
+spiega preparazione, procedura, risultati, limiti ed esempi per ogni voce.
+Un unico installer Windows installa o aggiorna il plugin, conservando
+impostazioni e alias precedenti. Non sono necessari gli Express Tools.
+
+NOVITÀ DELLA VERSIONE DEFINITIVA
+Identità AG CAD Tools, installer con grafica e colori approvati, menu
+superiore e Ribbon, Guida con ricerca e comandi subito visibili.
+Installa/Ripara senza conferma intermedia; OK al termine chiude il setup.
+La versione 2.0 conserva la logica della RC5 approvata dall’autore.
+
+REQUISITI E TRASPARENZA DELLE PROVE
+AutoCAD completo 2024–2027 Windows x64, italiano/inglese nel manifest;
+interfaccia del plugin in italiano. Windows 11 secondo i requisiti della
+release Autodesk; Windows 10 soltanto scenario storico per 2024–2026.
+LISPSYS=1 o 2. Nessuna richiesta di disattivare SECURELOAD.
+Evidenze native: AutoCAD 2027 italiano, caricamento, campione di comandi;
+installer, Guida e menu RC5 approvati. Le altre versioni, l’inglese e tutti
+198 comandi singolarmente non sono dichiarati collaudati. Link alla matrice.
+LT, Mac/Web, 2023 e precedenti e altri CAD DWG fuori perimetro.
+
+CTA E DOWNLOAD
+Primaria: Scarica AG CAD Tools 2.0 per Windows
+File: AG_CAD_Tools_2.0_Setup.exe
+Dimensione: 4666368 byte
+SHA-256: 3000da2b35c35d914a91b99e4fdb4709e03df661503ac0747bb8d96cf676ee8f
+Firma Authenticode: assente.
+Directory proposta: /downloads/ag-cad-tools/2.0/
+Secondarie: Leggi la Guida · Verifica compatibilità · Supporto
+Guida: AG_CAD_Tools_Help.html
+Compatibilità: AG_CAD_Tools_Compatibilita.html
+Rapporto: RAPPORTO_AG_CAD_Tools_2.0.html
+Sorgenti: AG_CAD_Tools_2.0_Sorgenti.zip
+Portabile: AG_CAD_Tools_2.0_Portabile.zip
+Pacchetto completo: AG_CAD_Tools_2.0_Consegna.zip
+Impronte: SHA256_AG_CAD_Tools_2.0.txt
+Specifiche: SPECIFICHE_AG_CAD_Tools_2.0.json
+
+INSTALLAZIONE IN PAGINA
+Chiudi AutoCAD, avvia il setup e premi Installa, Aggiorna o Ripara.
+Al messaggio di successo premi OK e riapri AutoCAD. Usa AG CAD Tools dal
+menu, dal Ribbon oppure digita AGCADTOOLS. Guida: AG_AIUTOSTRUMENTI.
+Non occorre disinstallare la RC5 o CAD Tools Italiano prima del setup.
+
+FAQ VISIBILI (DA RIFLETTERE FEDELMENTE NEI DATI STRUTTURATI)
+È la versione definitiva? Sì, 2.0 autorizzata dall’autore dopo l’approvazione
+RC5; i limiti del collaudo sono dichiarati nella matrice.
+Quanti strumenti contiene? 198; 200 voci comprendono Sostieni e Diagnostica.
+I 541 nomi includono servizi e alias, non 541 strumenti distinti.
+Servono gli Express Tools? No, il plugin non ne dipende.
+Funziona in AutoCAD inglese? È previsto dal codice e dal manifest; il plugin
+resta italiano. Non è ancora documentato il collaudo nativo inglese.
+I vecchi comandi funzionano? Sì: 210 alias CTI e gli altri nomi storici
+restano validi, per un totale di 330 nomi precedenti preservati.
+Posso aggiornare la RC5? Sì, avvia il nuovo EXE e premi Ripara se proposto.
+Come segnalo un problema? Indica comando, versioni e passaggi; invia un
+esempio riproducibile tramite Supporto o WhatsApp +39 333 724 0544.
+Quali licenze sono incluse? Attribuzioni e licenze MIT delle cinque fonti
+Web; evitare di dichiarare MIT l’intero progetto senza una licenza dedicata.
+
+INTEGRAZIONE SUL SITO
+Repository: andreagiaqui-83/andreagiaqui-83.github.io.
+Rileggere AGENTS.md e .github/PLUGINS-PUBLICATION.md correnti prima di editare.
+Preservare le altre landing, tariffe, moduli, consenso e tracciamenti.
+Download sul dominio: copiare questo EXE senza modificarlo o ricompilarlo;
+verificare dimensione e SHA-256. Aggiornare downloads/releases.json.
+Aggiungere canonical, sitemap e dati strutturati coerenti con i testi.
+Registrare le pagine in scripts/site-pages.json, con footer comune e ritorni
+in alto/basso. La guida offline resta nel bundle; adattare solo la copia web.
+Non aggiungere moduli commenti senza integrazione e test del backend.
+Eseguire sync-page-navigation.cjs, sync-site-footer.cjs, test del sito,
+workflow plugins-verified e audit locale; verificare desktop/mobile.
+Dopo il deploy controllare audit live e hash dei download.
+Il nome AutoCAD appartiene ad Autodesk; AG CAD Tools è un progetto indipendente.
+Supporto: https://andreagiaquinto.it — WhatsApp +39 333 724 0544.
