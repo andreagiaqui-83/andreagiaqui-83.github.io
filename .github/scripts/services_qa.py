@@ -43,7 +43,7 @@ def static():
  for tag in s.select('[src],[href]'):
   value=tag.get('src') or tag.get('href')
   if not value or value.startswith(('http:','https:','mailto:','tel:','#')):continue
-  file=ROOT/value.split('?')[0].lstrip('/')
+  file=ROOT/urlparse(value).path.lstrip('/')
   if file.is_dir():file=file/'index.html'
   assert file.exists(),value
  for p in Path('assets/services').glob('*'):
