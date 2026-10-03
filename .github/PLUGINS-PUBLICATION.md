@@ -21,3 +21,9 @@ Footer comune senza pulsante LinkedIn; didascalie descrittive senza formule illu
 - Il manifest include sia EXE sia ZIP. Guida (646 schede), schema Ribbon, catalogo, rapporto, note, compatibilità e SHA devono avere link validi e navigazione comune.
 - `finalize-release-assets.yml` ricongiunge eventuali parti di trasporto su un branch `release/**`, verifica dimensioni e SHA prima di salvare i file e rimuove le parti dal tree corrente. Non compila o modifica gli installer.
 - Eseguire i test esistenti e `node scripts/audit-site.cjs local`; dopo la pubblicazione ripetere con `live`. Il controllo completo intercetta scritture e analytics. I documenti archiviati mantengono `noindex,follow`.
+
+## Release YQArch 3.78 — 3 ottobre 2026
+- Collaudo nativo della 3.77 acquisito su AutoCAD 2027 italiano: 646/646 definizioni, menu e Ribbon confermati. CUIx e risorse funzionali conservati nella 3.78; aggiornati versione, descrizione diagnostica e documenti.
+- EXE/ZIP 3.78 già ricostruiti e verificati nel progetto; sul sito copiarli senza modificarli. Conservare gli archivi precedenti.
+- Conteggi Ribbon: 10 grandi + 50 piccoli visibili + 70 nel flyout. 23 categorie e 547 voci; guida con 646 schede e limiti dichiarati.
+- Nessuna nuova certificazione di tutte le geometrie o di altri ambienti. Conservare separazione fra prove native 3.77 e verifiche automatiche 3.78.

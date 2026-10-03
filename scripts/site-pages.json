@@ -118,5 +118,37 @@
       "href": "https://andreagiaquinto.it/yqarch-italiano/",
       "label": "Torna a YQArch Italiano"
     }
+  },
+  {
+    "file": "downloads/yqarch/YQArch_Italiano_3.78_GUIDA.html",
+    "kind": "guide",
+    "parent": {
+      "href": "https://andreagiaquinto.it/yqarch-italiano/",
+      "label": "Torna a YQArch Italiano"
+    }
+  },
+  {
+    "file": "downloads/yqarch/YQArch_Italiano_3.78_RIBBON.html",
+    "kind": "guide",
+    "parent": {
+      "href": "https://andreagiaquinto.it/yqarch-italiano/",
+      "label": "Torna a YQArch Italiano"
+    }
+  },
+  {
+    "file": "downloads/yqarch/YQArch_Italiano_3.78_CATALOGO.html",
+    "kind": "guide",
+    "parent": {
+      "href": "https://andreagiaquinto.it/yqarch-italiano/",
+      "label": "Torna a YQArch Italiano"
+    }
+  },
+  {
+    "file": "downloads/yqarch/YQArch_Italiano_3.78_REPORT.html",
+    "kind": "report",
+    "parent": {
+      "href": "https://andreagiaquinto.it/yqarch-italiano/",
+      "label": "Torna a YQArch Italiano"
+    }
   }
 ]
