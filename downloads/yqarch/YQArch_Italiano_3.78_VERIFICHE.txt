@@ -1,0 +1,16 @@
+YQArch Italiano 3.78 — verifiche del 3 ottobre 2026
+
+192 test logici e simulati: PASS.
+89 controlli statici: PASS.
+31 controlli sul pacchetto EXE/ZIP finale: PASS.
+Manifest: 794 record, 795 file nel pacchetto.
+Seconda build dalla cartella estratta dall'EXE: EXE e ZIP byte-identici.
+Conservazione dalla 3.77: 531 file binari/risorse identici (CUIx, core, icone, catalogo e anteprime inclusi); 43 file runtime differiscono soltanto per versione o descrizione diagnostica.
+
+Collaudo nativo acquisito: 3.77, AutoCAD 2027 italiano (ACADVER 26.0s), LISPSYS=1, Windows NT 10.0 Intel64. 646 comandi definiti su 646, zero mancanti, un menu principale, 23/23 categorie, 547 voci, DLL icone presenti. Schermate Inizio/YQArch alla stessa altezza. La 3.78 conserva esattamente quel CUIx.
+Bootstrap YQArch: 1922 ms; non misura l'intero avvio AutoCAD.
+La diagnostica non esegue i comandi e non certifica la geometria. Le verifiche statiche e simulate non sostituiscono il collaudo di ogni funzione o ambiente. EXE non firmato Authenticode; launcher originale conservato e payload completo ricostruito.
+
+SHA-256
+f134c2783721956daea5d3c1176302f31c944bcdc68f332ae87894b2a36c8cc9  YQArch_Italiano_3.78.exe
+ecd56dd0238cd9a949a452a922e2b67075d2d09c9ac04cd5851f88ed79e48c4b  YQArch_Italiano_3.78.zip

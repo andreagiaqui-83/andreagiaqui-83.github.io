@@ -1,21 +1,21 @@
 [
   {
     "project": "yqarch",
-    "version": "3.73",
-    "file": "/downloads/yqarch/YQArch_Italiano_3.73.exe",
-    "sha256": "07165f6a941ebb4b97e4842d4cdf4a03a017bd433cda8a17eb8f7aa419c6280d",
+    "version": "3.78",
+    "file": "/downloads/yqarch/YQArch_Italiano_3.78.exe",
+    "sha256": "f134c2783721956daea5d3c1176302f31c944bcdc68f332ae87894b2a36c8cc9",
     "bytes": 20211200,
-    "status": "collaudata su AutoCAD 2026 italiano: installazione, Ribbon e inserimento blocchi",
-    "date": "2026-10-01"
+    "status": "verifiche automatiche 3.78; CUIx identico alla 3.77 collaudata su AutoCAD 2027 italiano",
+    "date": "2026-10-03"
   },
   {
     "project": "yqarch",
-    "version": "3.73",
-    "file": "/downloads/yqarch/YQArch_Italiano_3.73.zip",
-    "sha256": "ec14d087067620222a721da25c1034167edb9411741ac5fe5dc69ba76c839df2",
-    "bytes": 18019247,
-    "status": "collaudata su AutoCAD 2026 italiano: installazione, Ribbon e inserimento blocchi",
-    "date": "2026-10-01"
+    "version": "3.78",
+    "file": "/downloads/yqarch/YQArch_Italiano_3.78.zip",
+    "sha256": "ecd56dd0238cd9a949a452a922e2b67075d2d09c9ac04cd5851f88ed79e48c4b",
+    "bytes": 18029646,
+    "status": "verifiche automatiche 3.78; CUIx identico alla 3.77 collaudata su AutoCAD 2027 italiano",
+    "date": "2026-10-03"
   },
   {
     "project": "express-tools",

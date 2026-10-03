@@ -27,6 +27,6 @@ test('Indexable pages have unique titles, descriptions, correct canonicals and e
 test('Current software metadata, download links and manifest agree; guide retains all command IDs',()=>{
  const releases=JSON.parse(fs.readFileSync('downloads/releases.json'));
  for(const [file,d] of docs){for(const s of d.querySelectorAll('[type="application/ld+json"]')){const g=JSON.parse(s.textContent)['@graph']||[];for(const app of g.filter(x=>x['@type']==='SoftwareApplication')){const r=releases.find(r=>origin+r.file===app.downloadUrl);assert.ok(r,file);assert.equal(app.softwareVersion,r.version,file);assert.ok(d.querySelector('a[href="'+r.file+'"]'),file);}}}
- const guide=docs.get('downloads/yqarch/YQArch_Italiano_3.73_GUIDA.html');assert.equal(guide.querySelectorAll('article.card').length,646);assert.equal(new Set([...guide.querySelectorAll('article.card')].map(e=>e.id)).size,646);
+ const guide=docs.get('downloads/yqarch/YQArch_Italiano_3.78_GUIDA.html');assert.equal(guide.querySelectorAll('article.card').length,646);assert.equal(new Set([...guide.querySelectorAll('article.card')].map(e=>e.id)).size,646);
  assert.ok(!releases.some(r=>r.version==='3.72'));
 });
