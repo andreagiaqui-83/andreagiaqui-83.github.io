@@ -1,0 +1,40 @@
+AG CAD TOOLS 2.0 — REGISTRO DEL RILASCIO E DEI COLLAUDI
+3 ottobre 2026 · Andrea Giaquinto
+
+DECISIONE DI RILASCIO
+L’autore autorizza la versione definitiva dopo aver approvato le tre
+modifiche RC5: installer, Guida e menu superiore. Non si richiede la
+ripetizione di questi controlli per la promozione a 2.0.
+
+EVIDENZE NATIVE DISPONIBILI
+- RC4: caricamento su AutoCAD 2027 italiano, 198/198 e 541/541.
+- RC4: diversi comandi provati dall’autore con buon esito; elenco non fornito.
+- RC5: interfaccia installer, disposizione della Guida e menu approvati.
+- Schermata finale: AG CAD Tools presente nella barra testuale e nel Ribbon.
+- Log: ACADVER 26.0s; LISPSYS=1; SECURELOAD=0; Windows NT 10.0 Intel64.
+  La stringa NT 10.0 non distingue Windows 10/11 e non indica la build.
+- ETIT Companion, BlockHub e YQArch presenti nella sessione precedente.
+  La coesistenza del caricamento non certifica tutte le interazioni.
+
+PROMOZIONE A 2.0
+Confronto dei sorgenti con baseline RC5: stessa logica LISP e motore
+installer, stesse 200 schede della Guida. Cambiano solo metadati, etichette,
+stato del rilascio e documentazione generale. Il rapporto registra i
+controlli automatici realmente eseguiti sul pacchetto definitivo.
+I test automatici girano su Linux con API AutoCAD simulate; la compilazione
+produce il setup Windows x64. Il setup definitivo non è eseguito qui.
+
+COPERTURA NON DOCUMENTATA
+Non risultano prove native per tutte le 198 funzioni singolarmente,
+AutoCAD 2024–2026, AutoCAD inglese, SECURELOAD 1/2, tutte le varianti
+WMF/font, tutte le scale Windows, rollback/disinstallazione nativi e tutte
+le interazioni con altri plugin. Queste combinazioni restano esplicitamente
+non collaudate. Il manifest non le trasforma in prove superate.
+Questa è una delimitazione delle evidenze, non una nuova checklist richiesta
+all’autore per rilasciare la 2.0.
+
+FUTURE SEGNALAZIONI
+Per arricchire il registro: versione plugin, comando, lingua/build AutoCAD,
+Windows, passaggi, risultato atteso/ottenuto, eventuale ESC/UNDO e file di
+esempio. Il CSV delle 198 funzioni può annotare successivi test individuali.
+Supporto: https://andreagiaquinto.it — WhatsApp +39 333 724 0544.

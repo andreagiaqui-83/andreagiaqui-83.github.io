@@ -1,7 +1,7 @@
 name: Services landing regression and live verification
 on:
   push:
-    branches: [main, 'optimize/services-*']
+    branches: [main, 'optimize/services-*', 'release/site-*']
     paths:
       - 'index.html'
       - 'assets/services/**'

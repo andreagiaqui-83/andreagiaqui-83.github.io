@@ -18,12 +18,39 @@
     "date": "2026-10-03"
   },
   {
-    "project": "express-tools",
-    "version": "3.2-rc1",
-    "file": "/downloads/express-tools/Express_Tools_Italiano_3.2-rc1.exe",
-    "sha256": "25e0380fa0e580ac556e353dc2ca2c50e34f62edefd3544cfa7f8b13f692e144",
-    "bytes": 3940352,
-    "status": "release candidata, non stabile",
-    "date": "2026-09-27"
+    "project": "ag-cad-tools",
+    "version": "2.0",
+    "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.0_Setup.exe",
+    "sha256": "3000da2b35c35d914a91b99e4fdb4709e03df661503ac0747bb8d96cf676ee8f",
+    "bytes": 4666368,
+    "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
+    "date": "2026-10-03"
+  },
+  {
+    "project": "ag-cad-tools",
+    "version": "2.0",
+    "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.0_Portabile.zip",
+    "sha256": "5cf834da6b15d52fbf8ef717574990a3af22321a02b98c3708409ab029c803b1",
+    "bytes": 1523126,
+    "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
+    "date": "2026-10-03"
+  },
+  {
+    "project": "ag-cad-tools",
+    "version": "2.0",
+    "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.0_Sorgenti.zip",
+    "sha256": "04cf7b6e79e4be1b244a51ac52cdb9864200ee519d48603da91df9e9ef1746c7",
+    "bytes": 7372732,
+    "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
+    "date": "2026-10-03"
+  },
+  {
+    "project": "ag-cad-tools",
+    "version": "2.0",
+    "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.0_Consegna.zip",
+    "sha256": "385fa8bdcb6776d0d3bbbbe6ba83a41ce09f50a1cc3a6ff68f8e8b78c27dc7eb",
+    "bytes": 11468923,
+    "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
+    "date": "2026-10-03"
   }
 ]

@@ -210,8 +210,8 @@
   document.addEventListener('ag:consentopen',()=>{consentOpen=true;updateWA();});document.addEventListener('ag:consentclose',()=>{consentOpen=false;updateWA();});
   consentOpen=!!document.querySelector('.ag-consent[open]');updateWA();
   const reviewForm=document.getElementById('reviewForm'),reviewStatus=document.getElementById('reviewStatus'),grid=document.getElementById('reviewsGrid');
-  const addReview=review=>{const card=document.createElement('article');card.className='review-card';const mark=document.createElement('div');mark.className='review-mark';mark.textContent='“';mark.setAttribute('aria-hidden','true');const text=document.createElement('p');text.textContent=review.text||'';const meta=document.createElement('span');meta.textContent=[review.displayName||'Cliente',review.service||'Recensione cliente'].join(' · ');card.append(mark,text,meta);grid.append(card);};
-  fetch(backend+'/api/reviews?source=cad-services').then(r=>r.ok?r.json():{}).then(data=>{const seen=new Set([...grid.children].map(x=>x.querySelector('p')?.textContent.trim()));for(const r of (data.reviews||[]).slice().reverse())if(r.source!=='autocad-lessons' && !seen.has((r.text||'').trim())){addReview(r);seen.add((r.text||'').trim());}}).catch(()=>{});
+  const addReview=review=>{const card=document.createElement('article');card.className='review-card';const mark=document.createElement('div');mark.className='review-mark';mark.textContent='“';mark.setAttribute('aria-hidden','true');const text=document.createElement('p');text.textContent=review.text||'';const meta=document.createElement('span');meta.textContent=[review.displayName||'Cliente',review.service||'Recensione cliente'].join(' · ');card.append(mark,text,meta);return card;};
+  fetch(backend+'/api/reviews?source=cad-services').then(r=>r.ok?r.json():{}).then(data=>{window.AGReviews.merge(grid,(data.reviews||[]).filter(r=>r.source!=='autocad-lessons'),addReview);}).catch(()=>{});
   reviewForm?.addEventListener('submit',async e=>{
     e.preventDefault();if(!reviewForm.reportValidity())return;
     const button=reviewForm.querySelector('[type=submit]');if(button.disabled)return;

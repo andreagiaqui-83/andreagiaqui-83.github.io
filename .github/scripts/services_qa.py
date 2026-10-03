@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
-BUILD='20260930-services-r9'
+BUILD='20261003-services-r10'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
@@ -17,7 +17,8 @@ def static():
  assert len(s.select('h1'))==1
  assert s.select_one('.hp')['aria-hidden']=='true'
  assert not s.select('img[src*="drive.google"]')
- assert len(s.select('link[rel=stylesheet]'))==3
+ styles={urlparse(x['href']).path for x in s.select('link[rel=stylesheet]')}
+ assert {'/assets/services/services.css','/assets/consent.css','/assets/site-footer.css','/assets/site-header.css','/assets/site-pages.css'} <= styles
  assert not s.select_one('#pointCloud').has_attr('disabled')
  assert not s.select_one('#pointCloud').has_attr('required')
  assert s.select_one('#nuvole-di-punti img') and s.select_one('#tariffe')
@@ -42,7 +43,7 @@ def static():
  for tag in s.select('[src],[href]'):
   value=tag.get('src') or tag.get('href')
   if not value or value.startswith(('http:','https:','mailto:','tel:','#')):continue
-  file=ROOT/value.split('?')[0].lstrip('/')
+  file=ROOT/urlparse(value).path.lstrip('/')
   if file.is_dir():file=file/'index.html'
   assert file.exists(),value
  for p in Path('assets/services').glob('*'):
@@ -54,7 +55,7 @@ def static():
  assert not diff,'Protected lesson assets, backend or tracking changed'
  old=BeautifulSoup(subprocess.check_output(['git','show',BASELINE+':index.html']), 'html.parser')
  assert [x.get_text(' ',strip=True) for x in old.select('#reviewsGrid .review-card')]==[x.get_text(' ',strip=True) for x in s.select('#reviewsGrid .review-card')]
- save('static.json',{'status':'PASS','build':BUILD,'baseline':BASELINE,'html_sha256':sha(Path('index.html').read_bytes()),'protected_tree':'lesson assets except authorized HTML/CSS/JS, backend and tracking unchanged','review_text':'unchanged','active_css_count':3})
+ save('static.json',{'status':'PASS','build':BUILD,'baseline':BASELINE,'html_sha256':sha(Path('index.html').read_bytes()),'protected_tree':'lesson assets except authorized HTML/CSS/JS, backend and tracking unchanged','review_text':'unchanged','active_css_count':len(styles)})
  print('STATIC PASS',flush=True)
 
 def run_browser(base,stage):

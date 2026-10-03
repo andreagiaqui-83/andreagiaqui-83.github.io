@@ -1,0 +1,225 @@
+{
+  "prodotto": "AG CAD Tools",
+  "autore": "Andrea Giaquinto",
+  "sito": "https://andreagiaquinto.it",
+  "versione": "2.0",
+  "canale": "definitiva",
+  "app_version": "2.0.0.6",
+  "data_rilascio": "2026-10-03",
+  "base_approvata": "2.0 RC5",
+  "strumenti": 198,
+  "core": 93,
+  "web_mit": 100,
+  "personali": 5,
+  "categorie": [
+    "Blocchi e attributi",
+    "Dati e scambio",
+    "Testo",
+    "Controllo e selezione",
+    "Layout e stampa",
+    "Immagini",
+    "Layer e proprietà",
+    "File e sistema",
+    "Modifica",
+    "Polilinee e allineamenti",
+    "Misure e quote",
+    "Guida e supporto",
+    "UCS e viste",
+    "Disegno e architettura",
+    "3D ed elevazioni",
+    "Rilievo e coordinate"
+  ],
+  "voci_visibili": 200,
+  "nomi_pubblici_servizi_alias": 541,
+  "alias_cti": 210,
+  "comandi": {
+    "catalogo": [
+      "AGCADTOOLS",
+      "AGCAD"
+    ],
+    "diagnostica": "AG_DIAGNOSTICA",
+    "guida": "AG_AIUTOSTRUMENTI",
+    "supporto": "AG_SOSTIENI"
+  },
+  "pacchetto": {
+    "bundle": "AGCADTools.bundle",
+    "gruppo_cui": "AGCADTOOLS",
+    "installazione": "%APPDATA%\\Autodesk\\ApplicationPlugins\\AGCADTools.bundle",
+    "per_utente": true,
+    "runtime_esterno_richiesto": false,
+    "express_tools_richiesti": false,
+    "lingua_interfaccia": "it-IT"
+  },
+  "compatibilita": {
+    "data": "2026-10-03",
+    "versione_pubblica": "2.0",
+    "app_version": "2.0.0.6",
+    "stato": "Versione definitiva autorizzata dall’autore",
+    "base_approvata": "2.0 RC5",
+    "riscontro_autore": "Ok interfaccia di installazione, guida e compare nel menu. Mi sembra tutto ok. Per me puoi rilasciare la versione definitiva per la pubblicazione con tutte le specifiche del caso.",
+    "ambiente": "AutoCAD 2027 italiano, Windows x64; log precedente ACADVER 26.0s, LISPSYS=1, SECURELOAD=0; build Windows non documentata.",
+    "evidenze": [
+      "RC5: installer, Guida e menu approvati dall’autore.",
+      "Schermata ricevuta: menu testuale AG CAD Tools e scheda Ribbon presenti in AutoCAD 2027 italiano.",
+      "RC4: diagnostica 198/198 funzioni e 541/541 nomi; diversi comandi provati con buon esito, senza elenco puntuale."
+    ],
+    "limiti": [
+      "Il setup definitivo ricompilato non è eseguito nativamente in questo ambiente.",
+      "Nessun collaudo nativo puntuale completo di tutti i 198 comandi.",
+      "AutoCAD 2024–2026 e inglese: abilitazione e verifica statica, non collaudo nativo.",
+      "SECURELOAD 1/2, WMF/font e interazioni con altri plugin non certificati integralmente."
+    ],
+    "matrice": [
+      [
+        "2024",
+        "R24.3",
+        "Windows 11; Windows 10 storico, 1809+ nei requisiti Autodesk",
+        "Italiano e inglese",
+        "Abilitata dal manifest; verifica statica. Nessun collaudo nativo documentato."
+      ],
+      [
+        "2025",
+        "R25.0",
+        "Windows 11; Windows 10 storico, 1809+ nei requisiti Autodesk",
+        "Italiano e inglese",
+        "Abilitata dal manifest; verifica statica. Nessun collaudo nativo documentato."
+      ],
+      [
+        "2026",
+        "R25.1",
+        "Windows 11; Windows 10 storico nei requisiti Autodesk",
+        "Italiano e inglese",
+        "Abilitata dal manifest; verifica statica. Nessun collaudo nativo documentato."
+      ],
+      [
+        "2027",
+        "R26.0",
+        "Windows 11",
+        "Italiano e inglese",
+        "Italiano: caricamento, Ribbon e campione di comandi confermati; installer, Guida e menu RC5 approvati. La 2.0 ne conserva la logica. Inglese non collaudato nativamente."
+      ],
+      [
+        "2021–2023",
+        "R24.0–R24.2",
+        "Fuori perimetro",
+        "Non dichiarate",
+        "Motore Unicode disponibile, ma release non abilitate da questo manifest."
+      ],
+      [
+        "2020 e precedenti",
+        "R23.x e precedenti",
+        "Fuori perimetro",
+        "Non dichiarate",
+        "Nessuna variante legacy UTF-8/Unicode distribuita."
+      ]
+    ],
+    "fonti": [
+      [
+        "Autodesk — requisiti AutoCAD 2024",
+        "https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/System-requirements-for-AutoCAD-2024-including-Specialized-Toolsets.html"
+      ],
+      [
+        "Autodesk — requisiti AutoCAD 2025",
+        "https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/System-requirements-for-AutoCAD-2025-including-Specialized-Toolsets.html"
+      ],
+      [
+        "Autodesk — requisiti AutoCAD 2026",
+        "https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/System-requirements-for-AutoCAD-2026-including-Specialized-Toolsets.html"
+      ],
+      [
+        "Autodesk — requisiti AutoCAD 2027",
+        "https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/System-requirements-for-AutoCAD-2027-including-Specialized-Toolsets.html"
+      ],
+      [
+        "Autodesk — fine del supporto Windows 10",
+        "https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Autodesk-Announcing-End-of-Support-for-Windows-10.html"
+      ],
+      [
+        "Autodesk — LISPSYS e motore Unicode",
+        "https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-Core/files/GUID-1853092D-6E6D-4A06-8956-AD2C3DF203A3.htm"
+      ],
+      [
+        "Autodesk — comandi e opzioni internazionali AutoLISP",
+        "https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-AutoLISP/files/GUID-D156B6ED-B1B4-42CB-BE1D-CA251BFC08C3.htm"
+      ],
+      [
+        "Autodesk — Layout.ModelType (ActiveX, Windows)",
+        "https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-ActiveX-Reference/files/GUID-7D01DF6D-1D7D-4505-8EDC-861C38551593.htm"
+      ],
+      [
+        "Autodesk — Mirror (ActiveX, Windows)",
+        "https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-ActiveX-Reference/files/GUID-F89941D6-676B-43C0-8D92-9AFDAFB03780.htm"
+      ],
+      [
+        "Go — requisito minimo Windows da Go 1.21",
+        "https://go.dev/doc/go1.21"
+      ]
+    ]
+  },
+  "installer": {
+    "file": "AG_CAD_Tools_2.0_Setup.exe",
+    "byte": 4666368,
+    "sha256": "3000da2b35c35d914a91b99e4fdb4709e03df661503ac0747bb8d96cf676ee8f",
+    "target": "Windows x64 GUI",
+    "toolchain": "go version go1.23.2 linux/amd64",
+    "firma_authenticode": false,
+    "conferma_installa_ripara": false,
+    "ok_finale_chiude": true,
+    "backup_sha256_rollback": true
+  },
+  "controlli_automatici": {
+    "promozione": {
+      "pass": 8,
+      "fail": 0
+    },
+    "audit": {
+      "pass": 43,
+      "fail": 0
+    },
+    "integrazione": {
+      "pass": 618,
+      "fail": 0
+    },
+    "web": {
+      "pass": 49,
+      "fail": 0
+    },
+    "personali": {
+      "pass": 54,
+      "fail": 0
+    },
+    "bootstrap": {
+      "pass": 6,
+      "fail": 0
+    },
+    "menu": {
+      "pass": 5,
+      "fail": 0
+    },
+    "correzioni": {
+      "pass": 12,
+      "fail": 0
+    },
+    "documenti": {
+      "pass": 11,
+      "fail": 0
+    },
+    "continuita": {
+      "pass": 4,
+      "fail": 0
+    }
+  },
+  "go_test": 13,
+  "riproducibilita_payload": {
+    "stato": "PASS",
+    "versione": "2.0",
+    "file_identici": 424,
+    "metodo": "Due generazioni consecutive dalle baseline incluse, confronto SHA-256 di ogni file."
+  },
+  "licenze": "Licenze e attribuzioni delle cinque fonti MIT incluse; non attribuire MIT automaticamente all’intero progetto.",
+  "pubblicazione": {
+    "stato": "Pacchetto pronto; messa online del sito non eseguita in questa consegna",
+    "url_pagina_proposto": "https://andreagiaquinto.it/ag-cad-tools/",
+    "directory_download_proposta": "/downloads/ag-cad-tools/2.0/"
+  }
+}

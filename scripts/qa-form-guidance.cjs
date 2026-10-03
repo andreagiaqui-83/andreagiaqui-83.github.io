@@ -34,7 +34,7 @@ async function axe(page,selectors){await page.addScriptTag({path:'node_modules/a
   browser=await type.launch();
   for(const width of widths){
    const env=await context(browser,width),page=await env.ctx.newPage();
-   await open(page,'/');assert.equal(await page.locator('body').getAttribute('data-build'),'20260930-services-r9');
+   await open(page,'/');assert.equal(await page.locator('body').getAttribute('data-build'),'20261003-services-r10');
    await shown(page,'drawingPreferences',false);await shown(page,'mechanicalPreferences',false);await shown(page,'otherPreferences',false);
    assert.equal(await page.locator('[name="Google_Maps_Earth"]').count(),0);
    assert.equal(await page.locator('.technical-details input').count(),2);assert.equal(await page.locator('.technical-details textarea').count(),0);

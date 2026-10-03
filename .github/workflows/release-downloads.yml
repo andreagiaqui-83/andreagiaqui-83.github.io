@@ -1,0 +1,44 @@
+name: Published release downloads and plugin API
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'downloads/**'
+      - 'cloudflare-worker/**'
+      - '.github/workflows/release-downloads.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact public bytes and read-only plugin endpoints
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,time,urllib.request
+          root='https://andreagiaquinto.it'
+          files=['/downloads/releases.json','/downloads/portfolio/Andrea_Giaquinto_Portfolio.pdf']
+          files += [r['file'] for r in json.loads(pathlib.Path('downloads/releases.json').read_text())]
+          files += ['/downloads/ag-cad-tools/SHA256_AG_CAD_Tools_2.0.txt']
+          for attempt in range(18):
+              try:
+                  for file in files:
+                      request=urllib.request.Request(root+file+'?verify='+str(time.time()),headers={'Cache-Control':'no-cache'})
+                      with urllib.request.urlopen(request,timeout=25) as response:
+                          actual=hashlib.sha256(response.read()).hexdigest()
+                      expected=hashlib.sha256(pathlib.Path(file.lstrip('/')).read_bytes()).hexdigest()
+                      assert actual==expected,file
+                  for project in ['yqarch','express-tools','blockhub-cad']:
+                      request=urllib.request.Request('https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/plugin-comments?project='+project,headers={'Origin':root})
+                      with urllib.request.urlopen(request,timeout=25) as response:
+                          assert json.load(response)['ok'] is True,project
+                  print('VERIFIED: exact bytes for',len(files),'public files and 3 read-only project APIs. No messages sent.')
+                  break
+              except Exception as error:
+                  print('Waiting for release:',str(error),flush=True)
+                  if attempt==17: raise
+                  time.sleep(15)
+          PY

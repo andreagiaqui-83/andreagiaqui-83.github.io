@@ -30,3 +30,4 @@ test('Current software metadata, download links and manifest agree; guide retain
  const guide=docs.get('downloads/yqarch/YQArch_Italiano_3.78_GUIDA.html');assert.equal(guide.querySelectorAll('article.card').length,646);assert.equal(new Set([...guide.querySelectorAll('article.card')].map(e=>e.id)).size,646);
  assert.ok(!releases.some(r=>r.version==='3.72'));
 });
+

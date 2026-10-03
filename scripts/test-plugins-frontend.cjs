@@ -1,6 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require('node:crypto'),{JSDOM}=require('jsdom');
 const script=fs.readFileSync('assets/plugins/plugins.js','utf8');
-for(const slug of ['yqarch-italiano','express-tools-italiano'])test(slug+': canonical, one H1, synced FAQ, internal paths and direct installer',()=>{
+for(const slug of ['yqarch-italiano','ag-cad-tools'])test(slug+': canonical, one H1, synced FAQ, internal paths and direct installer',()=>{
  const d=new JSDOM(fs.readFileSync(slug+'/index.html','utf8')).window.document;assert.equal(d.querySelectorAll('h1').length,1);assert.equal(d.querySelector('link[rel=canonical]').href,'https://andreagiaquinto.it/'+slug+'/');
  const graph=JSON.parse(d.querySelector('[type="application/ld+json"]').textContent)['@graph'];const faq=graph.find(x=>x['@type']==='FAQPage');assert.deepEqual([...d.querySelectorAll('#faq details')].map(x=>({q:x.querySelector('summary').textContent,a:x.querySelector('p').textContent})),faq.mainEntity.map(x=>({q:x.name,a:x.acceptedAnswer.text})));
  for(const a of d.querySelectorAll('[href],[src]')){let value=a.getAttribute('href')||a.getAttribute('src');if(value.startsWith('/')){const path=value.split(/[?#]/)[0];assert.ok(fs.existsSync('.'+path+(path.endsWith('/')?'index.html':'')),path);}else if(value.startsWith('#'))assert.ok(d.getElementById(value.slice(1)),value);}
