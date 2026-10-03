@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Verify exact public bytes and read-only plugin endpoints
+      - name: Verify exact public download bytes
         run: |
           python - <<'PY'
           import hashlib,json,pathlib,time,urllib.request
@@ -31,14 +31,37 @@ jobs:
                           actual=hashlib.sha256(response.read()).hexdigest()
                       expected=hashlib.sha256(pathlib.Path(file.lstrip('/')).read_bytes()).hexdigest()
                       assert actual==expected,file
-                  for project in ['yqarch','express-tools','blockhub-cad']:
-                      request=urllib.request.Request('https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/plugin-comments?project='+project,headers={'Origin':root})
-                      with urllib.request.urlopen(request,timeout=25) as response:
-                          assert json.load(response)['ok'] is True,project
-                  print('VERIFIED: exact bytes for',len(files),'public files and 3 read-only project APIs. No messages sent.')
+                  print('VERIFIED: exact bytes for',len(files),'public files.')
                   break
               except Exception as error:
                   print('Waiting for release:',str(error),flush=True)
                   if attempt==17: raise
                   time.sleep(15)
           PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser for the public website client
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Read plugin APIs through the actual browser client
+        run: |
+          node - <<'JS'
+          const {chromium}=require('playwright');
+          const assert=require('node:assert/strict');
+          (async()=>{const browser=await chromium.launch();try{
+            const page=await browser.newPage();
+            await page.route('**/*',route=>['GET','HEAD','OPTIONS'].includes(route.request().method())?route.continue():route.abort());
+            await page.goto('https://andreagiaquinto.it/blockhub-cad/',{waitUntil:'networkidle'});
+            for(const project of ['yqarch','express-tools','blockhub-cad']){
+              const result=await page.evaluate(async project=>{
+                const r=await fetch('https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/plugin-comments?project='+project,{credentials:'omit'});
+                return {status:r.status,ok:(await r.json()).ok};
+              },project);
+              assert.equal(result.status,200,project);assert.equal(result.ok,true,project);
+              console.log('PUBLIC API VERIFIED',project);
+            }
+          }finally{await browser.close();}})().catch(error=>{console.error(error);process.exitCode=1});
+          JS
