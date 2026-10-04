@@ -111,6 +111,9 @@
 .docfa-guidance strong{display:block;margin-bottom:4px;color:var(--ink)}
 @media(max-width:700px){.docfa-guidance{grid-template-columns:1fr;gap:16px}}
 
+/* 20261004 horizontal containment.
+   The reviews carousel intentionally scrolls inside its own viewport; the document itself must never acquire a horizontal scrollbar from off-screen carousel cards. */
+html,body{max-width:100%;overflow-x:clip}
 /* 20261004 Preventivo online */
 .home-quote-cta{max-width:900px;margin:24px auto 0;padding:26px;border:1px solid rgba(16,43,58,.14);border-radius:24px;background:linear-gradient(135deg,#f7fafb,#edf4f6);text-align:center}
 .home-quote-cta h3{margin:0 0 10px;font-size:clamp(26px,4vw,42px);color:#102b3a}.home-quote-cta p{max-width:720px;margin:0 auto 18px}
