@@ -1,0 +1,36 @@
+name: Public profile links verification
+on:
+  workflow_dispatch:
+  push:
+    branches: ['release/site-20261005-final']
+    paths: ['.github/workflows/profile-links-verification.yml']
+permissions:
+  contents: read
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Resolve the two existing public Google profile links
+        run: |
+          python - <<'PY'
+          import urllib.request,re,json,html,pathlib,os
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'profiles';out.mkdir()
+          rows=[]
+          for code in ['jGcqtu9IW1WccgA6V','w1R3HKoVL3Cqr5KmB']:
+            url='https://share.google/'+code
+            try:
+              request=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Accept-Language':'it-IT,it;q=0.9'})
+              with urllib.request.urlopen(request,timeout=25) as r:
+                content=r.read(4000000).decode('utf-8','replace');final=r.url
+              (out/(code+'.html')).write_text(content)
+              evidence=[content[max(0,m.start()-180):m.end()+250] for m in list(re.finditer('Cosenza|Locate Varesino|<title[^>]*>.*?</title>',content,re.I))[:15]]
+              row={'source':url,'resolved':final,'evidence':evidence}
+            except Exception as e:row={'source':url,'error':str(e)}
+            rows.append(row);print(json.dumps(row,ensure_ascii=False))
+          (out/'result.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-profile-links
+          path: ${{ runner.temp }}/profiles/
