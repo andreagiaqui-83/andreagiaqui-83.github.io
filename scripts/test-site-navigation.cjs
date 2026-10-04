@@ -51,3 +51,6 @@ test('Mobile menu opens and closes using Escape, links and outside interaction',
  for(const action of [()=>d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true})),()=>nav.querySelector('a').dispatchEvent(new w.MouseEvent('click',{bubbles:true})),()=>d.querySelector('main').click()]){toggle.click();assert.equal(toggle.getAttribute('aria-expanded'),'true');assert.ok(d.documentElement.classList.contains('sg-menu-open'));action();assert.equal(toggle.getAttribute('aria-expanded'),'false');assert.ok(!d.documentElement.classList.contains('sg-menu-open'));}
  assert.match(fs.readFileSync('assets/site-header.css','utf8'),/overflow-y:auto/);dom.window.close();
 });
+test('Google profile city labels follow the user-confirmed URL mapping and order',()=>{
+ const d=new JSDOM(fs.readFileSync('partials/site-footer.html','utf8')).window.document,links=[...d.querySelectorAll('.sf-map')];assert.deepEqual(links.map(a=>[a.getAttribute('href'),a.textContent]),[['https://share.google/w1R3HKoVL3Cqr5KmB','Vedi il mio profilo Google Maps di Cosenza (CS)'],['https://share.google/jGcqtu9IW1WccgA6V','Vedi il mio profilo Google Maps di Locate Varesino (CO)']]);assert.equal(d.querySelector('.sf-locations'),null);
+});

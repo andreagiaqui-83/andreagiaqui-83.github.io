@@ -10,6 +10,10 @@ Baseline remota: `82335957bac1a6edde02003f1ef3915d5ed58e72`. Prima delle modific
 - Nuovo visual Recensioni: `assets/reviews/studio-{640,960}.{jpg,webp}`; nessun cliente o lavoro consegnato fittizio. Prompt: studio CAD/BIM editoriale di fascia professionale, disegni architettonici, modello fisico di casa e laptop, quercia/navy/bianco caldo, luce naturale, senza persone, loghi, stelle, recensioni o testo leggibile. Generazione ImageGen; esportazioni ottimizzate per dispositivo. Ritratto Contatti estratto dal ritratto reale già presente, senza modifiche all'identità.
 - Privacy pubblica ripulita dall'app privata JobMailer, trasferita in pagina dedicata noindex,nofollow e assente da sitemap/menu. Il vecchio hash reindirizza alla policy separata. Nessun codice pubblico Gmail API; URL configurato nella console OAuth dell'app privata non accessibile da questo repository.
 
+## Profili Google Maps
+
+I reindirizzamenti sono stati risolti; Google ha poi richiesto un CAPTCHA per leggere gli indirizzi. L’utente ha confermato direttamente l’associazione il 4 ottobre 2026: link `jGcqtu9IW1WccgA6V` = Locate Varesino (CO), link `w1R3HKoVL3Cqr5KmB` = Cosenza (CS). Footer ordinato Cosenza, poi Locate Varesino, con le due diciture esatte richieste.
+
 ## Preventivo: difetti corretti e contratti conservati
 - Campi inattivi disabilitati senza perdere le scelte; catalogo escluso quando non pertinente; completezza nuvola incide solo su servizi Scan. Campi nuvola/catalogo/localizzazione realmente visibili (rimossa regola CSS generale che li nascondeva).
 - Superficie usata una sola volta, soglie/minimi e coefficienti conservati. Riepilogo include opzioni attive, non soltanto il nome del servizio. Superficie assente e richieste non calcolabili passano alla valutazione personale.
