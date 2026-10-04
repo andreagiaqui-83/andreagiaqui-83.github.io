@@ -1,6 +1,6 @@
 {
   "state": "active",
-  "build": "20260930-services-r9",
+  "build": "20261004-preventivo-online",
   "scope": [
     "/",
     "/index.html"
@@ -78,5 +78,7 @@
     "Indicazioni_planimetria_DOCFA"
   ],
   "docfa_scope": "Supporto grafico; firma e presentazione restano al professionista abilitato",
-  "home_navigation": "Common page-back-button style for every Home and parent link"
+  "home_navigation": "Common page-back-button style for every Home and parent link",
+  "last_real_smoke_test": "2026-10-04",
+  "publication_notes": "Preventivo online dedicato, computi metrici integrati, menu mobile semplificato, breadcrumb Home rimossi dalle landing, contatti e visual aggiornati."
 }

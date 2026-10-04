@@ -79,3 +79,11 @@ La posizione dell’immobile resta visibile e contiene soltanto indirizzo e coor
 
 ## DOCFA e Home uniforme — 30 settembre 2026, build r9
 Aggiunto il campo facoltativo `Indicazioni_planimetria_DOCFA` con istruzioni basate sul Vademecum nazionale dell’Agenzia delle Entrate (fonti in DOCFA-CONTENT-SOURCES.md). Conservazione in pagina, esclusione front-end e server per servizio inattivo, limite 3000 caratteri e nessuna variazione alle tariffe. Home e ritorni alle pagine madri condividono aspetto, icona, dimensioni, hover e focus, senza dipendere da JavaScript. La posizione dell’immobile mantiene solo indirizzo e coordinate.
+
+## Aggiornamento 04/10/2026 — Preventivo online
+- Nuova pagina /preventivo/ con stima automatica indicativa e invio tramite backend esistente.
+- Home alleggerita: il vecchio modulo resta solo come compatibilità tecnica nascosta, mentre la CTA pubblica rinvia al Preventivo online.
+- Computi metrici e estimativi integrati nei servizi.
+- Landing secondarie senza breadcrumb Home ridondante: il menu globale è il riferimento principale.
+- Menu mobile reso overlay leggibile su smartphone.
+- AG CAD Tools, Recensioni e Contatti aggiornati con nuovi visual; Contatti include Locate Varesino (CO), Cosenza (CS) e secondo link Google Maps.

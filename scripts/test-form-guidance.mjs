@@ -127,6 +127,6 @@ test('Review invitation and lesson Home breadcrumb point to static, unique desti
  const f=fixture();try{
  const link=f.d.querySelector('#recensioni a[href="#lascia-recensione"]'),target=f.d.querySelector('#lascia-recensione');assert.ok(link);assert.equal(f.d.querySelectorAll('#lascia-recensione').length,1);assert.ok(target.querySelector('#reviewForm'));assert.equal(target.closest('details'),null);
  for(const id of ['drawingDetails','mechanicalDetails','renderCustom','otherDetails']){const field=f.d.getElementById(id);assert.ok(field.labels.length);assert.ok(field.getAttribute('aria-describedby').split(' ').every(ref=>f.d.getElementById(ref)));}
- const lesson=new JSDOM(fs.readFileSync('lezioni-autocad/index.html','utf8'));const nav=lesson.window.document.querySelector('.breadcrumb');assert.equal(nav.querySelector('a').getAttribute('href'),'/');assert.equal(nav.querySelector('[aria-current="page"]').textContent,'Lezioni AutoCAD');lesson.window.close();
+ const lesson=new JSDOM(fs.readFileSync('lezioni-autocad/index.html','utf8'));assert.equal(lesson.window.document.querySelector('.breadcrumb'),null);lesson.window.close();
  }finally{f.close();}
 });
