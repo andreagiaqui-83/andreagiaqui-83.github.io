@@ -4,7 +4,7 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 
 - La homepage è la landing dei servizi; `/lezioni-autocad/` è una landing separata, con istruzioni proprie. Conservare collegamenti, ancore usate negli annunci, parametri di attribuzione e distinzione degli eventi di conversione.
 - Per i servizi, `service_quote_success` scatta solo dopo l’invio riuscito. Non alterare raccolta del consenso o protezione dei dati nei tracciamenti.
-- Mantenere sempre visibili la posizione dell’immobile (indirizzo e coordinate, senza campo Google Maps/Earth) e il modulo recensioni. Le specifiche CAD/BIM compaiono sotto i servizi quando si seleziona AutoCAD 2D, AutoCAD 3D o Revit/BIM. Allegati e dettagli restano facoltativi. I template sono stati spostati sotto la selezione servizi su richiesta dell’utente: mostrarli soltanto per AutoCAD 2D/3D o Revit/BIM, con i relativi campi facoltativi.
+- Nel Preventivo online, per gli edifici e in particolare per le nuvole di punti, sono ammessi indirizzo fisico, coordinate geografiche e link Google Maps/Google Earth; restano facoltativi e non vanno inviati ai sistemi di misurazione. Nel modulo storico mantenuto solo per compatibilità preservare i contratti esistenti. Allegati e dettagli restano facoltativi.
 - Conservare nomi/ID dei campi e contratti con il backend, salvo una modifica funzionale esplicitamente richiesta. Verificare gli invii con test simulati, senza produrre richieste o recensioni reali.
 - Descrivere la compatibilità CAD/BIM con formati e versioni concordati; non promettere compatibilità universale o conservazione integrale di ogni funzione nativa. Incoraggiare materiali complementari pertinenti e disponibili, senza renderli obbligatori.
 - Sincronizzare FAQ visibili e dati strutturati. Conservare canonical, metadati, gerarchia dei titoli, immagini ottimizzate e regole in `.github/SERVICES-PUBLICATION.md`.
@@ -53,3 +53,10 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - Su smartphone il menu globale si apre come pannello verticale a larghezza utile, con scorrimento interno se necessario, chiusura su link/Escape/click esterno e blocco dello scroll della pagina durante l'apertura.
 - Le landing secondarie non mostrano pulsanti/breadcrumb Home ridondanti. Guide e report mantengono soltanto i ritorni specifici alla pagina madre quando utili.
 - Nella home, «Strumenti per il tuo AutoCAD» è una sezione visivamente separata dal portfolio, con titolo più grande, margine superiore e separatore dedicato.
+
+## Backend Preventivo online — 4 ottobre 2026
+- La pagina `/preventivo/` usa esclusivamente il Worker esistente `cad-bim-preventivi.andrea-giaqui.workers.dev`: sessione firmata, token, upload a `/api/upload/{sessionId}` e invio a `/api/submit`. Non introdurre endpoint paralleli non verificati.
+- Il backend accetta sia i valori storici di `Output[]` sia i servizi del nuovo preventivatore (CAD 2D/3D, Revit/BIM, Scan to CAD/BIM, computi, DOCFA, meccanica, planimetrie commerciali/3D, render, virtual staging, Interior Design, video/walkthrough e Altro).
+- `service_quote_success` può essere emesso anche dalla pagina `preventivo`, ma soltanto dopo una risposta positiva del backend con requestId UUID; nessun dato personale, importo o contenuto dei campi va inviato a GA4.
+- La copia email al cliente è facoltativa e viene tentata soltanto se richiesta; un eventuale errore della copia non deve invalidare la richiesta principale. La UI deve mostrare un fallback onesto alla copia stampabile/PDF.
+- La copia stampabile della stima resta informativa, con filigrana e disclaimer; non è un preventivo definitivo né un documento da firmare o accettare.

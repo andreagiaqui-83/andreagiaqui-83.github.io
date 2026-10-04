@@ -26,3 +26,39 @@ test('Il riepilogo e i dati inviati qualificano i metri quadrati come lordi comp
   assert.match(js,/m² lordi complessivi dei piani/);
   assert.match(js,/balconi, terrazzi, cortili, giardini, aree esterne e pertinenze esterne esclusi/);
 });
+
+
+test('Preventivo online usa il backend quote con sessione firmata e upload protetto',()=>{
+  assert.match(js,/https:\/\/cad-bim-preventivi\.andrea-giaqui\.workers\.dev/);
+  assert.match(js,/sessionToken/);
+  assert.match(js,/\/api\/upload\/['"]?\+?encodeURIComponent\(sessionId\)/);
+  assert.match(js,/'X-Session-Token':sessionToken/);
+  assert.match(js,/'X-File-Size':String\(file\.size\)/);
+  assert.match(js,/JSON\.stringify\(\{sessionId,token:sessionToken,fields\}\)/);
+});
+
+test('La conversione commerciale scatta soltanto dopo una risposta positiva del backend',()=>{
+  const success=js.indexOf("window.AGTracking?.track('service_quote_success'");
+  const submit=js.indexOf("const d=await r.json().catch(()=>({}))");
+  const failure=js.indexOf("if(!r.ok)throw new Error");
+  assert.ok(success>submit && success>failure);
+  assert.match(js,/form_submit_attempt/);
+  assert.match(js,/form_error/);
+});
+
+test('La copia cliente e la stampa PDF hanno fallback espliciti',()=>{
+  assert.ok(doc.getElementById('customerCopyNote'));
+  assert.ok(doc.getElementById('quotePrintMeta'));
+  assert.match(js,/customerCopySent/);
+  assert.match(js,/quote-printing/);
+  assert.match(js,/afterprint/);
+  const css=fs.readFileSync('assets/preventivo.css','utf8');
+  assert.match(css,/STIMA AUTOMATICA INDICATIVA/);
+  assert.match(css,/NON È UN PREVENTIVO DEFINITIVO/);
+  assert.match(css,/Andrea Giaquinto · Disegnatore CAD e BIM/);
+});
+
+test('La misurazione ammette service_quote_success nella pagina preventivo',()=>{
+  const measurement=fs.readFileSync('assets/measurement.js','utf8');
+  assert.match(measurement,/\['services','preventivo'\]\.includes\(document\.body\.dataset\.pageType\)/);
+});
