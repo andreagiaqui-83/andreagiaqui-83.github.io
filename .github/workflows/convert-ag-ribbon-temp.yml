@@ -1,0 +1,45 @@
+name: Temporary convert AG CAD Tools ribbon
+on:
+  push:
+    branches: [phase-ribbon-reviews-20261004]
+    paths:
+      - '.github/workflows/convert-ag-ribbon-temp.yml'
+      - 'assets/plugins/ag-cad-tools-ribbon.webp'
+permissions:
+  contents: write
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase-ribbon-reviews-20261004
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --quiet pillow
+      - name: Convert ribbon to baseline JPEG
+        run: |
+          python - <<'PY'
+          from PIL import Image, ImageEnhance
+          src='assets/plugins/ag-cad-tools-ribbon.webp'
+          dst='assets/plugins/ag-cad-tools-ribbon.jpg'
+          im=Image.open(src).convert('RGB')
+          im.load()
+          if im.width > 1440:
+              h=round(im.height*1440/im.width)
+              im=im.resize((1440,h),Image.Resampling.LANCZOS)
+          im=ImageEnhance.Sharpness(im).enhance(1.08)
+          im.save(dst,'JPEG',quality=88,optimize=True,progressive=False,subsampling='4:2:0')
+          check=Image.open(dst); check.load()
+          assert check.width>0 and check.height>0
+          print('JPEG',check.size)
+          PY
+      - name: Commit converted image
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/plugins/ag-cad-tools-ribbon.jpg
+          git diff --cached --quiet && exit 0
+          git commit -m "Genera la Ribbon AG CAD Tools in JPEG"
+          git push origin HEAD:phase-ribbon-reviews-20261004
