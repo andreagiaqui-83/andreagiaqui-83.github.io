@@ -86,10 +86,10 @@ test('Every Home link uses the common static component and guide parents remain 
  const entries=JSON.parse(fs.readFileSync('scripts/site-pages.json','utf8'));let homes=0;
  for(const entry of entries){const dom=new JSDOM(fs.readFileSync(entry.file,'utf8')),d=dom.window.document;
   for(const a of d.querySelectorAll('[data-home-link]')){homes++;assert.ok(a.classList.contains('page-back-button'));assert.equal(new URL(a.getAttribute('href'),origin).pathname,'/');assert.equal(a.querySelector('span:last-child').textContent,'Home');assert.equal(a.querySelector('[aria-hidden]').textContent,'←');assert.equal(a.hasAttribute('onclick'),false);}
-  if(entry.kind==='landing'&&entry.file!=='index.html')assert.equal(d.querySelectorAll('.breadcrumb [data-home-link]').length,1,entry.file);
+  if(entry.kind==='landing')assert.equal(d.querySelectorAll('.breadcrumb [data-home-link], .breadcrumb .page-back-button').length,0,entry.file);
   if(entry.parent)for(const a of d.querySelectorAll('.page-return a'))assert.equal(a.getAttribute('href'),entry.parent.href);
   dom.window.close();
  }
- assert.equal(homes,entries.filter(e=>e.kind==='landing'&&e.file!=='index.html').length+2*entries.filter(e=>e.parent?.href==='/').length);for(const p of ['assets/plugins/plugins.css','lezioni-autocad/assets/landing.css'])assert.ok(!fs.readFileSync(p,'utf8').includes('.breadcrumb'));
+ assert.equal(homes,2*entries.filter(e=>e.parent?.href==='/').length);for(const p of ['assets/plugins/plugins.css','lezioni-autocad/assets/landing.css'])assert.ok(!fs.readFileSync(p,'utf8').includes('.breadcrumb'));
  cp.execFileSync(process.execPath,['scripts/sync-page-navigation.cjs','--check']);cp.execFileSync(process.execPath,['scripts/sync-site-footer.cjs','--check']);
 });

@@ -10,7 +10,8 @@ for(const entry of entries){
  const homeLink='<a class="page-back-button" data-home-link href="/" aria-label="Home — torna alla pagina principale di Andrea Giaquinto"><span aria-hidden="true">←</span><span>Home</span></a>';
  after=after.replace(/<nav\b[^>]*class="[^"]*\bbreadcrumb\b[^"]*"[^>]*>[\s\S]*?<\/nav>/g,nav=>nav.replace(/<a\b[^>]*href="(?:\/|https:\/\/andreagiaquinto\.it\/)"[^>]*>[\s\S]*?<\/a>/,()=>homeLink));
  if(entry.kind==='landing'){
-  if(after!==before){if(check)throw new Error('Home non sincronizzata: '+entry.file);fs.writeFileSync(entry.file,after);}
+  after=after.replace(/<nav\b[^>]*class="[^"]*\bbreadcrumb\b[^"]*"[^>]*>[\s\S]*?<\/nav>/g,'');
+  if(after!==before){if(check)throw new Error('Landing navigation non sincronizzata: '+entry.file);fs.writeFileSync(entry.file,after);}
   continue;
  }
  if(!entry.parent || !entry.parent.label || !entry.parent.href)throw new Error('Pagina senza destinazione di ritorno: '+entry.file);

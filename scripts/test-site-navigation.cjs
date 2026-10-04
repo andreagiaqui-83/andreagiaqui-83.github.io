@@ -6,7 +6,7 @@ function scan(dir='.') {return fs.readdirSync(dir,{withFileTypes:true}).flatMap(
 test('Every public HTML page is registered and every secondary page declares its parent',()=>{
  assert.deepEqual([...entries.map(e=>e.file)].sort(),scan().sort());assert.equal(new Set(entries.map(e=>e.file)).size,entries.length);
  for(const e of entries){const d=docs.get(e.file);assert.equal(d.querySelectorAll('h1').length,1,e.file);const ids=[...d.querySelectorAll('[id]')].map(n=>n.id);assert.equal(ids.length,new Set(ids).size,e.file+' duplicate IDs');
- if(e.kind==='landing'){assert.equal(d.querySelectorAll('.page-return').length,0);if(e.file!=='index.html')assert.equal(d.querySelectorAll('.breadcrumb [data-home-link]').length,1);continue;}
+ if(e.kind==='landing'){assert.equal(d.querySelectorAll('.page-return').length,0);assert.equal(d.querySelectorAll('.breadcrumb [data-home-link], .breadcrumb .page-back-button').length,0);continue;}
  assert.ok(e.parent?.label?.startsWith('Torna ')||(e.parent?.href==='/'&&e.parent.label==='Home'),e.file);const u=new URL(e.parent.href,'https://andreagiaquinto.it');assert.equal(u.origin,'https://andreagiaquinto.it');assert.equal(u.username,'');
  let dest=u.pathname.slice(1);if(!dest||dest.endsWith('/'))dest+='index.html';assert.ok(fs.existsSync(dest),e.file+' destination');
  const links=[...d.querySelectorAll('.page-back-button')];assert.equal(links.length,2,e.file);for(const a of links){assert.equal(a.getAttribute('href'),e.parent.href);assert.ok(a.textContent.includes(e.parent.label));assert.equal(a.hasAttribute('onclick'),false);}
@@ -16,7 +16,7 @@ test('Every public HTML page is registered and every secondary page declares its
 test('Shared footer, clean captions and working cookie controls remain synchronized',()=>{
  const canonical=new JSDOM(fs.readFileSync('partials/site-footer.html','utf8')).window.document.querySelector('footer').outerHTML;
  for(const [file,d] of docs){assert.equal(d.querySelectorAll('footer').length,1,file);assert.equal(d.querySelector('footer').outerHTML,canonical,file);
- assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,8);
+ assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,9);
  assert.ok(d.querySelector('script[src*="assets/measurement.js"]'),file+' cookie controls');
  for(const el of d.querySelectorAll('figcaption,.visual-note'))assert.doesNotMatch(el.textContent,/illustrativ|intelligenza artificiale|creat[aoe].*\bIA\b/i,file);
  }

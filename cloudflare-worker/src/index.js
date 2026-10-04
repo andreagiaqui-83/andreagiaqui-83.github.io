@@ -27,6 +27,21 @@ const FIELD_LABELS = {
   Data_indicativa_consegna: 'Data indicativa di consegna',
   Professione: 'Professione',
   Note_conclusive: 'Note conclusive',
+  Tipologia_progetto: 'Tipologia progetto',
+  Tipo_intervento: 'Tipo intervento',
+  Destinazione_uso: 'Destinazione d’uso',
+  Piani_interessati: 'Piani interessati',
+  Unita_immobiliari: 'Unità immobiliari',
+  Numero_fabbricati: 'Numero fabbricati',
+  Qualita_materiale: 'Qualità materiale dichiarata',
+  Indirizzo_fabbricato: 'Indirizzo fabbricato',
+  Coordinate_geografiche: 'Coordinate geografiche',
+  PDF_tecnici: 'PDF tecnici',
+  Catalogo_PDF: 'Catalogo PDF',
+  Stima_automatica_indicativa: 'Stima automatica indicativa',
+  Completezza_informazioni: 'Completezza informazioni',
+  Copia_stima_email: 'Copia stima via email',
+  Differenze_documenti: 'Differenze / modifiche documenti',
   Nome_cognome: 'Nome e cognome',
   Nome: 'Nome e cognome',
   Studio_societa: 'Studio / società',
@@ -302,7 +317,7 @@ async function submitQuote(request, env, origin) {
   if (!session) return json({ ok: false, error: 'Sessione non trovata.' }, 404, origin, env);
   const fields = body.fields;
   if (!fields || typeof fields !== 'object' || Array.isArray(fields) || Object.keys(fields).length > 35 || JSON.stringify(fields).length > 48000 || String(body.website || '').trim()) return json({ok:false,error:'Dati della richiesta non validi.'},400,origin,env);
-  for (const value of Object.values(fields)) if (typeof value !== 'string' && !(Array.isArray(value) && value.length <= 12 && value.every(x => typeof x === 'string'))) return json({ok:false,error:'Formato campo non valido.'},400,origin,env);
+  for (const value of Object.values(fields)) if (typeof value !== 'string' && !(Array.isArray(value) && value.length <= 20 && value.every(x => typeof x === 'string'))) return json({ok:false,error:'Formato campo non valido.'},400,origin,env);
   const name = String(fields.Nome_cognome || '').trim();
   const email = getCustomerEmail(fields);
   const outputs = [].concat(fields['Output[]'] || []);
@@ -364,7 +379,7 @@ async function submitQuote(request, env, origin) {
   }, 'cad-quote/' + sessionId);
 
   let customerCopySent = false;
-  if (customerEmail && env.SEND_CUSTOMER_COPY === 'true') {
+  if (customerEmail && env.SEND_CUSTOMER_COPY === 'true' && fields.Copia_stima_email !== 'No') {
     const customerHtml = `
       <div style="font-family:Arial,sans-serif;color:#172033;line-height:1.5">
         <h2 style="margin:0 0 14px">Richiesta di preventivo ricevuta</h2>

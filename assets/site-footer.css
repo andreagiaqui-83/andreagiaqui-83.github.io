@@ -23,3 +23,6 @@ footer.site-footer{display:block;position:relative;background:#0b2130;color:#edf
 .breadcrumb>[aria-current="page"]{min-width:0;overflow-wrap:anywhere}
 .page-back-button[data-home-link]{white-space:nowrap}
 @media print{.breadcrumb{display:none}}
+
+/* 20261004 locations */
+.sf-map-secondary{margin-top:7px}.sf-locations{margin:8px 0 0;color:#9fb6c2;font-size:13px;line-height:1.45}
