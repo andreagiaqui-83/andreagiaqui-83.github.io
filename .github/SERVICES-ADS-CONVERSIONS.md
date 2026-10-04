@@ -20,3 +20,6 @@ Il tag AW diretto e GTM non sono necessari per l'importazione GA4 e non sono sta
 Baseline di questa modifica: `57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1`, che include le regole AGENTS delle lezioni aggiunte in parallelo. Il controllo di conservazione confronta l'intera cartella lezioni con questa baseline aggiornata.
 
 Al momento della preparazione, l'accesso Google non ha completato la verifica dell'identità. L'evento nel codice non dimostra che sia già configurato come evento chiave o conversione Ads. Budget giornaliero e durata della nuova campagna restano vuoti finché Andrea non li fornisce e non possono essere modificati autonomamente. Nessuna campagna viene avviata da questa modifica.
+
+## Preventivo online — 4 ottobre 2026
+La pagina `/preventivo/` riutilizza la stessa conversione commerciale `service_quote_success`. L'evento viene emesso esclusivamente dopo una risposta positiva di `/api/submit` e usa il requestId UUID come `lead_id`, preservando la deduplicazione. Non inviare a GA4 fascia di prezzo, superficie, servizi selezionati, nomi, email, telefono, indirizzi, coordinate, link o altri contenuti del modulo. I tentativi e gli errori possono usare soltanto gli eventi diagnostici già ammessi (`form_submit_attempt`, `form_error`).
