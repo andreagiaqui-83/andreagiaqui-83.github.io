@@ -152,7 +152,8 @@ def run_browser(base,stage):
       page.evaluate('''()=>{let c=document.createElement('article');c.className='review-card';c.innerHTML='<p>'+('Recensione tecnica di prova isolata. '.repeat(18))+'</p><span>Test T.</span>';document.querySelector('#reviewsGrid').append(c);}''')
       view.focus();page.keyboard.press('End');page.wait_for_timeout(200);assert one_card()==1
      assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
-     if width<768:expect(page.locator('#whatsappQuickContact')).not_to_be_visible()
+     if width<768:
+      fab=page.locator('#whatsappQuickContact');expect(fab).to_be_visible();box=fab.bounding_box();assert box['width']>=44 and box['height']>=44 and box['x']>=-1 and box['x']+box['width']<=width+1
      assert not errors,errors
      assert not bad,bad
      vitals=page.evaluate('({lab:window.__qaVitals,navigation:performance.getEntriesByType("navigation").map(n=>({ttfb:n.responseStart-n.requestStart,domContentLoaded:n.domContentLoadedEventEnd-n.startTime})),resources:performance.getEntriesByType("resource").length})')

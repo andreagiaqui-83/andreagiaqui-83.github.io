@@ -14,3 +14,7 @@
 @media(max-width:850px) and (min-width:768px){#recensioni #reviewsGrid>.review-card{flex-basis:340px;width:340px}}
 @media(max-width:767px){#recensioni #reviewsGrid>.review-card{flex-basis:100%;width:100%;max-width:100%;min-height:190px}#recensioni #reviewsGrid>.review-card p{margin:16px 0;font-size:16px;line-height:1.65}#recensioni #reviewsGrid>.review-card>span{font-size:13px;line-height:1.5}#recensioni .reviews-toolbar{margin:18px 0 15px}}
 @media(prefers-reduced-motion:reduce){#recensioni .reviews-toolbar button{transition:none}}
+
+/* 20261004: Firefox can include the internal scroll-snap track in document.scrollWidth. Clip it at the section wrapper while preserving the carousel's own horizontal scroll. */
+#recensioni>.wrap{overflow-x:hidden;overflow-x:clip}
+#recensioni #reviewsCarousel{contain:layout paint}
