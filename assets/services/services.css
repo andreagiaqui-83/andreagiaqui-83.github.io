@@ -124,3 +124,5 @@
 #portfolio .project-links{margin-top:16px}
 @media(max-width:900px){#tariffe .pricing-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){#tariffe .pricing-grid{grid-template-columns:1fr}#portfolio .split>div:nth-child(2){margin-top:28px;padding-top:28px}}
+
+#tariffe .pricing-inclusions{display:none}
