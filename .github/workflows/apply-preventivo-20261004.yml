@@ -27,14 +27,14 @@ jobs:
         run: node scripts/apply-preventivo-20261004.cjs
       - name: Sync shared navigation
         run: |
+          node scripts/sync-site-footer.cjs
           node scripts/sync-site-header.cjs
           node scripts/sync-page-navigation.cjs
-          node scripts/sync-site-footer.cjs
       - name: Verify synchronized surfaces
         run: |
+          node scripts/sync-site-footer.cjs --check
           node scripts/sync-site-header.cjs --check
           node scripts/sync-page-navigation.cjs --check
-          node scripts/sync-site-footer.cjs --check
           node scripts/test-site-navigation.cjs
       - name: Run repository tests
         run: npm test
