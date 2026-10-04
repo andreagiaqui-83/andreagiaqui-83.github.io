@@ -87,3 +87,7 @@ Aggiunto il campo facoltativo `Indicazioni_planimetria_DOCFA` con istruzioni bas
 - Landing secondarie senza breadcrumb Home ridondante: il menu globale è il riferimento principale.
 - Menu mobile reso overlay leggibile su smartphone.
 - AG CAD Tools, Recensioni e Contatti aggiornati con nuovi visual; Contatti include Locate Varesino (CO), Cosenza (CS) e secondo link Google Maps.
+
+## Preventivo online — superficie lorda complessiva, 4 ottobre 2026
+- Il campo superficie indica la somma dei m² lordi dei piani effettivamente interessati, misurati al lordo delle murature. Il valore inserito è già complessivo e non va moltiplicato per il numero dei piani.
+- Escludere balconi, terrazzi, cortili, giardini, aree esterne, porticati/logge aperte e altre pertinenze esterne, salvo lavorazioni esplicitamente dedicate a tali parti.
