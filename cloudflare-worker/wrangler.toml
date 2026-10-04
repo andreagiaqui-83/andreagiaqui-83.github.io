@@ -8,7 +8,7 @@ workers_dev = true
 ALLOWED_ORIGIN = "https://andreagiaquinto.it"
 EMAIL_TO = "andrea.giaqui@gmail.com"
 EMAIL_FROM = "Preventivi CAD BIM <onboarding@resend.dev>"
-SEND_CUSTOMER_COPY = "false"
+SEND_CUSTOMER_COPY = "true"
 
 [[r2_buckets]]
 binding = "QUOTE_FILES"
