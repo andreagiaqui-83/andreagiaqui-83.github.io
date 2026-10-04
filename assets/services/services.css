@@ -129,3 +129,6 @@
 @media(max-width:620px){#tariffe .pricing-grid{grid-template-columns:1fr}#portfolio .portfolio-tools-block{margin-top:42px;padding-top:34px}#portfolio .portfolio-tools-title{font-size:clamp(28px,9vw,36px)}#portfolio .project-links{margin-top:22px}}
 
 #tariffe .pricing-inclusions{display:none}
+
+/* 20261004 QA responsive: il carosello non deve aumentare lo scrollWidth della pagina. */
+.reviews-section{overflow-x:hidden}
