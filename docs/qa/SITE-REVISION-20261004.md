@@ -26,4 +26,17 @@ Test unitari e sicurezza eseguiti localmente, inclusi nuovi casi di formule sing
 
 La matrice CI verifica Chromium, Firefox e WebKit a 320, 360, 375, 390, 393, 412, 430, 600, 768, 800, 820, 1024, 1280, 1366, 1440, 1920 px. Verifica anche immagini, risorse interne, titoli, ID, consenso, axe, navigazione senza JS e invii simulati. Lighthouse confronta candidato e baseline in condizioni uguali: misure di laboratorio, non Core Web Vitals sul campo.
 
-Stato di pubblicazione e risultati CI finali: da completare dopo le esecuzioni remote e la verifica del sito online. Non equiparare un test simulato alla consegna reale delle email o a un collaudo dentro AutoCAD.
+## Evidenze della versione di rilascio
+
+- 91 test unitari/sicurezza superati localmente. Il candidato `0f43170010fc6daa8a5664f4f26519a39f84569e` ha superato l’audit completo delle 33 pagine nei tre motori e nelle 16 larghezze, il flusso preventivo simulato nei tre motori e la regressione Servizi.
+- Il confronto Lighthouse ha identificato un salto mobile comune dovuto all’attivazione tardiva del menu. La versione finale applica lo stato JavaScript prima del primo rendering, mantenendo le dieci destinazioni visibili senza JavaScript. Sono stati corretti anche il contrasto delle etichette nel pannello cookie e il caricamento responsive dell’immagine del preventivo; l’audit axe ora verifica esplicitamente anche il pannello aperto.
+- Controllo Lighthouse mobile mirato dopo queste correzioni: YQArch 98 prestazioni / 100 accessibilità / 100 SEO; Preventivo 98 / 100 / 100; CLS 0 per entrambe. Singole misure locali di laboratorio: non rappresentano dati utenti reali e possono variare tra esecuzioni. I confronti completi e gli artefatti CI della versione finale sono collegati alla [PR #16](https://github.com/andreagiaqui-83/andreagiaqui-83.github.io/pull/16).
+- La pipeline sul ramo main attende la versione pubblicata, confronta le risorse e ripete i controlli live, con invii intercettati. La cronologia della PR e delle esecuzioni GitHub Actions costituisce la traccia del rilascio, senza trasformare un risultato locale in una dichiarazione di pubblicazione.
+
+## Limiti della verifica
+
+Nessun invio reale di email né collaudo dentro AutoCAD. Installer/ZIP lasciati invariati rispetto alla baseline. La configurazione della console OAuth di JobMailer non è accessibile dal repository; sono verificabili la policy separata e il reindirizzamento dal vecchio hash. Lighthouse è una misura sintetica, non una certificazione di Core Web Vitals sul campo.
+
+## Ripresa e chiusura del candidato — 5 ottobre 2026
+
+Recuperati i file finali e completato il trasferimento rimasto interrotto. Corretto il contrasto del titolo del pannello cookie anche nel rapporto storico YQArch 3.73, dove la regola locale dei titoli prevaleva sul colore del dialogo. Ripetuti e superati i 91 test, i controlli di sincronizzazione di navigazione/header/footer/checksum e l'audit Chromium delle 33 pagine alle 16 larghezze, con zero anomalie, compreso il pannello cookie aperto. I controlli remoti sul commit definitivo e la verifica della pubblicazione restano tracciati dalla PR #16 e dalle relative esecuzioni GitHub Actions.

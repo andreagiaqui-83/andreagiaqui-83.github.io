@@ -18,6 +18,8 @@ main h1,main h2,main h3{text-wrap:balance}main p,main li{text-wrap:pretty}main :
 /* Technical guides keep their long commands within the available column. */
 body:not([data-site-kind=landing]) main :is(.grid,.cards,.card,.box){min-width:0;max-width:100%}body:not([data-site-kind=landing]) main :is(code,h3,h4,li,p){overflow-wrap:anywhere}body:not([data-site-kind=landing]) .card h3{flex-wrap:wrap}body:not([data-site-kind=landing]) .card h3 a{min-width:0}
 .skip,.skip-link{position:fixed;top:0;left:16px;transform:translateY(-150%);z-index:2000;background:#fff;color:#102b3a;padding:14px 20px;border:2px solid #102b3a;border-radius:0 0 8px 8px}.skip:focus,.skip-link:focus{transform:translateY(0)}
-body[data-page-type=collaboration] .hero h1{font-size:clamp(40px,4.5vw,62px);max-width:14ch;line-height:1.04}body[data-page-type=collaboration] .hero-visual{align-self:center}
+body[data-page-type=collaboration] .hero h1{font-size:clamp(40px,4.5vw,62px);max-width:none;line-height:1.04}body[data-page-type=collaboration] .hero-visual{align-self:center}
 /* Grid children must shrink in WebKit too, including long plugin headings. */
 .hero-grid>*{min-width:0;max-width:100%}.hero h1{overflow-wrap:anywhere}
+
+.ag-consent #ag-consent-title,.ag-consent .ag-consent-options label{color:#f5f7fa}

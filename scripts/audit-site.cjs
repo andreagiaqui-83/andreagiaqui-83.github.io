@@ -41,7 +41,7 @@ async function run(){
    await page.addScriptTag({path:path.join(root,'node_modules/axe-core/axe.min.js')});
    row.axe=await page.evaluate(async()=>(await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary,html:n.html.slice(0,500)}))})));
    row.keyboard=await page.evaluate(()=>{const e=document.querySelector('.page-return a,.skip,.skip-link,.doc-skip');if(!e)return {skipOrReturn:false};e.focus();return {skipOrReturn:true,focusable:document.activeElement===e}});
-   if(await page.locator('[data-consent-open]').count()){await page.locator('[data-consent-open]').first().click();row.cookiePreferences=await reject.isVisible();await reject.click();}
+   if(await page.locator('[data-consent-open]').count()){await page.locator('[data-consent-open]').first().click();row.cookiePreferences=await reject.isVisible();row.cookieAxe=await page.evaluate(async()=>(await axe.run('.ag-consent',{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})));if(row.cookieAxe.length)report.issues.push({file:entry.file,engine,type:'cookie-axe',violations:row.cookieAxe});await reject.click();}
    row.errors=errors;row.googleAfterReject=google.length;
    if(row.axe.length)report.issues.push({file:entry.file,engine,type:'axe',violations:row.axe});
    if(errors.length||row.images.broken.length||row.structure.h1!==1||row.structure.ids.length||google.length)report.issues.push({file:entry.file,engine,type:'structure-assets-consent',errors,images:row.images,structure:row.structure,google});
