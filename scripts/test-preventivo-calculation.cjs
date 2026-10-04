@@ -1,0 +1,41 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),{JSDOM}=require('jsdom');
+const html=fs.readFileSync('preventivo/index.html','utf8'),source=fs.readFileSync('assets/preventivo.js','utf8');
+const sid='11111111-1111-4111-8111-111111111111';
+function ui(){const dom=new JSDOM(html,{url:'https://andreagiaquinto.it/preventivo/',runScripts:'outside-only'}),w=dom.window,d=w.document,events=[];w.scrollTo=()=>{};w.matchMedia=()=>({matches:true});w.CSS={escape:s=>s};w.AGTracking={track:(name,data)=>events.push({name,data})};w.eval(source.replace(/\}\)\(\);\s*$/,'window.calc=calculate;window.fields=buildFields;window.go=setStep;})();'));const val=(id,value)=>{const el=d.getElementById(id);if(el.type==='checkbox')el.checked=value;else el.value=value;el.dispatchEvent(new w.Event('change',{bubbles:true}));};const services=(...ids)=>{for(const el of d.querySelectorAll('[name=service]')){el.checked=ids.includes(el.dataset.service);el.dispatchEvent(new w.Event('change',{bubbles:true}));}};val('area',1000);val('primaryMaterial','pdf_vector');val('complexity','standard');val('deadline','normal');for(const id of ['quoted','scaled','updated','real'])val(id,'yes');return{w,d,events,val,services,close:()=>w.close(),sum:()=>w.calc().items.reduce((s,r)=>s+r[1],0)};}
+const near=(a,b)=>assert.ok(Math.abs(a-b)<.00001,`${a} != ${b}`);
+test('All individual services retain their configured starting formulas and minima',()=>{const f=ui();try{
+ const rows=[['autocad2d',200],['autocad3d',300],['revit',300],['docfa',20],['mech2d',15],['mech3d',25],['virtual',10],['video',20]];
+ f.val('docfaInput','pdf');f.val('mechComplexity','simple');for(const [service,cost] of rows){f.services(service);near(f.sum(),cost);}
+ f.services('autocad2d');f.val('area',1);near(f.sum(),20);f.services('autocad3d');near(f.sum(),30);f.services('revit');near(f.sum(),30);
+ f.services('docfa');f.val('docfaCount',3);near(f.sum(),50);
+ for(const [service,count,complex,ready,expected] of [['render','renderCount','renderComplexity','renderReady',10],['plan3d','plan3dCount','plan3dComplexity','plan3dReady',15],['commercial2d','commercialCount','commercialStyle','commercialReady',10]]){f.services(service);f.val(count,1);f.val(complex,service==='commercial2d'?'clean':'simple');f.val(ready,true);near(f.sum(),expected);}
+ f.services('interior');for(const id of ['interiorPlans','interiorMood','interiorRenders','interiorPlans3d'])f.val(id,1);near(f.sum(),45);
+ }finally{f.close()}});
+test('Total gross area is never multiplied by floors; Scan enhancements and Revit disciplines compose correctly',()=>{const f=ui();try{
+ for(const service of ['autocad2d','autocad3d','revit']){f.services(service);f.val('floors',1);const expected=f.sum();f.val('floors',7);near(f.sum(),expected);}
+ f.services('scan2d','autocad2d');for(const [photos,plans,expected] of [[false,false,280],[true,false,250],[false,true,230],[true,true,220]]){f.val('hasPhotos',photos);f.val('hasPlans',plans);near(f.sum(),expected);assert.equal(f.w.calc().items.length,1);}
+ f.val('area',1);for(const [photos,plans,expected] of [[false,false,50],[true,false,40],[false,true,35],[true,true,30]]){f.val('hasPhotos',photos);f.val('hasPlans',plans);near(f.sum(),expected);}
+ f.services('revit');f.val('area',1000);for(const id of ['revitStructures','revitElec','revitHyd','revitHvac'])f.val(id,true);near(f.sum(),735);
+ f.services('scanbim','revit');near(f.sum(),808.5);assert.equal(f.w.calc().items.length,1);
+ }finally{f.close()}});
+test('Computi retain factor, minima, CAD/BIM synergies, estimativo replacement and manual thresholds',()=>{const f=ui();try{
+ for(const x of f.d.querySelectorAll('#computoCategories input'))x.checked=false;f.val('area',1);f.val('floors',1);f.val('computoScope','partial');f.val('intervention','stato_fatto');f.val('destination','residenziale');f.val('primaryMaterial','native');f.services('computo');near(f.sum(),25);
+ f.services('computo_est');near(f.sum(),35);
+ f.val('area',100);f.val('primaryMaterial','pdf_vector');f.val('intervention','nuova');f.services('computo');const only=f.sum();near(only,45);
+ f.services('computo','autocad2d');near(f.w.calc().items.find(x=>x[0]==='Computo metrico')[1],42.75);
+ f.services('computo','revit');near(f.w.calc().items.find(x=>x[0]==='Computo metrico')[1],40.5);
+ f.services('computo','computo_est');assert.equal(f.w.calc().items.length,1);f.val('priceSource','official');near(f.sum(),56.25);
+ f.val('area',2001);assert.equal(f.w.calc().manual,true);f.val('area',100);f.val('priceSource','newprices');assert.equal(f.w.calc().manual,true);
+ }finally{f.close()}});
+test('Catalog, free technical PDF, rounding, urgency and stale selections follow active services',()=>{const f=ui();try{
+ f.services('render');f.val('renderReady',true);f.val('renderComplexity','simple');f.val('catalog',true);f.val('catalogItems',4);near(f.sum(),42);f.val('technicalPdf',false);near(f.sum(),42);assert.deepEqual([f.w.calc().exact,f.w.calc().low,f.w.calc().high],[40,35,45]);
+ f.services('autocad2d');near(f.sum(),200);assert.equal(f.w.fields().Catalogo_PDF,'No');f.val('deadline','4_6');near(f.sum(),220);f.val('deadline','under2');assert.equal(f.w.calc().manual,true);
+ f.val('deadline','normal');f.val('area',0);assert.equal(f.w.calc().manual,true);f.services('other');assert.equal(f.w.calc().manual,true);f.services('interior');for(const id of ['interiorPlans','interiorMood','interiorRenders','interiorPlans3d'])f.val(id,0);assert.equal(f.w.calc().manual,true);
+ f.services('autocad2d');f.val('area',1000);for(const id of ['quoted','scaled','updated','real'])f.val(id,'no');assert.equal(f.w.calc().manual,true);
+ }finally{f.close()}});
+const pause=()=>new Promise(r=>setTimeout(r,25));
+function contact(f){f.services('autocad2d');f.w.go(7,false);f.val('contactName','Mario');f.val('contactSurname','Rossi');f.val('contactEmail','qa@example.invalid');f.val('privacy',true);}
+test('Retry freezes the same payload, reuses session, rejects incomplete confirmation and emits one UUID-only lead',async()=>{const f=ui(),posts=[];try{contact(f);let attempt=0;f.w.fetch=async(url,opts)=>{if(url.endsWith('/api/session'))return Response.json({ok:true,sessionId:sid,token:'mock'});posts.push(JSON.parse(opts.body));return Response.json(++attempt===1?{ok:true}:{ok:true,requestId:sid,customerCopySent:false});};const submit=()=>f.d.querySelector('form#estimateForm').dispatchEvent(new f.w.Event('submit',{cancelable:true,bubbles:true}));submit();submit();await pause();assert.equal(posts.length,1);assert.equal(f.events.filter(x=>x.name==='service_quote_success').length,0);assert.equal(f.d.getElementById('contactEmail').disabled,true);assert.equal(f.d.getElementById('quoteSuccess').hidden,true);submit();await pause();assert.equal(posts.length,2);assert.deepEqual(posts[0],posts[1]);assert.equal(Object.keys(posts[0].fields).length<=35,true);assert.match(posts[0].fields.Indicazioni_output,/AutoCAD/);assert.equal(f.d.getElementById('quoteSuccess').hidden,false);assert.equal(f.events.filter(x=>x.name==='service_quote_success').length,1);const data=f.events.find(x=>x.name==='service_quote_success').data;assert.deepEqual(Object.keys(data),['lead_id','form_id']);assert.equal(data.lead_id,sid);assert.match(f.d.getElementById('quotePrintDetails').textContent,/1000 m²/);submit();await pause();assert.equal(posts.length,2);
+ }finally{f.close()}});
+test('Failure before submission restores editable controls and preserves user values',async()=>{const f=ui();try{contact(f);f.w.fetch=async()=>Response.json({ok:false},{status:503});f.d.querySelector('#estimateForm').dispatchEvent(new f.w.Event('submit',{cancelable:true}));await pause();assert.equal(f.d.getElementById('contactEmail').disabled,false);assert.equal(f.d.getElementById('contactName').value,'Mario');assert.equal(f.d.getElementById('revitDetail').disabled,true);assert.equal(f.events.filter(x=>x.name==='service_quote_success').length,0);}finally{f.close()}});

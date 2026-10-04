@@ -1,12 +1,10 @@
-<!doctype html>
-<html lang="it">
-<head>
+<!DOCTYPE html><html lang="it"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script>document.documentElement.classList.add('js');</script>
 <meta name="theme-color" content="#102b3a">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
-<title>Preventivo online CAD, BIM, computi e render | Andrea Giaquinto</title>
+<title>Preventivo AutoCAD, Revit e computi metrici | Andrea Giaquinto</title>
 <meta name="description" content="Ottieni una stima automatica indicativa per AutoCAD 2D/3D, Revit/BIM, computi metrici, render, Interior Design, DOCFA e altri servizi tecnici. Gratuita e senza impegno.">
 <link rel="canonical" href="https://andreagiaquinto.it/preventivo/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -21,12 +19,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="/style.css?v=20260920-services-home">
 <link rel="stylesheet" href="/enhancements.css?v=20260927-nav-global-r1">
-<link rel="stylesheet" href="/assets/preventivo.css?v=20261004-r3">
+<link rel="stylesheet" href="/assets/preventivo.css?v=20261005-final">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Service","name":"Preventivo online per servizi CAD, BIM, computi metrici e render","provider":{"@type":"Person","name":"Andrea Giaquinto","url":"https://andreagiaquinto.it/"},"areaServed":{"@type":"Country","name":"Italia"},"url":"https://andreagiaquinto.it/preventivo/","description":"Configuratore per ottenere una stima automatica indicativa, gratuita e senza impegno, relativa ai servizi tecnici di Andrea Giaquinto."}
 </script>
-<link rel="stylesheet" href="/assets/consent.css?v=17"><link rel="stylesheet" href="/assets/site-footer.css?v=20261003-r1"><link rel="stylesheet" href="/assets/site-header.css?v=20261004-r3"><script defer src="/assets/site-header.js?v=20261004-r3"></script></head>
-<body data-page-type="preventivo"><!-- SITE-HEADER:START --><header class="sg-header"><div class="sg-inner"><a class="sg-brand" href="/">Andrea Giaquinto<small>DISEGNATORE CAD E BIM</small></a><button class="sg-toggle" type="button" aria-expanded="false" aria-controls="sg-nav">Menu ☰</button><nav id="sg-nav" class="sg-nav" aria-label="Pagine del sito"><a href="/">Servizi</a><a href="/lezioni-autocad/">Lezioni AutoCAD</a><a href="/yqarch-italiano/">YQArch</a><a href="/ag-cad-tools/">AG CAD Tools</a><a href="/blockhub-cad/">BlockHub CAD</a><a href="/portfolio/">Portfolio</a><a href="/preventivo/" aria-current="page">Preventivo online</a><a href="/recensioni/">Recensioni</a><a href="/contatti/" class="sg-contact">Contatti</a></nav></div></header><!-- SITE-HEADER:END -->
+<link rel="stylesheet" href="/assets/consent.css?v=17"><link rel="stylesheet" href="/assets/site-footer.css?v=20261003-r1"><link rel="stylesheet" href="/assets/site-refinement.css?v=20261005-final"><link rel="stylesheet" href="/assets/site-header.css?v=20261005-final"><script defer src="/assets/site-header.js?v=20261005-final"></script></head>
+<body data-page-type="preventivo" data-build="20261005-site-final" data-site-kind="landing"><!-- SITE-HEADER:START --><header class="sg-header"><div class="sg-inner"><a class="sg-brand" href="/">Andrea Giaquinto<small>DISEGNATORE CAD E BIM</small></a><button class="sg-toggle" type="button" aria-expanded="false" aria-controls="sg-nav">Menu ☰</button><nav id="sg-nav" class="sg-nav" aria-label="Pagine del sito"><a href="/">Servizi</a><a href="/preventivo/" aria-current="page">Preventivo online</a><a href="/disegnatore-online/">Disegnatore online</a><a href="/lezioni-autocad/">Lezioni AutoCAD</a><a href="/yqarch-italiano/">YQArch Italiano</a><a href="/ag-cad-tools/">AG CAD Tools</a><a href="/blockhub-cad/">BlockHub CAD</a><a href="/portfolio/">Portfolio</a><a href="/recensioni/">Recensioni</a><a href="/contatti/" class="sg-contact">Contatti</a></nav></div></header><!-- SITE-HEADER:END -->
 <a class="skip-link" href="#contenuto">Salta al contenuto</a>
 <main id="contenuto">
 <section class="quote-hero">
@@ -47,7 +45,7 @@
 
 <section class="quote-app-section">
 <div class="quote-wrap">
-<form id="estimateForm" class="quote-app" autocomplete="on" novalidate>
+<form id="estimateForm" class="quote-app" autocomplete="on" novalidate="">
   <div class="quote-progress" aria-label="Avanzamento richiesta">
     <button type="button" data-go-step="1"><strong>1</strong><span>Servizi</span></button>
     <button type="button" data-go-step="2"><strong>2</strong><span>Progetto</span></button>
@@ -80,8 +78,8 @@
       <label><input type="checkbox" name="service" value="Video / Walkthrough" data-service="video"><strong>Video / Walkthrough</strong><span>Brevi presentazioni e percorsi virtuali.</span></label>
       <label><input type="checkbox" name="service" value="Altro" data-service="other"><strong>Altro</strong><span>Richiesta particolare da valutare.</span></label>
     </div>
-    <p class="quote-error" id="serviceError" hidden>Seleziona almeno un servizio.</p>
-    <div class="quote-nav"><span></span><button class="quote-btn primary" type="button" data-next>Continua</button></div>
+    <p class="quote-error" id="serviceError" hidden="">Seleziona almeno un servizio.</p>
+    <div class="quote-nav"><span></span><button class="quote-btn primary" type="button" data-next="">Continua</button></div>
   </section>
 
   <section class="quote-step" data-step="2">
@@ -99,26 +97,26 @@
         <select id="destination"><option value="residenziale">Residenziale</option><option value="uffici">Uffici</option><option value="commerciale">Commerciale</option><option value="ricettivo">Ricettivo / ristorante</option><option value="industriale">Industriale</option><option value="scolastico">Scolastico / sanitario / sportivo</option><option value="mista">Mista</option><option value="altro">Altro</option></select>
       </label>
       <label>Superficie lorda complessiva dei piani interessati (m²)
-        <input id="area" type="number" min="0" step="1" inputmode="decimal" value="100" aria-describedby="areaHelp">
+        <input id="area" type="number" min="0" step="1" inputmode="decimal" value="100" aria-describedby="areaHelp" max="10000000">
         <small id="areaHelp" class="quote-field-help">Inserisci la somma delle superfici lorde di tutti i piani interessati, misurate al lordo delle murature. Escludi balconi, terrazzi, cortili, giardini, aree esterne, porticati o logge aperte e altre pertinenze/accessori esterni, salvo che siano essi stessi oggetto della lavorazione. Esempio: 120 m² + 120 m² = 240 m². Non moltiplicare nuovamente il totale per il numero di piani.</small>
       </label>
       <label>Piani interessati
-        <input id="floors" type="number" min="1" step="1" inputmode="numeric" value="1">
-      </label>
+        <input id="floors" type="number" min="1" step="1" inputmode="numeric" value="1" aria-describedby="floorsHelp" max="100000">
+      <small id="floorsHelp">Serve a valutare l’articolazione del progetto; non moltiplica la superficie inserita.</small></label>
       <label>Unità immobiliari
-        <input id="units" type="number" min="1" step="1" inputmode="numeric" value="1">
+        <input id="units" type="number" min="1" step="1" inputmode="numeric" value="1" max="100000">
       </label>
       <label>Numero fabbricati
-        <input id="buildings" type="number" min="1" step="1" inputmode="numeric" value="1">
+        <input id="buildings" type="number" min="1" step="1" inputmode="numeric" value="1" max="100000">
       </label>
       <label>Complessità geometrica
-        <select id="complexity"><option value="very_simple">Molto semplice</option><option value="standard" selected>Standard</option><option value="medium">Media</option><option value="complex">Complessa</option><option value="very_complex">Molto complessa</option></select>
+        <select id="complexity"><option value="very_simple">Molto semplice</option><option value="standard" selected="">Standard</option><option value="medium">Media</option><option value="complex">Complessa</option><option value="very_complex">Molto complessa</option></select>
       </label>
       <label>Regione <input id="region" autocomplete="address-level1"></label>
       <label>Provincia <input id="province" autocomplete="address-level2"></label>
       <label>Comune <input id="comune" autocomplete="address-level3"></label>
     </div>
-    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev>Indietro</button><button class="quote-btn primary" type="button" data-next>Continua</button></div>
+    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev="">Indietro</button><button class="quote-btn primary" type="button" data-next="">Continua</button></div>
   </section>
 
   <section class="quote-step" data-step="3">
@@ -127,8 +125,8 @@
     <div class="quote-detail-card" data-for-service="autocad2d scan2d">
       <h3>AutoCAD 2D</h3>
       <div class="quote-grid four">
-        <label>Prospetti <input id="cadElevations" type="number" min="0" value="0"></label>
-        <label>Sezioni <input id="cadSections" type="number" min="0" value="0"></label>
+        <label>Prospetti <input id="cadElevations" type="number" min="0" value="0" max="100000"></label>
+        <label>Sezioni <input id="cadSections" type="number" min="0" value="0" max="100000"></label>
         <label class="quote-check"><input id="cadRoof" type="checkbox"><span>Pianta copertura</span></label>
         <label class="quote-check"><input id="cadTerritorial" type="checkbox"><span>Inquadramento territoriale</span></label>
       </div>
@@ -137,7 +135,7 @@
     <div class="quote-detail-card" data-for-service="autocad3d scan3d">
       <h3>AutoCAD 3D</h3>
       <label>Livello di modellazione
-        <select id="cad3dDetail"><option value="essential">Essenziale</option><option value="standard" selected>Standard</option><option value="detailed">Dettagliato</option><option value="very_detailed">Molto dettagliato</option></select>
+        <select id="cad3dDetail"><option value="essential">Essenziale</option><option value="standard" selected="">Standard</option><option value="detailed">Dettagliato</option><option value="very_detailed">Molto dettagliato</option></select>
       </label>
     </div>
 
@@ -145,10 +143,10 @@
       <h3>Revit / BIM</h3>
       <div class="quote-grid two">
         <label>Livello di modellazione
-          <select id="revitDetail"><option value="essential">Essenziale</option><option value="standard" selected>Standard</option><option value="detailed">Dettagliato</option><option value="very_detailed">Elevato dettaglio</option></select>
+          <select id="revitDetail"><option value="essential">Essenziale</option><option value="standard" selected="">Standard</option><option value="detailed">Dettagliato</option><option value="very_detailed">Elevato dettaglio</option></select>
         </label>
         <div><span class="quote-label">Discipline</span><div class="quote-inline-checks">
-          <label><input type="checkbox" checked disabled> Architettura</label><label><input id="revitStructures" type="checkbox"> Strutture</label><label><input id="revitElec" type="checkbox"> MEP elettrico</label><label><input id="revitHyd" type="checkbox"> MEP idrico</label><label><input id="revitHvac" type="checkbox"> MEP HVAC</label>
+          <label><input type="checkbox" checked="" disabled=""> Architettura</label><label><input id="revitStructures" type="checkbox"> Strutture</label><label><input id="revitElec" type="checkbox"> MEP elettrico</label><label><input id="revitHyd" type="checkbox"> MEP idrico</label><label><input id="revitHvac" type="checkbox"> MEP HVAC</label>
         </div></div>
       </div>
     </div>
@@ -159,56 +157,56 @@
         <label>Ambito
           <select id="computoScope"><option value="all">Tutto il progetto</option><option value="partial">Solo alcune lavorazioni</option></select>
         </label>
-        <label data-est-only>Riferimento economico
+        <label data-est-only="">Riferimento economico
           <select id="priceSource"><option value="official">Prezzario ufficiale</option><option value="client">Listino fornito dal cliente</option><option value="mixed">Fonti miste</option><option value="newprices">Molte analisi nuovi prezzi</option><option value="unknown">Non so — da valutare</option></select>
         </label>
       </div>
       <div class="quote-inline-checks quote-categories" id="computoCategories">
-        <label><input type="checkbox" value="demolizioni" checked> Demolizioni</label><label><input type="checkbox" value="scavi"> Scavi</label><label><input type="checkbox" value="strutture"> Strutture</label><label><input type="checkbox" value="murature" checked> Murature</label><label><input type="checkbox" value="isolamenti"> Isolamenti</label><label><input type="checkbox" value="coperture"> Coperture / facciate</label><label><input type="checkbox" value="finiture" checked> Finiture</label><label><input type="checkbox" value="serramenti"> Serramenti</label><label><input type="checkbox" value="idrico"> Idrico</label><label><input type="checkbox" value="elettrico"> Elettrico</label><label><input type="checkbox" value="hvac"> HVAC</label><label><input type="checkbox" value="antincendio"> Antincendio / speciali</label><label><input type="checkbox" value="rinnovabili"> Rinnovabili</label><label><input type="checkbox" value="esterni"> Esterni</label><label><input type="checkbox" value="ascensori"> Elevatori</label>
+        <label><input type="checkbox" value="demolizioni" checked=""> Demolizioni</label><label><input type="checkbox" value="scavi"> Scavi</label><label><input type="checkbox" value="strutture"> Strutture</label><label><input type="checkbox" value="murature" checked=""> Murature</label><label><input type="checkbox" value="isolamenti"> Isolamenti</label><label><input type="checkbox" value="coperture"> Coperture / facciate</label><label><input type="checkbox" value="finiture" checked=""> Finiture</label><label><input type="checkbox" value="serramenti"> Serramenti</label><label><input type="checkbox" value="idrico"> Idrico</label><label><input type="checkbox" value="elettrico"> Elettrico</label><label><input type="checkbox" value="hvac"> HVAC</label><label><input type="checkbox" value="antincendio"> Antincendio / speciali</label><label><input type="checkbox" value="rinnovabili"> Rinnovabili</label><label><input type="checkbox" value="esterni"> Esterni</label><label><input type="checkbox" value="ascensori"> Elevatori</label>
       </div>
     </div>
 
     <div class="quote-detail-card" data-for-service="docfa">
       <h3>Planimetrie DOCFA</h3>
-      <div class="quote-grid two"><label>Numero planimetrie / unità <input id="docfaCount" type="number" min="1" value="1"></label><label>Materiale di base <select id="docfaInput"><option value="dwg">DWG utilizzabile</option><option value="pdf" selected>PDF quotato</option><option value="scan">Scansione</option><option value="redraw">Ridisegno importante</option></select></label></div>
+      <div class="quote-grid two"><label>Numero planimetrie / unità <input id="docfaCount" type="number" min="1" value="1" max="100000"></label><label>Materiale di base <select id="docfaInput"><option value="dwg">DWG utilizzabile</option><option value="pdf" selected="">PDF quotato</option><option value="scan">Scansione</option><option value="redraw">Ridisegno importante</option></select></label></div>
       <p class="quote-note">Il servizio riguarda il supporto grafico e non comprende automaticamente presentazioni catastali, asseverazioni o prestazioni professionali riservate.</p>
     </div>
 
     <div class="quote-detail-card" data-for-service="mech2d mech3d">
       <h3>Disegno meccanico</h3>
-      <div class="quote-grid three"><label>Numero componenti <input id="mechCount" type="number" min="1" value="1"></label><label>Complessità <select id="mechComplexity"><option value="simple">Semplice</option><option value="medium">Media</option><option value="complex">Complessa</option></select></label><label class="quote-check"><input id="mechSimilar" type="checkbox" checked><span>Componenti simili / ripetitivi</span></label></div>
+      <div class="quote-grid three"><label>Numero componenti <input id="mechCount" type="number" min="1" value="1" max="100000"></label><label>Complessità <select id="mechComplexity"><option value="simple">Semplice</option><option value="medium">Media</option><option value="complex">Complessa</option></select></label><label class="quote-check"><input id="mechSimilar" type="checkbox" checked=""><span>Componenti simili / ripetitivi</span></label></div>
     </div>
 
     <div class="quote-detail-card" data-for-service="commercial2d">
       <h3>Planimetrie commerciali 2D</h3>
-      <div class="quote-grid three"><label>Numero planimetrie <input id="commercialCount" type="number" min="1" value="1"></label><label>Stile <select id="commercialStyle"><option value="clean">Pulita / essenziale</option><option value="furnished">Arredata</option><option value="colored">Arredata e colorata</option><option value="elaborate">Presentazione elaborata</option></select></label><label class="quote-check"><input id="commercialReady" type="checkbox" checked><span>Geometria di base già disponibile</span></label></div>
+      <div class="quote-grid three"><label>Numero planimetrie <input id="commercialCount" type="number" min="1" value="1" max="100000"></label><label>Stile <select id="commercialStyle"><option value="clean">Pulita / essenziale</option><option value="furnished">Arredata</option><option value="colored">Arredata e colorata</option><option value="elaborate">Presentazione elaborata</option></select></label><label class="quote-check"><input id="commercialReady" type="checkbox" checked=""><span>Geometria di base già disponibile</span></label></div>
     </div>
 
     <div class="quote-detail-card" data-for-service="plan3d">
       <h3>Planimetrie 3D arredate</h3>
-      <div class="quote-grid three"><label>Numero planimetrie <input id="plan3dCount" type="number" min="1" value="1"></label><label>Complessità <select id="plan3dComplexity"><option value="simple">Semplice</option><option value="standard" selected>Standard</option><option value="complex">Complessa</option></select></label><label class="quote-check"><input id="plan3dReady" type="checkbox"><span>Modello 3D già disponibile</span></label></div>
+      <div class="quote-grid three"><label>Numero planimetrie <input id="plan3dCount" type="number" min="1" value="1" max="100000"></label><label>Complessità <select id="plan3dComplexity"><option value="simple">Semplice</option><option value="standard" selected="">Standard</option><option value="complex">Complessa</option></select></label><label class="quote-check"><input id="plan3dReady" type="checkbox"><span>Modello 3D già disponibile</span></label></div>
     </div>
 
     <div class="quote-detail-card" data-for-service="render">
       <h3>Render fotorealistici</h3>
-      <div class="quote-grid three"><label>Numero viste <input id="renderCount" type="number" min="1" value="1"></label><label>Complessità <select id="renderComplexity"><option value="simple">Semplice</option><option value="standard" selected>Standard</option><option value="complex">Complessa</option></select></label><label class="quote-check"><input id="renderReady" type="checkbox"><span>Modello 3D già disponibile</span></label></div>
+      <div class="quote-grid three"><label>Numero viste <input id="renderCount" type="number" min="1" value="1" max="100000"></label><label>Complessità <select id="renderComplexity"><option value="simple">Semplice</option><option value="standard" selected="">Standard</option><option value="complex">Complessa</option></select></label><label class="quote-check"><input id="renderReady" type="checkbox"><span>Modello 3D già disponibile</span></label></div>
     </div>
 
     <div class="quote-detail-card" data-for-service="virtual">
       <h3>Virtual staging</h3>
-      <div class="quote-grid two"><label>Numero immagini <input id="virtualCount" type="number" min="1" value="1"></label><label>Intervento <select id="virtualType"><option value="empty">Ambiente vuoto da arredare</option><option value="partial">Parzialmente arredato</option><option value="remove">Rimozione importante arredi</option><option value="finish">Modifica importante finiture</option></select></label></div>
+      <div class="quote-grid two"><label>Numero immagini <input id="virtualCount" type="number" min="1" value="1" max="100000"></label><label>Intervento <select id="virtualType"><option value="empty">Ambiente vuoto da arredare</option><option value="partial">Parzialmente arredato</option><option value="remove">Rimozione importante arredi</option><option value="finish">Modifica importante finiture</option></select></label></div>
     </div>
 
     <div class="quote-detail-card" data-for-service="interior">
       <h3>Interior Design</h3>
-      <div class="quote-grid four"><label>Layout / piante 2D <input id="interiorPlans" type="number" min="0" value="0"></label><label>Moodboard <input id="interiorMood" type="number" min="0" value="0"></label><label>Render <input id="interiorRenders" type="number" min="0" value="1"></label><label>Piante 3D <input id="interiorPlans3d" type="number" min="0" value="0"></label></div>
+      <div class="quote-grid four"><label>Layout / piante 2D <input id="interiorPlans" type="number" min="0" value="0" max="100000"></label><label>Moodboard <input id="interiorMood" type="number" min="0" value="0" max="100000"></label><label>Render <input id="interiorRenders" type="number" min="0" value="1" max="100000"></label><label>Piante 3D <input id="interiorPlans3d" type="number" min="0" value="0" max="100000"></label></div>
     </div>
 
     <div class="quote-detail-card" data-for-service="video">
       <h3>Video / Walkthrough</h3>
       <div class="quote-grid two"><label>Durata indicativa <select id="videoDuration"><option value="15">Fino a 15 s</option><option value="30">16–30 s</option><option value="60">31–60 s</option><option value="manual">Oltre 60 s</option></select></label><label>Complessità <select id="videoComplexity"><option value="simple">Semplice</option><option value="medium">Media</option><option value="complex">Complessa</option></select></label></div>
     </div>
-    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev>Indietro</button><button class="quote-btn primary" type="button" data-next>Continua</button></div>
+    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev="">Indietro</button><button class="quote-btn primary" type="button" data-next="">Continua</button></div>
   </section>
 
   <section class="quote-step" data-step="4">
@@ -216,16 +214,16 @@
     <div class="quote-upload" id="uploadZone">
       <strong>Carica i file disponibili</strong>
       <p>PDF, immagini, DWG/DXF, RVT, IFC, STEP/IGES, mesh e archivi ZIP.</p>
-      <input id="directFiles" type="file" multiple>
+      <input id="directFiles" type="file" multiple="">
       <div id="fileList" class="quote-file-list"></div>
       <small>Limiti caricamento diretto: <strong>90 MB per file</strong> e <strong>500 MB complessivi</strong>. Per materiale più grande usa un link cloud.</small>
     </div>
     <div class="quote-grid two">
       <label>Link cloud al materiale completo
-        <input id="cloudLink" type="url" placeholder="https://drive.google.com/...">
+        <input id="cloudLink" type="url" placeholder="https://drive.google.com/..." maxlength="2000">
       </label>
       <label>Materiale principale
-        <select id="primaryMaterial"><option value="native">Modello nativo già utilizzabile</option><option value="dwg">DWG/DXF pulito e quotato</option><option value="pdf_vector" selected>PDF vettoriale / quotato</option><option value="scan">PDF / scansione</option><option value="images">Immagini da interpretare</option><option value="sketch">Schizzi + misure</option><option value="photos">Fotografie / documentazione incompleta</option></select>
+        <select id="primaryMaterial"><option value="native">Modello nativo già utilizzabile</option><option value="dwg">DWG/DXF pulito e quotato</option><option value="pdf_vector" selected="">PDF vettoriale / quotato</option><option value="scan">PDF / scansione</option><option value="images">Immagini da interpretare</option><option value="sketch">Schizzi + misure</option><option value="photos">Fotografie / documentazione incompleta</option></select>
       </label>
       <label>Quote / misure <select id="quoted"><option value="yes">Sì</option><option value="partial">In parte</option><option value="no">No</option><option value="unknown">Non so</option></select></label>
       <label>Scala <select id="scaled"><option value="yes">Confermata</option><option value="no">No</option><option value="unknown">Non so</option></select></label>
@@ -233,22 +231,22 @@
       <label>Coerenza con stato reale / progetto <select id="real"><option value="yes">Coerenti</option><option value="partial">In parte</option><option value="unknown">Non so</option></select></label>
     </div>
 
-    <div id="pointCloudFields" class="quote-detail-card" hidden>
+    <div id="pointCloudFields" class="quote-detail-card" hidden="">
       <h3>Nuvola di punti</h3>
       <p class="quote-note"><strong>Consigliato:</strong> condividi il link cloud alla cartella completa della nuvola nel formato originale, senza conversioni preliminari.</p>
       <div class="quote-inline-checks"><label><input id="hasPhotos" type="checkbox"> Posso fornire fotografie</label><label><input id="hasPlans" type="checkbox"> Posso fornire planimetrie / disegni affidabili</label></div>
       <div class="quote-grid two">
         <label>Completezza nuvola <select id="cloudComplete"><option value="yes">Sembra completa</option><option value="partial">Parziale</option><option value="unknown">Non so</option></select></label>
-        <label>Link cloud specifico della nuvola <input id="pointCloudLink" type="url" placeholder="https://..."></label>
-        <label>Indirizzo fisico del fabbricato <input id="buildingAddress" autocomplete="street-address" placeholder="Via, numero, Comune"></label>
-        <label>Coordinate geografiche <input id="geoCoords" placeholder="Latitudine, longitudine"></label>
-        <label class="quote-span-2">Link Google Maps / Google Earth <input id="mapLink" type="url" placeholder="https://maps.google.com/..."></label>
+        <label>Link cloud specifico della nuvola <input id="pointCloudLink" type="url" placeholder="https://..." maxlength="2000"></label>
+        
+        
+        
       </div>
-    </div>
+    </div><div class="quote-detail-card"><h3>Posizione del fabbricato <small>facoltativa</small></h3><p class="quote-note" id="mapsHelp">Puoi aggiungere indirizzo, coordinate o un link Google Maps/Google Earth per identificare il fabbricato.</p><div class="quote-grid two"><label>Indirizzo fisico del fabbricato <input id="buildingAddress" autocomplete="street-address" placeholder="Via, numero, Comune" aria-describedby="mapsHelp"></label><label>Coordinate geografiche <input id="geoCoords" placeholder="Latitudine, longitudine" aria-describedby="mapsHelp"></label><label class="quote-span-2">Link Google Maps / Google Earth <input id="mapLink" type="url" placeholder="https://maps.google.com/..." aria-describedby="mapsHelp" maxlength="2000"></label></div></div>
     <label class="quote-span">Differenze o modifiche non riportate nei documenti
-      <textarea id="differences" rows="4" placeholder="Facoltativo"></textarea>
+      <textarea id="differences" rows="4" placeholder="Facoltativo" maxlength="3000"></textarea>
     </label>
-    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev>Indietro</button><button class="quote-btn primary" type="button" data-next>Continua</button></div>
+    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev="">Indietro</button><button class="quote-btn primary" type="button" data-next="">Continua</button></div>
   </section>
 
   <section class="quote-step" data-step="5">
@@ -257,20 +255,20 @@
       <label>Quando ti serve?
         <select id="deadline"><option value="normal">Nessuna urgenza / almeno 7 giorni</option><option value="4_6">Entro 4–6 giorni</option><option value="2_3">Entro 2–3 giorni</option><option value="under2">Meno di 2 giorni — da verificare</option></select>
       </label>
-      <label class="quote-check"><input id="technicalPdf" type="checkbox" checked><span>Voglio anche i PDF tecnici, quando pertinenti <small>Compresi senza maggiorazione.</small></span></label>
+      <label class="quote-check"><input id="technicalPdf" type="checkbox" checked=""><span>Voglio anche i PDF tecnici, quando pertinenti <small>Compresi senza maggiorazione.</small></span></label>
     </div>
-    <div id="catalogBox" class="quote-detail-card" hidden>
+    <div id="catalogBox" class="quote-detail-card" hidden="">
       <h3>Catalogo PDF di presentazione</h3>
       <label class="quote-check"><input id="catalog" type="checkbox"><span>Voglio anche un catalogo PDF</span></label>
-      <label id="catalogItemsWrap" hidden>Contenuti grafici distinti <input id="catalogItems" type="number" min="1" value="4"></label>
+      <label id="catalogItemsWrap" hidden="">Contenuti grafici distinti <input id="catalogItems" type="number" min="1" value="4" max="100000"></label>
       <p class="quote-note">Catalogo PDF: 20 € di base + 3 € per ogni contenuto grafico distinto.</p>
     </div>
-    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev>Indietro</button><button class="quote-btn primary" type="button" data-next>Calcola la stima</button></div>
+    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev="">Indietro</button><button class="quote-btn primary" type="button" data-next="">Calcola la stima</button></div>
   </section>
 
   <section class="quote-step" data-step="6">
     <div class="quote-step-head"><p>PASSAGGIO 6 DI 7</p><h2>La tua stima indicativa</h2><span>Il calcolo usa le informazioni inserite e non sostituisce la verifica dei file.</span></div>
-    <div id="quotePrintMeta" class="quote-print-meta" aria-hidden="true"></div>
+    <div id="quotePrintMeta" class="quote-print-meta"></div>
     <div class="quote-estimate" id="estimateBox">
       <span>STIMA AUTOMATICA INDICATIVA</span>
       <strong id="estimateRange">—</strong>
@@ -278,30 +276,30 @@
     </div>
     <p class="quote-fiscal dark">Importi al netto di IVA e degli eventuali oneri fiscali o previdenziali applicabili. L'eventuale ritenuta d'acconto, ove prevista, sarà gestita secondo la normativa vigente.</p>
     <div class="quote-summary-grid" id="estimateSummary"></div>
-    <div id="estimateWarnings"></div>
+    <div id="estimateWarnings"></div><div id="quotePrintDetails" class="quote-print-details"></div>
     <div class="quote-disclaimer"><strong>Questa stima non costituisce un preventivo definitivo.</strong> È gratuita, indicativa e senza impegno per entrambe le parti. Andrea Giaquinto verificherà personalmente la richiesta.</div>
-    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev>Indietro</button><button class="quote-btn primary" type="button" data-next>Continua con i contatti</button></div>
+    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev="">Indietro</button><button class="quote-btn primary" type="button" data-next="">Continua con i contatti</button></div>
   </section>
 
   <section class="quote-step" data-step="7">
     <div class="quote-step-head"><p>PASSAGGIO 7 DI 7</p><h2>Dove posso risponderti?</h2><span>Andrea risponderà personalmente via email dopo aver verificato la richiesta.</span></div>
     <div class="quote-grid two">
-      <label>Nome * <input id="contactName" name="given-name" autocomplete="given-name" required></label>
-      <label>Cognome <input id="contactSurname" name="family-name" autocomplete="family-name"></label>
-      <label>Email * <input id="contactEmail" name="email" type="email" autocomplete="email" required></label>
+      <label>Nome * <input id="contactName" name="given-name" autocomplete="given-name" required="" maxlength="60" minlength="2"></label>
+      <label>Cognome <input id="contactSurname" name="family-name" autocomplete="family-name" maxlength="59"></label>
+      <label>Email * <input id="contactEmail" name="email" type="email" autocomplete="email" required="" maxlength="254"></label>
       <label>Telefono / WhatsApp <input id="contactPhone" name="tel" type="tel" autocomplete="tel" inputmode="tel"></label>
       <label>Studio / Azienda <input id="contactCompany" name="organization" autocomplete="organization"></label>
-      <label class="quote-span-2">Note finali <textarea id="contactNotes" rows="5"></textarea></label>
+      <label class="quote-span-2">Note finali <textarea id="contactNotes" rows="5" maxlength="3000"></textarea></label>
     </div>
-    <label class="quote-check quote-wide"><input id="copyEmail" type="checkbox" checked><span>Inviami via email una copia della richiesta e della stima indicativa.</span></label>
-    <label class="quote-check quote-wide"><input id="privacy" type="checkbox" required><span>Ho letto l'<a href="/privacy/#preventivo">informativa privacy</a> e chiedo di essere ricontattato per questa richiesta.</span></label>
+    <label class="quote-check quote-wide"><input id="copyEmail" type="checkbox" checked=""><span>Inviami via email una copia della richiesta e della stima indicativa.</span></label>
+    <label class="quote-check quote-wide"><input id="privacy" type="checkbox" required=""><span>Ho letto l'<a href="/privacy/#preventivo">informativa privacy</a> e chiedo di essere ricontattato per questa richiesta.</span></label>
     <div class="quote-disclaimer">Il lavoro inizierà soltanto dopo l'accordo tra le parti su attività, prezzo, tempi e condizioni. La stima automatica non comporta alcun obbligo di affidamento o accettazione dell'incarico.</div>
-    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev>Indietro</button><button class="quote-btn primary" id="submitQuote" type="submit">Invia la richiesta</button></div>
+    <div class="quote-nav"><button class="quote-btn secondary" type="button" data-prev="">Indietro</button><button class="quote-btn primary" id="submitQuote" type="submit">Invia la richiesta</button></div>
     <p id="submitStatus" class="quote-status" role="status" aria-live="polite"></p>
   </section>
 </form>
 
-<div id="quoteSuccess" class="quote-success" hidden>
+<div id="quoteSuccess" class="quote-success" hidden="">
   <span class="quote-success-mark">✓</span>
   <p class="quote-eyebrow">RICHIESTA INVIATA</p>
   <h2>Grazie. Ho ricevuto la tua richiesta.</h2>
@@ -309,7 +307,7 @@
   <p class="quote-request-id" id="requestId"></p>
   <p id="customerCopyNote" class="quote-note quote-success-copy" aria-live="polite"></p>
   <div class="quote-estimate compact"><span>STIMA AUTOMATICA INDICATIVA</span><strong id="successRange"></strong></div>
-  <div class="quote-success-actions"><button type="button" class="quote-btn primary" id="printEstimate">Stampa / salva la copia PDF</button><a class="quote-btn secondary" href="/">Torna ai servizi</a></div>
+  <div class="quote-success-actions"><button type="button" class="quote-btn primary" id="printEstimate">Stampa / salva la copia PDF</button></div>
   <div class="quote-contact-box">
     <strong>Andrea Giaquinto · Disegnatore CAD / BIM</strong>
     <a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a>
@@ -320,18 +318,18 @@
 </div>
 </section>
 </main>
-<script defer src="/assets/preventivo.js?v=20261004-r3"></script>
+<script defer="" src="/assets/preventivo.js?v=20261005-final"></script>
 <footer class="site-footer" aria-label="Contatti e collegamenti del sito">
   <div class="sf-wrap">
     <div class="sf-top">
-      <div class="sf-identity"><a class="sf-name" href="/">Andrea Giaquinto</a><p class="sf-role">Disegnatore CAD e BIM</p><p class="sf-intro">Disegno tecnico, BIM, computi metrici, render,<br>lezioni e strumenti per AutoCAD.</p><a class="sf-map" href="https://share.google/jGcqtu9IW1WccgA6V" target="_blank" rel="noopener noreferrer">Il mio profilo su Google Maps <span aria-hidden="true">↗</span></a><a class="sf-map sf-map-secondary" href="https://share.google/w1R3HKoVL3Cqr5KmB" target="_blank" rel="noopener noreferrer">Altro profilo su Google Maps <span aria-hidden="true">↗</span></a><p class="sf-locations">Riferimenti territoriali: Locate Varesino (CO) · Cosenza (CS)</p></div>
+      <div class="sf-identity"><a class="sf-name" href="/">Andrea Giaquinto</a><p class="sf-role">Disegnatore CAD e BIM</p><p class="sf-intro">Disegno tecnico, BIM, computi metrici, render,<br>lezioni e strumenti per AutoCAD.</p><a class="sf-map" href="https://share.google/jGcqtu9IW1WccgA6V" target="_blank" rel="noopener noreferrer">Il mio profilo su Google Maps <span aria-hidden="true">↗</span></a><a class="sf-map sf-map-secondary" href="https://share.google/w1R3HKoVL3Cqr5KmB" target="_blank" rel="noopener noreferrer">Altro profilo su Google Maps <span aria-hidden="true">↗</span></a></div>
       <div class="sf-contacts"><p class="sf-label">RESTIAMO IN CONTATTO</p><div class="sf-details"><a href="tel:+393337240544" aria-label="Chiama Andrea Giaquinto al +39 333 724 0544"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2c0 9 7 16 16 16a2 2 0 0 0 2-2v-3l-5-2-2 2a14 14 0 0 1-6-6l2-2-2-5Z"></path></svg><span>+39 333 724 0544</span></a><a href="mailto:andrea.giaqui@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 6 9 7 9-7"></path></svg><span>andrea.giaqui@gmail.com</span></a></div>
         <div class="sf-social" role="group" aria-label="WhatsApp e profili social"><a class="sf-social-link sf-whatsapp" href="https://wa.me/393337240544?text=Ciao%20Andrea%2C%20vorrei%20ricevere%20informazioni." target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.6a9 9 0 0 1-13.4 7.9L3 21l1.5-4.5A9 9 0 1 1 21 11.6Z"></path><path d="M8 7.5c0 4.8 3.4 8 8 8l1-2-3-1-1 1a8 8 0 0 1-3-3l1-1-1-2Z"></path></svg><span>Scrivimi su WhatsApp</span></a><a class="sf-social-link" href="https://www.facebook.com/disegnatoreautocadonline" target="_blank" rel="noopener noreferrer"><svg class="sf-brand-icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#0866ff"></rect><path fill="#fff" d="M13.8 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V3.9c-.3 0-1.3-.1-2.4-.1-2.5 0-4.1 1.5-4.1 4.2v2H8v3h2.5v8Z"></path></svg><span>Seguimi su Facebook</span></a></div>
       </div>
     </div>
-    <nav class="sf-nav" aria-label="Esplora il sito"><span class="sf-label">ESPLORA IL SITO</span><a href="/">Servizi CAD, BIM e render</a><a href="/lezioni-autocad/">Lezioni AutoCAD</a><a href="/yqarch-italiano/">YQArch Italiano</a><a href="/ag-cad-tools/">AG CAD Tools</a><a href="/blockhub-cad/">BlockHub CAD</a><a href="/portfolio/">Portfolio</a><a href="/preventivo/">Preventivo online</a><a href="/recensioni/">Recensioni</a><a href="/contatti/">Contatti</a></nav>
+    <nav class="sf-nav" aria-label="Esplora il sito"><span class="sf-label">ESPLORA IL SITO</span><a href="/">Servizi</a><a href="/preventivo/">Preventivo online</a><a href="/disegnatore-online/">Disegnatore online</a><a href="/lezioni-autocad/">Lezioni AutoCAD</a><a href="/yqarch-italiano/">YQArch Italiano</a><a href="/ag-cad-tools/">AG CAD Tools</a><a href="/blockhub-cad/">BlockHub CAD</a><a href="/portfolio/">Portfolio</a><a href="/recensioni/">Recensioni</a><a href="/contatti/">Contatti</a></nav>
     <div class="sf-legal"><p>© <span id="year">2026</span> Andrea Giaquinto. Tutti i diritti riservati.<br>I marchi citati appartengono ai rispettivi proprietari.</p><div><a href="/privacy/">Privacy e cookie</a><button type="button" data-consent-open="">Preferenze cookie</button></div></div>
   </div>
 </footer>
-<script defer src="/assets/measurement-config.js?v=ga4-20260917"></script><script defer src="/assets/measurement.js?v=20261004-preventivo-online"></script></body>
-</html>
+<script defer="" src="/assets/measurement-config.js?v=ga4-20260917"></script><script defer="" src="/assets/measurement.js?v=20261004-preventivo-online"></script>
+</body></html>

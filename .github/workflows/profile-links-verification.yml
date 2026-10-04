@@ -30,6 +30,18 @@ jobs:
             rows.append(row);print(json.dumps(row,ensure_ascii=False))
           (out/'result.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2))
           PY
+      - name: Inspect the resolved public profiles with JavaScript
+        run: |
+          for entity in 11x_r_qspk 11p1fz97ds; do
+            timeout 35 google-chrome --headless --no-sandbox --disable-dev-shm-usage --virtual-time-budget=12000 --dump-dom "https://www.google.com/search?kgmid=/g/$entity&hl=it" > "$RUNNER_TEMP/profiles/$entity-rendered.html" 2>/dev/null || true
+          done
+          python - <<'PY'
+          import pathlib,os,re,html
+          for p in (pathlib.Path(os.environ['RUNNER_TEMP'])/'profiles').glob('*-rendered.html'):
+            s=p.read_text(); text=html.unescape(re.sub('<[^>]+>',' ',s));text=re.sub(r'\s+',' ',text)
+            snippets=[text[max(0,m.start()-180):m.end()+250] for m in list(re.finditer('Cosenza|Locate Varesino',text,re.I))[:8]]
+            print(p.name,snippets or text[:1000])
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: public-profile-links

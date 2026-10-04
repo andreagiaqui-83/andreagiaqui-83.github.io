@@ -42,3 +42,6 @@ Il modulo recensioni deve essere sempre visibile come nella landing servizi. Il 
 Conservare il percorso «Home / Lezioni AutoCAD» sopra il riquadro iniziale, con Home collegata alla pagina principale tramite link HTML statico, visibile anche su mobile e senza JavaScript.
 
 - Il link Home usa `page-back-button` e il CSS condiviso `/assets/site-footer.css`, come le altre pagine. Non reintrodurre uno stile breadcrumb locale divergente; preservare il percorso Home / Lezioni AutoCAD e le destinazioni statiche.
+
+## Direttiva successiva e prevalente — revisione finale del 4 ottobre 2026
+Le indicazioni storiche sopra sul breadcrumb Home sono superate: nessun pulsante o percorso Home/Torna aggiuntivo. Usare l'header globale statico con dieci destinazioni e il footer condiviso. FAQ sintetiche e JSON-LD identico; lezioni, prezzi, moduli, consenso, recensioni e contratti backend restano invariati.
