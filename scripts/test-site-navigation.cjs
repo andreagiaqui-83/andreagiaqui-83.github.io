@@ -35,3 +35,22 @@ test('Commercial offer preserves section anchors, four styles and optional reque
  visible.forEach((x,i)=>{assert.equal(faq[i].name,x.querySelector('summary').textContent);assert.equal(faq[i].acceptedAnswer.text,(x.querySelector('.faq-answer')||x.querySelector('p')).textContent.replace(/\s+/g,' ').trim());});
  assert.ok(d.querySelector('#tariffe').textContent.includes('10 €'));assert.equal(d.querySelector('#pointCloud').disabled,false);
 });
+
+test('Homepage usa un solo header globale e separa gli strumenti AutoCAD dal portfolio',()=>{
+ const d=docs.get('index.html');
+ assert.equal(d.querySelectorAll('.sg-header').length,1);
+ assert.equal(d.querySelector('.topbar'),null,'legacy topbar homepage');
+ assert.equal(d.querySelector('.site-header'),null,'legacy site-header homepage');
+ const tools=d.querySelector('#portfolio .portfolio-tools-block');
+ assert.ok(tools,'blocco strumenti AutoCAD assente');
+ assert.equal(tools.querySelector('h3')?.textContent.trim(),'Strumenti per il tuo AutoCAD');
+ assert.ok(tools.querySelectorAll('.project-links a').length>=3);
+});
+test('Menu mobile globale dispone di pannello scorrevole e blocco scroll',()=>{
+ const css=fs.readFileSync('assets/site-header.css','utf8');
+ const js=fs.readFileSync('assets/site-header.js','utf8');
+ assert.match(css,/\.sg-header \.sg-nav\.sg-open\{/);
+ assert.match(css,/max-height:calc\(100dvh - 96px\)/);
+ assert.match(css,/html\.sg-menu-open/);
+ assert.match(js,/root\.classList\.toggle\('sg-menu-open',open\)/);
+});

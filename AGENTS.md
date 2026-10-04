@@ -21,7 +21,7 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - Conservare la baseline avanzata delle quattro landing e le tariffe pubblicate. Non estendere la tariffa di 10 € a video, walkthrough o pacchetti; tali attività sono concordate nel preventivo.
 - Il footer non include «Seguimi su LinkedIn». Conservare gli altri contatti e i riferimenti all’identità nei dati strutturati, salvo nuova richiesta.
 - Eliminare nelle didascalie «immagine illustrativa», formule equivalenti e riferimenti all’IA. Distinguere comunque stato attuale e proposta; non presentare un render come lavoro già realizzato.
-- Ogni pagina secondaria, guida o rapporto deve dichiarare la pagina di riferimento in `scripts/site-pages.json` e includere pulsanti di ritorno ben visibili in alto e in basso. Usare link HTML espliciti e descrittivi, non `history.back()` o referrer non verificati.
+- Ogni pagina pubblica resta registrata in `scripts/site-pages.json`. Le landing secondarie usano il menu globale e non mostrano più il pulsante/breadcrumb Home ridondante. Guide e rapporti tecnici possono conservare il collegamento esplicito alla pagina madre quando serve per orientarsi, senza `history.back()` o referrer non verificati.
 - Dopo aggiunte o aggiornamenti eseguire `node scripts/sync-page-navigation.cjs` e `node scripts/sync-site-footer.cjs`; registrare tutte le nuove pagine HTML, escluse soltanto verifiche di proprietà e frammenti di template. I test devono essere superati prima della pubblicazione; ogni pagina secondaria deve avere una destinazione di ritorno valida.
 - Home: render e planimetrie commerciali si rivolgono anche ad agenzie, property manager, proprietari, imprese e piccoli studi. Preservare gli altri servizi tecnici, i quattro stili e la quinta proposta. Le nuove preferenze visuali usano il contratto esistente `Render_viste[]`: non modificare nomi/ID o backend senza necessità.
 
@@ -30,15 +30,15 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - Specifiche CAD/BIM: mantenere `Indicazioni_output`, con istruzioni pertinenti alle selezioni attive; template esistenti conservati subito dopo.
 - «Altro» nei render apre `Render_personalizzato`; Disegno meccanico apre `Indicazioni_disegno_meccanico`; «Altro / da valutare» apre `Richiesta_personalizzata`. Ogni nuovo testo è facoltativo, massimo 3000 caratteri, validato anche dal backend.
 - Nascondere e disabilitare i campi inattivi senza cancellarne il testo nella pagina; riattivarli con le scelte precedenti. Nessun autofocus al cambio servizio; ripristino dopo errore e azzeramento solo dopo invio confermato.
-- Il breadcrumb «Home / Lezioni AutoCAD» precede il titolo delle lezioni. Il collegamento Home deve funzionare anche senza JavaScript.
+- La landing Lezioni AutoCAD non usa più il breadcrumb «Home / Lezioni AutoCAD»: la navigazione avviene tramite l’header globale statico, disponibile anche senza JavaScript.
 
 ## DOCFA e navigazione Home — 30 settembre 2026
 - Planimetrie DOCFA apre `docfaPreferences` con il campo `Indicazioni_planimetria_DOCFA`: facoltativo, massimo 3000 caratteri, validato e trasmesso soltanto per il servizio attivo. Conservazione temporanea in pagina, esclusione quando deselezionato, reset soltanto dopo invio riuscito. Nessun dato catastale nei tracciamenti.
 - Il servizio DOCFA è supporto grafico al professionista, non una pratica completa con firma e presentazione. Chiedere dati identificativi, rilievo e riferimenti pertinenti, senza richiedere credenziali o documenti d’identità. Per testi e aggiornamenti consultare le fonti annotate in `.github/DOCFA-CONTENT-SOURCES.md`.
-- Home e ritorni alle pagine di riferimento usano la medesima classe `page-back-button` in `assets/site-footer.css`; niente varianti locali concorrenti in CSS delle lezioni o dei plugin. I collegamenti Home sono marcati `data-home-link` e generati da `sync-page-navigation.cjs`. Guide e report conservano il collegamento al proprio plugin o pagina madre.
+- Le landing non mostrano pulsanti Home aggiuntivi. `sync-page-navigation.cjs` rimuove i breadcrumb Home dalle landing; guide e report possono conservare il collegamento al proprio plugin o pagina madre. Non introdurre varianti locali concorrenti.
 
 ## Struttura del sito — 3 ottobre 2026
-- Navigazione globale statica tramite `scripts/sync-site-header.cjs`, con 8 destinazioni. Conservare navigazione locale e landing distinte. Eseguire i tre sincronizzatori (ritorni, footer, header) e controllare anche senza JavaScript.
+- Navigazione globale statica tramite `scripts/sync-site-header.cjs`, ora con 9 destinazioni incluso Preventivo online. Sulle landing il menu globale è il riferimento principale; evitare header duplicati visibili. Eseguire i tre sincronizzatori (ritorni, footer, header) e controllare anche senza JavaScript.
 - AG CAD Tools 2.0 sostituisce la landing Express Tools; URL precedente mantenuto con collegamento al nuovo progetto e canonical coerente. Archivio Express non promosso per download correnti. La chiave backend `express-tools` conserva la bacheca storica sotto il nome AG CAD Tools.
 - BlockHub CAD resta in aggiornamento senza download fino a rilascio autorizzato. Contatti ha endpoint privato `/api/contact`, distinto da preventivi e lezioni, senza conversioni commerciali. Proposte con link passano dal modulo privato; i commenti pubblici restano moderati.
 - Portfolio web e PDF mostrano chiaramente lo stato di aggiornamento; non inserire progetti fittizi. Recensioni approvate ordinate dalla più recente; date non fornite e voti non vanno inventati. Vincenzo G. è una testimonianza sulle lezioni, non sui servizi CAD.
@@ -47,3 +47,9 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 ## Superfici per il Preventivo online — 4 ottobre 2026
 - Tutti i calcoli basati sui metri quadrati usano la **superficie lorda complessiva dei piani effettivamente interessati dall'incarico**, già sommata tra i piani e misurata al lordo delle murature. Non moltiplicare mai nuovamente tale valore per il numero dei piani.
 - Dalla superficie lorda vanno esclusi balconi, terrazzi, cortili, giardini, aree esterne, porticati o logge aperte e altre pertinenze/accessori esterni, salvo che siano essi stessi oggetto della lavorazione richiesta. Eventuali opere esterne restano richieste distinte e non devono alterare la superficie lorda dei piani.
+
+## Navigazione e portfolio — 4 ottobre 2026
+- Sulla homepage deve essere visibile un solo header/menu principale. L'eventuale header locale storico non deve comparire né creare un secondo menu su smartphone; la homepage non contiene più il vecchio `topbar` locale.
+- Su smartphone il menu globale si apre come pannello verticale a larghezza utile, con scorrimento interno se necessario, chiusura su link/Escape/click esterno e blocco dello scroll della pagina durante l'apertura.
+- Le landing secondarie non mostrano pulsanti/breadcrumb Home ridondanti. Guide e report mantengono soltanto i ritorni specifici alla pagina madre quando utili.
+- Nella home, «Strumenti per il tuo AutoCAD» è una sezione visivamente separata dal portfolio, con titolo più grande, margine superiore e separatore dedicato.

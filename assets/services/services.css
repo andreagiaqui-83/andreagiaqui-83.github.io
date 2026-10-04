@@ -119,10 +119,13 @@
 #tariffe .pricing-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 #tariffe .price-card{min-height:250px}
 .legacy-quote-form{display:none!important}
-#portfolio .portfolio-tools-title{font-size:clamp(22px,3vw,32px);letter-spacing:.04em;margin:34px 0 18px;color:#102b3a;font-weight:800}
-#portfolio .split>div:nth-child(2){padding-top:20px;border-top:1px solid rgba(16,43,58,.18)}
-#portfolio .project-links{margin-top:16px}
+#portfolio .portfolio-main{max-width:880px}
+#portfolio .portfolio-tools-block{margin-top:56px;padding-top:42px;border-top:1px solid rgba(16,43,58,.22)}
+#portfolio .portfolio-tools-block .eyebrow{margin-bottom:12px}
+#portfolio .portfolio-tools-title{font-size:clamp(30px,4vw,44px);line-height:1.08;letter-spacing:-.025em;margin:0 0 12px;color:#102b3a;font-weight:800}
+#portfolio .portfolio-tools-intro{max-width:760px;margin:0;color:var(--muted);font-size:15px;line-height:1.7}
+#portfolio .project-links{margin-top:26px}
 @media(max-width:900px){#tariffe .pricing-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:620px){#tariffe .pricing-grid{grid-template-columns:1fr}#portfolio .split>div:nth-child(2){margin-top:28px;padding-top:28px}}
+@media(max-width:620px){#tariffe .pricing-grid{grid-template-columns:1fr}#portfolio .portfolio-tools-block{margin-top:42px;padding-top:34px}#portfolio .portfolio-tools-title{font-size:clamp(28px,9vw,36px)}#portfolio .project-links{margin-top:22px}}
 
 #tariffe .pricing-inclusions{display:none}

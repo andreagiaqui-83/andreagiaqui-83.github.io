@@ -91,3 +91,9 @@ Aggiunto il campo facoltativo `Indicazioni_planimetria_DOCFA` con istruzioni bas
 ## Preventivo online — superficie lorda complessiva, 4 ottobre 2026
 - Il campo superficie indica la somma dei m² lordi dei piani effettivamente interessati, misurati al lordo delle murature. Il valore inserito è già complessivo e non va moltiplicato per il numero dei piani.
 - Escludere balconi, terrazzi, cortili, giardini, aree esterne, porticati/logge aperte e altre pertinenze esterne, salvo lavorazioni esplicitamente dedicate a tali parti.
+
+## Navigazione mobile e sezione Portfolio — 4 ottobre 2026
+- La homepage usa un solo header globale; il vecchio header locale è rimosso dalla sorgente per evitare il doppio menu, in particolare sui browser Android/Samsung.
+- Le landing secondarie non mostrano più il pulsante/breadcrumb Home ridondante: la navigazione principale è l'header globale. Guide e report tecnici possono conservare il ritorno esplicito alla pagina madre.
+- Il menu globale mobile è un pannello verticale con area di tocco adeguata, altezza massima rispetto al viewport e scorrimento interno.
+- «Strumenti per il tuo AutoCAD» nella sezione Portfolio della home è separato visivamente dal blocco Portfolio con maggiore margine, separatore e titolo più evidente.
