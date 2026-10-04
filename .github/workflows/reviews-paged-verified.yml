@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'index.html'
       - '.github/workflows/reviews-paged-verified.yml'
       - '.github/scripts/reviews_paged.py'
       - 'reviews-carousel.css'
