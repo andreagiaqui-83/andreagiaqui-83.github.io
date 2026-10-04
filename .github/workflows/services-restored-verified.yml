@@ -5,11 +5,15 @@ on:
     paths:
       - 'index.html'
       - 'assets/services/**'
+      - 'preventivo/**'
+      - 'assets/preventivo.js'
+      - 'assets/preventivo.css'
       - 'assets/measurement.js'
       - 'scripts/test-frontend.cjs'
       - 'privacy/index.html'
       - 'cloudflare-worker/src/index.js'
       - 'scripts/test-services-*'
+      - 'scripts/test-preventivo.cjs'
       - '.github/scripts/services_qa.py'
       - '.github/scripts/services_restored_check.py'
       - '.github/workflows/services-restored-verified.yml'
@@ -35,7 +39,7 @@ jobs:
           python -m pip install --quiet playwright requests beautifulsoup4 pillow
           python -m playwright install --with-deps chromium webkit firefox
       - name: Unit and security regression tests, including protected lessons
-        run: node --test scripts/test-frontend.cjs scripts/test-lessons.mjs scripts/test-services-frontend.cjs scripts/test-services-backend.mjs
+        run: node --test scripts/test-frontend.cjs scripts/test-lessons.mjs scripts/test-services-frontend.cjs scripts/test-services-backend.mjs scripts/test-preventivo.cjs
       - name: Verify candidate in Chromium, WebKit and Firefox
         run: python .github/scripts/services_qa.py local
       - name: Verify public deployment

@@ -116,19 +116,18 @@ def run_browser(base,stage):
      if width in [390,1440]:
       page.locator('#faq h2').scroll_into_view_if_needed()
       page.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq.png'))
-     # Permanently visible forms and aligned legal actions on every viewport.
-     for selector in ['.technical-details', '#reviewForm']:
-      target=page.locator(selector)
-      expect(target).to_be_visible()
-      assert target.evaluate("e=>!e.closest('details')")
-      for field in target.locator('input:not(.hp),textarea,button').all():
-       expect(field).to_be_visible()
-       box=field.bounding_box();assert box['x']>=-1 and box['x']+box['width']<=width+1,(width,selector,box)
+     # The homepage now links to /preventivo/: only the review form remains a permanent form here.
+     target=page.locator('#reviewForm')
+     expect(target).to_be_visible();assert target.evaluate("e=>!e.closest('details')")
+     for field in target.locator('input:not(.hp),textarea,button').all():
+      expect(field).to_be_visible()
+      box=field.bounding_box();assert box['x']>=-1 and box['x']+box['width']<=width+1,(width,'#reviewForm',box)
+     assert not page.locator('#quoteForm').is_visible(),'Legacy quote form must stay hidden on the homepage'
      legal=page.locator('.sf-legal>div').evaluate("e=>[...e.children].map(n=>{const r=n.getBoundingClientRect();const t=document.createRange();t.selectNodeContents(n);const b=t.getBoundingClientRect();return {top:r.top,height:r.height,textTop:b.top,textHeight:b.height};})")
      assert abs(legal[0]['textTop']-legal[1]['textTop'])<=1,(engine,width,legal)
      assert all(x['height']>=44 for x in legal)
      if width in [390,1440]:
-      for selector,name in [('#nuvole-di-punti','point-cloud'),('#tariffe','pricing'),('.point-cloud-field','cloud-field'),('.compatibility-note','compatibility'),('.collaboration-note','collaboration'),('#render','render'),('#preventivo','person'),('.technical-details','technical'),('.review-submit-section','review-form'),('.sf-legal','footer')]:
+      for selector,name in [('#nuvole-di-punti','point-cloud'),('#tariffe','pricing'),('.compatibility-note','compatibility'),('.collaboration-note','collaboration'),('#render','render'),('#preventivo','person'),('.review-submit-section','review-form'),('.sf-legal','footer'),('#portfolio','portfolio')]:
        page.locator(selector).screenshot(path=str(OUT/f'{stage}-{engine}-{width}-{name}.png'))
       for selector,name in [('#consegna-pdf','pdf'),('#faq-nuvole-di-punti','point-cloud'),('#faq-tariffe','pricing'),('#settori-cad-bim','sectors'),('#vantaggi-disegnatore-online','online'),('#compatibilita-software','software')]:
        detail=page.locator(selector)
@@ -136,7 +135,7 @@ def run_browser(base,stage):
        detail.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq-{name}.png'))
        assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
        detail.locator('summary').click()
-     # Mobile: complete cards, arrows, keyboard first/last and responsive resize.
+     # Mobile: complete review cards, arrows, keyboard first/last and responsive resize.
      view=page.locator('#reviewsCarousel');view.scroll_into_view_if_needed()
      def one_card():
       return view.evaluate('e=>{const r=e.getBoundingClientRect();return [...e.querySelectorAll(".review-card")].filter(c=>{const b=c.getBoundingClientRect();return Math.min(b.right,r.right)-Math.max(b.left,r.left)>2;}).length;}')
@@ -152,62 +151,8 @@ def run_browser(base,stage):
       page.set_viewport_size({'width':390,'height':844});page.wait_for_timeout(200);assert one_card()==1
       page.evaluate('''()=>{let c=document.createElement('article');c.className='review-card';c.innerHTML='<p>'+('Recensione tecnica di prova isolata. '.repeat(18))+'</p><span>Test T.</span>';document.querySelector('#reviewsGrid').append(c);}''')
       view.focus();page.keyboard.press('End');page.wait_for_timeout(200);assert one_card()==1
-     # Conditional CAD/BIM templates and render preferences; all optional.
-     expect(page.locator('#templatePreferences')).not_to_be_visible()
-     page.locator('#cad2dSelected').check();expect(page.locator('#templateCAD')).to_be_visible()
-     expect(page.locator('#templateBIM')).not_to_be_visible()
-     page.locator('#cad3dSelected').check();page.locator('#cad2dSelected').uncheck()
-     expect(page.locator('#templateCAD')).to_be_enabled()
-     page.locator('#cad3dSelected').uncheck();expect(page.locator('#templatePreferences')).not_to_be_visible()
-     page.locator('#bimSelected').check();expect(page.locator('#templateBIM')).to_be_visible()
-     page.locator('#cad2dSelected').check()
-     page.locator('#templateCAD').set_input_files({'name':'standard.dwt','mimeType':'application/octet-stream','buffer':b'Template CAD'})
-     page.locator('#templateBIM').set_input_files({'name':'standard.rte','mimeType':'application/octet-stream','buffer':b'Template BIM'})
-     page.locator('#renderSelected').check()
-     page.locator('[name="Render_viste[]"][value="Vista 3D"]').check()
-     page.locator('#renderSelected').uncheck();expect(page.locator('#renderPreferences')).not_to_be_visible()
-     page.locator('#renderSelected').check();expect(page.locator('[name="Render_viste[]"][value="Vista 3D"]')).to_be_checked()
-     # Accessible conditional interior input and preservation.
-     page.locator('#interiorSelected').check();expect(page.locator('#interiorPreferences')).to_be_visible()
-     expect(page.locator('#interiorCustom')).not_to_be_visible()
-     page.locator('[name="Interior_Design_stili[]"][value="Japandi"]').check()
-     page.locator('#interiorCustomSelected').check()
-     page.locator('#interiorCustom').fill('Test riservato: legno chiaro, materiali naturali')
-     page.locator('#interiorSelected').uncheck();expect(page.locator('#interiorCustom')).to_be_disabled()
-     page.locator('#interiorSelected').check();expect(page.locator('#interiorCustom')).to_have_value('Test riservato: legno chiaro, materiali naturali')
      assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
      if width<768:expect(page.locator('#whatsappQuickContact')).not_to_be_visible()
-     if engine=='chromium' and width in [320,1440]:
-      axe=page.evaluate("async()=>await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})")
-      save(f'{stage}-accessibility-expanded-{width}.json',axe)
-      assert not axe['violations'],[(x['id'],[n['target'] for n in x['nodes']]) for x in axe['violations']]
-     if width in [390,1440]:
-      page.locator('#modulo').screenshot(path=str(OUT/f'{stage}-{engine}-{width}-form.png'))
-      page.locator('#quoteForm > fieldset').first.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-options.png'))
-      page.locator('.quote-guide').screenshot(path=str(OUT/f'{stage}-{engine}-{width}-guide.png'))
-     # Upload accumulation, removal, rejected extension, byte-progress mock.
-     page.locator('#projectFiles').set_input_files({'name':'test-a.pdf','mimeType':'application/pdf','buffer':b'%PDF-test'})
-     page.locator('#projectFiles').set_input_files({'name':'test-b.dwg','mimeType':'application/octet-stream','buffer':b'DWG-test'})
-     expect(page.locator('#projectDropzone .selected-file')).to_have_count(2)
-     page.get_by_role('button',name='Rimuovi test-a.pdf',exact=True).click();expect(page.locator('#projectDropzone .selected-file')).to_have_count(1)
-     page.locator('#projectFiles').set_input_files({'name':'cloud.las','mimeType':'application/octet-stream','buffer':b'las-test'})
-     expect(page.locator('#projectDropzone .selected-file')).to_have_count(1)
-     expect(page.locator('#fileWarning')).to_contain_text('link cloud')
-     page.locator('#pointCloud').fill('https://cloud.example.invalid/private-point-cloud.custom?format=original')
-     f=page.locator('#quoteForm');f.locator('[name=Nome_cognome]').fill('Test riservato');f.locator('[name=email]').fill('private@example.invalid');f.locator('[name=Consenso_privacy]').check()
-     page.get_by_role('button',name='Preferenze cookie',exact=True).click();page.get_by_role('button',name='Accetta tutti',exact=True).click()
-     assert len([u for u in google if '/gtag/js' in u])==1
-     consent=page.evaluate('window.AGTracking.getConsent()');assert consent['analytics'] and consent['marketing']
-     page.locator('#quoteSubmit').click();expect(page.locator('#grazie')).to_be_visible();assert len(posts)==1
-     assert posts[0]['fields']['Interior_Design_5a_proposta_personalizzata'].startswith('Test riservato')
-     assert posts[0]['fields']['Interior_Design_stili[]']==['Japandi','Personalizzata']
-     assert posts[0]['fields']['Render_viste[]']=='Vista 3D'
-     assert posts[0]['fields']['Nuvola_di_punti_link_cloud']=='https://cloud.example.invalid/private-point-cloud.custom?format=original'
-     events=page.evaluate('window.dataLayer.filter(x=>x[0]==="event").map(x=>({name:x[1],data:x[2]}))')
-     assert len([e for e in events if e['name']=='page_view'])==1
-     assert len([e for e in events if e['name']=='service_quote_success'])==1
-     assert not [e for e in events if e['name']=='generate_lead']
-     serialized=json.dumps(events);assert 'private@example' not in serialized and 'riservato' not in serialized and 'test-b' not in serialized and 'private-point-cloud' not in serialized
      assert not errors,errors
      assert not bad,bad
      vitals=page.evaluate('({lab:window.__qaVitals,navigation:performance.getEntriesByType("navigation").map(n=>({ttfb:n.responseStart-n.requestStart,domContentLoaded:n.domContentLoadedEventEnd-n.startTime})),resources:performance.getEntriesByType("resource").length})')
