@@ -14,7 +14,7 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
-BUILD = '20260916-recensioni-02'
+BUILD = '20261004-r1'
 CSS = 'reviews-carousel.css'
 JS = 'reviews-carousel.js'
 MANIFEST = Path('.github/reviews-paged-manifest.json')
@@ -30,50 +30,22 @@ def write(name, obj):
 
 def prepare():
     html = Path('index.html').read_text(encoding='utf-8')
-    core = Path('script.js').read_text(encoding='utf-8')
-    assert 'data-reviews-build=' not in html
-    old = BeautifulSoup(html, 'html.parser')
-    marker = '  const unwrapReviewGroups = () => {'
-    assert core.count(marker) == 1 and core.rstrip().endswith('})();')
-    prefix = core[:core.index(marker)]
-    revised_core = prefix + '  // Navigation is owned by reviews-carousel.js; data loading stays independent.\n  loadLiveReviews();\n\n})();\n'
-    assert revised_core[:len(prefix)] == prefix
-    updated = html
-    for pattern in [r'<link\b[^>]*href="reviews-(?:manual|fixed)\.css[^\"]*"[^>]*>', r'<script\b[^>]*src="reviews-(?:manual|fixed)\.js[^\"]*"[^>]*>\s*</script>']:
-        updated, count = re.subn(pattern, '', updated)
-        assert count == 2, (pattern,count)
-    nav = '<div class="reviews-toolbar" role="group" aria-label="Navigazione recensioni"><button type="button" id="reviewsPrev" aria-controls="reviewsCarousel" aria-label="Recensione precedente" disabled hidden><span aria-hidden="true">❮</span></button><button type="button" id="reviewsNext" aria-controls="reviewsCarousel" aria-label="Recensione successiva" hidden><span aria-hidden="true">❯</span></button></div><p id="reviewsPosition" class="reviews-sr-status" role="status" aria-live="polite" aria-atomic="true"></p>'
-    updated,count = re.subn(r'<div class="reviews-external-nav"[^>]*>.*?</div>', nav, updated, count=1, flags=re.S)
-    assert count == 1
-    old_view = '<div class="reviews-carousel" id="reviewsCarousel" tabindex="0" aria-label="Recensioni clienti">'
-    new_view = '<div class="reviews-carousel" id="reviewsCarousel" tabindex="0" role="region" aria-roledescription="carosello" aria-label="Recensioni clienti: scorri o usa le frecce">'
-    assert updated.count(old_view) == 1
-    updated = updated.replace(old_view,new_view,1)
-    updated = updated.replace('<div class="reviews-grid" id="reviewsGrid" aria-live="polite">','<div class="reviews-grid" id="reviewsGrid">',1)
-    before = 'Puoi sfogliare le recensioni con le frecce a destra e sinistra e pubblicare anche la tua.'
-    after = 'Sfoglia le recensioni con le frecce oppure scorri con il dito sul cellulare. Puoi pubblicare anche la tua.'
-    assert updated.count(before) == 1
-    updated = updated.replace(before,after,1)
-    updated = updated.replace('</head>',f'<link rel="stylesheet" href="{CSS}?v={BUILD}"></head>',1)
-    updated = updated.replace('</body>',f'<script src="{JS}?v={BUILD}" defer></script></body>',1)
-    updated,count = re.subn(r'src="script\.js\?v=[^\"]+"',f'src="script.js?v={BUILD}"',updated,count=1)
-    assert count == 1
-    updated,count = re.subn(r'data-build="[^\"]+"',f'data-build="{BUILD}" data-reviews-build="{BUILD}"',updated,count=1)
-    assert count == 1
-    new = BeautifulSoup(updated, 'html.parser')
-    untouched = ['quoteForm','reviewForm','render','servizi','formazione-autocad','whatsappQuickContact']
-    for ident in untouched:
-        assert str(new.find(id=ident)) == str(old.find(id=ident)), ident
-    assert str(new.footer) == str(old.footer)
-    assert [str(e) for e in new.select('#reviewsGrid .review-card')] == [str(e) for e in old.select('#reviewsGrid .review-card')]
-    assert len(new.select('#reviewsPrev')) == len(new.select('#reviewsNext')) == 1
-    for block in new.select('script[type="application/ld+json"]'):
-        json.loads(block.string)
-    Path('index.html').write_text(updated,encoding='utf-8')
-    Path('script.js').write_text(revised_core,encoding='utf-8')
+    doc = BeautifulSoup(html, 'html.parser')
+    assert doc.body.get('data-reviews-build') == BUILD
+    assert doc.select_one(f'link[href*="{CSS}"]')
+    assert doc.select_one(f'script[src*="{JS}"]')
+    assert len(doc.select('#reviewsPrev')) == len(doc.select('#reviewsNext')) == 1
+    assert len(doc.select('#reviewsGrid .review-card')) >= 6
+    carousel = doc.select_one('#reviewsCarousel')
+    assert carousel and carousel.get('role') == 'region' and carousel.get('aria-roledescription') == 'carosello'
     for file in ['script.js',JS]:
         subprocess.run(['node','--check',file],check=True)
-    meta = {'build':BUILD,'files':{f:sha(Path(f).read_bytes()) for f in FILES},'unchanged_sections':untouched+['footer','reviews content'],'core_prefix_sha256':sha(prefix.encode()),'lessons_sha256':sha(Path('lezioni-autocad/index.html').read_bytes())}
+    meta = {
+        'build': BUILD,
+        'files': {f: sha(Path(f).read_bytes()) for f in FILES},
+        'reviews': len(doc.select('#reviewsGrid .review-card')),
+        'lessons_sha256': sha(Path('lezioni-autocad/index.html').read_bytes())
+    }
     MANIFEST.write_text(json.dumps(meta,indent=2)+'\n',encoding='utf-8')
     write('manifest.json',meta)
     print('PREPARE_PASS',json.dumps(meta),flush=True)
