@@ -157,7 +157,7 @@ async function uploadFile(request, env, origin, sessionId) {
   let rawName;
   try { rawName = decodeURIComponent(request.headers.get('X-File-Name') || 'file'); }
   catch (_) { return json({ok:false,error:'Nome file non valido.'},400,origin,env); }
-  if (/\.(las|laz|e57|rcp|rcs|pts|ptx|xyz)$/i.test(rawName)) return json({ok:false,error:'Per la nuvola di punti usa il campo link cloud dedicato; puoi condividere qualsiasi formato originale.'},400,origin,env);
+  if (/\.(las|laz|e57|rcp|rcs|pts|ptx|xyz|ply)$/i.test(rawName)) return json({ok:false,error:'Per la nuvola di punti usa il campo link cloud dedicato; puoi condividere qualsiasi formato originale.'},400,origin,env);
   const fieldName = request.headers.get('X-Field-Name') || 'Allegato';
   const declaredSize = Number(request.headers.get('X-File-Size') || request.headers.get('Content-Length') || 0);
   if (!Number.isSafeInteger(declaredSize) || declaredSize <= 0) return json({ ok: false, error: 'Dimensione file non valida.' }, 400, origin, env);
