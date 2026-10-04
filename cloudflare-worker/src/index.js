@@ -42,6 +42,11 @@ const FIELD_LABELS = {
   Completezza_informazioni: 'Completezza informazioni',
   Copia_stima_email: 'Copia stima via email',
   Differenze_documenti: 'Differenze / modifiche documenti',
+  Superficie_indicativa: 'Superficie lorda complessiva dei piani',
+  Regione: 'Regione',
+  Provincia: 'Provincia',
+  Comune: 'Comune',
+  Materiale_disponibile: 'Materiale disponibile',
   Nome_cognome: 'Nome e cognome',
   Nome: 'Nome e cognome',
   Studio_societa: 'Studio / società',
@@ -321,15 +326,18 @@ async function submitQuote(request, env, origin) {
   const name = String(fields.Nome_cognome || '').trim();
   const email = getCustomerEmail(fields);
   const outputs = [].concat(fields['Output[]'] || []);
-  const validOutputs = new Set(['Elaborati AutoCAD 2D','Modello AutoCAD 3D','Planimetria DOCFA in AutoCAD','Modello Revit / BIM 3D','Disegno meccanico AutoCAD','Render fotorealistici / viste prospettiche','Visualizzazioni orbitali / sequenze 360°','Interior Design','Altro']);
+  const validOutputs = new Set([
+    'Elaborati AutoCAD 2D','Modello AutoCAD 3D','Planimetria DOCFA in AutoCAD','Modello Revit / BIM 3D','Disegno meccanico AutoCAD','Render fotorealistici / viste prospettiche','Visualizzazioni orbitali / sequenze 360°','Interior Design','Altro',
+    'AutoCAD 2D','AutoCAD 3D','Revit / BIM','Scan to CAD 2D','Scan to CAD 3D','Scan to BIM / Revit','Computo metrico','Computo metrico estimativo','Planimetria DOCFA','Disegno meccanico 2D','Disegno meccanico 3D','Planimetria commerciale 2D','Planimetria 3D arredata','Render fotorealistici','Virtual staging','Video / Walkthrough'
+  ]);
   if (name.length < 2 || name.length > 120 || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || fields.Consenso_privacy !== 'Acconsento' || !outputs.length || !outputs.every(x=>validOutputs.has(x))) return json({ok:false,error:'Controlla nome, email, servizio e informativa privacy.'},400,origin,env);
   // New optional descriptions are bounded and never retained for inactive services.
   // Keep legacy fields/clients compatible, including Indicazioni_output and old map links.
   const detailOptions = {
-    Render_personalizzato: outputs.includes('Render fotorealistici / viste prospettiche') && [].concat(fields['Render_viste[]'] || []).includes('Altro'),
-    Indicazioni_disegno_meccanico: outputs.includes('Disegno meccanico AutoCAD'),
+    Render_personalizzato: outputs.some(x => ['Render fotorealistici / viste prospettiche','Render fotorealistici'].includes(x)) && [].concat(fields['Render_viste[]'] || []).includes('Altro'),
+    Indicazioni_disegno_meccanico: outputs.some(x => ['Disegno meccanico AutoCAD','Disegno meccanico 2D','Disegno meccanico 3D'].includes(x)),
     Richiesta_personalizzata: outputs.includes('Altro'),
-    Indicazioni_planimetria_DOCFA: outputs.includes('Planimetria DOCFA in AutoCAD'),
+    Indicazioni_planimetria_DOCFA: outputs.some(x => ['Planimetria DOCFA in AutoCAD','Planimetria DOCFA'].includes(x)),
   };
   for (const [key, active] of Object.entries(detailOptions)) {
     if (fields[key] !== undefined && (typeof fields[key] !== 'string' || fields[key].length > 3000)) {
@@ -360,7 +368,7 @@ async function submitQuote(request, env, origin) {
   const pointCloudHtml = pointCloudLink ? `<p><strong>Nuvola di punti — link cloud:</strong><br><a href="${escapeHtml(pointCloudLink)}">${escapeHtml(pointCloudLink)}</a></p>` : '';
   const ownerHtml = `
     <div style="font-family:Arial,sans-serif;color:#172033;line-height:1.5">
-      <h2 style="margin:0 0 18px">Nuova richiesta preventivo AutoCAD / Revit</h2>
+      <h2 style="margin:0 0 18px">Nuova richiesta dal Preventivo online</h2>
       <table style="border-collapse:collapse;width:100%;max-width:900px">${rowsFromFields(fields)}</table>
       <h3 style="margin:24px 0 8px">Allegati</h3>
       ${attachmentList(uploads)}
@@ -374,7 +382,7 @@ async function submitQuote(request, env, origin) {
     from: env.EMAIL_FROM,
     to: [env.EMAIL_TO],
     reply_to: customerEmail || undefined,
-    subject: 'Nuova richiesta preventivo AutoCAD / Revit dal sito',
+    subject: 'Nuova richiesta dal Preventivo online · Andrea Giaquinto',
     html: ownerHtml,
   }, 'cad-quote/' + sessionId);
 
@@ -382,23 +390,25 @@ async function submitQuote(request, env, origin) {
   if (customerEmail && env.SEND_CUSTOMER_COPY === 'true' && fields.Copia_stima_email !== 'No') {
     const customerHtml = `
       <div style="font-family:Arial,sans-serif;color:#172033;line-height:1.5">
-        <h2 style="margin:0 0 14px">Richiesta di preventivo ricevuta</h2>
-        <p>Grazie. La tua richiesta è stata ricevuta correttamente.</p>
-        <p>Esaminerò personalmente il materiale e ti ricontatterò appena possibile. Non è necessario compilare nuovamente il modulo.</p>
+        <h2 style="margin:0 0 14px">La tua stima automatica indicativa</h2>
+        <p>Grazie. Questa email è la copia della richiesta inviata tramite il Preventivo online di andreagiaquinto.it.</p>
+        <p><strong>La stima riportata nel riepilogo è automatica, indicativa, gratuita e senza impegno per entrambe le parti. Non costituisce un preventivo definitivo, un'offerta economica vincolante o la conferma di un incarico.</strong></p>
+        <p>Gli importi indicati sono al netto di IVA e degli eventuali oneri fiscali o previdenziali applicabili. L'eventuale ritenuta d'acconto, ove prevista, sarà gestita secondo la normativa vigente.</p>
+        <p>Esaminerò personalmente le informazioni e l'eventuale materiale ricevuto e ti risponderò via email per confermare la stima, proporre un importo differente o chiedere eventuali integrazioni.</p>
         <h3 style="margin:24px 0 8px">Riepilogo della richiesta</h3>
         <table style="border-collapse:collapse;width:100%;max-width:900px">${rowsFromFields(fields, { includePrivacy: false })}</table>
         <h3 style="margin:24px 0 8px">Materiale inviato</h3>
         <p>${uploads.length ? `${uploads.length} file caricati correttamente (${escapeHtml(formatFileSize(uploads.reduce((s, f) => s + Number(f.size || 0), 0)))} complessivi).` : 'Nessun file caricato direttamente dal modulo.'}</p>
         ${cloudLink ? `<p><strong>Link cloud indicato:</strong><br><a href="${escapeHtml(cloudLink)}">${escapeHtml(cloudLink)}</a></p>` : ''}
         ${pointCloudHtml}
-        <p style="margin-top:26px"><strong>Andrea Giaquinto</strong><br>Disegnatore AutoCAD e Revit · CAD | BIM | CONSULENZA<br><a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a><br><a href="tel:+393337240544">+39 333 724 0544</a> · WhatsApp / Telegram</p>
+        <p style="margin-top:26px"><strong>Andrea Giaquinto</strong><br>Disegnatore CAD e BIM<br><a href="mailto:andrea.giaqui@gmail.com">andrea.giaqui@gmail.com</a><br><a href="tel:+393337240544">+39 333 724 0544</a> · Telefono / WhatsApp<br><a href="https://andreagiaquinto.it/">andreagiaquinto.it</a></p>
       </div>`;
     try {
       await sendEmail(env, {
         from: env.EMAIL_FROM,
         to: [customerEmail],
         reply_to: env.EMAIL_TO,
-        subject: 'Conferma richiesta di preventivo AutoCAD / Revit',
+        subject: 'Copia della tua stima indicativa · Andrea Giaquinto',
         html: customerHtml,
       }, 'cad-quote-copy/' + sessionId);
       customerCopySent = true;
