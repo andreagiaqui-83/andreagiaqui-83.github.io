@@ -109,6 +109,8 @@ def browser_checks(base,stage):
                     page=context.new_page();page.set_default_timeout(25000)
                     response=page.goto(base,wait_until='domcontentloaded')
                     assert response and response.status==200
+                    reject=page.get_by_role('button',name='Rifiuta facoltativi')
+                    if reject.is_visible(): reject.click()
                     assert page.locator('body').get_attribute('data-reviews-build')==BUILD
                     page.wait_for_function("document.getElementById('reviewsCarousel').dataset.pagedReviews==='2'")
                     page.locator('#recensioni').scroll_into_view_if_needed()
