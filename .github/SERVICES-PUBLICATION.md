@@ -97,3 +97,10 @@ Aggiunto il campo facoltativo `Indicazioni_planimetria_DOCFA` con istruzioni bas
 - Le landing secondarie non mostrano più il pulsante/breadcrumb Home ridondante: la navigazione principale è l'header globale. Guide e report tecnici possono conservare il ritorno esplicito alla pagina madre.
 - Il menu globale mobile è un pannello verticale con area di tocco adeguata, altezza massima rispetto al viewport e scorrimento interno.
 - «Strumenti per il tuo AutoCAD» nella sezione Portfolio della home è separato visivamente dal blocco Portfolio con maggiore margine, separatore e titolo più evidente.
+
+## Backend del Preventivo online — 4 ottobre 2026
+- `/preventivo/` usa il Worker storico verificato `cad-bim-preventivi.andrea-giaqui.workers.dev`, con sessione firmata e token restituito da `/api/session`; gli allegati passano da `/api/upload/{sessionId}` con limiti server 90 MB/file e 500 MB complessivi.
+- Nuvole di punti LAS/LAZ/E57/RCP/RCS/PTS/PTX/XYZ/PLY non vanno caricate direttamente: usare il link cloud nel formato originale. Per il fabbricato sono ammessi anche indirizzo, coordinate e link Google Maps/Google Earth.
+- Il backend accetta i servizi del nuovo preventivatore oltre ai valori storici, mantiene idempotenza e conserva richieste/allegati secondo le regole già pubblicate.
+- La copia cliente è facoltativa. Se l'invio della copia email non riesce, la richiesta principale resta valida e la pagina offre la copia stampabile/PDF della stima.
+- `service_quote_success` è ammesso su `/preventivo/` soltanto dopo conferma positiva del backend e usa esclusivamente il requestId UUID, senza importi o dati personali.
