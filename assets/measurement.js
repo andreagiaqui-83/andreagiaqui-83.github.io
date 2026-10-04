@@ -88,7 +88,7 @@
   const allowedEvents = new Set(['page_view','cta_click','contact_click','form_view','form_start','form_complete','form_submit_attempt','form_error','generate_lead','service_quote_success','scroll_depth']);
   function track(name,values={}) {
     if (!allowedEvents.has(name)) return;
-    if (name === 'service_quote_success' && document.body.dataset.pageType !== 'services') return;
+    if (name === 'service_quote_success' && !['services','preventivo'].includes(document.body.dataset.pageType)) return;
     const safe={page_type:document.body.dataset.pageType || 'site',page_location:cleanLocation(),page_referrer:referrerOrigin()};
     // Never pass form values, full URLs, names, email, telephone, or free text to Google.
     for (const field of ['cta_id','contact_method','form_id','error_type']) if (/^[a-z0-9_-]{1,60}$/.test(values[field]||'')) safe[field]=values[field];
