@@ -43,3 +43,7 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - BlockHub CAD resta in aggiornamento senza download fino a rilascio autorizzato. Contatti ha endpoint privato `/api/contact`, distinto da preventivi e lezioni, senza conversioni commerciali. Proposte con link passano dal modulo privato; i commenti pubblici restano moderati.
 - Portfolio web e PDF mostrano chiaramente lo stato di aggiornamento; non inserire progetti fittizi. Recensioni approvate ordinate dalla più recente; date non fornite e voti non vanno inventati. Vincenzo G. è una testimonianza sulle lezioni, non sui servizi CAD.
 - Tariffe CAD 0,20 e 0,30 €/m² lordo per piano trattabili secondo fabbricato, anche al ribasso. Render e piante Interior Design a partire da 10 € per elaborato; numero, complessità e altre attività concordati nel preventivo. FAQ visibili e JSON-LD allineati.
+
+## Superfici per il Preventivo online — 4 ottobre 2026
+- Tutti i calcoli basati sui metri quadrati usano la **superficie lorda complessiva dei piani effettivamente interessati dall'incarico**, già sommata tra i piani e misurata al lordo delle murature. Non moltiplicare mai nuovamente tale valore per il numero dei piani.
+- Dalla superficie lorda vanno esclusi balconi, terrazzi, cortili, giardini, aree esterne, porticati o logge aperte e altre pertinenze/accessori esterni, salvo che siano essi stessi oggetto della lavorazione richiesta. Eventuali opere esterne restano richieste distinte e non devono alterare la superficie lorda dei piani.
