@@ -36,3 +36,36 @@ test('Render views and interior styles reach stored request and both confirmatio
  global.fetch=async(u,o)=>{calls.push(JSON.parse(o.body));return Response.json({id:'test'});};
  try{const response=await worker.fetch(req('/api/submit',{...ss,fields}),f.env);assert.equal(response.status,200);assert.equal(calls.length,2);for(const email of calls){assert.ok(email.html.includes('Stili Interior Design da valutare'));assert.ok(email.html.includes('Japandi'));assert.ok(email.html.includes('Viste render richieste'));assert.ok(email.html.includes('Vista 3D'));}const saved=JSON.parse(f.entries.get('quotes/'+ss.sessionId+'/request.json'));assert.deepEqual(saved.fields['Interior_Design_stili[]'],fields['Interior_Design_stili[]']);assert.deepEqual(saved.fields['Render_viste[]'],fields['Render_viste[]']);}finally{global.fetch=old;}
 });
+
+
+test('Preventivo online accetta i nuovi servizi, conserva Maps e invia la copia indicativa quando richiesta',async()=>{
+ const f=fixture();f.env.SEND_CUSTOMER_COPY='true';const ss=await session(f),calls=[],old=global.fetch;
+ const fields={Nome_cognome:'Cliente prova',Email:'cliente@example.invalid','Output[]':['AutoCAD 2D','Computo metrico','Virtual staging'],Consenso_privacy:'Acconsento',Copia_stima_email:'Sì',Stima_automatica_indicativa:'100 € – 120 €',Superficie_indicativa:'240 m² lordi complessivi dei piani',Google_Maps_Earth:'https://maps.google.com/?q=45.0,9.0'};
+ global.fetch=async(u,o)=>{calls.push(JSON.parse(o.body));return Response.json({id:'test'});};
+ try{
+  const response=await worker.fetch(req('/api/submit',{...ss,fields}),f.env);
+  assert.equal(response.status,200);
+  const payload=await response.json();assert.equal(payload.customerCopySent,true);
+  assert.equal(calls.length,2);
+  assert.match(calls[0].subject,/Preventivo online/);
+  assert.match(calls[1].subject,/stima indicativa/i);
+  assert.match(calls[1].html,/non costituisce un preventivo definitivo/i);
+  assert.match(calls[1].html,/IVA/i);
+  assert.match(calls[1].html,/100 € – 120 €/);
+  const saved=JSON.parse(f.entries.get('quotes/'+ss.sessionId+'/request.json'));
+  assert.deepEqual(saved.fields['Output[]'],fields['Output[]']);
+  assert.equal(saved.fields.Google_Maps_Earth,fields.Google_Maps_Earth);
+ }finally{global.fetch=old;}
+});
+
+test('Preventivo online rispetta la scelta di non inviare la copia cliente',async()=>{
+ const f=fixture();f.env.SEND_CUSTOMER_COPY='true';const ss=await session(f),calls=[],old=global.fetch;
+ const fields={Nome_cognome:'Cliente prova',Email:'cliente@example.invalid','Output[]':['Computo metrico estimativo'],Consenso_privacy:'Acconsento',Copia_stima_email:'No',Stima_automatica_indicativa:'Valutazione personalizzata'};
+ global.fetch=async(u,o)=>{calls.push(JSON.parse(o.body));return Response.json({id:'test'});};
+ try{
+  const response=await worker.fetch(req('/api/submit',{...ss,fields}),f.env);
+  assert.equal(response.status,200);
+  const payload=await response.json();assert.equal(payload.customerCopySent,false);
+  assert.equal(calls.length,1);
+ }finally{global.fetch=old;}
+});
