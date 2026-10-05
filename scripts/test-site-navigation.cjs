@@ -3,20 +3,19 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const entries=JSON.parse(fs.readFileSync('scripts/site-pages.json','utf8'));
 const docs=new Map(entries.map(e=>[e.file,new JSDOM(fs.readFileSync(e.file,'utf8')).window.document]));
 function scan(dir='.') {return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{const p=path.join(dir,e.name);if(e.isDirectory())return ['node_modules','.git','.github','docs','partials'].includes(e.name)?[]:scan(p);return e.name.endsWith('.html')&&!/^google[a-f0-9]+\.html$/.test(e.name)?[p.replace(/^\.\//,'')]:[];});}
-test('Every public HTML page is registered and every secondary page declares its parent',()=>{
+test('Every HTML page is registered and uses one complete static navigation without redundant return buttons',()=>{
  assert.deepEqual([...entries.map(e=>e.file)].sort(),scan().sort());assert.equal(new Set(entries.map(e=>e.file)).size,entries.length);
+ const expected=['Servizi','Preventivo online','Disegnatore online','Lezioni AutoCAD','YQArch Italiano','AG CAD Tools','BlockHub CAD','Portfolio','Recensioni','Contatti'];
  for(const e of entries){const d=docs.get(e.file);assert.equal(d.querySelectorAll('h1').length,1,e.file);const ids=[...d.querySelectorAll('[id]')].map(n=>n.id);assert.equal(ids.length,new Set(ids).size,e.file+' duplicate IDs');
- if(e.kind==='landing'){assert.equal(d.querySelectorAll('.page-return').length,0);assert.equal(d.querySelectorAll('.breadcrumb [data-home-link], .breadcrumb .page-back-button').length,0);continue;}
- assert.ok(e.parent?.label?.startsWith('Torna ')||(e.parent?.href==='/'&&e.parent.label==='Home'),e.file);const u=new URL(e.parent.href,'https://andreagiaquinto.it');assert.equal(u.origin,'https://andreagiaquinto.it');assert.equal(u.username,'');
- let dest=u.pathname.slice(1);if(!dest||dest.endsWith('/'))dest+='index.html';assert.ok(fs.existsSync(dest),e.file+' destination');
- const links=[...d.querySelectorAll('.page-back-button')];assert.equal(links.length,2,e.file);for(const a of links){assert.equal(a.getAttribute('href'),e.parent.href);assert.ok(a.textContent.includes(e.parent.label));assert.equal(a.hasAttribute('onclick'),false);}
- assert.ok(d.querySelector('[data-page-return="top"]').compareDocumentPosition(d.querySelector('h1'))&4,e.file+' top link');
+ assert.equal(d.querySelectorAll('.sg-header').length,1,e.file);assert.deepEqual([...d.querySelectorAll('.sg-nav a')].map(a=>a.textContent.trim()),expected,e.file);
+ assert.equal(d.querySelectorAll('.page-return,.page-back-button,.breadcrumb,[data-home-link],.guide-back').length,0,e.file);
+ for(const a of d.querySelectorAll('.sg-nav a')){let dest=a.getAttribute('href').slice(1);if(!dest||dest.endsWith('/'))dest+='index.html';assert.ok(fs.existsSync(dest),e.file+' navigation destination');}
  }
 });
 test('Shared footer, clean captions and working cookie controls remain synchronized',()=>{
  const canonical=new JSDOM(fs.readFileSync('partials/site-footer.html','utf8')).window.document.querySelector('footer').outerHTML;
  for(const [file,d] of docs){assert.equal(d.querySelectorAll('footer').length,1,file);assert.equal(d.querySelector('footer').outerHTML,canonical,file);
- assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,9);
+ assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,10);
  assert.ok(d.querySelector('script[src*="assets/measurement.js"]'),file+' cookie controls');
  for(const el of d.querySelectorAll('figcaption,.visual-note'))assert.doesNotMatch(el.textContent,/illustrativ|intelligenza artificiale|creat[aoe].*\bIA\b/i,file);
  }
@@ -46,11 +45,12 @@ test('Homepage usa un solo header globale e separa gli strumenti AutoCAD dal por
  assert.equal(tools.querySelector('h3')?.textContent.trim(),'Strumenti per il tuo AutoCAD');
  assert.ok(tools.querySelectorAll('.project-links a').length>=3);
 });
-test('Menu mobile globale dispone di pannello scorrevole e blocco scroll',()=>{
- const css=fs.readFileSync('assets/site-header.css','utf8');
- const js=fs.readFileSync('assets/site-header.js','utf8');
- assert.match(css,/\.sg-header \.sg-nav\.sg-open\{/);
- assert.match(css,/max-height:calc\(100dvh - 96px\)/);
- assert.match(css,/html\.sg-menu-open/);
- assert.match(js,/root\.classList\.toggle\('sg-menu-open',open\)/);
+test('Mobile menu opens and closes using Escape, links and outside interaction',()=>{
+ const dom=new JSDOM(fs.readFileSync('index.html','utf8'),{runScripts:'outside-only'}),w=dom.window,d=w.document;w.matchMedia=()=>({matches:false,addEventListener(){}});w.eval(fs.readFileSync('assets/site-header.js','utf8'));
+ const toggle=d.querySelector('.sg-toggle'),nav=d.querySelector('.sg-nav');
+ for(const action of [()=>d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true})),()=>nav.querySelector('a').dispatchEvent(new w.MouseEvent('click',{bubbles:true})),()=>d.querySelector('main').click()]){toggle.click();assert.equal(toggle.getAttribute('aria-expanded'),'true');assert.ok(d.documentElement.classList.contains('sg-menu-open'));action();assert.equal(toggle.getAttribute('aria-expanded'),'false');assert.ok(!d.documentElement.classList.contains('sg-menu-open'));}
+ assert.match(fs.readFileSync('assets/site-header.css','utf8'),/overflow-y:auto/);dom.window.close();
+});
+test('Google profile city labels follow the user-confirmed URL mapping and order',()=>{
+ const d=new JSDOM(fs.readFileSync('partials/site-footer.html','utf8')).window.document,links=[...d.querySelectorAll('.sf-map')];assert.deepEqual(links.map(a=>[a.getAttribute('href'),a.textContent]),[['https://share.google/w1R3HKoVL3Cqr5KmB','Vedi il mio profilo Google Maps di Cosenza (CS)'],['https://share.google/jGcqtu9IW1WccgA6V','Vedi il mio profilo Google Maps di Locate Varesino (CO)']]);assert.equal(d.querySelector('.sf-locations'),null);
 });

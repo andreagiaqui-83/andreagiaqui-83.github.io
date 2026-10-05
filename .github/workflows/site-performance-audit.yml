@@ -1,9 +1,10 @@
 name: Site performance comparison
 on:
   push:
-    branches: ['release/yqarch-*']
+    branches: ['release/yqarch-*', 'release/site-*']
     paths:
-      - 'yqarch-italiano/**'
+      - '**/*.html'
+      - 'assets/**'
       - 'scripts/audit-performance.cjs'
       - '.github/workflows/site-performance-audit.yml'
   workflow_dispatch:

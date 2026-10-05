@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),
 const {chromium,firefox,webkit}=require('playwright');
 const live=process.argv.includes('live'),base=live?'https://andreagiaquinto.it':'http://127.0.0.1:8891',stage=live?'live':'candidate';
 const out=path.join(process.env.RUNNER_TEMP||'/tmp','docfa-home-proof');fs.mkdirSync(out,{recursive:true});
-const widths=[320,360,390,430,768,1024,1440],landingPages=['index.html','preventivo/index.html','lezioni-autocad/index.html','yqarch-italiano/index.html','ag-cad-tools/index.html','blockhub-cad/index.html','portfolio/index.html','recensioni/index.html','contatti/index.html'];
+const widths=[320,360,390,430,768,1024,1440],landingPages=['index.html','preventivo/index.html','disegnatore-online/index.html','lezioni-autocad/index.html','yqarch-italiano/index.html','ag-cad-tools/index.html','blockhub-cad/index.html','portfolio/index.html','recensioni/index.html','contatti/index.html'];
 const routeFor=f=>f==='index.html'?'/':'/'+f.replace(/index\.html$/,'');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml','.avif':'image/avif','.webp':'image/webp'};
 let server,browser;const report=[];
@@ -31,7 +31,7 @@ async function axe(page,selectors){await page.addScriptTag({path:'node_modules/a
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),engine+' '+width+' preventivo overflow');
    await page.locator('[data-step="1"] [data-next]').click();await page.locator('[data-step="2"] [data-next]').click();
    const card=page.locator('[data-for-service~="docfa"]');assert.equal(await card.isVisible(),true);assert.equal(await card.locator('#docfaCount').isVisible(),true);
-   if(width<=430){const toggle=page.locator('.sg-toggle');assert.equal(await toggle.isVisible(),true);await toggle.click();assert.equal(await page.locator('.sg-nav').isVisible(),true);assert.equal(await page.locator('.sg-nav a').count(),9);assert.ok(await page.locator('.sg-nav').evaluate(e=>e.scrollHeight>=e.clientHeight));await toggle.click();}
+   if(width<=430){const toggle=page.locator('.sg-toggle');assert.equal(await toggle.isVisible(),true);await toggle.click();assert.equal(await page.locator('.sg-nav').isVisible(),true);assert.equal(await page.locator('.sg-nav a').count(),10);assert.ok(await page.locator('.sg-nav').evaluate(e=>e.scrollHeight>=e.clientHeight));await toggle.click();}
    if(engine==='chromium'&&[390,1440].includes(width)){await page.screenshot({animations:'disabled',path:path.join(out,stage+'-preventivo-docfa-'+width+'.png')});}
    if(engine==='chromium'&&width===390)await axe(page,['.quote-app']);
    assert.deepEqual(env.errors,[]);assert.deepEqual(env.google,[]);assert.equal(env.writes.length,0);report.push({engine,width,page:'preventivo-docfa',status:'PASS'});await env.ctx.close();

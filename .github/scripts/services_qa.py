@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
-BUILD='20261003-services-r10'
+BUILD='20261005-site-final'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
@@ -25,7 +25,10 @@ def static():
  assert not s.select_one('#metodo-ibrido')
  assert not s.select('[href="#metodo-ibrido"]')
  assert '0,20 €' in s.select_one('#tariffe').get_text() and '0,30 €' in s.select_one('#tariffe').get_text()
- assert '68 €' in s.select_one('.pricing-example').get_text() and '60 €' in s.select_one('.pricing-example').get_text()
+ assert not s.select_one('.pricing-example')
+ assert 'trattabili' in s.select_one('#tariffe').get_text().lower()
+ assert s.select_one('#tariffe a[href="/preventivo/"]')
+ assert 'complessiva' in s.select_one('#tariffe').get_text().lower()
  assert len(s.select('#interior-design .interior-style-card'))==4
  assert s.select_one('textarea[name="Interior_Design_5a_proposta_personalizzata"]')
  for n in ['Minimal contemporaneo','Japandi','Mediterraneo contemporaneo','Organic Modern']:assert n in s.select_one('#interior-design').get_text()
@@ -129,7 +132,7 @@ def run_browser(base,stage):
      if width in [390,1440]:
       for selector,name in [('#nuvole-di-punti','point-cloud'),('#tariffe','pricing'),('.compatibility-note','compatibility'),('.collaboration-note','collaboration'),('#render','render'),('#preventivo','person'),('.review-submit-section','review-form'),('.sf-legal','footer'),('#portfolio','portfolio')]:
        page.locator(selector).screenshot(path=str(OUT/f'{stage}-{engine}-{width}-{name}.png'))
-      for selector,name in [('#consegna-pdf','pdf'),('#faq-nuvole-di-punti','point-cloud'),('#faq-tariffe','pricing'),('#settori-cad-bim','sectors'),('#vantaggi-disegnatore-online','online'),('#compatibilita-software','software')]:
+      for selector,name in [('#consegna-pdf','pdf'),('#faq-nuvole-di-punti','point-cloud'),('#faq-tariffe','pricing'),('#settori-cad-bim','sectors'),('#compatibilita-software','software')]:
        detail=page.locator(selector)
        detail.locator('summary').click()
        detail.screenshot(path=str(OUT/f'{stage}-{engine}-{width}-faq-{name}.png'))

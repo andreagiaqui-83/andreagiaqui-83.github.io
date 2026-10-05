@@ -6,7 +6,7 @@ const live=process.argv.includes('live'),root=process.cwd();
 const base=live?'https://andreagiaquinto.it':'http://127.0.0.1:8887';
 const out=path.join(process.env.RUNNER_TEMP||'/tmp','site-audit');fs.mkdirSync(out,{recursive:true});
 const entries=JSON.parse(fs.readFileSync('scripts/site-pages.json'));
-const widths=[320,360,375,390,412,430,600,768,800,1024,1280,1366,1440,1920];
+const widths=[320,360,375,390,393,412,430,600,768,800,820,1024,1280,1366,1440,1920];
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript','.avif':'image/avif','.webp':'image/webp','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg'};
 let server;
 const report={mode:live?'live':'local',at:new Date().toISOString(),pages:[],issues:[],blockedWrites:[]};
@@ -41,7 +41,7 @@ async function run(){
    await page.addScriptTag({path:path.join(root,'node_modules/axe-core/axe.min.js')});
    row.axe=await page.evaluate(async()=>(await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary,html:n.html.slice(0,500)}))})));
    row.keyboard=await page.evaluate(()=>{const e=document.querySelector('.page-return a,.skip,.skip-link,.doc-skip');if(!e)return {skipOrReturn:false};e.focus();return {skipOrReturn:true,focusable:document.activeElement===e}});
-   if(await page.locator('[data-consent-open]').count()){await page.locator('[data-consent-open]').first().click();row.cookiePreferences=await reject.isVisible();await reject.click();}
+   if(await page.locator('[data-consent-open]').count()){await page.locator('[data-consent-open]').first().click();row.cookiePreferences=await reject.isVisible();row.cookieAxe=await page.evaluate(async()=>(await axe.run('.ag-consent',{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})));if(row.cookieAxe.length)report.issues.push({file:entry.file,engine,type:'cookie-axe',violations:row.cookieAxe});await reject.click();}
    row.errors=errors;row.googleAfterReject=google.length;
    if(row.axe.length)report.issues.push({file:entry.file,engine,type:'axe',violations:row.axe});
    if(errors.length||row.images.broken.length||row.structure.h1!==1||row.structure.ids.length||google.length)report.issues.push({file:entry.file,engine,type:'structure-assets-consent',errors,images:row.images,structure:row.structure,google});

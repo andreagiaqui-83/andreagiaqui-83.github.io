@@ -104,3 +104,6 @@ Aggiunto il campo facoltativo `Indicazioni_planimetria_DOCFA` con istruzioni bas
 - Il backend accetta i servizi del nuovo preventivatore oltre ai valori storici, mantiene idempotenza e conserva richieste/allegati secondo le regole già pubblicate.
 - La copia cliente è facoltativa. Se l'invio della copia email non riesce, la richiesta principale resta valida e la pagina offre la copia stampabile/PDF della stima.
 - `service_quote_success` è ammesso su `/preventivo/` soltanto dopo conferma positiva del backend e usa esclusivamente il requestId UUID, senza importi o dati personali.
+
+## Revisione finale del 4 ottobre 2026 — prevale sulle regole di navigazione storiche
+Menu statico comune di dieci pagine, inclusa Disegnatore online, senza ritorni Home/Torna/breadcrumb anche nelle guide. Home sintetica con prezzi per superficie lorda totale, trattabilità e CTA al preventivo; FAQ ridotte e sincronizzate. Preventivatore: configurazione preservata, nuove regressioni di calcolo e percorso completo con richieste intercettate, PDF informativo verificato visivamente. JobMailer privato separato e non indicizzabile; il sito non usa Gmail API. Test completi su 33 documenti, tre browser e 16 larghezze; prestazioni misurate in laboratorio con confronto alla baseline, senza rivendicare dati sul campo.

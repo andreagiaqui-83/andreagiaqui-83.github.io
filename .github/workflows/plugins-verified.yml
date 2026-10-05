@@ -68,6 +68,8 @@ jobs:
           node scripts/sync-download-checksums.cjs --check
       - name: New site paths, private contacts and navigation
         run: node scripts/qa-site-expansion.cjs local
+      - name: Complete quote flow, retry and informative PDF
+        run: node scripts/qa-preventivo-flow.cjs local
       - name: Local plugin interactions
         run: node .github/scripts/plugins_qa.cjs local
       - name: Local cross-page consistency
@@ -96,6 +98,9 @@ jobs:
       - name: Public downloads, API and browser verification
         if: github.ref == 'refs/heads/main'
         run: node .github/scripts/plugins_qa.cjs live
+      - name: Live quote flow with intercepted requests
+        if: github.ref == 'refs/heads/main'
+        run: node scripts/qa-preventivo-flow.cjs live
       - name: Live new site paths and simulated contact form
         if: github.ref == 'refs/heads/main'
         run: node scripts/qa-site-expansion.cjs live
@@ -115,6 +120,7 @@ jobs:
           name: plugin-pages-${{ github.sha }}
           path: |
             ${{ runner.temp }}/plugins-proof/
+            ${{ runner.temp }}/quote-flow-proof/
             ${{ runner.temp }}/landing-proof/
             ${{ runner.temp }}/form-guidance-proof/
           retention-days: 30

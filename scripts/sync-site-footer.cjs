@@ -12,7 +12,7 @@ for(const file of files){const before=fs.readFileSync(file,'utf8');let after=bef
   if(!/href="[^"\s]*assets\/consent\.css/.test(after))after=after.replace('</head>','<link rel="stylesheet" href="/assets/consent.css?v=17"></head>');
   after=after.replace('</body>','<script defer src="/assets/measurement-config.js?v=ga4-20260917"></script><script defer src="/assets/measurement.js?v=20260920-services-ads"></script></body>');
  }
- after=after.replace(/<link\b[^>]*href="\/assets\/site-header\.css[^>]*>|<\/head>/,match=>css+match);
+ after=after.replace(/<link\b[^>]*href="\/assets\/site-(?:refinement|header)\.css[^>]*>|<\/head>/,match=>css+match);
  if(after!==before){if(check)throw new Error('Footer non sincronizzato: '+file);fs.writeFileSync(file,after);}
 }
 console.log('Footer condiviso: '+files.length+' pagine sincronizzate.');

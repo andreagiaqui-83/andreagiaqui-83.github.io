@@ -39,7 +39,7 @@ jobs:
           python -m pip install --quiet playwright requests beautifulsoup4 pillow
           python -m playwright install --with-deps chromium webkit firefox
       - name: Unit and security regression tests, including protected lessons
-        run: node --test scripts/test-frontend.cjs scripts/test-lessons.mjs scripts/test-services-frontend.cjs scripts/test-services-backend.mjs scripts/test-preventivo.cjs
+        run: node --test scripts/test-frontend.cjs scripts/test-lessons.mjs scripts/test-services-frontend.cjs scripts/test-services-backend.mjs scripts/test-preventivo.cjs scripts/test-preventivo-calculation.cjs
       - name: Verify candidate in Chromium, WebKit and Firefox
         run: python .github/scripts/services_qa.py local
       - name: Verify public deployment

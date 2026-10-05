@@ -31,3 +31,12 @@ test('Current software metadata, download links and manifest agree; guide retain
  assert.ok(!releases.some(r=>r.version==='3.72'));
 });
 
+test('All FAQ schemas match visible questions and complete answers exactly',()=>{
+ const normalize=s=>s.replace(/\s+/g,' ').trim();
+ for(const [file,d] of docs){const schemas=[...d.querySelectorAll('[type="application/ld+json"]')].flatMap(s=>{const o=JSON.parse(s.textContent);return o['@graph']||[o]}).filter(o=>o['@type']==='FAQPage');if(!schemas.length)continue;
+ const visible=[...d.querySelectorAll('#faq details')];assert.equal(schemas.length,1,file);const questions=schemas[0].mainEntity;assert.equal(questions.length,visible.length,file);
+ visible.forEach((el,i)=>{assert.equal(normalize(questions[i].name),normalize(el.querySelector('summary').textContent),file);const answer=el.querySelector('.faq-answer')||el.querySelector('p');assert.equal(normalize(questions[i].acceptedAnswer.text),normalize(answer.textContent),file);});}
+});
+test('Private JobMailer policy remains reachable by legacy deep link and absent from public discovery',()=>{
+ const file='cad-bim-job-mailer/privacy/index.html',d=docs.get(file);assert.ok(d);assert.equal(d.querySelector('meta[name=robots]').content,'noindex,nofollow');assert.doesNotMatch(fs.readFileSync('sitemap.xml','utf8'),/cad-bim-job-mailer/);assert.doesNotMatch(fs.readFileSync('partials/site-footer.html','utf8'),/cad-bim-job-mailer/);const policy=docs.get('privacy/index.html');assert.equal(policy.querySelector('h2#cad-bim-job-mailer'),null);assert.ok([...policy.scripts].some(s=>s.textContent.includes('location.hash==="#cad-bim-job-mailer"')&&s.textContent.includes('location.replace("/cad-bim-job-mailer/privacy/")')));
+});

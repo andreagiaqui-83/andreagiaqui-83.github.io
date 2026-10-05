@@ -5,7 +5,8 @@ const out=path.join(process.env.RUNNER_TEMP||'/tmp','performance-proof',label);f
 const mime={'.html':'text/html','.css':'text/css','.js':'application/javascript','.avif':'image/avif','.webp':'image/webp','.svg':'image/svg+xml','.jpg':'image/jpeg','.png':'image/png'};
 const server=http.createServer((req,res)=>{try{if(!['GET','HEAD'].includes(req.method))throw Error('Read only');let p=decodeURIComponent(new URL(req.url,'http://localhost').pathname);if(p.endsWith('/'))p+='index.html';const file=path.resolve(root,'.'+p);if(!file.startsWith(root+path.sep))throw Error('Path');const bytes=fs.readFileSync(file);res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'});res.end(req.method==='HEAD'?undefined:bytes);}catch{res.writeHead(404);res.end();}});
 (async()=>{await new Promise(r=>server.listen(8889,'127.0.0.1',r));const {spawn}=require('node:child_process'),summary=[];try{
- for(const route of ['/','/lezioni-autocad/','/yqarch-italiano/','/express-tools-italiano/'])for(const device of ['mobile','desktop']){
+ for(const route of ['/','/preventivo/','/disegnatore-online/','/lezioni-autocad/','/yqarch-italiano/','/ag-cad-tools/','/recensioni/','/contatti/'])for(const device of ['mobile','desktop']){
+  if(!fs.existsSync(path.join(root,route,'index.html')))continue;
   const file=path.join(out,(route==='/'?'home':route.replaceAll('/',''))+'-'+device);
   const args=[require.resolve('lighthouse/cli/index.js'),'http://127.0.0.1:8889'+route,'--chrome-flags=--headless --no-sandbox --disable-dev-shm-usage','--only-categories=performance,accessibility,best-practices,seo','--output=json','--output=html','--output-path='+file,'--quiet'];
   if(device==='desktop')args.push('--preset=desktop');

@@ -8,6 +8,10 @@
     "kind": "landing"
   },
   {
+    "file": "disegnatore-online/index.html",
+    "kind": "landing"
+  },
+  {
     "file": "lezioni-autocad/index.html",
     "kind": "landing"
   },
@@ -21,139 +25,71 @@
   },
   {
     "file": "express-tools-italiano/guida/index.html",
-    "kind": "guide",
-    "parent": {
-      "href": "/ag-cad-tools/",
-      "label": "Torna ad AG CAD Tools"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html",
-    "kind": "guide",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.64_REPORT.html",
-    "kind": "report",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "report"
   },
   {
     "file": "downloads/express-tools/Express_Tools_Italiano_3.2-rc1_Report.html",
-    "kind": "report",
-    "parent": {
-      "href": "/ag-cad-tools/",
-      "label": "Torna ad AG CAD Tools"
-    }
+    "kind": "report"
   },
   {
     "file": "privacy/index.html",
-    "kind": "service",
-    "parent": {
-      "href": "/",
-      "label": "Home"
-    }
+    "kind": "service"
   },
   {
     "file": "404.html",
-    "kind": "service",
-    "parent": {
-      "href": "/",
-      "label": "Home"
-    }
+    "kind": "service"
   },
   {
     "file": "report-google/index.html",
-    "kind": "service",
-    "parent": {
-      "href": "/",
-      "label": "Home"
-    }
+    "kind": "service"
   },
   {
     "file": "report-google/privacy/index.html",
-    "kind": "service",
-    "parent": {
-      "href": "/report-google/",
-      "label": "Torna a Report Google"
-    }
+    "kind": "service"
   },
   {
     "file": "report-google/termini/index.html",
-    "kind": "service",
-    "parent": {
-      "href": "/report-google/",
-      "label": "Torna a Report Google"
-    }
+    "kind": "service"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.73_GUIDA.html",
-    "kind": "guide",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.73_REPORT.html",
-    "kind": "report",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "report"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.73_RIBBON.html",
-    "kind": "guide",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.73_CATALOGO.html",
-    "kind": "guide",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.78_GUIDA.html",
-    "kind": "guide",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.78_RIBBON.html",
-    "kind": "guide",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.78_CATALOGO.html",
-    "kind": "guide",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/yqarch/YQArch_Italiano_3.78_REPORT.html",
-    "kind": "report",
-    "parent": {
-      "href": "https://andreagiaquinto.it/yqarch-italiano/",
-      "label": "Torna a YQArch Italiano"
-    }
+    "kind": "report"
   },
   {
     "file": "ag-cad-tools/index.html",
@@ -177,34 +113,22 @@
   },
   {
     "file": "downloads/ag-cad-tools/AG_CAD_Tools_Help.html",
-    "kind": "guide",
-    "parent": {
-      "href": "/ag-cad-tools/",
-      "label": "Torna ad AG CAD Tools"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/ag-cad-tools/AG_CAD_Tools_Compatibilita.html",
-    "kind": "guide",
-    "parent": {
-      "href": "/ag-cad-tools/",
-      "label": "Torna ad AG CAD Tools"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/ag-cad-tools/AG_CAD_Tools_Sostieni.html",
-    "kind": "guide",
-    "parent": {
-      "href": "/ag-cad-tools/",
-      "label": "Torna ad AG CAD Tools"
-    }
+    "kind": "guide"
   },
   {
     "file": "downloads/ag-cad-tools/RAPPORTO_AG_CAD_Tools_2.0.html",
-    "kind": "report",
-    "parent": {
-      "href": "/ag-cad-tools/",
-      "label": "Torna ad AG CAD Tools"
-    }
+    "kind": "report"
+  },
+  {
+    "file": "cad-bim-job-mailer/privacy/index.html",
+    "kind": "private"
   }
 ]
