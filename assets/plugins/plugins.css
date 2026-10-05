@@ -4,3 +4,25 @@
 .support .support-grid{align-items:center;gap:54px}.support .support-emblem{display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:16px;color:#fff;background:#17634f;font-size:27px;box-shadow:0 8px 20px #17634f20;margin-bottom:22px}.support .eyebrow{color:#225b49}.support h2{font-size:clamp(32px,3.5vw,46px);line-height:1.13;letter-spacing:-.035em}.support .support-methods{gap:20px}.support .support-method{padding:28px;border:1px solid #ccd9e2;border-radius:18px;box-shadow:0 10px 30px #1537470c;background:#fff}.support .support-method-head{display:flex;align-items:center;gap:15px;margin-bottom:20px}.support .support-method-head h3{margin:1px 0 0;font-size:23px;letter-spacing:-.02em}.support .support-kicker{font-size:10px;letter-spacing:.09em;font-weight:700;color:#4b5f6d;margin:0}.support .support-pay-icon{display:flex;align-items:center;justify-content:center;width:48px;height:48px;flex:none;border-radius:14px;font-size:32px;font-weight:850;background:#eaf2ff;color:#003087;font-style:italic}.support .support-paypal{border-top:4px solid #1673b8}.support .support-postepay{border-top:4px solid #e7bd23}.support .support-postepay .support-pay-icon{background:#fff0a3;color:#173c56;font-style:normal}.support .support-value{font-size:20px;color:#143747;margin:0 0 16px}.support .support-method .button{background:#123e64;color:white;border:1px solid #123e64;font-size:13px;padding:12px 16px;min-height:46px}.support .support-method .button:hover{background:#1e537e}.support .support-postepay .button{background:#fff0a3;color:#173747;border-color:#e2cd66}.support .support-postepay .button:hover{background:#ffe681}.support .support-open{display:inline-flex;align-items:center;gap:7px;margin:0 0 0 14px;min-height:46px;font-size:13px;color:#174f7b;text-decoration:underline;text-underline-offset:3px}.support .support-method .micro{margin:15px 0 0;font-size:12px;color:#4b606d}.support .support-grid>div>.micro{font-size:13px;color:#38594d;border-top:1px solid #bfd3c7;padding-top:18px;margin-top:24px}
 .hero-visual figcaption{font-size:11px;text-transform:none;letter-spacing:normal;line-height:1.6;color:#d8e7eb}.hero-visual img{aspect-ratio:3/2;object-fit:cover}.hero-visual{box-shadow:0 20px 44px #15374718}
 @media(max-width:760px){.support .support-grid{gap:30px}.support .support-method{padding:22px}.support .support-value{font-size:18px}.support .support-open{margin-left:0;margin-top:6px;display:flex;max-width:max-content}.hero-visual img{max-height:none}}
+
+/* BlockHub CAD 1.23 — landing release */
+.bh-release-hero .hero-grid{grid-template-columns:.92fr 1.18fr}
+.bh-ready{background:#e0f3e9;color:#145a3f}
+.bh-release-visual{margin:0;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 18px 44px #15374718}
+.bh-release-visual img{display:block;width:100%;height:auto}
+.bh-release-visual figcaption{padding:14px 18px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+.bh-screens{display:grid;grid-template-columns:1.45fr .95fr;gap:20px;align-items:start}
+.bh-shot{margin:0;padding:12px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 12px 28px #1537470d}
+.bh-shot img{width:100%;height:auto;border-radius:10px;border:1px solid #dce5e8}
+.bh-shot figcaption{padding:12px 4px 2px;color:var(--muted);font-size:14px}
+.bh-shot figcaption strong{color:var(--ink)}
+.bh-facts{display:grid;grid-template-columns:repeat(4,1fr);margin-top:26px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.bh-facts div{padding:20px;border-right:1px solid var(--line)}
+.bh-facts div:last-child{border-right:0}
+.bh-facts strong{display:block;font-size:21px;color:var(--accent);margin-bottom:5px}
+.bh-facts span{font-size:13px;color:var(--muted)}
+.bh-download-steps{padding-left:20px;color:#d8e7eb}
+.bh-download-steps li{margin:8px 0}
+.bh-pending-download{pointer-events:none;opacity:.72}
+@media(max-width:900px){.bh-release-hero .hero-grid,.bh-screens{grid-template-columns:1fr}.bh-release-visual{max-width:760px}.bh-facts{grid-template-columns:repeat(2,1fr)}.bh-facts div:nth-child(2){border-right:0}.bh-facts div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media(max-width:520px){.bh-facts{grid-template-columns:1fr}.bh-facts div,.bh-facts div:nth-child(2){border-right:0;border-bottom:1px solid var(--line)}.bh-facts div:last-child{border-bottom:0}}
