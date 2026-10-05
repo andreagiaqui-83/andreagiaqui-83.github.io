@@ -1,5 +1,12 @@
 name: Verify reviews arrows and one-card mobile paging
 on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - '.github/workflows/reviews-paged-verified.yml'
+      - '.github/scripts/reviews_paged.py'
+      - 'reviews-carousel.css'
+      - 'reviews-carousel.js'
   push:
     branches: [main]
     paths:
@@ -35,6 +42,7 @@ jobs:
           path: ${{ runner.temp }}/reviews-proof/
           retention-days: 7
       - name: Verify full public deployment and browser interactions
+        if: github.ref == 'refs/heads/main'
         run: python .github/scripts/reviews_paged.py live
       - name: Save verification evidence
         if: always()

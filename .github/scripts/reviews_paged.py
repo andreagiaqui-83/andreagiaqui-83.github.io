@@ -110,6 +110,10 @@ def browser_checks(base,stage):
                     response=page.goto(base,wait_until='domcontentloaded')
                     assert response and response.status==200
                     assert page.locator('body').get_attribute('data-reviews-build')==BUILD
+                    # Fresh browser contexts have no consent choice. Use the public
+                    # control before interacting with content behind the modal.
+                    page.get_by_role('button',name='Rifiuta facoltativi',exact=True).click()
+                    page.locator('dialog.ag-consent').wait_for(state='hidden')
                     page.wait_for_function("document.getElementById('reviewsCarousel').dataset.pagedReviews==='2'")
                     page.locator('#recensioni').scroll_into_view_if_needed()
                     prev=page.locator('#reviewsPrev');nxt=page.locator('#reviewsNext');view=page.locator('#reviewsCarousel')
@@ -151,7 +155,7 @@ def browser_checks(base,stage):
                         page.set_viewport_size({'width':393,'height':1000});page.wait_for_timeout(300);assert_rest(page,393,1)
                     assert page.locator('#quoteForm').count()==page.locator('#reviewForm').count()==1
                     assert page.locator('#whatsappQuickContact').get_attribute('href').startswith('https://wa.me/393337240544')
-                    assert page.locator('#formazione-autocad .training-cta').get_attribute('href')=='/lezioni-autocad/'
+                    assert page.locator('#formazione-autocad a[data-cta="course_landing_click"]').get_attribute('href')=='/lezioni-autocad/'
                     result={'browser':engine,'width':width,'status':'PASS','card_width':start['cards'][0]['width'],'viewport_width':start['box']['width'],'one_card_mobile':width<=767,'arrow_size':actual,'swipe':swipe_result}
                     results.append(result);print(stage.upper()+'_BROWSER_PASS',json.dumps(result),flush=True)
                     context.close()
