@@ -32,3 +32,14 @@ Footer comune senza pulsante LinkedIn; didascalie descrittive senza formule illu
 - AG CAD Tools: 198 strumenti (93 principali, 100 da cinque fonti MIT, 5 personali), 200 schede inclusi servizi; 541 nomi non sono 541 strumenti. Manifest AutoCAD completo 2024–2027 Windows x64 IT/EN, collaudo nativo documentato 2027 italiano e campione di comandi. LT/Mac/Web/altro CAD esclusi.
 - Non presentare AG come traduzione ufficiale né come copia integrale del comportamento Autodesk; fonti, attribuzioni e limiti sono consultabili. Le copie web della documentazione aggiungono navigazione e adattamenti grafici; ZIP/EXE restano identici.
 - BlockHub: pagina e bacheca, nessun download o numero definitivo finché la release è in lavorazione.
+
+
+## Release BlockHub CAD 1.23 — 5 ottobre 2026
+- La RC7 è stata collaudata positivamente dall’autore su AutoCAD 2027 italiano / Windows x64 ed è la baseline stabile della release definitiva. Non reintrodurre il wrapper RC6 `Exec + AppActivate + ReadAll`, che aveva causato una regressione su Libreria → Strumenti.
+- Release definitiva: `BlockHub_CAD_1.23_Setup.exe`, 51.399.168 byte, SHA-256 `918caed28076087166133320c09d7ed457b521e66d5ecc2916573a948bf53a5d`. Pubblicare esattamente questi byte senza ricompilare o modificare l'installer.
+- Base standard: 4.029 asset = 3.496 baseline BlockHub + 348 CADdillo CC0 + 185 asset autorizzati; i 185 comprendono 153 dinamici/parametrici e 32 statici.
+- Runtime offline-first: nessun catalogo web nella galleria; nuovi file esterni entrano soltanto tramite Importa. Importazioni personali, Preferiti e Recenti restano locali.
+- Ripristino 1.23: completo oppure selettivo; può mantenere copie `_mod_N`, nomi/classificazioni personalizzati e blocchi standard rimossi.
+- Compatibilità pubblica: AutoCAD completo 2024–2027 Windows x64. Collaudo reale completo solo su AutoCAD 2027 italiano; 2024/2025/2026 e AutoCAD inglese sono verificati strutturalmente/API e non vanno presentati come fisicamente collaudati. Windows 11 x64 supportato; Windows 10 solo legacy/non supportato; AutoCAD LT, macOS, Web e Windows ARM esclusi.
+- Visual di release: `assets/plugins/blockhub-cad-1.23-libreria.webp` e `assets/plugins/blockhub-cad-1.23-installazione.webp`. Usare didascalie descrittive; non chiamarli screenshot autentici se sono stati ottimizzati/ricostruiti.
+- La landing `/blockhub-cad/` sostituisce lo stato “in aggiornamento”; il download va attivato soltanto nella fase finale, dopo assemblaggio/copia dell’EXE approvato nel dominio, verifica SHA-256 e test locali. Homepage e dati strutturati devono restare coerenti con la landing.
