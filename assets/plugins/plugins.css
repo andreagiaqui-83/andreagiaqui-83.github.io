@@ -26,3 +26,6 @@
 .bh-pending-download{pointer-events:none;opacity:.72}
 @media(max-width:900px){.bh-release-hero .hero-grid,.bh-screens{grid-template-columns:1fr}.bh-release-visual{max-width:760px}.bh-facts{grid-template-columns:repeat(2,1fr)}.bh-facts div:nth-child(2){border-right:0}.bh-facts div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
 @media(max-width:520px){.bh-facts{grid-template-columns:1fr}.bh-facts div,.bh-facts div:nth-child(2){border-right:0;border-bottom:1px solid var(--line)}.bh-facts div:last-child{border-bottom:0}}
+/* Keep long installer names within the download card on narrow screens. */
+body[data-project="blockhub-cad"] .download-panel>div{min-width:0;overflow-wrap:anywhere}
+body[data-project="blockhub-cad"] .download-panel .button{white-space:normal;max-width:100%}
