@@ -43,3 +43,8 @@ Footer comune senza pulsante LinkedIn; didascalie descrittive senza formule illu
 - Compatibilità pubblica: AutoCAD completo 2024–2027 Windows x64. Collaudo reale completo solo su AutoCAD 2027 italiano; 2024/2025/2026 e AutoCAD inglese sono verificati strutturalmente/API e non vanno presentati come fisicamente collaudati. Windows 11 x64 supportato; Windows 10 solo legacy/non supportato; AutoCAD LT, macOS, Web e Windows ARM esclusi.
 - Visual di release: `assets/plugins/blockhub-cad-1.23-libreria.webp` e `assets/plugins/blockhub-cad-1.23-installazione.webp`. Usare didascalie descrittive; non chiamarli screenshot autentici se sono stati ottimizzati/ricostruiti.
 - La landing `/blockhub-cad/` sostituisce lo stato “in aggiornamento”; il download va attivato soltanto nella fase finale, dopo assemblaggio/copia dell’EXE approvato nel dominio, verifica SHA-256 e test locali. Homepage e dati strutturati devono restare coerenti con la landing.
+
+## Pubblicazione BlockHub CAD e menu — 7 ottobre 2026
+- Download definitivo attivo in `/downloads/blockhub-cad/`, con note, compatibilità e impronte. Il file EXE resta identico a BH-123-FINALE; corretti soltanto i refusi dei recapiti nelle note web.
+- Header comune con «Plugin per AutoCAD» e tre destinazioni; disclosure nativa anche senza JavaScript, chiusura da tastiera e su interazione esterna.
+- Link Maps esclusivamente nei Contatti con associazione corretta del 7 ottobre; nessun profilo nel footer.

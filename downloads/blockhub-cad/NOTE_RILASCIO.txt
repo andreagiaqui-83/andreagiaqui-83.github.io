@@ -1,0 +1,57 @@
+BLOCKHUB CAD 1.23 - NOTE DI RILASCIO
+====================================
+Release definitiva: 05/10/2026
+Build: BH-123-FINALE
+
+BlockHub CAD 1.23 è una libreria visuale locale per AutoCAD, con 4.029 blocchi standard già inclusi e disponibili offline.
+
+NOVITÀ E MIGLIORAMENTI PRINCIPALI
+- Libreria completamente locale/offline: nessun catalogo web o download durante l'uso ordinario.
+- Importazione esplicita di file CAD o ZIP; nessuna acquisizione automatica dei blocchi presenti nei disegni.
+- Ricerca globale, categorie e filtro Vista, inclusa la voce Blocchi dinamici.
+- Menu contestuale con Inserisci, Preferiti, Rinomina/modifica, Rimuovi dalla libreria e apertura cartella.
+- Gestione delle modifiche BEDIT dei blocchi inseriti da BlockHub: copia personale progressiva _mod_N senza alterare l'originale standard.
+- Categoria Blocchi personalizzati dedicata alle copie modificate.
+- Ripristino libreria selettivo: ripristino completo oppure mantenimento dei blocchi personalizzati, dei nomi/classificazioni personalizzati e/o dei blocchi rimossi.
+- Scala automatica in base alle unità dichiarate nel file sorgente e INSUNITS del disegno.
+- Stabilità UI ripristinata sul percorso di apertura già collaudato dopo l'esperimento RC6; nessun polling AppActivate/ReadAll nel wrapper della galleria.
+- Diagnostica e verifica approfondita dei file locali disponibili come comandi espliciti.
+
+BASE STANDARD
+- 4.029 DXF standard + relative anteprime PVW.
+- 3.496 asset della baseline BlockHub precedente.
+- 348 asset statici CADdillo con geometria CC0 1.0 verificata.
+- 185 asset dell'archivio autorizzato: 153 Dynamic Blocks/parametrici e 32 statici.
+
+COMPATIBILITÀ DICHIARATA
+- AutoCAD completo 2024, 2025, 2026 e 2027 per Windows x64.
+- ACADVER: 24.3 / 25.0 / 25.1 / 26.0.
+- Installazioni AutoCAD italiane e inglesi: architettura del pacchetto compatibile; interfaccia BlockHub CAD in italiano.
+- Collaudo reale completo eseguito su AutoCAD 2027 italiano.
+- Windows 11 x64: piattaforma supportata per la distribuzione pubblica.
+- Windows 10 x64: legacy/non supportato; Autodesk ha cessato il supporto su Windows 10 dal 14/10/2025.
+- Windows ARM: non supportato.
+- AutoCAD LT: non incluso nel perimetro dichiarato.
+
+INSTALLAZIONE / AGGIORNAMENTO
+1. Chiudere AutoCAD.
+2. Avviare BlockHub_CAD_1.23_Setup.exe.
+3. Premere Installazione / Aggiorna.
+4. Riaprire AutoCAD e usare il comando BLOCCHI.
+
+I dati personali in %LOCALAPPDATA%\BlockHubCAD vengono conservati durante installazione, aggiornamento e disinstallazione.
+
+SUPPORTO E CONTATTI
+Sito: https://andreagiaquinto.it/
+Email: andrea.giaqui@gmail.com
+WhatsApp: +39 333 724 0544
+
+Sono benvenute segnalazioni di bug, suggerimenti, proposte di nuovi blocchi o gruppi di blocchi e idee per migliorare il plugin.
+
+SOSTIENI IL PROGETTO
+BlockHub CAD è distribuito gratuitamente. Il sostegno è facoltativo e non sblocca funzioni o livelli premium.
+PayPal: andrea.giaqui@gmail.com
+Postepay P2P: 333 724 0544
+
+SHA-256 SETUP
+918caed28076087166133320c09d7ed457b521e66d5ecc2916573a948bf53a5d

@@ -72,3 +72,8 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - Per questa revisione verificare Chromium, Firefox e WebKit alle larghezze 320, 360, 375, 390, 393, 412, 430, 600, 768, 820, 1024, 1366, 1440, 1920 (800 e 1280 aggiuntive). Nessun invio reale nei test. Pubblicare solo dopo CI pertinente verde e verificare i file online.
 
 - Associazione dei profili Maps confermata dall'utente il 4 ottobre 2026: `https://share.google/jGcqtu9IW1WccgA6V` = Locate Varesino (CO); `https://share.google/w1R3HKoVL3Cqr5KmB` = Cosenza (CS). Nel footer ordine Cosenza, poi Locate Varesino, con etichette complete «Vedi il mio profilo Google Maps di …». Non dedurre le zone operative dai profili.
+
+## Direttiva prevalente — 7 ottobre 2026
+- Il menu globale raggruppa YQArch Italiano, AG CAD Tools e BlockHub CAD in un’unica voce «Plugin per AutoCAD», con sottomenu accessibile anche senza JavaScript. Le dieci destinazioni restano presenti; nel footer possono rimanere link diretti.
+- Eliminare i due profili Google Maps da tutti i footer. Mantenerli soltanto nel contenuto della pagina Contatti, invertiti su esplicita correzione dell’utente: `https://share.google/jGcqtu9IW1WccgA6V` = Cosenza (CS); `https://share.google/w1R3HKoVL3Cqr5KmB` = Locate Varesino (CO). Questa associazione sostituisce quella errata del 4 ottobre.
+- Pubblicazione autorizzata di BlockHub CAD 1.23 definitiva BH-123-FINALE, installer approvato byte-identico. Aggiornare landing, homepage, FAQ, dati strutturati e manifest con download attivo; non pubblicare candidature AG CAD Tools non approvate.

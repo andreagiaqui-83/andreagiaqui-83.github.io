@@ -52,5 +52,14 @@
     "bytes": 11468923,
     "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
     "date": "2026-10-03"
+  },
+  {
+    "project": "blockhub-cad",
+    "version": "1.23",
+    "file": "/downloads/blockhub-cad/BlockHub_CAD_1.23_Setup.exe",
+    "sha256": "918caed28076087166133320c09d7ed457b521e66d5ecc2916573a948bf53a5d",
+    "bytes": 51399168,
+    "status": "definitiva BH-123-FINALE; derivata dalla RC7 approvata su AutoCAD 2027 italiano / Windows x64",
+    "date": "2026-10-05"
   }
 ]

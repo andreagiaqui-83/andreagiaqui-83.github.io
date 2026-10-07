@@ -1,0 +1,15 @@
+{
+  "product": "BlockHub CAD",
+  "version": "1.23",
+  "build": "BH-123-FINALE",
+  "release_date": "2026-10-05",
+  "installer": "BlockHub_CAD_1.23_Setup.exe",
+  "sha256": "918caed28076087166133320c09d7ed457b521e66d5ecc2916573a948bf53a5d",
+  "standard_assets": 4029,
+  "autocad": [2024, 2025, 2026, 2027],
+  "supported_os": ["Windows 11 x64"],
+  "ui_language": "Italiano",
+  "autocad_language_architecture": ["Italiano", "English"],
+  "real_test": "AutoCAD 2027 ITA",
+  "license_runtime": "Libreria standard offline; fonti e licenze documentate nel pacchetto"
+}

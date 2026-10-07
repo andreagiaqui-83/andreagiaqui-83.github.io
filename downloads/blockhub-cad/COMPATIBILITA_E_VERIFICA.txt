@@ -1,0 +1,44 @@
+BLOCKHUB CAD 1.23 - COMPATIBILITÀ E VERIFICA
+=============================================
+Data verifica: 05/10/2026
+
+PERIMETRO PUBBLICATO
+- AutoCAD completo 2024-2027 per Windows x64.
+- Interfaccia BlockHub CAD in italiano.
+- Compatibilità architetturale con AutoCAD ITA e ENG.
+- Windows 11 x64 supportato.
+- AutoCAD LT, Windows ARM e sistemi operativi a 32 bit esclusi.
+
+MAPPATURA AUTOCAD
+- AutoCAD 2024 = ACADVER 24.3
+- AutoCAD 2025 = ACADVER 25.0
+- AutoCAD 2026 = ACADVER 25.1
+- AutoCAD 2027 = ACADVER 26.0
+
+PACKAGECONTENTS.XML
+- OS=Win64
+- Platform=AutoCAD
+- SeriesMin=R24.3
+- SeriesMax=R26.0
+
+MODULI UNITÀ INCLUSI
+- R24: .NET Framework 4.8
+- R25: .NET 8
+- R26: .NET 10
+La famiglia R25 copre AutoCAD 2025/2026. Autodesk documenta AutoCAD 2025 SDK tra gli SDK supportati da AutoCAD 2026. AutoCAD 2026 usa .NET 8 fino all'Update 1.1 e .NET 10 dall'Update 1.2; la compatibilità 2026 di BlockHub CAD è quindi verificata architetturalmente/API ma non fisicamente su ogni update.
+
+LINGUA
+Il bundle non limita il locale di AutoCAD. I richiami ai comandi Autodesk usati dal plugin sono globalizzati dove necessario (per esempio _.NETLOAD e _.-WBLOCK). I comandi BlockHub sono propri del plugin e mantengono i nomi BLOCCHI, BLOCCHIIMPORTA, BLOCCHIDIAGNOSTICA ecc. L'interfaccia resta in italiano anche su AutoCAD inglese.
+
+WINDOWS
+Autodesk ha terminato il supporto dei propri prodotti su Windows 10 dal 14/10/2025. La pagina pubblica di BlockHub CAD dichiara quindi Windows 11 x64 come sistema supportato. Windows 10 non viene presentato come supportato, anche se alcune combinazioni software esistenti possono continuare tecnicamente a funzionare.
+
+COLLAUDO REALE
+La release 1.23 deriva dalla RC7 collaudata positivamente dall'utente su AutoCAD 2027 italiano. Non è stato possibile eseguire in questa sessione un collaudo reale su ogni combinazione 2024/2025/2026/2027, ITA/ENG e build Windows; per tali combinazioni la verifica è architetturale/statica e basata sulle API e sui requisiti Autodesk ufficiali.
+
+FONTI AUTODESK/MICROSOFT CONSULTATE
+- Autodesk ACADVER: https://help.autodesk.com/cloudhelp/2027/ENU/AutoCAD-Core/files/GUID-793238B6-F8B8-4D20-BB3A-001700AECD75.htm
+- Autodesk Managed .NET Compatibility: https://help.autodesk.com/cloudhelp/2027/ITA/AutoCAD-Customization/files/GUID-A6C680F2-DE2E-418A-A182-E4884073338A.htm
+- Autodesk PackageContents.xml: https://help.autodesk.com/cloudhelp/2027/ITA/AutoCAD-Customization/files/GUID-BC76355D-682B-46ED-B9B7-66C95EEF2BD0.htm
+- Autodesk Windows 10 end of support: https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Autodesk-Announcing-End-of-Support-for-Windows-10.html
+- Microsoft Windows 10 end of support: https://support.microsoft.com/it-it/windows/deployment/updates-lifecycle/windows-10-support-has-ended-on-october-14-2025

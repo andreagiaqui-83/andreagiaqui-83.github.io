@@ -33,7 +33,7 @@ const activeBrowsers=new Set();
    }
   }
   const ctx=await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false});
-  for(const entry of entries){const page=await ctx.newPage();await page.goto(base+routeFor(entry.file));assert.equal(await page.locator('.sg-nav a:visible').count(),10);assert.equal(await page.locator('.sg-toggle:visible').count(),0);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));report.push({engine,file:entry.file,status:'PASS',javascript:false,navigation:10});await page.close();}
+  for(const entry of entries){const page=await ctx.newPage();await page.goto(base+routeFor(entry.file));await page.locator('.sg-plugins summary').click();assert.equal(await page.locator('.sg-nav a:visible').count(),10);assert.equal(await page.locator('.sg-toggle:visible').count(),0);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));report.push({engine,file:entry.file,status:'PASS',javascript:false,navigation:10});await page.close();}
   await ctx.close();await browser.close();
  }
  fs.writeFileSync(path.join(out,(live?'live':'candidate')+'-revision.json'),JSON.stringify(report,null,2));console.log('REVISION VERIFIED',report.length);
