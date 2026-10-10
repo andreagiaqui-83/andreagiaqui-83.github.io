@@ -135,3 +135,8 @@ html,body{max-width:100%;overflow-x:clip}
 
 /* 20261004 QA responsive: il carosello non deve aumentare lo scrollWidth della pagina. */
 .reviews-section{overflow-x:hidden}
+
+/* PDF / paper / image to editable CAD and BIM — 10 October 2026. */
+.pdf-cad-section{background:#f8faf8}.pdf-cad-section .section-heading{align-items:start}.pdf-cad-section .section-heading>div{max-width:660px}.pdf-cad-visual{margin:0}.pdf-cad-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px;margin-top:36px}.pdf-cad-options article{display:flex;flex-direction:column;align-items:start;min-width:0}.pdf-cad-format{color:var(--accent);font-size:11px;font-weight:750;letter-spacing:.12em;margin-bottom:12px}.pdf-cad-options h3{font-size:25px;line-height:1.25;margin:0 0 14px}.pdf-cad-options p{font-size:15px;color:var(--muted);margin:0 0 22px}.pdf-cad-options .button{margin-top:auto;max-width:100%;white-space:normal}.pdf-cad-material{display:grid;grid-template-columns:minmax(0,.6fr) minmax(0,1.4fr);gap:32px;margin-top:36px;padding:26px 0 0;border-top:1px solid var(--line)}.pdf-cad-material h3{font-size:22px;margin:0}.pdf-cad-material p{font-size:14px;color:var(--muted);margin:0}
+@media(max-width:800px){.pdf-cad-options{gap:28px}.pdf-cad-material{grid-template-columns:1fr;gap:12px}}
+@media(max-width:600px){.pdf-cad-options{grid-template-columns:1fr;gap:30px;margin-top:28px}.pdf-cad-options article+article{border-top:1px solid var(--line);padding-top:28px}.pdf-cad-options h3{font-size:23px}.pdf-cad-options .button{width:100%;font-size:13px}.pdf-cad-material{margin-top:28px}}
