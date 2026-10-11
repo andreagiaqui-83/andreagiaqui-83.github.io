@@ -26,7 +26,7 @@ const activeBrowsers=new Set();
    await page.getByRole('button',{name:'Rifiuta facoltativi'}).click();assert.equal(google.length,0);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),engine+' '+width+' '+slug+' overflow');
    assert.equal(await page.locator('h1').count(),1);
-   for(const image of await page.locator('img').all())assert.ok(await image.evaluate(e=>e.complete&&e.naturalWidth>0));
+   for(const image of await page.locator('img').all())assert.ok(await image.evaluate(async e=>{e.loading='eager';await e.decode();return e.complete&&e.naturalWidth>0;}));
    if(width===320||width===1440){await page.addScriptTag({path:path.join(root,'node_modules/axe-core/axe.min.js')});const axe=await page.evaluate(async()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}}));assert.deepEqual(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[]);}
    if(width===390||width===1440){await page.screenshot({path:path.join(out,`${live?'live':'candidate'}-${engine}-${width}-${slug}-hero.png`)});for(const [selector,label]of [['#download','download'],['#commenti','comments'],['#sostieni','support']])await page.locator(selector).screenshot({style:'.topbar,.skip{visibility:hidden!important}',path:path.join(out,`${live?'live':'candidate'}-${engine}-${width}-${slug}-${label}.png`)});}
    if(slug==='ag-cad-tools'){
