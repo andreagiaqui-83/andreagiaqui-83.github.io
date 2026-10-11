@@ -22,13 +22,20 @@ const activeBrowsers=new Set();
    page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
    await page.route(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/,async route=>{google.push(route.request().url());await route.fulfill({status:200,body:''});});
    await page.route('**/api/plugin-comments?**',async route=>{if(route.request().method()==='POST'){posts.push(route.request().postDataJSON());await route.fulfill({json:{ok:true,pending:true}});}else await route.fulfill({json:{ok:true,comments:[{id:'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',name:'Visitatore di prova',text:'Come posso consultare la guida offline?',kind:'Domanda',environment:'Dati simulati per la verifica',createdAt:'2026-09-27T10:00:00Z'}],nextCursor:null}});});
-   const response=await page.goto(base+'/'+slug+'/',{waitUntil:'networkidle'});assert.equal(response.status(),200);assert.equal(await page.locator('body').getAttribute('data-build'),(slug==='yqarch-italiano'?'20261005-site-final':'20261005-site-final'));assert.equal(google.length,0);
+   const response=await page.goto(base+'/'+slug+'/',{waitUntil:'networkidle'});assert.equal(response.status(),200);assert.equal(await page.locator('body').getAttribute('data-build'),(slug==='yqarch-italiano'?'20261005-site-final':'20261011-ag-ribbon'));assert.equal(google.length,0);
    await page.getByRole('button',{name:'Rifiuta facoltativi'}).click();assert.equal(google.length,0);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),engine+' '+width+' '+slug+' overflow');
    assert.equal(await page.locator('h1').count(),1);
-   for(const image of await page.locator('img').all())assert.ok(await image.evaluate(e=>e.complete&&e.naturalWidth>0));
+   for(const image of await page.locator('img').all())assert.ok(await image.evaluate(async e=>{e.loading='eager';await e.decode();return e.complete&&e.naturalWidth>0;}));
    if(width===320||width===1440){await page.addScriptTag({path:path.join(root,'node_modules/axe-core/axe.min.js')});const axe=await page.evaluate(async()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}}));assert.deepEqual(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[]);}
    if(width===390||width===1440){await page.screenshot({path:path.join(out,`${live?'live':'candidate'}-${engine}-${width}-${slug}-hero.png`)});for(const [selector,label]of [['#download','download'],['#commenti','comments'],['#sostieni','support']])await page.locator(selector).screenshot({style:'.topbar,.skip{visibility:hidden!important}',path:path.join(out,`${live?'live':'candidate'}-${engine}-${width}-${slug}-${label}.png`)});}
+   if(slug==='ag-cad-tools'){
+    const zoom=page.locator('.ag-ribbon-zoom'),toggle=zoom.locator('summary');
+    await toggle.focus();await page.keyboard.press('Enter');assert.equal(await zoom.getAttribute('open'),'');
+    const full=page.locator('.ag-ribbon-full');await full.focus();await page.keyboard.press('End');
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),engine+' '+width+' enlarged Ribbon overflow');
+    await toggle.focus();await page.keyboard.press('Enter');assert.equal(await zoom.getAttribute('open'),null);
+   }
    await page.locator('.comment button').click();await page.locator('[name=name]').fill('Simulazione');await page.locator('[name=text]').fill('Questa risposta è intercettata dal test e non raggiunge il server.');await page.locator('[name=privacy]').check();await page.locator('#comment-form [type=submit]').click();await page.waitForFunction(()=>document.querySelector('#comment-status').textContent.includes('moderazione'));assert.equal(posts.length,1);assert.equal(posts[0].parentId,'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
    const conversions=await page.evaluate(()=>(window.dataLayer||[]).filter(x=>['generate_lead','service_quote_success'].includes(x[1])));assert.equal(conversions.length,0);assert.equal(google.length,0);assert.deepEqual(errors,[]);
    report.push({engine,width,slug,status:'PASS'});await context.close();

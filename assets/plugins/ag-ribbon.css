@@ -1,0 +1,21 @@
+/* The SVG viewport shows only the authentic Ribbon, including when enlarged. */
+.ag-ribbon-intro{max-width:64ch;color:var(--muted);margin-bottom:24px}
+.ag-ribbon-scroll{overflow-x:auto;overscroll-behavior-x:contain;background:#212833;scrollbar-color:#91a6b5 #212833;scrollbar-width:auto}
+.ag-ribbon-view{display:block;width:100%;min-width:1100px;height:auto;overflow:hidden}
+.ag-ribbon-showcase .ag-ribbon-scroll:focus-visible{outline:3px solid #b5efca;outline-offset:-3px}
+.ag-ribbon-showcase figcaption{padding:20px 24px}
+.ag-ribbon-showcase figcaption p{margin:0;font-size:14px;line-height:1.6}
+.ag-ribbon-showcase figcaption strong{display:block;color:#fff;font-weight:600}
+.ag-ribbon-showcase figcaption span:not(.ag-ribbon-open):not(.ag-ribbon-close){display:block}
+.ag-ribbon-zoom{margin-top:16px}
+.ag-ribbon-zoom summary{display:flex;align-items:center;justify-content:space-between;gap:16px;width:fit-content;max-width:100%;min-height:44px;padding:10px 16px;border:1px solid #b5efca;border-radius:7px;background:#b5efca;color:#102b3a;font-size:14px;font-weight:700;line-height:1.4;cursor:pointer;list-style:none}
+.ag-ribbon-zoom summary::-webkit-details-marker{display:none}
+.ag-ribbon-zoom summary:hover{background:#d1f5de}
+.ag-ribbon-zoom summary:focus-visible{outline-color:#b5efca}
+.ag-ribbon-zoom summary svg{flex:none}
+.ag-ribbon-close,.ag-ribbon-zoom[open] .ag-ribbon-open{display:none}
+.ag-ribbon-zoom[open] .ag-ribbon-close{display:inline}
+.ag-ribbon-showcase .ag-ribbon-hint{margin:18px 0 12px;color:#dce9ef;font-size:13px}
+.ag-ribbon-full{border:1px solid #58717d;border-radius:6px}
+.ag-ribbon-full .ag-ribbon-view{width:1772px;min-width:1772px;max-width:none}
+@media(max-width:740px){.ag-ribbon-showcase figcaption{padding:18px}.ag-ribbon-zoom summary{width:100%}.ag-ribbon-intro{font-size:16px}}
