@@ -82,3 +82,7 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 - La pagina Preventivo offre subito due percorsi: contatto diretto per un preventivo personalizzato, con email e WhatsApp visibili, oppure simulazione indicativa nel modulo sottostante. Conservare recapiti, consenso e distinzione fra clic di contatto e invio riuscito.
 - La homepage presenta il servizio da carta, PDF e immagini a DWG/DXF AutoCAD e RVT Revit prima della sezione nuvole di punti. Ridisegno CAD e modellazione BIM sono lavorazioni concordate sui dati disponibili, senza promessa di conversione automatica o precisione indipendente dai materiali.
 - Immagini pertinenti ottimizzate per dispositivo, didascalie descrittive e testo alternativo. Non presentare i visual come progetti consegnati o schermate software reali. Tariffe, formule, campi, endpoint, plugin e navigazione restano invariati.
+
+## Ribbon AG CAD Tools — 11 ottobre 2026
+- Nella pagina AG CAD Tools non mostrare mai la dicitura della versione didattica/non commerciale presente nella barra del titolo dello screenshot sorgente. Presentare soltanto la scheda Ribbon e i comandi autentici, escludendo barra del titolo, menu superiore e area di disegno.
+- Anche la vista ingrandita deve usare lo stesso ritaglio, senza collegamenti che aprano lo screenshot integrale. Conservare icone, etichette e proporzioni originali; niente ricostruzioni dell’interfaccia. Ingrandimento e scorrimento devono funzionare anche senza JavaScript.
