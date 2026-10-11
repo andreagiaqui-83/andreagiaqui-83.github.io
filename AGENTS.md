@@ -85,4 +85,4 @@ Le modifiche richieste dall’utente devono conservare e sviluppare tutte le ott
 
 ## Ribbon AG CAD Tools — 11 ottobre 2026
 - Nella pagina AG CAD Tools non mostrare mai la dicitura della versione didattica/non commerciale presente nella barra del titolo dello screenshot sorgente. Presentare soltanto la scheda Ribbon e i comandi autentici, escludendo barra del titolo, menu superiore e area di disegno.
-- Anche la vista ingrandita deve usare lo stesso ritaglio, senza collegamenti che aprano lo screenshot integrale. Conservare icone, etichette e proporzioni originali; niente ricostruzioni dell’interfaccia. Ingrandimento e scorrimento devono funzionare anche senza JavaScript.
+- Anche la vista ingrandita deve usare lo stesso ritaglio, senza collegamenti o file pubblici che aprano lo screenshot integrale. La risorsa SVG autonoma mantiene il ritaglio anche quando viene aperta direttamente; lo screenshot sorgente completo resta recuperabile nella storia Git. Conservare icone, etichette e proporzioni originali; niente ricostruzioni dell’interfaccia. Ingrandimento e scorrimento devono funzionare anche senza JavaScript.
