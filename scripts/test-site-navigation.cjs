@@ -5,7 +5,7 @@ const docs=new Map(entries.map(e=>[e.file,new JSDOM(fs.readFileSync(e.file,'utf8
 function scan(dir='.') {return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{const p=path.join(dir,e.name);if(e.isDirectory())return ['node_modules','.git','.github','docs','partials'].includes(e.name)?[]:scan(p);return e.name.endsWith('.html')&&!/^google[a-f0-9]+\.html$/.test(e.name)?[p.replace(/^\.\//,'')]:[];});}
 test('Every HTML page is registered and uses one complete static navigation without redundant return buttons',()=>{
  assert.deepEqual([...entries.map(e=>e.file)].sort(),scan().sort());assert.equal(new Set(entries.map(e=>e.file)).size,entries.length);
- const expected=['Servizi','Preventivo online','Disegnatore online','Lezioni AutoCAD','YQArch Italiano','AG CAD Tools','BlockHub CAD','Portfolio','Recensioni','Contatti'];
+ const expected=['Servizi','Preventivo online','Disegnatore online','Lezioni AutoCAD','Plugin AG CAD Tools','Portfolio','Recensioni','Contatti'];
  for(const e of entries){const d=docs.get(e.file);assert.equal(d.querySelectorAll('h1').length,1,e.file);const ids=[...d.querySelectorAll('[id]')].map(n=>n.id);assert.equal(ids.length,new Set(ids).size,e.file+' duplicate IDs');
  assert.equal(d.querySelectorAll('.sg-header').length,1,e.file);assert.deepEqual([...d.querySelectorAll('.sg-nav a')].map(a=>a.textContent.trim()),expected,e.file);
  assert.equal(d.querySelectorAll('.page-return,.page-back-button,.breadcrumb,[data-home-link],.guide-back').length,0,e.file);
@@ -15,7 +15,7 @@ test('Every HTML page is registered and uses one complete static navigation with
 test('Shared footer, clean captions and working cookie controls remain synchronized',()=>{
  const canonical=new JSDOM(fs.readFileSync('partials/site-footer.html','utf8')).window.document.querySelector('footer').outerHTML;
  for(const [file,d] of docs){assert.equal(d.querySelectorAll('footer').length,1,file);assert.equal(d.querySelector('footer').outerHTML,canonical,file);
- assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,10);
+ assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,8);
  assert.ok(d.querySelector('script[src*="assets/measurement.js"]'),file+' cookie controls');
  for(const el of d.querySelectorAll('figcaption,.visual-note'))assert.doesNotMatch(el.textContent,/illustrativ|intelligenza artificiale|creat[aoe].*\bIA\b/i,file);
  }
@@ -32,7 +32,7 @@ test('Commercial offer preserves section anchors, four styles and optional reque
  const text=d.querySelector('#render').textContent;for(const term of ['agenzie immobiliari','property manager','Planimetrie commerciali 2D','Planimetrie 3D arredate','Virtual staging','walkthrough'])assert.ok(text.includes(term),term);
  const graph=JSON.parse(d.querySelector('script[type="application/ld+json"]').textContent)['@graph'];const faq=graph.find(x=>x['@type']==='FAQPage').mainEntity;const visible=[...d.querySelectorAll('#faq details')];assert.equal(faq.length,visible.length);
  visible.forEach((x,i)=>{assert.equal(faq[i].name,x.querySelector('summary').textContent);assert.equal(faq[i].acceptedAnswer.text,(x.querySelector('.faq-answer')||x.querySelector('p')).textContent.replace(/\s+/g,' ').trim());});
- assert.ok(d.querySelector('#tariffe').textContent.includes('10 €'));assert.equal(d.querySelector('#pointCloud').disabled,false);
+ assert.ok(d.querySelector('#tariffe').textContent.includes('0,10 €'));assert.equal(d.querySelector('#pointCloud').disabled,false);
 });
 
 test('Homepage usa un solo header globale e separa gli strumenti AutoCAD dal portfolio',()=>{
@@ -43,7 +43,7 @@ test('Homepage usa un solo header globale e separa gli strumenti AutoCAD dal por
  const tools=d.querySelector('#portfolio .portfolio-tools-block');
  assert.ok(tools,'blocco strumenti AutoCAD assente');
  assert.equal(tools.querySelector('h3')?.textContent.trim(),'Strumenti per il tuo AutoCAD');
- assert.ok(tools.querySelectorAll('.project-links a').length>=3);
+ assert.ok(tools.querySelectorAll('.project-links a').length===1);
 });
 test('Mobile menu opens and closes using Escape, links and outside interaction',()=>{
  const dom=new JSDOM(fs.readFileSync('index.html','utf8'),{runScripts:'outside-only'}),w=dom.window,d=w.document;w.matchMedia=()=>({matches:false,addEventListener(){}});w.eval(fs.readFileSync('assets/site-header.js','utf8'));

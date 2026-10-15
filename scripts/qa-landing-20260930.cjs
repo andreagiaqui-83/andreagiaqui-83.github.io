@@ -21,7 +21,7 @@ const activeBrowsers=new Set();
     const response=await page.goto(base+routeFor(entry.file),{waitUntil:'networkidle'});assert.ok(response.status()===200||(live&&entry.file==='404.html'&&response.status()===404));
     const reject=page.getByRole('button',{name:'Rifiuta facoltativi'});if(await reject.isVisible())await reject.click();
     const overflow=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,view:innerWidth}));assert.ok(overflow.scroll<=width+1,JSON.stringify({engine,file:entry.file,width,overflow}));assert.equal(await page.locator('footer a[href*="linkedin"]').count(),0);
-    assert.equal(await page.locator('.page-return,.page-back-button,.breadcrumb,.guide-back').count(),0,entry.file+' redundant return');assert.equal(await page.locator('.sg-nav a').count(),10);
+    assert.equal(await page.locator('.page-return,.page-back-button,.breadcrumb,.guide-back').count(),0,entry.file+' redundant return');assert.equal(await page.locator('.sg-nav a').count(),8);
     for(const a of await page.locator('.site-footer a,.site-footer button').all()){await a.scrollIntoViewIfNeeded();const box=await a.boundingBox();assert.ok(box.height>=43&&box.x>=-1&&box.x+box.width<=width+1,entry.file+' footer control '+await a.innerText());}
     await page.locator('footer [data-consent-open]').click();assert.ok(await reject.isVisible());await reject.click();await page.addScriptTag({path:'node_modules/axe-core/axe.min.js'});
     const violations=await page.evaluate(async()=>{const include=['.site-footer','.sg-header'];if(document.querySelector('#render'))include.push('#render','.interior-intro');return(await axe.run({include:include.filter(s=>document.querySelector(s))},{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(x=>({id:x.id,nodes:x.nodes.map(n=>n.target)}));});assert.deepEqual(violations,[],JSON.stringify({engine,file:entry.file,width}));
@@ -33,7 +33,7 @@ const activeBrowsers=new Set();
    }
   }
   const ctx=await browser.newContext({viewport:{width:390,height:844},javaScriptEnabled:false});
-  for(const entry of entries){const page=await ctx.newPage();await page.goto(base+routeFor(entry.file));await page.locator('.sg-plugins summary').click();assert.equal(await page.locator('.sg-nav a:visible').count(),10);assert.equal(await page.locator('.sg-toggle:visible').count(),0);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));report.push({engine,file:entry.file,status:'PASS',javascript:false,navigation:10});await page.close();}
+  for(const entry of entries){const page=await ctx.newPage();await page.goto(base+routeFor(entry.file));assert.equal(await page.locator('.sg-nav a:visible').count(),8);assert.equal(await page.locator('.sg-toggle:visible').count(),0);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));report.push({engine,file:entry.file,status:'PASS',javascript:false,navigation:8});await page.close();}
   await ctx.close();await browser.close();
  }
  fs.writeFileSync(path.join(out,(live?'live':'candidate')+'-revision.json'),JSON.stringify(report,null,2));console.log('REVISION VERIFIED',report.length);

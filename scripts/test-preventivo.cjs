@@ -1,64 +1,13 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),{JSDOM}=require('jsdom');
-
-const html=fs.readFileSync('preventivo/index.html','utf8');
-const js=fs.readFileSync('assets/preventivo.js','utf8');
-const doc=new JSDOM(html).window.document;
-
-test('Preventivo online spiega la superficie lorda complessiva dei piani',()=>{
-  const area=doc.getElementById('area');
-  assert.ok(area,'campo area assente');
-  assert.equal(area.getAttribute('aria-describedby'),'areaHelp');
-  const help=doc.getElementById('areaHelp')?.textContent.replace(/\s+/g,' ').trim()||'';
-  assert.match(help,/superfici lorde di tutti i piani interessati/i);
-  for(const term of ['balconi','terrazzi','cortili','giardini','aree esterne']) assert.match(help,new RegExp(term,'i'));
-  assert.match(help,/Non moltiplicare nuovamente il totale per il numero di piani/i);
+const doc=new JSDOM(fs.readFileSync('preventivo/index.html','utf8')).window.document;
+test('Personal quote has one visible form, multiple deliverables and optional materials without calculator',()=>{
+ assert.equal(doc.querySelectorAll('#estimateForm').length,1);assert.equal(doc.querySelectorAll('.quote-step,.quote-progress,#estimateRange,#area').length,0);
+ assert.equal(doc.querySelectorAll('[name=service]').length,18);assert.ok(doc.querySelector('#directFiles').multiple);assert.equal(doc.querySelector('#directFiles').getAttribute('accept'),null);
+ for(const id of ['contactNotes','cloudLink','directFiles','contactPhone'])assert.equal(doc.getElementById(id).required,false);
+ for(const id of ['contactName','contactEmail','privacy'])assert.equal(doc.getElementById(id).required,true);
+ assert.match(doc.querySelector('.quote-hero').textContent,/risponderò via email/);assert.ok(doc.querySelector('.quote-direct-actions a[href^="mailto:"]'));assert.ok(doc.querySelector('.quote-direct-actions a[href^="https://wa.me/"]'));
 });
-
-test('Le formule CAD e BIM usano una sola volta la superficie complessiva',()=>{
-  assert.match(js,/function base2d\(\)\{const a=num\('#area'\);/);
-  assert.match(js,/function base3d\(\)\{return Math\.max\(30,num\('#area'\)\*CFG\.a3d/);
-  assert.match(js,/function baseRevit\(\)\{let b=Math\.max\(30,num\('#area'\)\*CFG\.revit/);
-  assert.doesNotMatch(js,/num\('#area'\)[^;\n]{0,120}\*\s*(?:int|num)\('#floors'/);
-  assert.doesNotMatch(js,/(?:int|num)\('#floors'[^;\n]{0,120}\*\s*num\('#area'/);
+test('Only confirmed business quote events remain eligible for measurement',()=>{
+ const measurement=fs.readFileSync('assets/measurement.js','utf8');assert.match(measurement,/\['services','preventivo'\]\.includes\(document\.body\.dataset\.pageType\)/);
 });
-
-test('Il riepilogo e i dati inviati qualificano i metri quadrati come lordi complessivi',()=>{
-  assert.match(js,/m² lordi complessivi dei piani/);
-  assert.match(js,/balconi, terrazzi, cortili, giardini, aree esterne e pertinenze esterne esclusi/);
-});
-
-
-test('Preventivo online usa il backend quote con sessione firmata e upload protetto',()=>{
-  assert.match(js,/https:\/\/cad-bim-preventivi\.andrea-giaqui\.workers\.dev/);
-  assert.match(js,/sessionToken/);
-  assert.match(js,/\/api\/upload\/['"]?\+?encodeURIComponent\(sessionId\)/);
-  assert.match(js,/'X-Session-Token':sessionToken/);
-  assert.match(js,/'X-File-Size':String\(file\.size\)/);
-  assert.match(js,/JSON\.stringify\(\{sessionId,token:sessionToken,fields\}\)/);
-});
-
-test('La conversione commerciale scatta soltanto dopo una risposta positiva del backend',()=>{
-  const success=js.indexOf("window.AGTracking?.track('service_quote_success'");
-  const submit=js.indexOf("const d=await r.json().catch(()=>({}))");
-  const failure=js.indexOf("if(!r.ok)throw new Error");
-  assert.ok(success>submit && success>failure);
-  assert.match(js,/form_submit_attempt/);
-  assert.match(js,/form_error/);
-});
-
-test('La copia cliente e la stampa PDF hanno fallback espliciti',()=>{
-  assert.ok(doc.getElementById('customerCopyNote'));
-  assert.ok(doc.getElementById('quotePrintMeta'));
-  assert.match(js,/customerCopySent/);
-  assert.match(js,/quote-printing/);
-  assert.match(js,/afterprint/);
-  const css=fs.readFileSync('assets/preventivo.css','utf8');
-  assert.match(css,/STIMA AUTOMATICA INDICATIVA/);
-  assert.match(css,/NON È UN PREVENTIVO DEFINITIVO/);
-  assert.match(css,/Andrea Giaquinto · Disegnatore CAD e BIM/);
-});
-
-test('La misurazione ammette service_quote_success nella pagina preventivo',()=>{
-  const measurement=fs.readFileSync('assets/measurement.js','utf8');
-  assert.match(measurement,/\['services','preventivo'\]\.includes\(document\.body\.dataset\.pageType\)/);
-});
+test('Legacy plugin entry routes point to the single page and are excluded from indexing',()=>{for(const [route,anchor] of [['yqarch-italiano','yqarch'],['blockhub-cad','blockhub'],['express-tools-italiano','express-tools']]){const d=new JSDOM(fs.readFileSync(route+'/index.html','utf8')).window.document;assert.match(d.querySelector('meta[http-equiv=refresh]').content,new RegExp('/ag-cad-tools/#'+anchor));assert.equal(d.querySelector('meta[name=robots]').content,'noindex,follow');assert.equal(d.querySelector('link[rel=canonical]').href,'https://andreagiaquinto.it/ag-cad-tools/');}});

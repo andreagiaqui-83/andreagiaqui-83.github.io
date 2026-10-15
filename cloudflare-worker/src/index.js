@@ -40,7 +40,7 @@ const FIELD_LABELS = {
   Catalogo_PDF: 'Catalogo PDF',
   Stima_automatica_indicativa: 'Stima automatica indicativa',
   Completezza_informazioni: 'Completezza informazioni',
-  Copia_stima_email: 'Copia stima via email',
+  Copia_stima_email: 'Copia richiesta via email',
   Differenze_documenti: 'Differenze / modifiche documenti',
   Superficie_indicativa: 'Superficie lorda complessiva dei piani',
   Regione: 'Regione',
@@ -157,7 +157,6 @@ async function uploadFile(request, env, origin, sessionId) {
   let rawName;
   try { rawName = decodeURIComponent(request.headers.get('X-File-Name') || 'file'); }
   catch (_) { return json({ok:false,error:'Nome file non valido.'},400,origin,env); }
-  if (/\.(las|laz|e57|rcp|rcs|pts|ptx|xyz|ply)$/i.test(rawName)) return json({ok:false,error:'Per la nuvola di punti usa il campo link cloud dedicato; puoi condividere qualsiasi formato originale.'},400,origin,env);
   const fieldName = request.headers.get('X-Field-Name') || 'Allegato';
   const declaredSize = Number(request.headers.get('X-File-Size') || request.headers.get('Content-Length') || 0);
   if (!Number.isSafeInteger(declaredSize) || declaredSize <= 0) return json({ ok: false, error: 'Dimensione file non valida.' }, 400, origin, env);
@@ -388,13 +387,13 @@ async function submitQuote(request, env, origin) {
 
   let customerCopySent = false;
   if (customerEmail && env.SEND_CUSTOMER_COPY === 'true' && fields.Copia_stima_email !== 'No') {
+    const legacyEstimate = Boolean(fields.Stima_automatica_indicativa);
     const customerHtml = `
       <div style="font-family:Arial,sans-serif;color:#172033;line-height:1.5">
-        <h2 style="margin:0 0 14px">La tua stima automatica indicativa</h2>
+        <h2 style="margin:0 0 14px">${legacyEstimate ? 'La tua stima automatica indicativa' : 'La tua richiesta di preventivo'}</h2>
         <p>Grazie. Questa email è la copia della richiesta inviata tramite il Preventivo online di andreagiaquinto.it.</p>
-        <p><strong>La stima riportata nel riepilogo è automatica, indicativa, gratuita e senza impegno per entrambe le parti. Non costituisce un preventivo definitivo, un'offerta economica vincolante o la conferma di un incarico.</strong></p>
-        <p>Gli importi indicati sono al netto di IVA e degli eventuali oneri fiscali o previdenziali applicabili. L'eventuale ritenuta d'acconto, ove prevista, sarà gestita secondo la normativa vigente.</p>
-        <p>Esaminerò personalmente le informazioni e l'eventuale materiale ricevuto e ti risponderò via email per confermare la stima, proporre un importo differente o chiedere eventuali integrazioni.</p>
+        ${legacyEstimate ? "<p>La stima riportata è automatica, indicativa e non vincolante; non costituisce un preventivo definitivo. Importi al netto di IVA ed eventuali oneri applicabili, da confermare nel preventivo.</p>" : "<p>La richiesta è gratuita e senza impegno. L’invio non costituisce conferma di un incarico.</p>"}
+        <p>Esaminerò personalmente le informazioni e il materiale ricevuto e ti risponderò via email con il preventivo personalizzato o con eventuali richieste di integrazione.</p>
         <h3 style="margin:24px 0 8px">Riepilogo della richiesta</h3>
         <table style="border-collapse:collapse;width:100%;max-width:900px">${rowsFromFields(fields, { includePrivacy: false })}</table>
         <h3 style="margin:24px 0 8px">Materiale inviato</h3>
@@ -408,7 +407,7 @@ async function submitQuote(request, env, origin) {
         from: env.EMAIL_FROM,
         to: [customerEmail],
         reply_to: env.EMAIL_TO,
-        subject: 'Copia della tua stima indicativa · Andrea Giaquinto',
+        subject: legacyEstimate ? 'Copia della tua stima indicativa · Andrea Giaquinto' : 'Copia della tua richiesta di preventivo · Andrea Giaquinto',
         html: customerHtml,
       }, 'cad-quote-copy/' + sessionId);
       customerCopySent = true;

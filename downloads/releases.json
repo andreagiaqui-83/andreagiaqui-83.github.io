@@ -1,12 +1,22 @@
 [
   {
+    "project": "ag-cad-tools",
+    "version": "2.2",
+    "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.2_Setup.exe",
+    "sha256": "42f7cc51d4ef4bbf1931bd08bbfe64e33e41e7142c987b2fbe7c40d1737192c3",
+    "bytes": 51700736,
+    "status": "Verificata e approvata dall’autore per la pubblicazione; include BlockHub",
+    "date": "2026-10-15"
+  },
+  {
     "project": "yqarch",
     "version": "3.78",
     "file": "/downloads/yqarch/YQArch_Italiano_3.78.exe",
     "sha256": "f134c2783721956daea5d3c1176302f31c944bcdc68f332ae87894b2a36c8cc9",
     "bytes": 20211200,
-    "status": "verifiche automatiche 3.78; CUIx identico alla 3.77 collaudata su AutoCAD 2027 italiano",
-    "date": "2026-10-03"
+    "status": "Archivio storico; versione corrente nella pagina Plugin AG CAD Tools",
+    "date": "2026-10-03",
+    "archived": true
   },
   {
     "project": "yqarch",
@@ -14,8 +24,9 @@
     "file": "/downloads/yqarch/YQArch_Italiano_3.78.zip",
     "sha256": "ecd56dd0238cd9a949a452a922e2b67075d2d09c9ac04cd5851f88ed79e48c4b",
     "bytes": 18029646,
-    "status": "verifiche automatiche 3.78; CUIx identico alla 3.77 collaudata su AutoCAD 2027 italiano",
-    "date": "2026-10-03"
+    "status": "Archivio storico; versione corrente nella pagina Plugin AG CAD Tools",
+    "date": "2026-10-03",
+    "archived": true
   },
   {
     "project": "ag-cad-tools",
@@ -23,8 +34,9 @@
     "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.0_Setup.exe",
     "sha256": "3000da2b35c35d914a91b99e4fdb4709e03df661503ac0747bb8d96cf676ee8f",
     "bytes": 4666368,
-    "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
-    "date": "2026-10-03"
+    "status": "Archivio storico; versione corrente nella pagina Plugin AG CAD Tools",
+    "date": "2026-10-03",
+    "archived": true
   },
   {
     "project": "ag-cad-tools",
@@ -32,8 +44,9 @@
     "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.0_Portabile.zip",
     "sha256": "5cf834da6b15d52fbf8ef717574990a3af22321a02b98c3708409ab029c803b1",
     "bytes": 1523126,
-    "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
-    "date": "2026-10-03"
+    "status": "Archivio storico; versione corrente nella pagina Plugin AG CAD Tools",
+    "date": "2026-10-03",
+    "archived": true
   },
   {
     "project": "ag-cad-tools",
@@ -41,8 +54,9 @@
     "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.0_Sorgenti.zip",
     "sha256": "04cf7b6e79e4be1b244a51ac52cdb9864200ee519d48603da91df9e9ef1746c7",
     "bytes": 7372732,
-    "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
-    "date": "2026-10-03"
+    "status": "Archivio storico; versione corrente nella pagina Plugin AG CAD Tools",
+    "date": "2026-10-03",
+    "archived": true
   },
   {
     "project": "ag-cad-tools",
@@ -50,8 +64,9 @@
     "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.0_Consegna.zip",
     "sha256": "385fa8bdcb6776d0d3bbbbe6ba83a41ce09f50a1cc3a6ff68f8e8b78c27dc7eb",
     "bytes": 11468923,
-    "status": "definitiva; RC5 approvata su AutoCAD 2027 italiano, campione di comandi",
-    "date": "2026-10-03"
+    "status": "Archivio storico; versione corrente nella pagina Plugin AG CAD Tools",
+    "date": "2026-10-03",
+    "archived": true
   },
   {
     "project": "blockhub-cad",
@@ -59,7 +74,8 @@
     "file": "/downloads/blockhub-cad/BlockHub_CAD_1.23_Setup.exe",
     "sha256": "918caed28076087166133320c09d7ed457b521e66d5ecc2916573a948bf53a5d",
     "bytes": 51399168,
-    "status": "definitiva BH-123-FINALE; derivata dalla RC7 approvata su AutoCAD 2027 italiano / Windows x64",
-    "date": "2026-10-05"
+    "status": "Archivio storico; versione corrente nella pagina Plugin AG CAD Tools",
+    "date": "2026-10-05",
+    "archived": true
   }
 ]

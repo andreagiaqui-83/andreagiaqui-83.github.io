@@ -20,15 +20,10 @@ async function axe(page,include){await page.addScriptTag({path:'node_modules/axe
    response=await page.goto(base+'/preventivo/?servizio=scan-bim',{waitUntil:'networkidle'});assert.equal(response.status(),200);await reject(page);
    assert.equal(await page.locator('input[data-service="scanbim"]').isChecked(),true);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'quote step 1 overflow '+width);
-   await page.locator('[data-step="1"] [data-next]').click();
-   const area=page.locator('#area');assert.equal(await area.getAttribute('aria-describedby'),'areaHelp');assert.match(await page.locator('#areaHelp').innerText(),/superfici lorde di tutti i piani/i);
-   await page.locator('[data-step="2"] [data-next]').click();assert.equal(await page.locator('[data-for-service~="revit"]').isVisible(),true);
-   await page.locator('[data-step="3"] [data-next]').click();assert.equal(await page.locator('#pointCloudFields').isVisible(),true);
-   for(const id of ['pointCloudLink','buildingAddress','geoCoords','mapLink'])assert.equal(await page.locator('#'+id).isVisible(),true,id);
-   assert.match(await page.locator('#pointCloudFields').innerText(),/link cloud/i);
-   await page.locator('[data-step="4"] [data-next]').click();await page.locator('[data-step="5"] [data-next]').click();assert.match(await page.locator('#estimateRange').innerText(),/€|Valutazione personalizzata/);
-   await page.locator('[data-step="6"] [data-next]').click();
-   const autofill={contactName:'given-name',contactSurname:'family-name',contactEmail:'email',contactPhone:'tel',contactCompany:'organization'};
+   for(const id of ['directFiles','cloudLink','contactNotes','contactName','contactEmail','contactPhone'])assert.equal(await page.locator('#'+id).isVisible(),true,id);
+   assert.equal(await page.locator('.quote-step,.quote-progress,#estimateRange').count(),0);
+   assert.match(await page.locator('#fileHelp').innerText(),/link cloud/i);
+   const autofill={contactName:'name',contactEmail:'email',contactPhone:'tel'};
    for(const [id,value] of Object.entries(autofill))assert.equal(await page.locator('#'+id).getAttribute('autocomplete'),value);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'quote final overflow '+width);
    if(engine==='chromium'&&[390,1440].includes(width)){await page.screenshot({animations:'disabled',path:path.join(out,stage+'-preventivo-'+width+'.png'),fullPage:true});}
