@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
-BUILD='20261015-servizi-ag22'
+BUILD='20261015-content-r2'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
@@ -26,7 +26,10 @@ def static():
  assert not s.select('[href="#metodo-ibrido"]')
  assert '0,20 €' in s.select_one('#tariffe').get_text() and '0,30 €' in s.select_one('#tariffe').get_text()
  assert not s.select_one('.pricing-example')
- assert 'trattabili' in s.select_one('#tariffe').get_text().lower()
+ assert len(s.select('#tariffe .price-card'))==4
+ assert not s.select_one('#tariffe .price-context')
+ quote=BeautifulSoup(Path('preventivo/index.html').read_text(),'html.parser')
+ assert 'trattabili' in quote.select_one('#tariffe').get_text().lower()
  assert s.select_one('#tariffe a[href="/preventivo/"]')
  assert 'complessiva' in s.select_one('#tariffe').get_text().lower()
  assert len(s.select('#interior-design .interior-style-card'))==4
