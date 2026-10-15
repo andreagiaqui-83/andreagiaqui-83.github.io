@@ -5,6 +5,10 @@ on:
     branches: [main, 'release/yqarch-*', 'release/site-*', 'optimize/plugins-*', 'optimize/services-site-*']
     paths:
       - 'index.html'
+      - 'preventivo/**'
+      - 'assets/preventivo.*'
+      - 'scripts/test-preventivo*.cjs'
+      - 'scripts/qa-preventivo-flow.cjs'
       - 'yqarch-italiano/**'
       - 'express-tools-italiano/**'
       - 'ag-cad-tools/**'
