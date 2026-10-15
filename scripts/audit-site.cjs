@@ -39,7 +39,7 @@ async function run(){
    }
    if(engine==='chromium'&&entry.file==='ag-cad-tools/index.html'){
     for(const width of [390,1440]){await page.setViewportSize({width,height:900});await page.locator('.ag-ribbon-zoom summary').click();await page.locator('.ag-ribbon-showcase').screenshot({path:path.join(out,`${live?'live':'local'}-ag-ribbon-enlarged-${width}.png`)});await page.locator('.ag-ribbon-zoom summary').click();}
-    const imagePage=await ctx.newPage();await imagePage.setViewportSize({width:1772,height:156});await imagePage.goto(base+'/assets/plugins/ag-cad-tools-ribbon.svg',{waitUntil:'networkidle'});await imagePage.screenshot({path:path.join(out,`${live?'live':'local'}-ag-ribbon-direct-image.png`)});await imagePage.close();
+    const imagePage=await ctx.newPage();await imagePage.setViewportSize({width:1916,height:151});await imagePage.goto(base+'/assets/plugins/ag-cad-tools-ribbon-2.2.png',{waitUntil:'networkidle'});await imagePage.screenshot({path:path.join(out,`${live?'live':'local'}-ag-ribbon-direct-image.png`)});await imagePage.close();
    }
    await page.setViewportSize({width:320,height:900});
    await page.addScriptTag({path:path.join(root,'node_modules/axe-core/axe.min.js')});

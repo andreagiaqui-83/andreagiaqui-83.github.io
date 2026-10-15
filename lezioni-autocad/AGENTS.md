@@ -45,3 +45,6 @@ Conservare il percorso «Home / Lezioni AutoCAD» sopra il riquadro iniziale, co
 
 ## Direttiva successiva e prevalente — revisione finale del 4 ottobre 2026
 Le indicazioni storiche sopra sul breadcrumb Home sono superate: nessun pulsante o percorso Home/Torna aggiuntivo. Usare l'header globale statico con dieci destinazioni e il footer condiviso. FAQ sintetiche e JSON-LD identico; lezioni, prezzi, moduli, consenso, recensioni e contratti backend restano invariati.
+
+## Navigazione globale — 15 ottobre 2026
+La richiesta di Andrea di riunire i plugin prevale sul precedente conteggio: otto destinazioni dirette, con l’unica voce «Plugin AG CAD Tools». Contenuto, prezzi, moduli e misurazione delle lezioni invariati.

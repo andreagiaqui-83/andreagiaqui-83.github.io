@@ -48,3 +48,6 @@ Footer comune senza pulsante LinkedIn; didascalie descrittive senza formule illu
 - Download definitivo attivo in `/downloads/blockhub-cad/`, con note, compatibilità e impronte. Il file EXE resta identico a BH-123-FINALE; corretti soltanto i refusi dei recapiti nelle note web.
 - Header comune con «Plugin per AutoCAD» e tre destinazioni; disclosure nativa anche senza JavaScript, chiusura da tastiera e su interazione esterna.
 - Link Maps esclusivamente nei Contatti con associazione corretta del 7 ottobre; nessun profilo nel footer.
+
+## Aggiornamento autorizzato — 15 ottobre 2026
+La release corrente è AG CAD Tools 2.2 con BlockHub integrato, dichiarata verificata e pubblicabile dall’autore. L’installer esatto è identificato dall’hash in AGENTS.md e downloads/releases.json. Nessuna ricompilazione. Unica landing /ag-cad-tools/, vecchie landing come ponti noindex con canonical unico; download storici conservati. Solo «BlockHub» nelle prose attuali. YQArch resta roadmap, non incluso nella 2.2. Guide web aggiornate alla dichiarazione corrente, preservando tutti i comandi, limiti e licenze; non estendere la verifica nativa oltre l’ambiente documentato. Nuova Ribbon autentica 1916×151 con pannello BlockHub e nessuna barra educativa.
