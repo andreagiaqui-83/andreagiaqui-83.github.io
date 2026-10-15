@@ -12,7 +12,7 @@ if([390,1440].includes(width))await p.locator('#sostieni').screenshot({path:path
 await p.goto(base+'/disegnatore-online/',{waitUntil:'networkidle'});
 assert.equal(await p.locator('#ambiti details').count(),0);assert.ok(await p.locator('#ambiti .sector-list').isVisible());assert.ok(await p.locator('#software-e-formati').isVisible());
 const actionBoxes=await p.locator('.collaboration-actions > a').evaluateAll(nodes=>nodes.map(e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height};}));
-assert.equal(actionBoxes.length,3);assert.ok(Math.max(...actionBoxes.map(x=>x.h))-Math.min(...actionBoxes.map(x=>x.h))<2);
+assert.equal(actionBoxes.length,3);assert.ok(Math.max(...actionBoxes.map(x=>x.h))-Math.min(...actionBoxes.map(x=>x.h))<2,JSON.stringify({width,actionBoxes}));
 if(width===1440){assert.ok(actionBoxes.every(x=>Math.abs(x.y-actionBoxes[0].y)<2));assert.ok(Math.max(...actionBoxes.map(x=>x.w))-Math.min(...actionBoxes.map(x=>x.w))<2);}
 if([390,1440].includes(width))await p.locator('.collaboration-final').screenshot({path:path.join(proof,'collaboration-actions-'+width+'.png')});
 await p.goto(base+'/preventivo/',{waitUntil:'networkidle'});
