@@ -69,3 +69,10 @@ test('Preventivo online rispetta la scelta di non inviare la copia cliente',asyn
   assert.equal(calls.length,1);
  }finally{global.fetch=old;}
 });
+
+test('Simple request sends a personalized-quote acknowledgement without an automatic amount and retries once',async()=>{
+ const f=fixture();f.env.SEND_CUSTOMER_COPY='true';const ss=await session(f),calls=[],old=global.fetch;
+ const fields={Nome_cognome:'Cliente prova',Email:'cliente@example.invalid','Output[]':['Revit / BIM','Render fotorealistici'],Consenso_privacy:'Acconsento',Contatto_preferito:'Email',Copia_stima_email:'Sì',Note_conclusive:'Modello e due viste',Link_cloud_materiale_completo:'https://example.invalid/project.rvt'};
+ global.fetch=async(u,o)=>{calls.push(JSON.parse(o.body));return Response.json({id:'test'});};
+ try{for(let n=0;n<2;n++){const r=await worker.fetch(req('/api/submit',{...ss,fields}),f.env);assert.equal(r.status,200);assert.equal((await r.json()).customerCopySent,true);}assert.equal(calls.length,2);assert.match(calls[1].subject,/richiesta di preventivo/);assert.match(calls[1].html,/risponderò via email con il preventivo personalizzato/);assert.doesNotMatch(calls[1].html,/stima automatica|100 €|Stima_automatica/);assert.match(calls[0].html,/Modello e due viste/);assert.equal(JSON.parse(f.entries.get('quotes/'+ss.sessionId+'/request.json')).fields.Note_conclusive,fields.Note_conclusive);}finally{global.fetch=old;}
+});
