@@ -147,3 +147,6 @@ html,body{max-width:100%;overflow-x:clip}
 .pricing-request .button{background:var(--mint);color:var(--ink);border-color:var(--mint);max-width:100%}.pricing-request .button:hover{background:#cbf5d9}.pricing-request-action{text-align:center}.pricing-request-action .micro{font-size:12px;margin:12px 0 0}
 @media(max-width:800px){.pricing-request{grid-template-columns:1fr;gap:22px;padding:26px}.pricing-request-action{text-align:left}.pricing-request .button{width:100%;white-space:normal}}
 @media(max-width:420px){.pricing-request{padding:22px}.pricing-request .button{font-size:13px}}
+
+/* Rinvio al confronto economico, senza ampliare le condizioni nella home. */
+.pricing-indicative{margin:12px 0 0;color:var(--muted);font-size:15px}.pricing-insight{margin-top:18px}.pricing-insight-link{display:inline-flex;align-items:center;gap:10px;min-height:44px;color:var(--accent);font-size:15px;font-weight:700;line-height:1.55;text-underline-offset:4px}.pricing-insight-link span{flex-shrink:0}

@@ -1,0 +1,31 @@
+/* Approfondimento editoriale: stili limitati alla pagina Disegnatore online. */
+.project-article{background:#fff;scroll-margin-top:110px}
+.project-intro{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+.project-intro>*{min-width:0}.project-intro h2{font-size:clamp(30px,3.3vw,44px)}
+.project-intro .lead{font-size:19px}.project-intro p:not(.eyebrow){color:var(--muted)}
+.project-visual{margin:0;overflow:hidden;border-radius:16px;background:var(--dark)}
+.project-visual img{display:block;width:100%;height:auto}
+.project-visual figcaption{padding:13px 18px;color:#d2e1e8;font-size:12px;line-height:1.5}
+.project-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin:44px 0 48px}
+.project-benefits>div{border-top:2px solid #b2d6ca;padding-top:20px;min-width:0}
+.project-benefits .project-number{display:block;color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.12em;margin-bottom:14px}
+.project-article h3{font-size:24px;line-height:1.2}.project-article p{line-height:1.75}
+.project-benefits p,.project-compare p,.project-scope p{color:var(--muted);font-size:16px}
+.project-compare{border-top:1px solid var(--line);padding-top:36px}
+.project-compare>p{max-width:85ch}.project-table{border-collapse:collapse;table-layout:fixed;width:100%;margin:24px 0;font-size:15px;line-height:1.65}
+.project-table th,.project-table td{width:50%;text-align:left;vertical-align:top;padding:18px 24px;border:1px solid var(--line);overflow-wrap:break-word}
+.project-table th{background:var(--dark);color:#fff;font-size:17px}.project-table th:first-child{background:#185d60}
+.project-table td:first-child{background:#f0f7f4}.project-table td{color:var(--muted)}.project-table strong{display:block;color:var(--ink);margin-bottom:5px}
+.project-example{display:grid;grid-template-columns:1fr 1.05fr;gap:40px;padding:36px;margin:40px 0;background:var(--dark);border-radius:16px;color:#fff}
+.project-example .eyebrow{color:var(--mint)}.project-example p{font-size:16px;color:#d2e1e8}.project-example h3{font-size:29px;color:#fff}
+.project-deliverables{display:flex;gap:12px;list-style:none;margin:24px 0 0;padding:0}
+.project-deliverables li{flex:1;padding:16px 10px;border:1px solid #46606c;border-radius:10px;font-size:14px;text-align:center;color:#d2e1e8}
+.project-deliverables strong{display:block;color:var(--mint);font-size:32px;line-height:1.2;margin-bottom:5px}
+.project-example-details{border-left:1px solid #46606c;padding-left:36px}.project-example-details p+p{margin-top:18px}
+.project-scope{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.project-checklist{padding-left:22px;margin:18px 0 0;color:var(--muted);font-size:16px}.project-checklist li{padding-left:4px;margin-bottom:10px}.project-checklist strong{color:var(--ink)}
+.project-conclusion{display:flex;align-items:center;justify-content:space-between;gap:30px;margin-top:36px;padding:26px 30px;background:#edf3f2;border-radius:12px}
+.project-conclusion p{margin:0;font-size:17px;max-width:65ch}.project-conclusion .button{flex-shrink:0}
+@media(max-width:960px){.project-intro{gap:28px}.project-benefits{gap:22px}.project-example{gap:26px;padding:28px}.project-example-details{padding-left:26px}.project-scope{gap:28px}}
+@media(max-width:760px){.project-intro,.project-example,.project-scope{grid-template-columns:1fr}.project-intro{gap:26px}.project-benefits{grid-template-columns:1fr;gap:24px;margin:30px 0 36px}.project-benefits h3{font-size:23px}.project-benefits .project-number{margin-bottom:8px}.project-example-details{border-left:0;border-top:1px solid #46606c;padding:24px 0 0}.project-example{gap:24px;margin:32px 0}.project-conclusion{display:block;padding:24px}.project-conclusion .button{margin-top:20px;width:100%}.project-table th,.project-table td{padding:14px}.project-scope{gap:28px}}
+@media(max-width:420px){.project-table{font-size:14px;line-height:1.6}.project-table th{font-size:16px}.project-table th,.project-table td{padding:12px 10px}.project-example{padding:22px}.project-deliverables{gap:8px}.project-deliverables li{font-size:13px;padding:14px 6px}.project-article h3{font-size:23px}.project-visual figcaption{padding:12px 16px}}
