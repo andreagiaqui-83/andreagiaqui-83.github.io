@@ -105,3 +105,9 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 - Disegnatore online include l’invito a chi usa altri software CAD/BIM, con formati di interscambio e limiti concordati. Ambiti ed elaborati sempre espansi e non richiudibili. CTA finale con tre pulsanti di uguale dimensione: preventivo, Email e WhatsApp, affiancati su desktop e adattati su mobile.
 - AG significa Andrea Giaquinto. Spiegare in linguaggio semplice la licenza MIT e il suo perimetro limitato ai componenti identificati. Visual installer 2.2 originale dal pacchetto verifiche della release, senza modifiche all’interfaccia o all’EXE.
 - Contatti: certificazione personale dichiarata dall’utente Autodesk Certified User (ACU) per AutoCAD; non estenderla a Revit/BIM. Dopo le FAQ, sezione Sostieni i miei progetti con gli stessi destinatari e controlli di copia della pagina AG CAD Tools.
+
+## Rifiniture richieste — 16 ottobre 2026
+- La voce Contatti usa lo stesso stile delle altre voci del menu, inclusi hover, focus e pagina corrente; nessuna evidenza verde dedicata.
+- Home: tariffe e invito al preventivo riuniti in una sola sezione con quattro prezzi e un unico pulsante. Conservare le ancore `#tariffe` e `#modulo`, ora nello stesso blocco; nessun cambiamento a prezzi, consenso o modulo storico di compatibilità.
+- Contatti: prima il profilo Google Maps di Locate Varesino (CO), poi quello di Cosenza (CS), senza cambiare associazione fra URL ed etichetta.
+- Sotto il link cloud del Preventivo, promemoria sempre visibile per accompagnare la nuvola di punti con foto interne/esterne, planimetrie e indirizzo fisico, se disponibili. Riferimenti facoltativi, indirizzo nelle note; nessun campo aggiuntivo o obbligo.

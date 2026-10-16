@@ -141,4 +141,9 @@ html,body{max-width:100%;overflow-x:clip}
 @media(max-width:800px){.pdf-cad-options{gap:28px}.pdf-cad-material{grid-template-columns:1fr;gap:12px}}
 @media(max-width:600px){.pdf-cad-options{grid-template-columns:1fr;gap:30px;margin-top:28px}.pdf-cad-options article+article{border-top:1px solid var(--line);padding-top:28px}.pdf-cad-options h3{font-size:23px}.pdf-cad-options .button{width:100%;font-size:13px}.pdf-cad-material{margin-top:28px}}
 
-#tariffe>.wrap>.button{margin-top:26px}
+/* Tariffe e richiesta di preventivo in un'unica sezione. */
+.pricing-request{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:center;margin-top:26px;padding:32px;border-radius:18px;background:var(--dark);color:#f4f8fa;scroll-margin-top:100px}
+.pricing-request h3{font-size:clamp(24px,3vw,30px);line-height:1.2;margin:0 0 12px;color:#fff}.pricing-request p{max-width:68ch;margin:0;color:#d2e1e8;font-size:15px;line-height:1.7}
+.pricing-request .button{background:var(--mint);color:var(--ink);border-color:var(--mint);max-width:100%}.pricing-request .button:hover{background:#cbf5d9}.pricing-request-action{text-align:center}.pricing-request-action .micro{font-size:12px;margin:12px 0 0}
+@media(max-width:800px){.pricing-request{grid-template-columns:1fr;gap:22px;padding:26px}.pricing-request-action{text-align:left}.pricing-request .button{width:100%;white-space:normal}}
+@media(max-width:420px){.pricing-request{padding:22px}.pricing-request .button{font-size:13px}}
