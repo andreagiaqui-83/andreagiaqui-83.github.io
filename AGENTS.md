@@ -111,3 +111,9 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 - Home: tariffe e invito al preventivo riuniti in una sola sezione con quattro prezzi e un unico pulsante. Conservare le ancore `#tariffe` e `#modulo`, ora nello stesso blocco; nessun cambiamento a prezzi, consenso o modulo storico di compatibilità.
 - Contatti: prima il profilo Google Maps di Locate Varesino (CO), poi quello di Cosenza (CS), senza cambiare associazione fra URL ed etichetta.
 - Sotto il link cloud del Preventivo, promemoria sempre visibile per accompagnare la nuvola di punti con foto interne/esterne, planimetrie e indirizzo fisico, se disponibili. Riferimenti facoltativi, indirizzo nelle note; nessun campo aggiuntivo o obbligo.
+
+## Direttiva prevalente — 16 ottobre 2026, approfondimento economico
+- La home mantiene quattro prezzi e il pulsante al Preventivo, aggiungendo soltanto «Costi indicativi e trattabili» e il rimando «Perché conviene un disegnatore online?» alla sezione `/disegnatore-online/#compenso-a-progetto`.
+- Nel Preventivo usare «Prezzi indicativi e trattabili», senza «anche al ribasso», con lo stesso rimando. Questa scelta sostituisce le precedenti formulazioni incompatibili; importi, superficie lorda e condizioni fiscali restano invariati.
+- Disegnatore online: approfondimento dopo i vantaggi sulla convenienza del compenso a progetto rispetto alle ore, tratto dall’articolo dell’autore. Distinguere lavoro da remoto e criterio di compenso; nessuna promessa di risparmio automatico, tempi o qualità garantiti. Importo stabile per attività e condizioni definite, revisioni incluse esplicite, variazioni concordate prima dell’esecuzione. Lavoro orario utile per esigenze non ancora delimitate.
+- Visual editoriale illustrativo, senza presentarlo come un progetto eseguito: varianti WebP 640/1120 px, caricamento differito e dimensioni dichiarate. Tabelle HTML e testo leggibile senza JavaScript, FAQ visibili e JSON-LD allineati.
