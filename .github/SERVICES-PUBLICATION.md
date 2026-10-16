@@ -125,3 +125,9 @@ Prevale la direttiva omonima in AGENTS.md: unico modulo di richiesta personale s
 - Contatti: certificazione personale dichiarata dall’utente Autodesk Certified User (ACU) per AutoCAD; non estenderla a Revit/BIM. Dopo le FAQ, sezione Sostieni i miei progetti con gli stessi destinatari e controlli di copia della pagina AG CAD Tools.
 
 Denominazione ACU verificata su [Autodesk](https://www.autodesk.com/certification/architecture-engineering-construction-certification); titolarità personale dichiarata dall’autore. Trattamento fiscale descritto senza aliquote o regime: distinguere compenso, IVA applicabile, ritenuta e importo da corrispondere.
+
+## Rifiniture richieste — 16 ottobre 2026
+- La voce Contatti usa lo stesso stile delle altre voci del menu, inclusi hover, focus e pagina corrente; nessuna evidenza verde dedicata.
+- Home: tariffe e invito al preventivo riuniti in una sola sezione con quattro prezzi e un unico pulsante. Conservare le ancore `#tariffe` e `#modulo`, ora nello stesso blocco; nessun cambiamento a prezzi, consenso o modulo storico di compatibilità.
+- Contatti: prima il profilo Google Maps di Locate Varesino (CO), poi quello di Cosenza (CS), senza cambiare associazione fra URL ed etichetta.
+- Sotto il link cloud del Preventivo, promemoria sempre visibile per accompagnare la nuvola di punti con foto interne/esterne, planimetrie e indirizzo fisico, se disponibili. Riferimenti facoltativi, indirizzo nelle note; nessun campo aggiuntivo o obbligo.

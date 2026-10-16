@@ -52,5 +52,5 @@ test('Mobile menu opens and closes using Escape, links and outside interaction',
  assert.match(fs.readFileSync('assets/site-header.css','utf8'),/overflow-y:auto/);dom.window.close();
 });
 test('Google Maps profiles appear only in Contacts, with the corrected destinations',()=>{
- for(const [file,d] of docs){assert.equal(d.querySelectorAll('footer a[href*="share.google"]').length,0,file);const maps=[...d.querySelectorAll('main a[href*="share.google"]')];if(file==='contatti/index.html'){assert.deepEqual(maps.map(a=>[a.getAttribute('href'),a.textContent.trim()]),[['https://share.google/jGcqtu9IW1WccgA6V','PROFILO GOOGLE MAPSCosenza (CS) ↗'],['https://share.google/w1R3HKoVL3Cqr5KmB','PROFILO GOOGLE MAPSLocate Varesino (CO) ↗']]);}else assert.equal(maps.length,0,file);}
+ for(const [file,d] of docs){assert.equal(d.querySelectorAll('footer a[href*="share.google"]').length,0,file);const maps=[...d.querySelectorAll('main a[href*="share.google"]')];if(file==='contatti/index.html'){assert.deepEqual(maps.map(a=>[a.getAttribute('href'),a.textContent.trim()]),[['https://share.google/w1R3HKoVL3Cqr5KmB','PROFILO GOOGLE MAPSLocate Varesino (CO) ↗'],['https://share.google/jGcqtu9IW1WccgA6V','PROFILO GOOGLE MAPSCosenza (CS) ↗']]);}else assert.equal(maps.length,0,file);}
 });
