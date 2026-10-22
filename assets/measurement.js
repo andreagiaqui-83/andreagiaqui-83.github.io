@@ -6,8 +6,18 @@
   const ads = /^AW-\d+$/.test(cfg.adsId || '') ? cfg.adsId : '';
   // Services import GA4 key events into Ads; this needs advertising consent
   // even without a separate AW tag. Other pages keep their existing behavior.
-  const importConsent = !!ga4 && cfg.conversionMode === 'ga4_import' && document.body.dataset.pageType === 'services';
+  const importConsent = !!ga4 && cfg.conversionMode === 'ga4_import' && ['services','preventivo'].includes(document.body.dataset.pageType);
   const marketingEnabled = !!ads || importConsent;
+  // Explicit, tab-scoped QA opt-out. Never infer internal traffic from location,
+  // referrer or repeat visits. The flag is not included in measurement URLs.
+  const testKey = 'ag_measurement_test';
+  const testFlag = new URLSearchParams(location.search).get('ag_test');
+  let testSession = testFlag === '1';
+  try {
+    if (testFlag === '1') sessionStorage.setItem(testKey,'1');
+    if (testFlag === '0') sessionStorage.removeItem(testKey);
+    testSession = sessionStorage.getItem(testKey) === '1';
+  } catch (_) {}
   const key = 'ag_cookie_preferences';
   const denied = {analytics_storage:'denied', ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied'};
   window.dataLayer = window.dataLayer || [];
@@ -39,6 +49,7 @@
   }
   function referrerOrigin() {try {return document.referrer ? new URL(document.referrer).origin : '';} catch (_) {return '';}}
   function configure() {
+    if (testSession) return;
     const target = choice.analytics && ga4 ? ga4 : choice.marketing && ads ? ads : '';
     if (!target) return;
     if (!loaded) {
@@ -87,7 +98,7 @@
   }
   const allowedEvents = new Set(['page_view','cta_click','contact_click','form_view','form_start','form_complete','form_submit_attempt','form_error','generate_lead','service_quote_success','scroll_depth']);
   function track(name,values={}) {
-    if (!allowedEvents.has(name)) return;
+    if (testSession || !allowedEvents.has(name)) return;
     if (name === 'service_quote_success' && !['services','preventivo'].includes(document.body.dataset.pageType)) return;
     const safe={page_type:document.body.dataset.pageType || 'site',page_location:cleanLocation(),page_referrer:referrerOrigin()};
     // Never pass form values, full URLs, names, email, telephone, or free text to Google.
@@ -103,7 +114,7 @@
       gtag('event','conversion',{send_to:ads+'/'+cfg.adsLeadLabel,transaction_id:values.lead_id,page_location:cleanLocation()});
     }
   }
-  window.AGTracking = Object.freeze({track,getConsent:()=>({...choice}),isConfigured:()=>!!(ga4||ads)});
+  window.AGTracking = Object.freeze({track,getConsent:()=>({...choice}),isConfigured:()=>!!(ga4||ads),isTestSession:()=>testSession});
   function makeDialog() {
     const dialog = document.createElement('dialog'); dialog.className='ag-consent'; dialog.setAttribute('aria-labelledby','ag-consent-title');
     dialog.innerHTML='<h2 id="ag-consent-title">Le tue preferenze cookie</h2><p>Il sito funziona anche senza cookie statistici o pubblicitari. Puoi cambiare scelta in qualsiasi momento dal link a fondo pagina.</p><div class="ag-consent-options"><label><input type="checkbox" checked disabled> Necessari <small>Funzioni del sito e memorizzazione delle preferenze.</small></label><label><input id="ag-analytics" type="checkbox"> Statistiche <small>Misurazione delle visite e dell’utilizzo con Google Analytics.</small></label><label><input id="ag-marketing" type="checkbox"> Misurazione pubblicitaria <small>Attribuzione delle richieste alle campagne Google Ads. Nessuna personalizzazione pubblicitaria.</small></label></div><p class="ag-consent-inactive" hidden>Nessun servizio Google di misurazione è attualmente attivo.</p><a href="/privacy/">Leggi l’informativa privacy e cookie</a><div class="ag-consent-actions"><button type="button" data-choice="reject">Rifiuta facoltativi</button><button type="button" data-choice="all">Accetta tutti</button><button type="button" data-choice="save">Salva preferenze</button></div><button type="button" class="ag-consent-close" aria-label="Chiudi senza accettare">Chiudi</button>';

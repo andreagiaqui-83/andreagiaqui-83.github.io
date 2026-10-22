@@ -52,6 +52,7 @@ function runDailyGoogleReporting() {
   const tz = cfg.TIMEZONE || 'Europe/Rome';
   const reportDate = dateOffset_(-1, tz);
 
+  collectSiteMeasurementRolling_(3, cfg);
   collectGa4Daily_(reportDate, cfg);
   collectGa4Sources_(reportDate, cfg);
   collectSearchConsoleRolling_(3, cfg);
@@ -146,6 +147,69 @@ function collectGa4Sources_(date, cfg) {
   replaceRowsForDates_('GA4_Sources', [date], rows);
 }
 
+// Separate from the lesson landing reports and Ads campaign configuration.
+// No query strings, client IDs, request IDs or form contents are exported.
+function collectSiteMeasurementRolling_(days, cfg) {
+  ensureSiteSheet_('GA4_Site_Events', ['Date', 'PagePath', 'EventName', 'EventCount', 'KeyEvents']);
+  ensureSiteSheet_('GA4_Site_Status', ['Date', 'Status', 'Note']);
+  for (let i = days; i >= 1; i--) {
+    const date = dateOffset_(-i, cfg.TIMEZONE || 'Europe/Rome');
+    try {
+      collectSiteMeasurement_(date, cfg);
+    } catch (e) {
+      // Preserve previous successful rows; never replace a failed read with zero.
+      replaceRowsForDates_('GA4_Site_Status', [date], [[date, 'ERRORE', String(e.message || e)]]);
+      console.warn('Site measurement ' + date + ': ' + e);
+    }
+  }
+}
+
+function collectSiteMeasurement_(date, cfg) {
+  const names = ['form_view', 'form_start', 'form_submit_attempt', 'form_error',
+    'service_quote_success', 'generate_lead', 'contact_click', 'cta_click'];
+  const filter = {andGroup: {expressions: [
+    {filter: {fieldName: 'eventName', inListFilter: {values: names, caseSensitive: true}}},
+    {filter: {fieldName: 'hostName', inListFilter: {values: [cfg.SITE_DOMAIN, 'www.' + cfg.SITE_DOMAIN], caseSensitive: false}}}
+  ]}};
+  const data = ga4Run_(['pagePath', 'eventName'], ['eventCount', 'keyEvents'], date, date, filter, cfg);
+  if (Number(data.rowCount || 0) > (data.rows || []).length) throw new Error('Risposta GA4 incompleta: righe oltre il limite. Dati precedenti conservati.');
+  const rows = (data.rows || []).map(r => [date, r.dimensionValues[0].value || '', r.dimensionValues[1].value || '',
+    Number(r.metricValues[0].value || 0), Number(r.metricValues[1].value || 0)]);
+  replaceRowsForDates_('GA4_Site_Events', [date], rows);
+  const limited = data.metadata && (data.metadata.subjectToThresholding || data.metadata.dataLossFromOtherRow || (data.metadata.samplingMetadatas || []).length);
+  replaceRowsForDates_('GA4_Site_Status', [date], [[date, limited ? 'LIMITATO' : 'OK',
+    limited ? 'GA4 segnala soglie, campionamento o aggregazioni: conteggi da interpretare con cautela.' : 'Lettura completata. Solo eventi misurati con consenso; dati recenti soggetti ad aggiornamento.']]);
+}
+
+function ensureSiteSheet_(name, header) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  let sh = ss.getSheetByName(name);
+  if (!sh) sh = ss.insertSheet(name);
+  if (sh.getLastRow() > 0) {
+    const current = sh.getRange(1, 1, 1, header.length).getValues()[0];
+    if (current.join('|') !== header.join('|')) throw new Error('Intestazioni inattese in ' + name + ': nessuna sovrascrittura.');
+    return;
+  }
+  sh.getRange(1, 1, 1, header.length).setValues([header]);
+  sh.setFrozenRows(1);
+}
+
+function addSiteMeasurementSummary_(rows, generatedAt, date) {
+  const state = rowsForDate_('GA4_Site_Status', date)[0];
+  if (!state || state[1] === 'ERRORE') {
+    addReportRow_(rows, generatedAt, date, 'GA4 sito', 'Stato dati', 'Non disponibili', state ? state[2] : 'Raccolta eventi sito non eseguita.');
+    return;
+  }
+  const events = rowsForDate_('GA4_Site_Events', date);
+  const total = (event, paths) => events.filter(r => r[2] === event && paths.includes(String(r[1]).replace(/index\.html$/, ''))).reduce((sum, r) => sum + Number(r[3] || 0), 0);
+  const note = state[2] + ' Eventi misurati, non totale delle richieste ricevute via email.';
+  addReportRow_(rows, generatedAt, date, 'GA4 sito', 'Preventivi confermati · service_quote_success', total('service_quote_success', ['/', '/preventivo/']), note);
+  addReportRow_(rows, generatedAt, date, 'GA4 sito', 'Richieste lezioni · generate_lead', total('generate_lead', ['/lezioni-autocad/']), note);
+  for (const event of ['form_view', 'form_start', 'form_submit_attempt', 'form_error']) {
+    addReportRow_(rows, generatedAt, date, 'GA4 Preventivo', event, total(event, ['/preventivo/']), 'Interazione o tentativo, non contatto acquisito. ' + state[2]);
+  }
+}
+
 function collectSearchConsoleRolling_(days, cfg) {
   const tz = cfg.TIMEZONE || 'Europe/Rome';
   const endDate = dateOffset_(-1, tz);
@@ -208,6 +272,8 @@ function buildDailyReport_(date, cfg) {
     addReportRow_(rows, generatedAt, date, 'GA4', 'Engagement rate', r[7], '');
     addReportRow_(rows, generatedAt, date, 'GA4', 'generate_lead', r[10], '');
   }
+
+  addSiteMeasurementSummary_(rows, generatedAt, date);
 
   const gsc = rowsForDate_('GSC_Queries', date);
   if (gsc.length) {
