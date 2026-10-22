@@ -35,10 +35,16 @@ Nei post usare una campagna pertinente al contenuto, distinguendola da quella de
 
 ## Report e account esterni
 
-Il foglio Google gratuito è stato letto via Google Drive: aggiornamenti GA4 e Search Console presenti il 22/10/2026. La configurazione resta sulla landing Lezioni; `generate_lead=0` in quel report non dimostra zero preventivi del sito. Estensione pronta in `google-reporting-free/apps-script-analytics-search-console.gs`, ancora da installare e verificare nell’editor esistente con accesso Google.
+Il foglio Google gratuito è stato letto via Google Drive: aggiornamenti GA4 e Search Console presenti il 22/10/2026. La configurazione resta sulla landing Lezioni; `generate_lead=0` in quel report non dimostra zero preventivi del sito. Estensione pronta in `google-reporting-free/apps-script-analytics-search-console.gs`, ancora da installare e verificare nell’editor esistente con accesso Google. Su richiesta di Andrea, questa operazione è rinviata perché al momento non può accedere; la pubblicazione del sito procede separatamente.
 
 Windsor.ai segnala letture sospese: sei account collegati, uno incluso nel piano gratuito. I dati sostitutivi restituiti dal connettore non sono dati reali e non vengono usati. Nessun abbonamento acquistato, nessun account scollegato. Le corrispondenze fra ID numerici Google Business, città e URL attuali non sono verificabili da questa lettura: i profili non vengono aggiornati sulla base di ipotesi.
 
 ## Verifica
 
 Test automatici con richieste intercettate, senza email o contatti reali. Copertura: consenso Home → Preventivo, rifiuto, deduplicazione, tentativo fallito e ripetizione con stesso UUID, contenuti esclusi dagli eventi, modalità collaudo e letture del report fallite/limitate. Il controllo WebKit simula il motore Safari: non equivale a una prova su iPhone fisico.
+
+## URL storici e limiti della verifica
+
+Le tre vecchie landing continuano a portare alle sezioni pertinenti di AG CAD Tools, con canonical e noindex coerenti. Sono pagine ponte HTML, non risposte HTTP 301. Un redirect permanente HTTP richiede una configurazione davanti a GitHub Pages: non è stato attivato né viene dichiarato come completato in questa revisione.
+
+L’audit locale del candidato ha controllato 33 pagine in Chromium, Firefox e WebKit e 16 larghezze da 320 a 1920 px. Verificate visivamente le nuove intestazioni Lezioni e l’indice AG a 390 e 1440 px. Il confronto Lighthouse delle sette destinazioni principali mostra 94–100 su mobile e 100 su desktop per le prestazioni, accessibilità e SEO 100, con CLS nullo. Si tratta di una singola misura sintetica per pagina, non di Core Web Vitals sul campo. La vecchia URL YQArch reindirizzata ha prodotto un campione desktop non valido (NO_LCP), escluso dal confronto; la destinazione AG CAD Tools è stata misurata direttamente. Gli avvisi CORS per le API pubbliche sul server locale non vengono interpretati come errori sul dominio di produzione, verificato separatamente dalla CI live.
