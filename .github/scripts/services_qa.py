@@ -57,8 +57,14 @@ def static():
    with Image.open(p) as im:im.load();assert im.width>0
  # The user authorized lesson footer, review visibility and copy changes on 27 September.
  # Keep all other course assets, backend and tracking byte-for-byte; browser checks cover authorized edits.
- diff=subprocess.check_output(['git','diff',BASELINE,'HEAD','--','lezioni-autocad',':(exclude)lezioni-autocad/AGENTS.md',':(exclude)lezioni-autocad/index.html',':(exclude)lezioni-autocad/assets/landing.css',':(exclude)lezioni-autocad/assets/landing.js','cloudflare-worker/src/lessons.js','assets/measurement-config.js','assets/consent.css']).decode()
+ diff=subprocess.check_output(['git','diff',BASELINE,'HEAD','--','lezioni-autocad',':(exclude)lezioni-autocad/AGENTS.md',':(exclude)lezioni-autocad/index.html',':(exclude)lezioni-autocad/assets/landing.css',':(exclude)lezioni-autocad/assets/landing.js','cloudflare-worker/src/lessons.js','assets/consent.css']).decode()
  assert not diff,'Protected lesson assets, backend or tracking changed'
+ # Compare the actual tracking configuration, allowing documentation-only edits.
+ def tracking_config(source):
+  command="const vm=require('node:vm'),fs=require('node:fs'),ctx={window:{}};vm.runInNewContext(fs.readFileSync(0,'utf8'),ctx);process.stdout.write(JSON.stringify(ctx.window.AG_MEASUREMENT))"
+  return json.loads(subprocess.check_output(['node','-e',command],input=source))
+ assert tracking_config(Path('assets/measurement-config.js').read_bytes())==tracking_config(subprocess.check_output(['git','show',BASELINE+':assets/measurement-config.js'])),'Tracking IDs, consent settings or conversion mode changed'
+
  old=BeautifulSoup(subprocess.check_output(['git','show',BASELINE+':index.html']), 'html.parser')
  assert [x.get_text(' ',strip=True) for x in old.select('#reviewsGrid .review-card')]==[x.get_text(' ',strip=True) for x in s.select('#reviewsGrid .review-card')]
  save('static.json',{'status':'PASS','build':BUILD,'baseline':BASELINE,'html_sha256':sha(Path('index.html').read_bytes()),'protected_tree':'lesson assets except authorized HTML/CSS/JS, backend and tracking unchanged','review_text':'unchanged','active_css_count':len(styles)})

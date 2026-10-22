@@ -4,6 +4,15 @@ const MAX_FILE=90*1024*1024,MAX_TOTAL=500*1024*1024;
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const form=$('#estimateForm');if(!form)return;
+// Funnel events describe interaction only; the lead remains backend-confirmed.
+let formVisible=false,viewTracked=false,startTracked=false;
+const canMeasure=()=>window.AGTracking?.getConsent?.().analytics===true&&!window.AGTracking?.isTestSession?.();
+function trackView(){if(formVisible&&!viewTracked&&canMeasure()){viewTracked=true;window.AGTracking.track('form_view',{form_id:'online_quote'});}}
+if('IntersectionObserver' in window){new IntersectionObserver(entries=>{formVisible=entries.some(e=>e.isIntersecting);trackView();},{threshold:0}).observe(form);}
+else{const checkView=()=>{const r=form.getBoundingClientRect();formVisible=r.bottom>0&&r.top<innerHeight;trackView();};addEventListener('scroll',checkView,{passive:true});addEventListener('resize',checkView);checkView();}
+document.addEventListener('ag:consentchange',trackView);
+function trackStart(e){if(startTracked||e.target.id==='quoteWebsite'||!e.target.matches('input,textarea')||!canMeasure())return;startTracked=true;window.AGTracking.track('form_start',{form_id:'online_quote'});}
+form.addEventListener('input',trackStart);form.addEventListener('change',trackStart);
 let files=[],sessionId='',sessionToken='',busy=false,submitted=false,pendingFields=null;
 const uploaded=new Map();
 const selectedServices=()=>$$('input[name="service"]:checked').map(x=>x.value);

@@ -134,3 +134,20 @@ Il report ChatGPT può leggere il foglio centrale via Google Drive e preparare i
 ## Sicurezza
 
 Non inserire password, token OAuth, client secret o chiavi API nel repository. L'autorizzazione avviene direttamente nell'account Google tramite Apps Script e Google Ads Scripts.
+
+## Estensione eventi del sito — 22 ottobre 2026
+
+Il sorgente aggiornato aggiunge `GA4_Site_Events` e `GA4_Site_Status`, senza cambiare `Config`, campagne, budget, trigger o tab storici delle Lezioni. Questi ultimi non rappresentano tutte le richieste del sito.
+
+- `service_quote_success`: preventivi confermati dalla Home e dal Preventivo online.
+- `generate_lead`: richieste confermate dalla landing Lezioni.
+- `form_view`, `form_start`, `form_submit_attempt`, `form_error`: percorso del Preventivo, con conteggi separati.
+- `contact_click` e `cta_click`: interazioni secondarie, non contatti acquisiti. Il parametro `contact_method` già inviato distingue email/telefono/WhatsApp; la sua eventuale dimensione personalizzata va verificata in GA4 prima di usarla nei report API.
+
+Il collector rilegge tre giorni, sostituisce soltanto le righe di quelle date e registra errori e limitazioni in una tabella distinta. Una lettura fallita conserva gli ultimi dati ma il riepilogo indica **Non disponibili**; una lettura riuscita senza eventi può riportare zero. Percorsi senza query string; nessun contenuto dei moduli. I dati GA4 includono soltanto le interazioni misurabili con consenso e possono differire dalle richieste realmente ricevute.
+
+**Stato verificato il 22/10/2026:** il report esistente continua ad aggiornarsi; l’estensione è preparata e testata nel repository, ma non è ancora installata nell’editor Apps Script. Google Drive può leggere il foglio, ma non modificare il suo script; la sessione del browser richiede accesso Google. Non considerare quindi i nuovi tab già popolati.
+
+Per completare: sostituire `Code.gs` nel progetto **già collegato al foglio**, salvare ed eseguire `runDailyGoogleReporting`. Il trigger esistente continuerà a richiamare la stessa funzione: non crearne un secondo. Controllare `GA4_Site_Status` e le nuove righe di `Daily_Report`. Prima della sostituzione conservare la versione attiva ed eventuali modifiche effettuate nell’editor non presenti nel repository. Nessuna modifica al manifest o ai permessi è prevista da questa estensione.
+
+Riferimento tecnico: [Google Analytics Data API, filtri e report](https://developers.google.com/analytics/devguides/reporting/data/v1/basics).
