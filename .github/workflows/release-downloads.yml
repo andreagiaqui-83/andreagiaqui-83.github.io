@@ -22,7 +22,7 @@ jobs:
           root='https://andreagiaquinto.it'
           files=['/downloads/releases.json','/downloads/portfolio/Andrea_Giaquinto_Portfolio.pdf']
           files += [r['file'] for r in json.loads(pathlib.Path('downloads/releases.json').read_text())]
-          files += ['/downloads/ag-cad-tools/SHA256_AG_CAD_Tools_2.0.txt']
+          files += ['/downloads/ag-cad-tools/SHA256_AG_CAD_Tools_2.2.txt']
           for attempt in range(18):
               try:
                   for file in files:
@@ -54,7 +54,7 @@ jobs:
           (async()=>{const browser=await chromium.launch();try{
             const page=await browser.newPage();
             await page.route('**/*',route=>['GET','HEAD','OPTIONS'].includes(route.request().method())?route.continue():route.abort());
-            await page.goto('https://andreagiaquinto.it/blockhub-cad/',{waitUntil:'networkidle'});
+            await page.goto('https://andreagiaquinto.it/ag-cad-tools/',{waitUntil:'networkidle'});
             for(const project of ['yqarch','express-tools','blockhub-cad']){
               const result=await page.evaluate(async project=>{
                 const r=await fetch('https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/plugin-comments?project='+project,{credentials:'omit'});

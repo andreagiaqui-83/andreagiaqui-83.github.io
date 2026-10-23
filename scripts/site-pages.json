@@ -28,18 +28,6 @@
     "kind": "guide"
   },
   {
-    "file": "downloads/yqarch/YQArch_Italiano_3.64_GUIDA.html",
-    "kind": "guide"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.64_REPORT.html",
-    "kind": "report"
-  },
-  {
-    "file": "downloads/express-tools/Express_Tools_Italiano_3.2-rc1_Report.html",
-    "kind": "report"
-  },
-  {
     "file": "privacy/index.html",
     "kind": "service"
   },
@@ -58,38 +46,6 @@
   {
     "file": "report-google/termini/index.html",
     "kind": "service"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.73_GUIDA.html",
-    "kind": "guide"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.73_REPORT.html",
-    "kind": "report"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.73_RIBBON.html",
-    "kind": "guide"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.73_CATALOGO.html",
-    "kind": "guide"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.78_GUIDA.html",
-    "kind": "guide"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.78_RIBBON.html",
-    "kind": "guide"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.78_CATALOGO.html",
-    "kind": "guide"
-  },
-  {
-    "file": "downloads/yqarch/YQArch_Italiano_3.78_REPORT.html",
-    "kind": "report"
   },
   {
     "file": "ag-cad-tools/index.html",
@@ -122,10 +78,6 @@
   {
     "file": "downloads/ag-cad-tools/AG_CAD_Tools_Sostieni.html",
     "kind": "guide"
-  },
-  {
-    "file": "downloads/ag-cad-tools/RAPPORTO_AG_CAD_Tools_2.0.html",
-    "kind": "report"
   },
   {
     "file": "cad-bim-job-mailer/privacy/index.html",

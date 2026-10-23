@@ -28,7 +28,7 @@ Il consenso condiviso è gestito da `assets/measurement.js`; la configurazione �
 [AG CAD Tools 2.2](https://andreagiaquinto.it/ag-cad-tools/?utm_source=github&utm_medium=referral&utm_campaign=repository_sito) riunisce i comandi in italiano e BlockHub. [Guida](https://andreagiaquinto.it/downloads/ag-cad-tools/AG_CAD_Tools_Help.html) e [compatibilità](https://andreagiaquinto.it/downloads/ag-cad-tools/AG_CAD_Tools_Compatibilita.html) descrivono requisiti e limiti verificati.
 
 ## Download
-Gli installer approvati sono ospitati in `downloads/`. Versioni, dimensioni e SHA-256 correnti sono registrati in `downloads/releases.json`. Gli EXE e ZIP collaudati non vengono ricostruiti durante la pubblicazione del sito.
+È distribuito soltanto l’installer approvato di **AG CAD Tools 2.2**, scaricabile dalla pagina del plugin. Versione, dimensione e SHA-256 sono registrati in `downloads/releases.json`. I pacchetti superati e la relativa documentazione sono stati ritirati dal ramo corrente. L’installer collaudato non viene ricostruito durante la pubblicazione del sito.
 
 ## Misurazione e collaudo
 Per le visite manuali di controllo aprire `https://andreagiaquinto.it/?ag_test=1`: nella stessa scheda i tag Google restano disattivati, anche con consenso già presente. Per uscire aprire `?ag_test=0` o chiudere la scheda. Questa opzione non simula il backend: i test di invio devono continuare a intercettare le richieste.

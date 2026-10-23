@@ -22,8 +22,10 @@ test('Shared footer, clean captions and working cookie controls remain synchroni
  cp.execFileSync(process.execPath,['scripts/sync-site-header.cjs','--check']);cp.execFileSync(process.execPath,['scripts/sync-page-navigation.cjs','--check']);cp.execFileSync(process.execPath,['scripts/sync-site-footer.cjs','--check']);
 });
 test('Plugin installers remain byte-identical to the approved baseline',()=>{
- const expected={'downloads/yqarch/YQArch_Italiano_3.64.exe':'6ed121ec822ba503ed139a2a5594593d6c609c6293eea5486fd55f4ca44a7906','downloads/express-tools/Express_Tools_Italiano_3.2-rc1.exe':'25e0380fa0e580ac556e353dc2ca2c50e34f62edefd3544cfa7f8b13f692e144'};
+ const expected={'downloads/ag-cad-tools/AG_CAD_Tools_2.2_Setup.exe':'42f7cc51d4ef4bbf1931bd08bbfe64e33e41e7142c987b2fbe7c40d1737192c3'};
  for(const [file,hash] of Object.entries(expected))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),hash,file);
+ const packages=fs.readdirSync('downloads',{recursive:true}).filter(name=>/\.(exe|zip)$/i.test(name)).map(name=>'downloads/'+name).sort();
+ assert.deepEqual(packages,Object.keys(expected).sort(),'Only the current approved installer may be distributed');
 });
 test('Commercial offer preserves section anchors, four styles and optional request contracts',()=>{
  const d=docs.get('index.html');for(const id of ['render','interior-design','modulo','nuvole-di-punti','tariffe'])assert.ok(d.getElementById(id),id);
