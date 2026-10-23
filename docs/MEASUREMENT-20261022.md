@@ -18,7 +18,7 @@ Non escludere utenti soltanto perché ricorrenti, localizzati a Cosenza o proven
 
 ## Link UTM pronti per le sorgenti esterne
 
-Usare nomi minuscoli coerenti; niente dati personali e niente UTM nei link interni. Gli URL canonici rimangono puliti. Il README di questo repository usa già il link GitHub. I due profili Google Business sono stati verificati nel browser il 23 ottobre: contengono già i link distinti riportati sotto, conservati per continuità. Per gli altri canali i link rimangono proposte pronte, non applicazioni certificate in questa revisione.
+Usare nomi minuscoli coerenti; niente dati personali e niente UTM nei link interni. Gli URL canonici rimangono puliti. Il README di questo repository usa già il link GitHub. I due profili Google Business sono stati verificati nel browser il 23 ottobre: contengono già i link distinti riportati sotto, conservati per continuità. Anche il link nella firma Gmail è stato aggiornato e verificato il 23 ottobre. Per gli altri canali i link rimangono proposte pronte, non applicazioni certificate in questa revisione.
 
 | Sorgente | Link da usare nel profilo o nella firma |
 |---|---|
@@ -27,7 +27,7 @@ Usare nomi minuscoli coerenti; niente dati personali e niente UTM nei link inter
 | Professione Architetto | https://andreagiaquinto.it/?utm_source=professionearchitetto&utm_medium=referral&utm_campaign=profilo_professionale |
 | Facebook | https://andreagiaquinto.it/?utm_source=facebook&utm_medium=social&utm_campaign=profilo_professionale |
 | LinkedIn | https://andreagiaquinto.it/?utm_source=linkedin&utm_medium=social&utm_campaign=profilo_professionale |
-| Firma email | https://andreagiaquinto.it/?utm_source=email&utm_medium=email&utm_campaign=firma_professionale |
+| Firma Gmail, applicato e verificato | https://andreagiaquinto.it/?utm_source=email&utm_medium=email&utm_campaign=firma_professionale |
 | Link condiviso in WhatsApp | https://andreagiaquinto.it/preventivo/?utm_source=whatsapp&utm_medium=messaging&utm_campaign=richiesta_preventivo |
 | GitHub, repository del sito | https://andreagiaquinto.it/ag-cad-tools/?utm_source=github&utm_medium=referral&utm_campaign=repository_sito |
 
@@ -73,3 +73,11 @@ Il blocco di caricamento sopra descritto è stato risolto aprendo una nuova sche
 Riferimenti operativi: https://support.google.com/analytics/answer/13296662 e https://support.google.com/analytics/answer/14239696.
 
 La pubblicazione della revisione del sito è stata verificata: 24 file correnti identici alla copia approvata, tutte le 60 URL dei file ritirati non più disponibili, installer AG CAD Tools 2.2 con hash approvato. L’audit aggiornato copre 21 pagine, 16 larghezze e Chromium/Firefox/WebKit; superati 96 test unitari e di sicurezza. Corretto anche l’ambiente CI con immagine Playwright ufficiale fissata alla versione 1.58.2 e controlli di pubblicazione eseguiti dal runtime Node già installato. I redirect HTTP 301 restano il passaggio infrastrutturale non attivato descritto in `REDIRECTS-301.md`.
+
+## Completamento dei collegamenti esterni — 23 ottobre 2026
+
+- Aggiornato nella firma Gmail «Andrea Giaquinto» soltanto il collegamento del sito: da HTTP a HTTPS con `utm_source=email`, `utm_medium=email`, `utm_campaign=firma_professionale`. Testo visibile, formattazione, recapiti e impostazioni della firma preesistenti conservati. Salvato nelle impostazioni e verificato riaprendo la pagina dopo il ricaricamento; nessun messaggio inviato.
+- Le due dimensioni GA4 `contact_method` e `form_id` risultano ancora presenti. Il nuovo controllo avviene nella stessa giornata della creazione: non anticipa la validazione sui dati delle successive 24–48 ore e non attiva i filtri.
+- I README dei repository YQArch-Italiano ed Express-Tools-Italiano sono aggiornati; i campi **About / Description** conservano invece le vecchie descrizioni. Il connettore disponibile non modifica questi metadati e la sessione browser GitHub non è autenticata. Per entrambi è pronto il testo: «Distribuzioni precedenti ritirate. Il progetto attuale è AG CAD Tools 2.2 di Andrea Giaquinto, con BlockHub integrato. Download e documentazione sul sito ufficiale.» Il campo Website deve usare il collegamento corrente del rispettivo README, conservandone gli UTM. Non rinominare o eliminare i repository né riscrivere la cronologia.
+- La pagina Facebook professionale è stata aperta per aggiornare il link: mostra il sito senza UTM e richiede l'accesso per modificarlo. Non è stata modificata. Gli altri link social/portali e il collegamento da condividere in WhatsApp restano pronti nella tabella, non dichiarati pubblicati.
+- Per riprendere senza ripetere le verifiche già concluse: accesso GitHub per i metadati, accesso ai profili esterni per i rispettivi link, decisione e accessi Aruba/Cloudflare per i 301, nuovi dati per la verifica GA4. Nessuna nuova modifica al codice, alle pagine, agli installer o al backend in quest'ultimo passaggio.
