@@ -1,4 +1,4 @@
-AG CAD Tools 2.1 — attribuzioni e licenze delle fonti Web (invariate dalla baseline)
+AG CAD Tools 2.2 — attribuzioni e licenze delle fonti Web (invariate dalla baseline)
 
 Le fonti originali sono incluse in provenienza/upstream.
 Il manifest associa ogni comando al repository e al commit utilizzato.

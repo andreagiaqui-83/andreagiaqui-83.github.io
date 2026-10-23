@@ -1,0 +1,16 @@
+{
+  "ref": "ag_cad_tools_consolidation",
+  "description": "Pagine plugin consolidate in AG CAD Tools",
+  "expression": "(http.host in {\"andreagiaquinto.it\" \"www.andreagiaquinto.it\"} and http.request.method in {\"GET\" \"HEAD\"} and http.request.uri.path in {\"/blockhub-cad/\" \"/blockhub-cad\" \"/blockhub-cad/index.html\" \"/yqarch-italiano/\" \"/yqarch-italiano\" \"/yqarch-italiano/index.html\" \"/express-tools-italiano/\" \"/express-tools-italiano\" \"/express-tools-italiano/index.html\"})",
+  "action": "redirect",
+  "action_parameters": {
+    "from_value": {
+      "target_url": {
+        "value": "https://andreagiaquinto.it/ag-cad-tools/"
+      },
+      "status_code": 301,
+      "preserve_query_string": true
+    }
+  },
+  "enabled": true
+}
