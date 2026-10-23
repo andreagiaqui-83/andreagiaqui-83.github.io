@@ -131,3 +131,10 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 - UTM soltanto nei link esterni in ingresso, mai nei collegamenti fra pagine del sito; non inserire dati personali. Guida operativa in `docs/MEASUREMENT-20261022.md`.
 - Il report gratuito delle lezioni resta dedicato alla landing e alla campagna configurata. L’estensione `GA4_Site_Events` raccoglie separatamente i due lead e il funnel del Preventivo; dichiarare attiva l’automazione soltanto dopo installazione e verifica in Apps Script. Non convertire errori di lettura in zeri.
 - AG CAD Tools conserva la 2.2 approvata, con indice statico compatto. Lezioni: metadati per lezioni private/ripetizioni, senza alterare prezzi o offerta.
+
+## Direttiva prevalente — 23 ottobre 2026, distribuzione unica e metodo di lavoro
+- Su richiesta esplicita dell’autore rimuovere dalla distribuzione corrente gli installer e i documenti di YQArch, BlockHub autonomo, Express Tools e AG CAD Tools 2.0. Questa scelta sostituisce le vecchie istruzioni di conservazione degli archivi pubblici. Mantenere soltanto AG CAD Tools 2.2, il suo installer byte-identico, guida, compatibilità, sostegno, mappa dei comandi e licenze pertinenti.
+- Le vecchie landing restano ponti verso AG CAD Tools per non interrompere i collegamenti. Anche la vecchia guida Express rimanda alla guida attuale. Non ripubblicare i pacchetti ritirati dai vecchi commit o dai workflow storici.
+- BlockHub integrato e la futura roadmap di funzioni analoghe a YQArch restano descritti nella pagina AG CAD Tools; non confonderli con download autonomi correnti.
+- FAQ sul metodo in Disegnatore online e Preventivo: collaborazione con disegnatori esperti, prevalenza della lavorazione manuale, AutoLISP/AG CAD Tools/IA come supporto ad attività ripetitive e controllo professionale. Tempi e costo sono concordati sul materiale; non promettere CAD/BIM completi e corretti in automatico. FAQ visibili e JSON-LD coerenti.
+- La rimozione dal ramo corrente e dalle release pubblicate non equivale alla cancellazione della cronologia Git. Non riscrivere la storia o eliminare repository interi durante la normale manutenzione del sito.
