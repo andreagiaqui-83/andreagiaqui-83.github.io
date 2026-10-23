@@ -188,9 +188,19 @@ function ensureSiteSheet_(name, header) {
   if (sh.getLastRow() > 0) {
     const current = sh.getRange(1, 1, 1, header.length).getValues()[0];
     if (current.join('|') !== header.join('|')) throw new Error('Intestazioni inattese in ' + name + ': nessuna sovrascrittura.');
-    return;
+  } else {
+    sh.getRange(1, 1, 1, header.length).setValues([header]);
   }
-  sh.getRange(1, 1, 1, header.length).setValues([header]);
+  // New Sheets can coerce ISO strings to Date objects. Keep date keys as text
+  // so rolling replacements and summary lookups remain idempotent.
+  const count = sh.getLastRow() - 1;
+  const dates = count > 0 ? sh.getRange(2, 1, count, 1).getValues().map(r => [
+    Object.prototype.toString.call(r[0]) === '[object Date]'
+      ? Utilities.formatDate(r[0], ss.getSpreadsheetTimeZone(), 'yyyy-MM-dd')
+      : String(r[0] || '')
+  ]) : [];
+  sh.getRange(2, 1, sh.getMaxRows() - 1, 1).setNumberFormat('@');
+  if (dates.length) sh.getRange(2, 1, dates.length, 1).setValues(dates);
   sh.setFrozenRows(1);
 }
 
