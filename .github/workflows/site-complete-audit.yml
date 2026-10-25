@@ -6,6 +6,7 @@ on:
       - '**/*.html'
       - 'assets/**'
       - 'scripts/audit-site.cjs'
+      - 'scripts/check-mobile-menu.cjs'
       - 'scripts/test-public-integrity.cjs'
       - 'scripts/site-pages.json'
       - '.github/workflows/site-complete-audit.yml'

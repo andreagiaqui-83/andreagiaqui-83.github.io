@@ -141,3 +141,7 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 
 ## Preventivo online — semplificazione del 23 ottobre 2026
 - Nel blocco finale del Preventivo mostrare soltanto un collegamento graficamente evidente alla pagina Disegnatore online, dove restano spiegazione del metodo e FAQ completa. Non duplicare domanda e risposta nel Preventivo né mantenerne uno schema FAQPage senza contenuto visibile. Conservare modulo, tariffe e altre CTA.
+
+## Menu mobile — correzione del 25 ottobre 2026
+- Il blocco dello scroll non deve creare un contenitore di scorrimento sul body né ritagliare il pannello del menu: l'header sticky deve restare visibile e azionabile anche dopo lo scorrimento. Bloccare il viewport e preservare la posizione della pagina alla chiusura.
+- Verificare posizione e raggiungibilità effettiva di pulsante e link, non soltanto classi e ARIA: apertura ripetuta a inizio, metà e fondo pagina, schermo orizzontale, scorrimento interno, Escape/click esterno e passaggio a desktop. Controllo browser condiviso in `scripts/check-mobile-menu.cjs`, eseguito dall'audit completo su Chromium, Firefox e WebKit.
