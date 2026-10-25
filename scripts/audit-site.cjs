@@ -2,6 +2,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {chromium,firefox,webkit}=require('playwright');
+const checkMobileMenu=require('./check-mobile-menu.cjs');
 const live=process.argv.includes('live'),root=process.cwd();
 const base=live?'https://andreagiaquinto.it':'http://127.0.0.1:8887';
 const out=path.join(process.env.RUNNER_TEMP||'/tmp','site-audit');fs.mkdirSync(out,{recursive:true});
@@ -43,6 +44,7 @@ async function run(){
     for(const width of [390,1440]){await page.setViewportSize({width,height:900});await page.locator('.ag-ribbon-zoom summary').click();await page.locator('.ag-ribbon-showcase').screenshot({path:path.join(out,`${live?'live':'local'}-ag-ribbon-enlarged-${width}.png`)});await page.locator('.ag-ribbon-zoom summary').click();}
     const imagePage=await ctx.newPage();await imagePage.setViewportSize({width:1916,height:151});await imagePage.goto(base+'/assets/plugins/ag-cad-tools-ribbon-2.2.png',{waitUntil:'networkidle'});await imagePage.screenshot({path:path.join(out,`${live?'live':'local'}-ag-ribbon-direct-image.png`)});await imagePage.close();
    }
+   row.mobileMenu=await checkMobileMenu(page,{extended:['index.html','preventivo/index.html','lezioni-autocad/index.html'].includes(entry.file)});
    await page.setViewportSize({width:320,height:900});
    await page.addScriptTag({path:path.join(root,'node_modules/axe-core/axe.min.js')});
    row.axe=await page.evaluate(async()=>(await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,impact:v.impact,help:v.help,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary,html:n.html.slice(0,500)}))})));
@@ -53,7 +55,24 @@ async function run(){
    if(errors.length||row.images.broken.length||row.structure.h1!==1||row.structure.ids.length||google.length)report.issues.push({file:entry.file,engine,type:'structure-assets-consent',errors,images:row.images,structure:row.structure,google});
    report.pages.push(row);console.log('AUDIT',engine,entry.file,'issues',report.issues.filter(x=>x.file===entry.file&&x.engine===engine).length);
    await ctx.close();
-  }}finally{await browser.close();}
+  }
+   if(engine!=='firefox'){
+    const touchContext=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:3,reducedMotion:'reduce',serviceWorkers:'block'});
+    await touchContext.route('**/*',async route=>{
+     const req=route.request(),u=req.url();
+     if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u))return route.fulfill({status:200,body:''});
+     if(!['GET','HEAD','OPTIONS'].includes(req.method())){report.blockedWrites.push({url:u,method:req.method()});return route.abort();}
+     if(u.includes('cad-bim-preventivi.andrea-giaqui.workers.dev'))return route.fulfill({json:{ok:true,reviews:[],comments:[],nextCursor:null}});
+     return route.continue();
+    });
+    const touchPage=await touchContext.newPage();await touchPage.goto(base+'/?ag_test=1',{waitUntil:'networkidle'});
+    const reject=touchPage.getByRole('button',{name:'Rifiuta facoltativi'});if(await reject.isVisible())await reject.click();
+    await touchPage.evaluate(async()=>Promise.all([...document.images].map(async img=>{img.loading='eager';try{await img.decode()}catch{}})));
+    const checks=await checkMobileMenu(touchPage,{extended:true,touch:true});
+    (report.touchMenus??=[]).push({engine,checks});
+    console.log('TOUCH MENU',engine,checks.length,'positions passed');await touchContext.close();
+   }
+  }finally{await browser.close();}
  }
 }
 run().catch(e=>{report.fatal=String(e.stack);console.error(e);process.exitCode=1}).finally(()=>{server?.close();fs.writeFileSync(path.join(out,(live?'live':'local')+'-audit.json'),JSON.stringify(report,null,2));console.log('AUDIT COMPLETE',report.pages.length,'pages',report.issues.length,'findings');if(report.issues.length||report.blockedWrites.length)process.exitCode=1;});
