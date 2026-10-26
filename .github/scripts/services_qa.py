@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
-BUILD='20261016-project-r1'
+BUILD='20261026-interior-r1'
 def save(name,data): (OUT/name).write_text(json.dumps(data,ensure_ascii=False,indent=2))
 def sha(data):return hashlib.sha256(data).hexdigest()
 def static():
@@ -32,9 +32,10 @@ def static():
  assert 'trattabili' in quote.select_one('#tariffe').get_text().lower()
  assert s.select_one('#tariffe a[href="/preventivo/"]')
  assert 'complessiva' in s.select_one('#tariffe').get_text().lower()
- assert len(s.select('#interior-design .interior-style-card'))==4
+ assert s.select_one('#render .property-services #interior-design')
+ assert not s.select('.interior-style-card,.interior-custom,.interior-section')
  assert s.select_one('textarea[name="Interior_Design_5a_proposta_personalizzata"]')
- for n in ['Minimal contemporaneo','Japandi','Mediterraneo contemporaneo','Organic Modern']:assert n in s.select_one('#interior-design').get_text()
+ assert s.select_one('#interior-design a')['href']=='/preventivo/?servizio=interior-design'
  graph=json.loads(s.select_one('script[type="application/ld+json"]').string)['@graph']
  fq=next(x for x in graph if x['@type']=='FAQPage')['mainEntity'];visible=s.select('#faq details')
  assert len(fq)==len(visible)

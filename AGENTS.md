@@ -145,3 +145,8 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 ## Menu mobile — correzione del 25 ottobre 2026
 - Il blocco dello scroll non deve creare un contenitore di scorrimento sul body né ritagliare il pannello del menu: l'header sticky deve restare visibile e azionabile anche dopo lo scorrimento. Bloccare il viewport e preservare la posizione della pagina alla chiusura.
 - Verificare posizione e raggiungibilità effettiva di pulsante e link, non soltanto classi e ARIA: apertura ripetuta a inizio, metà e fondo pagina, schermo orizzontale, scorrimento interno, Escape/click esterno e passaggio a desktop. Controllo browser condiviso in `scripts/check-mobile-menu.cjs`, eseguito dall'audit completo su Chromium, Firefox e WebKit.
+
+## Interior Design in Home — direttiva prevalente del 26 ottobre 2026
+- Eliminare la sezione autonoma con quattro stili e quinta proposta. Presentare «Interior Design su misura» come voce della sezione render/planimetrie: planimetrie renderizzate e proposte d'arredo sviluppate sulle idee, preferenze e specifiche del cliente, senza numero predefinito di alternative.
+- Conservare l'ancora `#interior-design` sulla nuova voce e il collegamento al Preventivo con Interior Design preselezionato. Allineare scheda riepilogativa e dati strutturati; mantenere tariffa da 0,10 €/m² lordo complessivo.
+- Rimuovere immagini e stili CSS usati esclusivamente dal vecchio blocco. Preservare il modulo corrente, le compatibilità del modulo storico inerte, i contratti backend e il menu mobile corretto il 25 ottobre. Questa direttiva sostituisce le precedenti indicazioni di mantenere quattro stili e quinta proposta nella presentazione pubblica.

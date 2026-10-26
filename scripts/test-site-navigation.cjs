@@ -27,9 +27,9 @@ test('Plugin installers remain byte-identical to the approved baseline',()=>{
  const packages=fs.readdirSync('downloads',{recursive:true}).filter(name=>/\.(exe|zip)$/i.test(name)).map(name=>'downloads/'+name).sort();
  assert.deepEqual(packages,Object.keys(expected).sort(),'Only the current approved installer may be distributed');
 });
-test('Commercial offer preserves section anchors, four styles and optional request contracts',()=>{
+test('Commercial offer integrates custom interior design and preserves anchors and request contracts',()=>{
  const d=docs.get('index.html');for(const id of ['render','interior-design','modulo','nuvole-di-punti','tariffe'])assert.ok(d.getElementById(id),id);
- assert.equal(d.querySelectorAll('#interior-design .interior-style-card').length,4);assert.equal(d.querySelectorAll('[name="Render_viste[]"]').length,10);assert.ok([...d.querySelectorAll('[name="Render_viste[]"]')].every(x=>!x.required));
+ assert.ok(d.querySelector('#render > .property-offer #interior-design'));assert.equal(d.querySelectorAll('.interior-style-card,.interior-custom,.interior-section').length,0);assert.equal(d.querySelector('#interior-design a').getAttribute('href'),'/preventivo/?servizio=interior-design');assert.equal(d.querySelectorAll('[name="Render_viste[]"]').length,10);assert.ok([...d.querySelectorAll('[name="Render_viste[]"]')].every(x=>!x.required));
  assert.equal(d.querySelector('#renderSelected').value,'Render fotorealistici / viste prospettiche');assert.ok(d.querySelector('link[href*="assets/services/services.css"]'));assert.ok(d.querySelector('link[href*="assets/site-header.css"]'));
  const text=d.querySelector('#render').textContent;for(const term of ['agenzie immobiliari','property manager','Planimetrie commerciali 2D','Planimetrie 3D arredate','Virtual staging','walkthrough'])assert.ok(text.includes(term),term);
  const graph=JSON.parse(d.querySelector('script[type="application/ld+json"]').textContent)['@graph'];const faq=graph.find(x=>x['@type']==='FAQPage').mainEntity;const visible=[...d.querySelectorAll('#faq details')];assert.equal(faq.length,visible.length);
