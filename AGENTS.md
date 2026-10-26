@@ -150,3 +150,5 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 - Eliminare la sezione autonoma con quattro stili e quinta proposta. Presentare «Interior Design su misura» come voce della sezione render/planimetrie: planimetrie renderizzate e proposte d'arredo sviluppate sulle idee, preferenze e specifiche del cliente, senza numero predefinito di alternative.
 - Conservare l'ancora `#interior-design` sulla nuova voce e il collegamento al Preventivo con Interior Design preselezionato. Allineare scheda riepilogativa e dati strutturati; mantenere tariffa da 0,10 €/m² lordo complessivo.
 - Rimuovere immagini e stili CSS usati esclusivamente dal vecchio blocco. Preservare il modulo corrente, le compatibilità del modulo storico inerte, i contratti backend e il menu mobile corretto il 25 ottobre. Questa direttiva sostituisce le precedenti indicazioni di mantenere quattro stili e quinta proposta nella presentazione pubblica.
+
+- Rifinitura del 26 ottobre: «Brevi video e walkthrough» è il punto 06 della stessa griglia render, accanto a Interior Design (05) su desktop e in sequenza su mobile. Il costo resta definito nel preventivo.
