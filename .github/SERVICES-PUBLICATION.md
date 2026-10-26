@@ -147,3 +147,6 @@ Richiesta: formulazioni sintetiche sui prezzi e approfondimento economico nella 
 - Hero, vantaggi, articolo e CTA orientati al risparmio, alla qualità degli elaborati e alla ricevuta/fattura secondo regime applicabile. Richiamo alle tariffe 0,20/0,30/0,10 €/m² e alle condizioni esistenti. Immagini già ottimizzate riutilizzate, stili non più utilizzati rimossi, nessun nuovo JavaScript.
 - Confronto delle tariffe verificato nelle fonti annotate in `.github/COLLABORATION-PRICING-SOURCES.md`; il range 25–45 è uno scenario richiesto dall’autore, non un tariffario ufficiale.
 - Audit completo esistente esteso con screenshot delle sezioni economiche a 390 e 1440 px; restano i controlli su 33 pagine, tre browser e 16 larghezze. Nessuna modifica a moduli, API, consenso, tracciamenti o software distribuito.
+
+## Interior Design su misura — 26 ottobre 2026
+La Home integra Interior Design nella sezione render e planimetrie commerciali. La vecchia sezione con quattro stili e quinta proposta è rimossa, insieme alle sue immagini e regole CSS dedicate. L'ancora `#interior-design` e la CTA restano disponibili sulla nuova voce; descrizione SEO e riepilogo sono coerenti con proposte sviluppate sulle indicazioni del cliente. Tariffe, modulo corrente, compatibilità storica e navigazione restano invariati.
