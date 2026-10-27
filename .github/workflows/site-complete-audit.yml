@@ -7,6 +7,7 @@ on:
       - 'assets/**'
       - 'scripts/audit-site.cjs'
       - 'scripts/check-mobile-menu.cjs'
+      - 'scripts/qa-preventivo-flow.cjs'
       - 'scripts/test-public-integrity.cjs'
       - 'scripts/site-pages.json'
       - '.github/workflows/site-complete-audit.yml'
@@ -39,6 +40,10 @@ jobs:
         env:
           QA_ENGINES: ${{ matrix.engine }}
         run: node scripts/audit-site.cjs local
+      - name: Confirm quote uploads, retries and consent without sending real requests
+        env:
+          QA_ENGINES: ${{ matrix.engine }}
+        run: node scripts/qa-preventivo-flow.cjs local
       - name: Wait for exact published documents
         if: github.ref == 'refs/heads/main'
         run: |
@@ -76,5 +81,7 @@ jobs:
         if: always()
         with:
           name: complete-site-${{ matrix.engine }}-${{ github.sha }}
-          path: ${{ runner.temp }}/site-audit/
+          path: |
+            ${{ runner.temp }}/site-audit/
+            ${{ runner.temp }}/quote-flow-proof/
           retention-days: 30

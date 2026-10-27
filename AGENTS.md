@@ -157,3 +157,9 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 - Pubblicata la sezione approvata `#metodo-di-lavoro` in Disegnatore online, dopo il confronto economico, in sostituzione del precedente riepilogo della collaborazione. Cinque passaggi, materiali complementari facoltativi, strumenti e controlli DWG/Revit.
 - Conservare la lettura sintetica: passaggi e controlli principali visibili; approfondimenti nativi apribili su IA e verifiche tecniche. Nessun riferimento bibliografico finale. Ambiti sempre espansi, FAQ e relativi dati strutturati invariati.
 - CSS circoscritto alla sezione, senza modifiche a menu, footer, consenso o tracciamenti. AutoLISP, AG CAD Tools e IA supportano il lavoro del disegnatore, senza promesse di elaborati automaticamente corretti.
+
+## Revisione autorizzata — 28 ottobre 2026
+- Migliorare chiarezza della Home e collegamenti contestuali; preservare consenso, eventi distinti servizi/lezioni, modulo semplice, prezzi e AG CAD Tools 2.2.
+- Nessuna nuova pagina servizio. Su successiva indicazione esplicita dell’autore, Portfolio web, PDF e materiali restano invariati fino a quando fornirà nuovi lavori.
+- Il collegamento al metodo dal Preventivo arriva a `/disegnatore-online/#metodo-di-lavoro`. Recensioni mantiene il carosello compatto e offre percorsi verso servizi e lezioni.
+- Il collaudo del Preventivo in CI intercetta sessione, allegati e invio: non generare richieste/email reali né lead fittizi in GA4. Una conferma visibile non richiede una nuova pagina Grazie.
