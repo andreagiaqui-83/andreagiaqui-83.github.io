@@ -1,0 +1,135 @@
+/* Metodo approvato: tutti gli stili sono circoscritti alla sezione. */
+.work-method *{box-sizing:border-box}
+.work-method{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 Arial,Helvetica,sans-serif}
+.work-method a{color:var(--accent);text-underline-offset:4px}
+.work-method a:hover{text-decoration-thickness:2px}
+.work-method :focus-visible{outline:3px solid #b86112;outline-offset:5px}
+.work-method .wm-title,.work-method h3,.work-method h4,.work-method p{margin:0}
+.work-method .wm-title,.work-method h3,.work-method h4{line-height:1.12;letter-spacing:-.035em}
+.work-method .wm-title{font-size:clamp(32px,4vw,48px);font-weight:700;max-width:750px}
+.work-method h3{font-size:clamp(27px,3.1vw,38px)}
+.work-method h4{font-size:23px}
+.work-method p{color:var(--muted)}
+.work-method .wrap{width:min(1180px,calc(100% - 64px));margin-inline:auto}
+.work-method{padding:64px 0 76px;scroll-margin-top:110px}
+.work-method .eyebrow{display:block;font-size:11px;font-weight:700;letter-spacing:.15em;line-height:1.5;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.work-method .wm-intro{display:grid;grid-template-columns:1fr 200px;gap:60px;align-items:center;margin-bottom:38px}
+.work-method .wm-intro p{font-size:18px;line-height:1.65;margin-top:22px;max-width:680px}
+.work-method .wm-experience{border-left:1px solid var(--line);padding:12px 0 12px 30px}
+.work-method .wm-experience strong{display:block;font-size:68px;line-height:1;letter-spacing:-.07em;color:var(--accent)}
+.work-method .wm-experience span{display:block;font-size:14px;line-height:1.5;margin-top:10px}
+.work-method .wm-experience small{display:block;font-size:11px;color:var(--muted);margin-top:14px}
+.work-method .wm-process{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:white}
+.work-method .wm-process-main{background:var(--dark);color:white;padding:34px 38px}
+.work-method .wm-process-main .eyebrow{color:var(--mint);margin-bottom:21px}
+.work-method .wm-steps{list-style:none;padding:0;margin:0}
+.work-method .wm-steps li{display:grid;grid-template-columns:37px 1fr;gap:16px;padding:17px 0;border-bottom:1px solid #36505b}
+.work-method .wm-steps li:first-child{padding-top:0}
+.work-method .wm-steps li:last-child{border:0;padding-bottom:0}
+.work-method .wm-step-number{font-size:12px;font-weight:700;color:var(--mint);padding-top:4px;letter-spacing:.08em}
+.work-method .wm-steps h4{font-size:20px;letter-spacing:-.02em;margin-bottom:5px}
+.work-method .wm-steps p{font-size:14px;line-height:1.55;color:#d1dee3}
+.work-method .wm-source-panel{padding:34px 38px;display:flex;flex-direction:column;gap:22px}
+.work-method .wm-source-panel h3{font-size:27px;line-height:1.14;margin-bottom:11px}
+.work-method .wm-source-panel p{font-size:15px}
+.work-method .wm-chips{display:flex;flex-wrap:wrap;gap:7px;padding:0;list-style:none;margin:16px 0 0}
+.work-method .wm-chips li{font-size:10px;letter-spacing:.06em;font-weight:700;padding:4px 9px;border:1px solid var(--line);border-radius:4px}
+.work-method .wm-cloud-note{padding:20px 22px;background:#edf5f2;border-radius:10px}
+.work-method .wm-cloud-note h4{font-size:19px;margin-bottom:8px}
+.work-method .wm-cloud-note p{font-size:14px}
+.work-method .wm-cloud-note strong{color:var(--ink)}
+.work-method .wm-source-note{font-size:13px!important}
+.work-method .wm-tools-section{padding-top:56px}
+.work-method .wm-section-head{display:flex;justify-content:space-between;align-items:end;gap:35px;margin-bottom:23px}
+.work-method .wm-section-head p{max-width:380px;font-size:15px}
+.work-method .wm-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:27px}
+.work-method .wm-tool{border-top:2px solid #aacabd;padding-top:23px}
+.work-method .wm-tool-icon{width:40px;height:40px;border-radius:9px;background:#e6f0ec;color:var(--accent);display:grid;place-items:center;margin-bottom:17px;font-weight:700;font-size:17px}
+.work-method .wm-tool h4{font-size:21px;margin-bottom:11px}
+.work-method .wm-tool p{font-size:15px;line-height:1.65}
+.work-method .wm-tool a{display:inline-flex;gap:10px;align-items:center;min-height:44px;font-size:14px;font-weight:700;margin-top:8px}
+.work-method .wm-ai-note{margin-top:28px;padding:25px 28px;border:1px solid var(--line);border-radius:12px;display:grid;grid-template-columns:62px 1fr;gap:20px;background:white}
+.work-method .wm-ai-mark{color:var(--accent);font-size:26px;font-weight:700;letter-spacing:-.04em}
+.work-method .wm-ai-note h4{font-size:21px;margin-bottom:9px}
+.work-method .wm-ai-note p{font-size:15px}
+.work-method .wm-ai-note details{margin-top:9px}
+.work-method .wm-ai-note summary{font-size:14px}
+.work-method .wm-ai-note details p{font-size:14px;margin-top:11px}
+.work-method .wm-quality-section{padding-top:54px}
+.work-method .wm-quality-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.work-method .wm-quality-card{border:1px solid var(--line);border-radius:14px;padding:27px 29px;background:white}
+.work-method .wm-file-type{font-size:10px;font-weight:bold;letter-spacing:.1em;display:inline-block;color:var(--accent);margin-bottom:10px}
+.work-method .wm-quality-card h4{font-size:24px;margin-bottom:19px}
+.work-method .wm-checks{padding:0;list-style:none;margin:0}
+.work-method .wm-checks li{position:relative;padding:0 0 11px 24px;font-size:15px;color:var(--muted);line-height:1.5}
+.work-method .wm-checks li::before{content:'✓';color:var(--accent);position:absolute;left:0;font-weight:700}
+.work-method .wm-checks strong{color:var(--ink)}
+.work-method .wm-quality-card details{margin-top:5px;border-top:1px solid var(--line);padding-top:7px}
+.work-method summary{cursor:pointer;color:var(--accent);font-weight:700;padding:9px 0;min-height:44px;font-size:14px;line-height:1.6}
+.work-method details[open] summary{margin-bottom:6px}
+.work-method .wm-details-text{font-size:14px!important;line-height:1.65}
+.work-method .wm-quality-caption{margin-top:18px;font-size:13px;max-width:850px}
+.work-method .wm-closing{margin-top:36px;display:flex;align-items:center;justify-content:space-between;gap:28px;background:#eaf3ef;border-radius:13px;padding:29px 32px}
+.work-method .wm-closing h3{font-size:25px;margin-bottom:8px}
+.work-method .wm-closing p{font-size:15px;max-width:640px}
+.work-method .button{min-height:52px;background:var(--accent);border:1px solid var(--accent);color:white;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;gap:18px;padding:12px 21px;text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap}
+.work-method .button:hover{background:#0a515c}
+.work-method .wm-scope{font-size:11px;line-height:1.65;margin-top:20px;color:var(--muted);max-width:980px}
+@media(max-width:850px){
+.work-method .wm-intro{grid-template-columns:1fr 150px;gap:24px}
+.work-method .wm-experience{padding-left:22px}
+.work-method .wm-experience strong{font-size:57px}
+.work-method .wm-process-main,.work-method .wm-source-panel{padding:27px}
+.work-method .wm-tools{gap:22px}
+.work-method .wm-section-head{display:block}
+.work-method .wm-section-head p{max-width:640px;margin-top:12px}
+.work-method .wm-closing{align-items:flex-start;flex-direction:column;gap:18px}
+.work-method .wm-quality-card{padding:24px}
+}
+@media(max-width:650px){
+.work-method{font-size:16px}
+.work-method .wrap{width:calc(100% - 36px)}
+.work-method{padding:18px 0 42px}
+.work-method .wm-intro{display:block;margin-bottom:25px}
+.work-method .wm-intro p{font-size:16px;margin-top:17px}
+.work-method .wm-experience{margin-top:24px;display:flex;gap:16px;align-items:center;padding:0;border:0}
+.work-method .wm-experience strong{font-size:43px}
+.work-method .wm-experience span{font-size:12px;margin:0;max-width:140px}
+.work-method .wm-experience small{font-size:10px;margin:0 0 0 auto;max-width:95px}
+.work-method .wm-process{grid-template-columns:1fr;border-radius:13px}
+.work-method .wm-process-main,.work-method .wm-source-panel{padding:26px 23px}
+.work-method .wm-steps li{grid-template-columns:28px 1fr;gap:12px;padding:16px 0}
+.work-method .wm-steps h4{font-size:19px}
+.work-method .wm-source-panel{gap:18px}
+.work-method .wm-source-panel h3{font-size:25px}
+.work-method .wm-cloud-note{padding:18px}
+.work-method .wm-tools-section,.work-method .wm-quality-section{padding-top:37px}
+.work-method .wm-tools{grid-template-columns:1fr;gap:24px}
+.work-method .wm-tool{display:grid;grid-template-columns:40px 1fr;gap:0 16px;padding-top:20px}
+.work-method .wm-tool-icon{grid-row:1 / 4;margin:0}
+.work-method .wm-tool h4{grid-column:2;margin-bottom:8px;font-size:20px}
+.work-method .wm-tool p,.work-method .wm-tool a{grid-column:2}
+.work-method .wm-tool a{margin-top:5px}
+.work-method .wm-ai-note{grid-template-columns:1fr;gap:9px;padding:22px;margin-top:25px}
+.work-method .wm-ai-mark{font-size:17px}
+.work-method .wm-quality-grid{grid-template-columns:1fr;gap:16px}
+.work-method .wm-quality-card{padding:24px 23px}
+.work-method .wm-quality-card h4{font-size:23px}
+.work-method .wm-quality-caption{font-size:12px}
+.work-method .wm-closing{padding:24px;gap:17px;margin-top:26px}
+.work-method .wm-closing h3{font-size:24px}
+.work-method .wm-closing p{font-size:14px}
+.work-method .button{white-space:normal;width:100%;font-size:14px}
+.work-method .wm-scope{font-size:11px}
+.work-method .eyebrow{font-size:10px;letter-spacing:.12em;margin-bottom:12px}
+}
+@media print{
+.work-method .wrap{width:100%}
+.work-method{padding:0}
+.work-method .wm-process-main{background:#eaf3ef;color:var(--ink)}
+.work-method .wm-process-main .eyebrow,.work-method .wm-step-number,.work-method .wm-steps p{color:var(--ink)}
+.work-method .wm-quality-card,.work-method .wm-tool,.work-method .wm-cloud-note,.work-method .wm-closing{break-inside:avoid}
+.work-method .button{color:var(--accent);background:white}
+.work-method .wm-tools-section,.work-method .wm-quality-section{padding-top:25px}
+}
+.work-method :is(h2,h3,h4){text-wrap:balance}.work-method h4{color:inherit}.work-method .wm-steps h4{color:#fff}.work-method .wm-intro>*{min-width:0}.work-method details{border-radius:0;background:transparent}.work-method .wm-tool-icon{flex-shrink:0}

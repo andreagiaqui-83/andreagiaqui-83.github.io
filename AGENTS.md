@@ -152,3 +152,8 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 - Rimuovere immagini e stili CSS usati esclusivamente dal vecchio blocco. Preservare il modulo corrente, le compatibilità del modulo storico inerte, i contratti backend e il menu mobile corretto il 25 ottobre. Questa direttiva sostituisce le precedenti indicazioni di mantenere quattro stili e quinta proposta nella presentazione pubblica.
 
 - Rifinitura del 26 ottobre: «Brevi video e walkthrough» è il punto 06 della stessa griglia render, accanto a Interior Design (05) su desktop e in sequenza su mobile. Il costo resta definito nel preventivo.
+
+## Metodo di lavoro — 27 ottobre 2026
+- Pubblicata la sezione approvata `#metodo-di-lavoro` in Disegnatore online, dopo il confronto economico, in sostituzione del precedente riepilogo della collaborazione. Cinque passaggi, materiali complementari facoltativi, strumenti e controlli DWG/Revit.
+- Conservare la lettura sintetica: passaggi e controlli principali visibili; approfondimenti nativi apribili su IA e verifiche tecniche. Nessun riferimento bibliografico finale. Ambiti sempre espansi, FAQ e relativi dati strutturati invariati.
+- CSS circoscritto alla sezione, senza modifiche a menu, footer, consenso o tracciamenti. AutoLISP, AG CAD Tools e IA supportano il lavoro del disegnatore, senza promesse di elaborati automaticamente corretti.

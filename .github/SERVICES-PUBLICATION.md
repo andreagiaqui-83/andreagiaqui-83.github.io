@@ -150,3 +150,8 @@ Richiesta: formulazioni sintetiche sui prezzi e approfondimento economico nella 
 
 ## Interior Design su misura — 26 ottobre 2026
 La Home integra Interior Design nella sezione render e planimetrie commerciali. La vecchia sezione con quattro stili e quinta proposta è rimossa, insieme alle sue immagini e regole CSS dedicate. L'ancora `#interior-design` e la CTA restano disponibili sulla nuova voce; descrizione SEO e riepilogo sono coerenti con proposte sviluppate sulle indicazioni del cliente. Tariffe, modulo corrente, compatibilità storica e navigazione restano invariati.
+
+## Metodo di lavoro — 27 ottobre 2026
+- Pubblicata la sezione approvata `#metodo-di-lavoro` in Disegnatore online, dopo il confronto economico, in sostituzione del precedente riepilogo della collaborazione. Cinque passaggi, materiali complementari facoltativi, strumenti e controlli DWG/Revit.
+- Conservare la lettura sintetica: passaggi e controlli principali visibili; approfondimenti nativi apribili su IA e verifiche tecniche. Nessun riferimento bibliografico finale. Ambiti sempre espansi, FAQ e relativi dati strutturati invariati.
+- CSS circoscritto alla sezione, senza modifiche a menu, footer, consenso o tracciamenti. AutoLISP, AG CAD Tools e IA supportano il lavoro del disegnatore, senza promesse di elaborati automaticamente corretti.
