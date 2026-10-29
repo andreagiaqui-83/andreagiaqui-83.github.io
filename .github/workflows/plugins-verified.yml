@@ -41,6 +41,8 @@ on:
       - 'downloads/**'
       - 'cloudflare-worker/**'
       - 'scripts/test-plugin*'
+      - 'scripts/qa-moderation-flow.cjs'
+      - 'scripts/test-moderation-origin.mjs'
       - '.github/scripts/plugins_qa.cjs'
       - '.github/workflows/plugins-verified.yml'
 permissions:
@@ -77,6 +79,8 @@ jobs:
         run: node scripts/qa-site-expansion.cjs local
       - name: Complete direct quote flow, uploads and retry
         run: node scripts/qa-preventivo-flow.cjs local
+      - name: Signed moderation forms in Chromium, Firefox and WebKit
+        run: node scripts/qa-moderation-flow.cjs
       - name: Local plugin interactions
         run: node .github/scripts/plugins_qa.cjs local
       - name: Local cross-page consistency
