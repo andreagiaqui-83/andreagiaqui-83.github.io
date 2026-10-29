@@ -170,3 +170,8 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 L’utente autorizza la pubblicazione del portfolio web e PDF, superando il precedente congelamento della sezione. La copertina mette in risalto restituzione CAD/BIM e lavori tecnici reali; le planimetrie commerciali restano l’ultima categoria. Dichiarare che la selezione è in continuo aggiornamento, che gli incarichi seguono specifiche dei professionisti committenti e che non sono modelli universali. Vietare copia, riproduzione e diffusione senza autorizzazione scritta. Il PDF resta all’URL stabile `downloads/portfolio/Andrea_Giaquinto_Portfolio.pdf`; il generatore `scripts/build-portfolio.py` utilizza esclusivamente le figure ripulite in `assets/portfolio/`.
 
 La bacheca AG CAD Tools richiede soltanto nome/nickname, commento e consenso privacy. Conservare moderazione, risposte, antispam e contratto API esistenti: `kind` e `environment` sono campi tecnici nascosti. Non inviare commenti reali durante i test. AG CAD Tools 2.2 e il suo installer restano invariati.
+
+
+## 2026-10-30 — Rifinitura del portfolio
+
+Le planimetrie commerciali possono comparire nella copertina web e PDF come immagine secondaria; il lavoro CAD/BIM resta in primo piano. La categoria commerciale resta ultima. Nella pagina web evitare la riga di recapiti ripetuta sotto la CTA finale: i recapiti completi restano nel footer comune. Nel PDF autonomo conservare la pagina contatti.

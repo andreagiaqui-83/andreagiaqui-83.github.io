@@ -97,7 +97,7 @@ para('Restituzione tecnica, DWG editabili, modellazione BIM/IFC e rappresentazio
 line(M,379,276,379,'#4e6c77');text('PRECISIONE / LEGGIBILITÀ / METODO',M,397,7.4,'#b7d5d2','Bold')
 text('andreagiaquinto.it',M,463,13,'#ffffff','Bold')
 rect(326,34,480,297,'#ffffff');pic('render-esterno',338,45,456,274,wm=False)
-for key,x,w in [('stato-comparativo',326,160),('nuvola-planimetria',494,148),('modello-ifc-revit',650,156)]:
+for key,x,w in [('stato-comparativo',326,160),('nuvola-planimetria',494,148),('commerciale-ampio-3d',650,156)]:
  rect(x,343,w,161,'#ffffff' if key!='nuvola-planimetria' else '#050708');pic(key,x+8,351,w-16,144,wm=False)
 footer(False,True)
 
