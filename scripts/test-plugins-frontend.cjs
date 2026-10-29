@@ -15,5 +15,11 @@ test('Guest replies render text safely, retain failed submissions and never emit
  w.document.querySelector('.comment button').click();const f=w.document.querySelector('#comment-form');f.elements.name.value='Test';f.elements.text.value='La risposta di prova';f.elements.privacy.checked=true;f.reportValidity=()=>true;
  f.dispatchEvent(new w.Event('submit',{cancelable:true}));await new Promise(r=>setTimeout(r,10));assert.equal(f.elements.text.value,'La risposta di prova');assert.equal(w.document.querySelector('#comment-status').textContent,'Riprova');
  f.dispatchEvent(new w.Event('submit',{cancelable:true}));await new Promise(r=>setTimeout(r,10));assert.equal(f.elements.text.value,'');assert.match(w.document.querySelector('#comment-status').textContent,/moderazione/);assert.equal(events.length,0);
- const bodies=requests.filter(r=>r.opts?.method==='POST').map(r=>JSON.parse(r.opts.body));assert.equal(bodies[0].parentId,'id1');assert.equal(bodies[0].requestId,bodies[1].requestId);dom.window.close();
+ const bodies=requests.filter(r=>r.opts?.method==='POST').map(r=>JSON.parse(r.opts.body));assert.equal(bodies[0].parentId,'id1');assert.equal(bodies[0].kind,'Risposta');assert.equal(bodies[0].environment,'');assert.equal(bodies[0].requestId,bodies[1].requestId);dom.window.close();
+});
+
+test('Comment form keeps two public text fields with the existing moderation contract',()=>{
+ const d=new JSDOM(fs.readFileSync('ag-cad-tools/index.html','utf8')).window.document,f=d.querySelector('#comment-form');
+ assert.equal(f.elements.kind.type,'hidden');assert.equal(f.elements.kind.value,'Domanda');assert.equal(f.elements.environment.type,'hidden');assert.equal(f.elements.environment.value,'');
+ assert.equal(f.querySelectorAll('select').length,0);assert.equal(f.querySelectorAll('textarea').length,1);assert.ok(f.elements.name.required);assert.ok(f.elements.text.required);assert.ok(f.elements.privacy.required);
 });

@@ -1,0 +1,117 @@
+{
+  "commerciale-ampio-2d": {
+    "width": 865,
+    "height": 723,
+    "dark": false
+  },
+  "commerciale-ampio-3d": {
+    "width": 930,
+    "height": 709,
+    "dark": false
+  },
+  "commerciale-compatto-2d": {
+    "width": 845,
+    "height": 705,
+    "dark": false
+  },
+  "commerciale-compatto-3d": {
+    "width": 864,
+    "height": 713,
+    "dark": false
+  },
+  "base-cad": {
+    "width": 2001,
+    "height": 1225,
+    "dark": true
+  },
+  "schizzo-primo": {
+    "width": 977,
+    "height": 693,
+    "dark": false
+  },
+  "schizzo-terra": {
+    "width": 985,
+    "height": 727,
+    "dark": false
+  },
+  "stato-fatto": {
+    "width": 3255,
+    "height": 1670,
+    "dark": false
+  },
+  "stato-progetto": {
+    "width": 3255,
+    "height": 1670,
+    "dark": false
+  },
+  "stato-comparativo": {
+    "width": 3255,
+    "height": 1670,
+    "dark": false
+  },
+  "scansione-base": {
+    "width": 840,
+    "height": 630,
+    "dark": false
+  },
+  "scansione-annotata": {
+    "width": 940,
+    "height": 905,
+    "dark": false
+  },
+  "dwg-scansione": {
+    "width": 1390,
+    "height": 1900,
+    "dark": false
+  },
+  "dwg-editor": {
+    "width": 690,
+    "height": 605,
+    "dark": false
+  },
+  "scansione-prospetti": {
+    "width": 2600,
+    "height": 443,
+    "dark": false
+  },
+  "scansione-piante": {
+    "width": 2400,
+    "height": 969,
+    "dark": false
+  },
+  "scansione-sezioni": {
+    "width": 804,
+    "height": 1600,
+    "dark": false
+  },
+  "render-esterno": {
+    "width": 1536,
+    "height": 1024,
+    "dark": false
+  },
+  "render-alternativo": {
+    "width": 1536,
+    "height": 1024,
+    "dark": false
+  },
+  "render-sezioni": {
+    "width": 1774,
+    "height": 887,
+    "dark": false
+  },
+  "modello-ifc-revit": {
+    "width": 808,
+    "height": 547,
+    "dark": false
+  },
+  "nuvola-sezione": {
+    "width": 1770,
+    "height": 1609,
+    "dark": true
+  },
+  "nuvola-planimetria": {
+    "width": 1770,
+    "height": 1615,
+    "dark": true
+  }
+}

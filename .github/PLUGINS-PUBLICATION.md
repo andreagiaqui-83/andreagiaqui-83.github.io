@@ -13,3 +13,8 @@ Stato corrente: 23 ottobre 2026. Questa specifica sostituisce le istruzioni stor
 - Sostegno volontario: PayPal `andrea.giaqui@gmail.com`, Postepay P2P `333 724 0544`. Non inventare altri destinatari o collegamenti. Nessun trasferimento automatico.
 - Bacheca AG: conservare la chiave tecnica `express-tools` e i contratti del backend. Commenti moderati, nessun dato dei commenti nei tracciamenti, nessuna conversione commerciale. Non inviare commenti o notifiche reali durante il collaudo.
 - Sincronizzare header/footer/navigazione e checksum. Eseguire unit test e workflow `plugins-verified.yml`, verificare le pagine desktop/mobile e l’integrità dei download pubblici prima di dichiarare completato il rilascio.
+
+
+### 2026-10-29 — Bacheca AG CAD Tools
+
+Il modulo pubblico presenta nome/nickname e commento, oltre al consenso privacy. I precedenti campi tipo/ambiente sono nascosti e mantengono il contratto API; risposte, moderazione firmata e antispam restano invariati. La grafica dedicata è in `assets/plugins/discussion.css`. Verificare sempre l’invio con API simulate, senza creare contributi reali.

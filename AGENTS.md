@@ -163,3 +163,10 @@ Questa direttiva esplicita di Andrea sostituisce le indicazioni storiche incompa
 - Nessuna nuova pagina servizio. Su successiva indicazione esplicita dell’autore, Portfolio web, PDF e materiali restano invariati fino a quando fornirà nuovi lavori.
 - Il collegamento al metodo dal Preventivo arriva a `/disegnatore-online/#metodo-di-lavoro`. Recensioni mantiene il carosello compatto e offre percorsi verso servizi e lezioni.
 - Il collaudo del Preventivo in CI intercetta sessione, allegati e invio: non generare richieste/email reali né lead fittizi in GA4. Una conferma visibile non richiede una nuova pagina Grazie.
+
+
+## 2026-10-29 — Portfolio pubblicato e commenti semplificati
+
+L’utente autorizza la pubblicazione del portfolio web e PDF, superando il precedente congelamento della sezione. La copertina mette in risalto restituzione CAD/BIM e lavori tecnici reali; le planimetrie commerciali restano l’ultima categoria. Dichiarare che la selezione è in continuo aggiornamento, che gli incarichi seguono specifiche dei professionisti committenti e che non sono modelli universali. Vietare copia, riproduzione e diffusione senza autorizzazione scritta. Il PDF resta all’URL stabile `downloads/portfolio/Andrea_Giaquinto_Portfolio.pdf`; il generatore `scripts/build-portfolio.py` utilizza esclusivamente le figure ripulite in `assets/portfolio/`.
+
+La bacheca AG CAD Tools richiede soltanto nome/nickname, commento e consenso privacy. Conservare moderazione, risposte, antispam e contratto API esistenti: `kind` e `environment` sono campi tecnici nascosti. Non inviare commenti reali durante i test. AG CAD Tools 2.2 e il suo installer restano invariati.

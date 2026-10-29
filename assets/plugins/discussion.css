@@ -1,0 +1,26 @@
+#commenti.ag-discussion{background:linear-gradient(130deg,#102b3a,#164955);color:#fff;padding:74px 0}
+.ag-discussion .section-head{align-items:start;gap:36px;margin-bottom:32px}
+.ag-discussion .section-head h2{color:#fff;max-width:540px}
+.ag-discussion .section-head p:not(.eyebrow){color:#d8e8eb;font-size:18px;line-height:1.65}
+.ag-discussion .eyebrow{color:#b9e5d6}
+.ag-discussion .discussion-grid{gap:32px;align-items:start}
+.ag-discussion .comment-form,.ag-discussion .discussion-grid>div{background:#fff;color:#102b3a;border:1px solid #d5e6e5;border-radius:18px;padding:30px;box-shadow:0 14px 32px #051c2926}
+.ag-discussion .discussion-badge{display:inline-block;background:#e6f3ee;color:#24574c;border-radius:30px;padding:6px 12px;font-size:11px;font-weight:750;letter-spacing:.08em;margin:0 0 16px}
+.ag-discussion .comment-form h3{font-size:26px;margin-top:0;line-height:1.2}
+.ag-discussion .field input:not([type=hidden]),.ag-discussion .field textarea{background:#f8fbfa;border:1px solid #9bb5bd;border-radius:9px;color:#102b3a;font-size:16px;padding:13px 14px}
+.ag-discussion .field textarea{resize:vertical;min-height:170px}
+.ag-discussion .field textarea::placeholder{color:#60747d;opacity:1}
+.ag-discussion .field input:focus,.ag-discussion .field textarea:focus{outline:3px solid #9bd6c4;outline-offset:2px;border-color:#236c70}
+.ag-discussion .comment-form .button{width:100%;background:#185e68;color:#fff;border-color:#185e68;min-height:48px}
+.ag-discussion .comment-form .button:hover{background:#10434c}
+.ag-discussion .check{align-items:flex-start;font-size:14px;line-height:1.55}
+.ag-discussion .check input{margin-top:5px;flex:none}
+.ag-discussion .comment-form small,.ag-discussion .micro{color:#516973}
+.ag-discussion .comments-heading{gap:14px;align-items:start;flex-wrap:wrap}
+.ag-discussion .comments-heading h3{font-size:24px;line-height:1.25;margin:0}
+.ag-discussion .plain-button{color:#185e68;min-height:44px;text-underline-offset:4px}
+.ag-discussion .comment{border-color:#d6e6e4;background:#f7fbfa;border-radius:10px;padding:20px;margin-top:18px;overflow-wrap:anywhere}
+.ag-discussion .reply-context{background:#e7f3ee;border-left:3px solid #236c70;border-radius:6px;padding:12px;margin-bottom:18px}
+.ag-discussion .reply-context[hidden]{display:none}
+.ag-discussion .form-status{color:#174d54;overflow-wrap:anywhere}
+@media(max-width:640px){#commenti.ag-discussion{padding:46px 0}.ag-discussion .comment-form,.ag-discussion .discussion-grid>div{padding:22px 18px}.ag-discussion .section-head{gap:15px}.ag-discussion .section-head h2{font-size:34px}.ag-discussion .comment-head{flex-wrap:wrap;gap:6px}}
