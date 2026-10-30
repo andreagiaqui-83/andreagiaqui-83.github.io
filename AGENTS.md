@@ -180,3 +180,8 @@ Le planimetrie commerciali possono comparire nella copertina web e PDF come imma
 ## 2026-10-30 — Tariffe render e planimetrie commerciali
 
 Su richiesta dell’autore, render e planimetrie commerciali, incluse le planimetrie renderizzate per Interior Design, partono da **15 € per elaborato**, con prezzo da concordare insieme in base alla complessità e alle richieste. Questa direttiva sostituisce le tariffe storiche di 0,10 €/m² e 10 € per questa categoria. Mantenere coerenti Home, Preventivo, Disegnatore online e relativi dati strutturati. Le tariffe CAD/BIM restano al m² lordo complessivo; video e walkthrough restano da concordare separatamente. Nessuna modifica a moduli, backend o tracciamenti.
+
+
+## 2026-10-30 — Richiami grafici in Home
+
+Le tre promozioni Lezioni AutoCAD, Portfolio e AG CAD Tools usano un unico componente `home-promo`, con immagini pertinenti già presenti sul sito, accenti blu/petrolio/viola e pulsanti colorati accessibili. Conservare ancore `#formazione-autocad` e `#portfolio`, link al portfolio PDF e `data-cta="course_landing_click"`. Le immagini sono differite e con dimensioni esplicite; nessun nuovo JavaScript o modifica alle pagine di destinazione. I lavori reali restano distinti dal visual delle lezioni; AG CAD Tools rimane 2.2.

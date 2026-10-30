@@ -42,10 +42,10 @@ test('Homepage usa un solo header globale e separa gli strumenti AutoCAD dal por
  assert.equal(d.querySelectorAll('.sg-header').length,1);
  assert.equal(d.querySelector('.topbar'),null,'legacy topbar homepage');
  assert.equal(d.querySelector('.site-header'),null,'legacy site-header homepage');
- const tools=d.querySelector('#portfolio .portfolio-tools-block');
+ const tools=d.querySelector('#portfolio .home-promo--tools');
  assert.ok(tools,'blocco strumenti AutoCAD assente');
- assert.equal(tools.querySelector('h3')?.textContent.trim(),'Strumenti per il tuo AutoCAD');
- assert.ok(tools.querySelectorAll('.project-links a').length===1);
+ assert.equal(tools.querySelector('h2')?.textContent.trim(),'Strumenti per il tuo AutoCAD');
+ assert.ok(tools.querySelectorAll('.home-promo-actions a').length===1);
 });
 test('Mobile menu opens and closes using Escape, links and outside interaction',()=>{
  const dom=new JSDOM(fs.readFileSync('index.html','utf8'),{runScripts:'outside-only'}),w=dom.window,d=w.document;w.matchMedia=()=>({matches:false,addEventListener(){}});w.eval(fs.readFileSync('assets/site-header.js','utf8'));
