@@ -1,8 +1,0 @@
-# SHA-256 dei file distribuiti su andreagiaquinto.it/downloads/ag-cad-tools/
-# Le pagine HTML includono la navigazione del sito. I documenti originali sono nel setup 2.2. È distribuita soltanto la release corrente approvata.
-42f7cc51d4ef4bbf1931bd08bbfe64e33e41e7142c987b2fbe7c40d1737192c3  AG_CAD_Tools_2.2_Setup.exe
-ba71f8b27d1cf756aeeae467ea3a3c920d93640ceeefd0ba53c001b874dfbe8b  AG_CAD_Tools_Compatibilita.html
-33df9b9c2929dde84cab919f1a6f5b8ac3190289c4a3028beb89126086ac2c2a  AG_CAD_Tools_Help.html
-bba3495a62ce299d0ae45975799f86e7139d6e76ba22aeb832382ddc2275e05c  AG_CAD_Tools_Sostieni.html
-ca2b21b754e3173eed603d277de680ef1ae915fdb4c142efe6b4636ffba4001d  LICENZE_TERZE_PARTI.txt
-59a9d0b4f6cc0c924e4417fa1648c6f668d72481a9d7626d86a3f2255f94523a  MAPPA_COMANDI_AG_CAD_Tools.csv

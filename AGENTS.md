@@ -185,3 +185,9 @@ Su richiesta dell’autore, render e planimetrie commerciali, incluse le planime
 ## 2026-10-30 — Richiami grafici in Home
 
 Le tre promozioni Lezioni AutoCAD, Portfolio e AG CAD Tools usano un unico componente `home-promo`, con immagini pertinenti già presenti sul sito, accenti blu/petrolio/viola e pulsanti colorati accessibili. Conservare ancore `#formazione-autocad` e `#portfolio`, link al portfolio PDF e `data-cta="course_landing_click"`. Le immagini sono differite e con dimensioni esplicite; nessun nuovo JavaScript o modifica alle pagine di destinazione. I lavori reali restano distinti dal visual delle lezioni; AG CAD Tools rimane 2.2.
+
+## 2026-10-30 — Rilascio AG CAD Tools 2.3
+
+La conferma diretta dell’autore e il rapporto aggiornato chiudono la sospensione della pubblicazione. Il riferimento corrente è l’installer 2.3 corretto, collaudato su AutoCAD 2027 italiano, invariato dopo il test. Seguire `.github/PLUGINS-PUBLICATION.md` e `.github/AG23-RELEASE.md`; non estendere la verifica alle altre combinazioni Windows/AutoCAD/lingua.
+
+Preservare gratuità evidente, novità disponibili distinte dal programma 2.4, Muri e pilastri come funzioni analoghe indipendenti senza equivalenza completa YQArch, quattro comandi personali con limiti e rimandi alla guida. Usare i conteggi del pacchetto, contestualizzando le schermate. La guida web conserva 298 schede e limiti; CSS circoscritto al contenuto senza modificare la navigazione comune. Nessuna modifica all’installer.

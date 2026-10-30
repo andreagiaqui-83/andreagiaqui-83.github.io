@@ -27,8 +27,8 @@ test('Indexable pages have unique titles, descriptions, correct canonicals and e
 test('Current software metadata, download links and manifest agree; guide retains all command IDs',()=>{
  const releases=JSON.parse(fs.readFileSync('downloads/releases.json'));
  for(const [file,d] of docs){for(const s of d.querySelectorAll('[type="application/ld+json"]')){const g=JSON.parse(s.textContent)['@graph']||[];for(const app of g.filter(x=>x['@type']==='SoftwareApplication')){const r=releases.find(r=>origin+r.file===app.downloadUrl);assert.ok(r,file);assert.equal(app.softwareVersion,r.version,file);assert.ok(d.querySelector('a[href="'+r.file+'"]'),file);}}}
- const guide=docs.get('downloads/ag-cad-tools/AG_CAD_Tools_Help.html');assert.equal(guide.querySelectorAll('article.card').length,241);assert.equal(new Set([...guide.querySelectorAll('article.card')].map(e=>e.id)).size,241);
- assert.equal(releases.length,1);assert.equal(releases[0].project,'ag-cad-tools');assert.equal(releases[0].version,'2.2');
+ const guide=docs.get('downloads/ag-cad-tools/AG_CAD_Tools_Help.html');assert.equal(guide.querySelectorAll('details.card').length,298);assert.equal(new Set([...guide.querySelectorAll('details.card')].map(e=>e.id)).size,298);
+ assert.equal(releases.length,1);assert.equal(releases[0].project,'ag-cad-tools');assert.equal(releases[0].version,'2.3');
 });
 
 test('All FAQ schemas match visible questions and complete answers exactly',()=>{

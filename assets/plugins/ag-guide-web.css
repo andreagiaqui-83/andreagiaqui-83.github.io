@@ -1,0 +1,127 @@
+/* Scoped web adaptation of the documentation distributed in AG CAD Tools 2.3. */
+:root{--ag-ink:#183249;--ag-navy:#173f68;--ag-blue:#176fa8;--ag-line:#d5e2ec;--ag-bg:#eff4f8;--ag-muted:#536779;--ag-gold:#b87508}
+#ag-guide-content *{box-sizing:border-box}
+#ag-guide-content{scroll-behavior:smooth}
+#ag-guide-content{color:var(--ag-ink);font:16px/1.6 "Segoe UI",Arial,sans-serif;background:var(--ag-bg);margin:0}
+#ag-guide-content a[href],#ag-guide-content a[href]:visited,#ag-guide-content button{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:44px;max-width:100%;padding:10px 16px;margin:4px 5px 4px 0;border:1px solid transparent;border-radius:9px;background:var(--ag-navy);color:#fff!important;text-decoration:none!important;font:600 14px/1.4 "Segoe UI",Arial,sans-serif;text-align:center;overflow-wrap:anywhere;box-shadow:0 3px 8px #173f681a;cursor:pointer;vertical-align:middle}
+#ag-guide-content a[href]:hover,#ag-guide-content button:hover{background:#0d2d4e;color:#fff!important;text-decoration:none!important}
+#ag-guide-content a[href]:focus-visible,#ag-guide-content button:focus-visible,#ag-guide-content input:focus-visible,#ag-guide-content select:focus-visible,#ag-guide-content summary:focus-visible{outline:3px solid var(--ag-gold);outline-offset:3px}
+#ag-guide-content a[href]:active{background:#0b223a}
+#ag-guide-content a[href^="https://wa.me/"],#ag-guide-content a.whatsapp{background:#10786d}
+#ag-guide-content a[href^="https://wa.me/"]:hover{background:#095b52}
+#ag-guide-content a[href] code{color:inherit;background:transparent}
+#ag-guide-content a[href] img{max-width:100%}
+#ag-guide-content a[href].secondary{background:#e7f0f7;color:#163f65!important;border-color:#bdcedd}
+#ag-guide-content a[href].secondary:hover{background:#d1e2ee}
+#ag-guide-content [hidden]{display:none!important}
+#ag-guide-content .ag-doc-nav{padding:12px 20px;border-bottom:1px solid var(--ag-line);background:#fff}
+#ag-guide-content .ag-archive-note{margin:18px;padding:14px 18px;background:#fff5df;border-left:4px solid var(--ag-gold)}
+#ag-guide-content header{padding:36px max(24px,calc((100vw - 1160px)/2));background:linear-gradient(115deg,#163c62,#176fa8);color:#fff}
+#ag-guide-content header p{max-width:850px;margin:10px 0}
+#ag-guide-content .eyebrow{letter-spacing:.12em;text-transform:uppercase;font-size:12px;font-weight:700}
+#ag-guide-content h1{font-size:42px;line-height:1.15;margin:10px 0 16px;letter-spacing:-.025em}
+#ag-guide-content main{max-width:1208px;margin:auto;padding:24px}
+#ag-guide-content h2{font-size:28px;line-height:1.25;color:#163f65;margin:0 0 18px}
+#ag-guide-content h3{font-size:22px;line-height:1.3;color:#163f65;margin:0 0 12px}
+#ag-guide-content h4{font-size:16px;margin:20px 0 5px;color:#173f68}
+#ag-guide-content p{margin:10px 0 16px}
+#ag-guide-content section.intro,#ag-guide-content .card,#ag-guide-content .bh-card,#ag-guide-content .support{background:#fff;border:1px solid var(--ag-line);border-radius:14px;padding:24px;margin:0 0 20px}
+#ag-guide-content .category{padding-top:22px;margin-bottom:30px}
+#ag-guide-content .subgroup>h3{border-bottom:2px solid #bfd3e3;padding:12px 0;margin:22px 0 18px}
+#ag-guide-content .card h3 img{width:32px;height:32px;vertical-align:middle;margin-right:10px}
+#ag-guide-content .card{scroll-margin-top:20px}
+#ag-guide-content .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+#ag-guide-content .grid>.card{margin:0}
+#ag-guide-content .meta,#ag-guide-content .small{font-size:13px;color:var(--ag-muted)}
+#ag-guide-content .ribbon-location{font-size:13px;border-left:3px solid #176fa8;padding-left:10px;margin-top:0}
+#ag-guide-content code{font:14px/1.5 Consolas,monospace;overflow-wrap:anywhere;background:#eef3f7;border-radius:4px;padding:2px 5px}
+#ag-guide-content .command{font-size:15px;font-weight:700}
+#ag-guide-content ul,#ag-guide-content ol{padding-left:23px}
+#ag-guide-content li{margin:6px 0}
+#ag-guide-content .command-index{display:flex;flex-wrap:wrap;gap:5px}
+#ag-guide-content .group-index{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#ag-guide-content .group-index a{justify-content:flex-start;text-align:left;margin:0;min-height:64px;background:#eaf2f8;color:#163f65!important;border-color:#c9dce9}
+#ag-guide-content .group-index a:hover{background:#d7e8f4}
+#ag-guide-content .search{background:#fff;border:1px solid var(--ag-line);border-radius:14px;padding:20px;margin:22px 0}
+#ag-guide-content label{display:block;font-weight:700;margin-bottom:8px}
+#ag-guide-content input,#ag-guide-content select{font:16px "Segoe UI",Arial,sans-serif;border:1px solid #9dafbe;border-radius:8px;min-height:46px;padding:10px 12px;color:#183249;background:#fff;max-width:100%}
+#ag-guide-content input{width:min(650px,100%)}
+#ag-guide-content select{min-width:220px;margin:5px 8px 5px 0}
+#ag-guide-content .search-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#ag-guide-content .result-count{margin:8px 0 0;font-size:14px;color:var(--ag-muted)}
+#ag-guide-content .reference{margin:18px 0 0;padding:14px;border-radius:8px;background:#f1f6fa;border-left:3px solid #8eacbf}
+#ag-guide-content .reference p{margin:6px 0;font-size:14px}
+#ag-guide-content .reference a{font-size:12px;padding:8px 11px}
+#ag-guide-content details{margin-top:16px;border-top:1px solid var(--ag-line);padding-top:12px}
+#ag-guide-content summary{cursor:pointer;font-weight:600;color:#173f68;min-height:36px}
+#ag-guide-content table{border-collapse:collapse;width:100%;font-size:14px}
+#ag-guide-content td,#ag-guide-content th{border:1px solid var(--ag-line);padding:11px;text-align:left;vertical-align:top}
+#ag-guide-content th{background:#eaf2f8}
+#ag-guide-content .table-wrap{overflow-x:auto}
+#ag-guide-content footer{padding:25px 0;font-size:14px;color:var(--ag-muted)}
+#ag-guide-content .note{border-left:4px solid #c98516;background:#fff8e9;padding:12px 16px}
+#ag-guide-content .anchor-compat{display:block;height:0}
+#ag-guide-content .quick{display:flex;flex-wrap:wrap;gap:5px}
+#ag-guide-content .group-count{font-size:14px;font-weight:400;color:var(--ag-muted)}
+@media(max-width:850px){#ag-guide-content .grid{grid-template-columns:1fr}
+#ag-guide-content .group-index{grid-template-columns:repeat(2,minmax(0,1fr))}
+#ag-guide-content h1{font-size:34px}
+}
+@media(max-width:520px){#ag-guide-content main{padding:14px}
+#ag-guide-content header{padding:27px 20px}
+#ag-guide-content section.intro,#ag-guide-content .card,#ag-guide-content .bh-card,#ag-guide-content .support{padding:18px}
+#ag-guide-content .group-index{grid-template-columns:1fr}
+#ag-guide-content h2{font-size:25px}
+#ag-guide-content h3{font-size:20px}
+#ag-guide-content .search{padding:16px}
+#ag-guide-content select{width:100%}
+#ag-guide-content .command-index a{width:100%;justify-content:flex-start;text-align:left}
+#ag-guide-content .ag-doc-nav{padding:10px}
+#ag-guide-content .reference{padding:11px}
+}
+@media(prefers-reduced-motion:reduce){#ag-guide-content{scroll-behavior:auto}
+#ag-guide-content *{transition:none!important}
+}
+@media print{#ag-guide-content{background:#fff}
+#ag-guide-content header{background:#fff;color:#173f68;padding:0}
+#ag-guide-content main{padding:0}
+#ag-guide-content .grid{display:block}
+#ag-guide-content .search{display:none}
+#ag-guide-content .card,#ag-guide-content .bh-card{break-inside:avoid}
+#ag-guide-content a[href]{box-shadow:none!important;border-color:#789!important;background:#edf3f8!important;color:#173f68!important}
+#ag-guide-content a[href]::after{content:none!important}
+}
+#ag-guide-content details.card{ display:block; padding:1rem; }
+#ag-guide-content details.card > summary{ cursor:pointer; font-weight:700; line-height:1.5; }
+#ag-guide-content details.card > summary code{ display:block; font-size:.8rem; font-weight:400; overflow-wrap:anywhere; }
+#ag-guide-content details.card[open] > summary{ margin-bottom:1rem; }
+#ag-guide-content .command-section,#ag-guide-content details.card > details{ margin:.65rem 0; }
+#ag-guide-content summary{ cursor:pointer; }
+#ag-guide-content summary:focus-visible{ outline:3px solid #b88432; outline-offset:4px; border-radius:3px; }
+#ag-guide-content details.intro,#ag-guide-content details.manual{ margin:1rem 0; padding:1rem; }
+#ag-guide-content details.intro,#ag-guide-content details.manual{ background:#fff; border:1px solid var(--ag-line); border-radius:14px; }
+#ag-guide-content .command-heading img{ width:32px; height:32px; vertical-align:middle; margin-right:10px; }
+#ag-guide-content #expand,#ag-guide-content #collapse{ margin:.5rem .5rem 0 0; }
+@media print{#ag-guide-content details.card{ break-inside:avoid; }
+ }
+#ag-guide-content .command-icon{box-sizing:content-box;width:32px;height:32px;padding:4px;background:#273a4d;border-radius:6px;object-fit:contain}
+#ag-guide-content .command-link-icon{width:20px;height:20px;flex:none;object-fit:contain}
+#ag-guide-content details.subgroup{padding:12px 0;border:0}
+#ag-guide-content details.subgroup>summary{font-size:22px;border-bottom:2px solid #bfd3e3;padding:12px 0;margin-bottom:14px}
+#ag-guide-content details.subgroup>summary::marker{color:#176fa8}
+
+
+#ag-guide-content{font:16px/1.6 "Segoe UI",Arial,sans-serif;color:#183249;background:#eff4f8}
+#ag-guide-content [id]{scroll-margin-top:110px}
+#ag-guide-content .command-icon{max-width:40px}
+#ag-guide-content .search-row>*{min-width:0}
+#ag-guide-content input,#ag-guide-content select{max-width:100%;min-width:0}
+.ag-compat-content{max-width:1100px;margin:32px auto;padding:30px;background:white;color:#20374d;font:16px/1.65 system-ui,sans-serif;border:1px solid #d5e2ec;border-radius:20px}
+.ag-compat-content h1{font-size:clamp(30px,5vw,44px);line-height:1.15}
+.ag-compat-content h2{font-size:25px;line-height:1.25;margin-top:30px}
+.ag-compat-content table{width:100%;border-collapse:collapse;font-size:14px;display:block;overflow:auto}
+.ag-compat-content td,.ag-compat-content th{padding:12px;border:1px solid #cbd9e5;text-align:left}
+.ag-compat-content th{background:#edf3fa}
+.ag-compat-content code{overflow-wrap:anywhere}
+.ag-compat-content a{color:#1e527b;text-underline-offset:3px}
+@media(max-width:600px){.ag-compat-content{padding:18px;margin:18px 16px}#ag-guide-content main{padding:14px}#ag-guide-content .card{padding:16px}}

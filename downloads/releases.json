@@ -1,11 +1,11 @@
 [
   {
     "project": "ag-cad-tools",
-    "version": "2.2",
-    "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.2_Setup.exe",
-    "sha256": "42f7cc51d4ef4bbf1931bd08bbfe64e33e41e7142c987b2fbe7c40d1737192c3",
-    "bytes": 51700736,
-    "status": "Verificata e approvata dall’autore per la pubblicazione; include BlockHub",
-    "date": "2026-10-15"
+    "version": "2.3",
+    "file": "/downloads/ag-cad-tools/AG_CAD_Tools_2.3_Setup.exe",
+    "sha256": "81c232304e3402adea26f90531e7c77f5c18ffddf993b08eccf8d52fdda719a5",
+    "bytes": 63328768,
+    "status": "Pubblicabile: collaudo autore confermato su AutoCAD 2027 italiano",
+    "date": "2026-10-30"
   }
 ]

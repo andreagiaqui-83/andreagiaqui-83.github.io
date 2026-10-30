@@ -22,7 +22,7 @@ jobs:
           root='https://andreagiaquinto.it'
           files=['/downloads/releases.json','/downloads/portfolio/Andrea_Giaquinto_Portfolio.pdf']
           files += [r['file'] for r in json.loads(pathlib.Path('downloads/releases.json').read_text())]
-          files += ['/downloads/ag-cad-tools/SHA256_AG_CAD_Tools_2.2.txt']
+          files += ['/downloads/ag-cad-tools/SHA256_AG_CAD_Tools_2.3.txt']
           for attempt in range(18):
               try:
                   for file in files:

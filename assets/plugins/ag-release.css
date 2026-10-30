@@ -1,0 +1,66 @@
+/* AG CAD Tools 2.3: page-specific presentation; common navigation is unchanged. */
+.ag23-page{--ag23-blue:#2454cc;--ag23-violet:#6940ba;--ag23-teal:#08776e}
+.ag23-page .hero{background:radial-gradient(ellipse at 90% 25%,#e9e2ff 0,transparent 48%),linear-gradient(145deg,#f8fafc,#edf4ff)}
+.ag23-page .hero h1{font-size:clamp(42px,5vw,68px)}
+.ag23-page .hero h1 em{color:var(--ag23-blue)}
+.ag23-page .hero .button{background:var(--ag23-blue);border-color:var(--ag23-blue)}
+.ag23-page .hero .button.secondary{background:#fff;color:#214aab;border-color:#a9bce9}
+.ag23-free{display:inline-flex;padding:7px 13px;border-radius:50px;background:#d6f6e7;color:#13553f;font-size:14px;font-weight:750;margin:0 0 18px}
+.ag23-page .hero-visual{background:#fff;border:1px solid #c6d5ed;border-radius:20px;transform:none}
+.ag23-page .hero-visual img{aspect-ratio:1150/777;object-fit:contain;height:auto}
+.ag23-page .hero-visual figcaption{color:#405774;background:#fff;border-color:#dce4f2}
+.ag23-page .hero-visual figcaption strong{color:#163b62}
+.ag23-page .hero-visual figcaption a{color:#2454cc}
+.ag23-page .facts{border:0;gap:14px;padding-bottom:32px}
+.ag23-page .facts>div{padding:20px!important;border:1px solid #d3deed!important;border-radius:15px;background:#ffffffdb}
+.ag23-page .facts strong{color:#234eb5}
+.ag23-page .facts>div:nth-child(2) strong{color:#0c7167}
+.ag23-page .facts>div:nth-child(3) strong{color:#6940ba}
+.ag23-page .section{padding-block:64px}
+.ag23-page .ag-page-index{border:0}
+.ag23-page .ag-page-index a{border-radius:24px;background:#fff}
+.ag23-section-head{max-width:780px;margin-bottom:30px}
+.ag23-news{background:#edf2fc}
+.ag23-news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.ag23-news-card{--card-accent:#2454cc;background:#fff;border:1px solid #ccd9f2;border-top:4px solid var(--card-accent);border-radius:18px;padding:26px;display:flex;align-items:flex-start;flex-direction:column;box-shadow:0 10px 25px #233f6610}
+.ag23-news-card:nth-child(3n+2){--card-accent:#08776e;border-color:#c7e3df;border-top-color:var(--card-accent)}
+.ag23-news-card:nth-child(3n){--card-accent:#6940ba;border-color:#e0d4ef;border-top-color:var(--card-accent)}
+.ag23-number{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;background:var(--card-accent);color:#fff;border-radius:12px;font-size:15px;font-weight:800;margin-bottom:20px}
+.ag23-news-card h3{font-size:23px;line-height:1.2}
+.ag23-news-card p{font-size:16px;color:#415767;margin-bottom:22px}
+.ag23-news-card>a{display:inline-flex;align-items:center;justify-content:space-between;gap:14px;margin-top:auto;min-height:46px;padding:10px 15px;border-radius:9px;background:var(--card-accent);color:#fff;text-decoration:none;font-size:14px;font-weight:700}
+.ag23-news-card>a:hover{filter:brightness(.92)}
+.ag23-personal{background:#f1edf8}
+.ag23-command-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:32px}
+.ag23-command{padding:30px;background:#fff;border:1px solid #d9d0ea;border-radius:20px;display:flex;flex-direction:column;align-items:flex-start}
+.ag23-command-icon{font-size:32px;line-height:1;display:flex;align-items:center;justify-content:center;width:54px;height:54px;background:#eee7fb;color:#6840b7;border-radius:15px;margin-bottom:22px}
+.ag23-command h3{font-size:26px}
+.ag23-command p{font-size:16px;color:#435565}
+.ag23-command p strong{color:#1c364b;font-weight:600}
+.ag-detail-link{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-size:15px;font-weight:700;margin-top:auto;color:#6434a4}
+.ag23-two{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+.ag23-two>div,.ag23-shot{min-width:0}
+.ag23-two h3:not(:first-child){margin-top:26px}
+.ag23-shot{margin:24px 0;background:#fff;border:1px solid #cddcea;border-radius:18px;overflow:hidden;box-shadow:0 12px 30px #173b6012}
+.ag23-shot>a{display:block;padding:12px;background:#f4f7fd}
+.ag23-shot img{display:block;width:100%;height:auto;border-radius:8px}
+.ag23-shot figcaption{padding:16px 20px;font-size:14px;color:#4d6072;line-height:1.55}
+.ag23-page #blockhub{background:#eef8f5}
+.ag23-page #blockhub>.wrap>.ag23-shot{max-width:1000px;margin:28px auto}
+.ag23-page #yqarch{background:#f4f7fc}
+.ag23-roadmap{background:#f8faf9}
+.ag23-roadmap-box{padding:42px;border:1px solid #d9c7ed;border-radius:24px;background:linear-gradient(125deg,#f1eaff,#f4f9ff);display:grid;grid-template-columns:1fr 1fr;gap:24px 40px}
+.ag23-roadmap-box .eyebrow{color:#693caa}
+.ag23-roadmap-box ol{margin:0;padding:0;list-style:none;counter-reset:roadmap}
+.ag23-roadmap-box li{padding:0 0 22px 47px;position:relative;counter-increment:roadmap}
+.ag23-roadmap-box li:before{content:counter(roadmap);position:absolute;left:0;top:0;display:grid;place-items:center;width:30px;height:30px;background:#6a40b6;color:#fff;border-radius:50%;font-size:14px;font-weight:700}
+.ag23-roadmap-box li strong,.ag23-roadmap-box li span{display:block}
+.ag23-roadmap-box li span{font-size:15px;color:#4d5b70;margin-top:5px}
+.ag23-roadmap-box>.micro{grid-column:1/-1;color:#43516a}
+.ag23-roadmap-box>.button{justify-self:start;background:#6940ba;color:#fff;border-color:#6940ba}
+.ag23-page .download-panel>div{min-width:0}
+.ag23-page .button{white-space:normal}
+.ag23-page .ag-ribbon-full .ag-ribbon-view{width:1917px;min-width:1917px}
+@media(max-width:950px){.ag23-news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ag23-two{grid-template-columns:1fr}.ag23-two .ag23-shot{max-width:760px}.ag23-roadmap-box{gap:24px}}
+@media(max-width:650px){.ag23-news-grid,.ag23-command-grid,.ag23-roadmap-box,.ag23-page .facts{grid-template-columns:1fr}.ag23-page .section{padding-block:44px}.ag23-news-card,.ag23-command{padding:23px}.ag23-roadmap-box{padding:25px}.ag23-page .facts{gap:10px}.ag23-page .hero-actions .button{width:100%}.ag23-page .hero-visual figcaption{padding:16px}.ag23-shot>a{padding:7px}.ag23-shot figcaption{padding:13px}.ag23-page .hero-grid{gap:28px}.ag23-page .wrap{width:calc(100% - 32px)}}
+@media(prefers-reduced-motion:reduce){.ag23-page{scroll-behavior:auto}}

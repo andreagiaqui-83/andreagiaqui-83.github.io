@@ -3,8 +3,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const directory = path.join(__dirname, '../downloads/ag-cad-tools');
-const output = 'SHA256_AG_CAD_Tools_2.2.txt';
-const header = '# SHA-256 dei file distribuiti su andreagiaquinto.it/downloads/ag-cad-tools/\n# Le pagine HTML includono la navigazione del sito. I documenti originali sono nel setup 2.2. È distribuita soltanto la release corrente approvata.\n';
+const output = 'SHA256_AG_CAD_Tools_2.3.txt';
+const header = '# SHA-256 dei file distribuiti su andreagiaquinto.it/downloads/ag-cad-tools/\n# Le pagine HTML includono la navigazione del sito. I documenti originali sono nel setup 2.3. È distribuita soltanto la release corrente approvata.\n';
 const rows = fs.readdirSync(directory).filter(name => !name.startsWith('SHA256_') && fs.statSync(path.join(directory, name)).isFile()).sort().map(name => crypto.createHash('sha256').update(fs.readFileSync(path.join(directory, name))).digest('hex') + '  ' + name);
 const expected = header + rows.join('\n') + '\n';
 if (process.argv.includes('--check')) {
