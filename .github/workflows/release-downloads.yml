@@ -15,29 +15,6 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Verify exact public download bytes
-        run: |
-          python - <<'PY'
-          import hashlib,json,pathlib,time,urllib.request
-          root='https://andreagiaquinto.it'
-          files=['/downloads/releases.json','/downloads/portfolio/Andrea_Giaquinto_Portfolio.pdf']
-          files += [r['file'] for r in json.loads(pathlib.Path('downloads/releases.json').read_text())]
-          files += ['/downloads/ag-cad-tools/SHA256_AG_CAD_Tools_2.3.txt']
-          for attempt in range(18):
-              try:
-                  for file in files:
-                      request=urllib.request.Request(root+file+'?verify='+str(time.time()),headers={'Cache-Control':'no-cache'})
-                      with urllib.request.urlopen(request,timeout=25) as response:
-                          actual=hashlib.sha256(response.read()).hexdigest()
-                      expected=hashlib.sha256(pathlib.Path(file.lstrip('/')).read_bytes()).hexdigest()
-                      assert actual==expected,file
-                  print('VERIFIED: exact bytes for',len(files),'public files.')
-                  break
-              except Exception as error:
-                  print('Waiting for release:',str(error),flush=True)
-                  if attempt==17: raise
-                  time.sleep(15)
-          PY
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -46,6 +23,8 @@ jobs:
           npm ci --no-audit --no-fund
           npm install --no-save --no-audit --no-fund playwright@1.58.2
           npx playwright install --with-deps chromium
+      - name: Verify exact public files through the normal browser client
+        run: node scripts/verify-published-downloads.cjs
       - name: Read plugin APIs through the actual browser client
         run: |
           node - <<'JS'
