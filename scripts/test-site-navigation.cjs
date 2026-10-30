@@ -34,7 +34,7 @@ test('Commercial offer integrates custom interior design and preserves anchors a
  const text=d.querySelector('#render').textContent;for(const term of ['agenzie immobiliari','property manager','Planimetrie commerciali 2D','Planimetrie 3D arredate','Virtual staging','walkthrough'])assert.ok(text.includes(term),term);
  const graph=JSON.parse(d.querySelector('script[type="application/ld+json"]').textContent)['@graph'];const faq=graph.find(x=>x['@type']==='FAQPage').mainEntity;const visible=[...d.querySelectorAll('#faq details')];assert.equal(faq.length,visible.length);
  visible.forEach((x,i)=>{assert.equal(faq[i].name,x.querySelector('summary').textContent);assert.equal(faq[i].acceptedAnswer.text,(x.querySelector('.faq-answer')||x.querySelector('p')).textContent.replace(/\s+/g,' ').trim());});
- assert.ok(d.querySelector('#tariffe').textContent.includes('0,10 €'));assert.equal(d.querySelector('#pointCloud').disabled,false);
+ assert.ok(d.querySelector('#tariffe').textContent.includes('15 €'));assert.equal(d.querySelector('#pointCloud').disabled,false);
 });
 
 test('Homepage usa un solo header globale e separa gli strumenti AutoCAD dal portfolio',()=>{

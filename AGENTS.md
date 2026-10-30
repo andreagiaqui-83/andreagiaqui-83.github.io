@@ -175,3 +175,8 @@ La bacheca AG CAD Tools richiede soltanto nome/nickname, commento e consenso pri
 ## 2026-10-30 — Rifinitura del portfolio
 
 Le planimetrie commerciali possono comparire nella copertina web e PDF come immagine secondaria; il lavoro CAD/BIM resta in primo piano. La categoria commerciale resta ultima. Nella pagina web evitare la riga di recapiti ripetuta sotto la CTA finale: i recapiti completi restano nel footer comune. Nel PDF autonomo conservare la pagina contatti.
+
+
+## 2026-10-30 — Tariffe render e planimetrie commerciali
+
+Su richiesta dell’autore, render e planimetrie commerciali, incluse le planimetrie renderizzate per Interior Design, partono da **15 € per elaborato**, con prezzo da concordare insieme in base alla complessità e alle richieste. Questa direttiva sostituisce le tariffe storiche di 0,10 €/m² e 10 € per questa categoria. Mantenere coerenti Home, Preventivo, Disegnatore online e relativi dati strutturati. Le tariffe CAD/BIM restano al m² lordo complessivo; video e walkthrough restano da concordare separatamente. Nessuna modifica a moduli, backend o tracciamenti.
