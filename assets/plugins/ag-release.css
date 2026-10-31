@@ -33,7 +33,8 @@
 .ag23-personal{background:#f1edf8}
 .ag23-command-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:32px}
 .ag23-command{padding:30px;background:#fff;border:1px solid #d9d0ea;border-radius:20px;display:flex;flex-direction:column;align-items:flex-start}
-.ag23-command-icon{font-size:32px;line-height:1;display:flex;align-items:center;justify-content:center;width:54px;height:54px;background:#eee7fb;color:#6840b7;border-radius:15px;margin-bottom:22px}
+.ag23-command-icon{display:flex;align-items:center;justify-content:center;width:54px;height:54px;flex-shrink:0;background:#263c50;border-radius:15px;margin-bottom:22px}
+.ag23-command-icon img{display:block;width:32px;height:32px;object-fit:contain}
 .ag23-command h3{font-size:26px}
 .ag23-command p{font-size:16px;color:#435565}
 .ag23-command p strong{color:#1c364b;font-weight:600}

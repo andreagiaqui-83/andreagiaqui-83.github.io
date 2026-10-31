@@ -22,3 +22,9 @@ Aggiornati Home, ponti storici, README, manifest, checksum e controlli di rilasc
 - 101 test automatici del sito superati; collegamenti e ricerca della guida verificati.
 - Anteprima desktop e mobile 320 px, con correzione della larghezza dei contatori.
 - La pubblicazione richiede inoltre i workflow `plugins-verified.yml` e `site-complete-audit.yml` e la verifica dell’installer pubblico. Nessun invio, commento o lead reale durante i test.
+
+## 31 ottobre 2026 — Icone e schermata BlockHub
+
+Le quattro schede dei comandi personali utilizzano i PNG originali estratti senza modifiche dalle rispettive schede della guida distribuita. Gli asset sono in `assets/plugins/commands/`; nessuna modifica a guida o installer.
+
+Schermata aggiornata: `assets/plugins/blockhub-2.3-corrected.png`. Rimosso soltanto il suffisso errato dopo «prospetto» nella prima tessera e nel dettaglio selezionato. Modifica con imagegen integrato, poi integrazione limitata alle due aree del refuso sull’originale, preservando tutti gli altri pixel e le dimensioni 1352 × 878. Prompt: «Remove ONLY the accidental nonsense suffix after the word prospetto in TWO places: the selected green-bordered first cabinet tile and the bold selected-item heading. Both labels must end at prospetto. Preserve all other screenshot content, text, layout and colors.»
