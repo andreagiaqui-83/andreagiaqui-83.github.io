@@ -34,7 +34,24 @@ async function run(){
    const reject=page.getByRole('button',{name:'Rifiuta facoltativi'});if(await reject.isVisible())await reject.click();
    row.structure=await page.evaluate(()=>({lang:document.documentElement.lang,title:document.title,h1:document.querySelectorAll('h1').length,main:document.querySelectorAll('main').length,canonical:document.querySelector('link[rel=canonical]')?.href,robots:document.querySelector('meta[name=robots]')?.content,ids:[...document.querySelectorAll('[id]')].map(e=>e.id).filter((x,i,a)=>a.indexOf(x)!==i)}));
    // Force pending lazy images only for decoding checks, not for performance measurements.
-   row.images=await page.evaluate(async()=>{const bad=[];await Promise.all([...document.images].filter(img=>img.getAttribute('src')||img.currentSrc).map(async img=>{img.loading='eager';try{await img.decode()}catch{bad.push((img.getAttribute('src')||img.currentSrc).slice(0,160))}}));return {total:document.images.length,broken:bad}});
+   row.images=await page.evaluate(async()=>{
+    const bad=[];
+    // Wait for the lazy-to-eager request before decoding. Starting every decode
+    // immediately can reject pending image requests in Chromium's long galleries.
+    for(const img of [...document.images].filter(img=>img.getAttribute('src')||img.currentSrc)){
+     try{
+      await new Promise((resolve,reject)=>{
+       const finish=error=>{clearTimeout(timer);img.removeEventListener('load',loaded);img.removeEventListener('error',failed);error?reject(error):resolve()};
+       const loaded=()=>finish(),failed=()=>finish(new Error('Image load failed'));
+       const timer=setTimeout(()=>finish(new Error('Image load timed out')),15000);
+       img.addEventListener('load',loaded,{once:true});img.addEventListener('error',failed,{once:true});
+       img.loading='eager';if(img.complete)img.naturalWidth?loaded():failed();
+      });
+      await img.decode();if(!img.naturalWidth)throw new Error('Empty image');
+     }catch{bad.push((img.getAttribute('src')||img.currentSrc).slice(0,160))}
+    }
+    return {total:document.images.length,broken:bad};
+   });
    for(const width of widths){await page.setViewportSize({width,height:900});await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);row.widths.push({width,overflow});if(overflow)report.issues.push({file:entry.file,engine,width,type:'overflow',nodes:await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width&&r.right>innerWidth+1&&getComputedStyle(e).position!=='fixed'}).slice(0,12).map(e=>({tag:e.tagName,id:e.id,class:e.className,rect:e.getBoundingClientRect().toJSON()})))});
     if(engine==='chromium'&&[390,1440].includes(width)){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:path.join(out,`${live?'live':'local'}-${entry.file.replace(/[^a-z0-9]/gi,'-')}-${width}.png`)});const modifiedSection=entry.file==='index.html'?'#pdf-dwg-revit':entry.file==='preventivo/index.html'?'.quote-hero':entry.file==='ag-cad-tools/index.html'?'.ag-ribbon-showcase':null;if(modifiedSection)await page.locator(modifiedSection).screenshot({path:path.join(out,`${live?'live':'local'}-updated-${entry.file==='index.html'?'pdf-cad':entry.file==='preventivo/index.html'?'preventivo':'ag-ribbon'}-${width}.png`)});}
     if(engine==='chromium'&&entry.file==='ag-cad-tools/index.html'&&[390,1440].includes(width)){await page.locator('.ag-page-index').screenshot({path:path.join(out,`${live?'live':'local'}-ag-index-${width}.png`)});}
