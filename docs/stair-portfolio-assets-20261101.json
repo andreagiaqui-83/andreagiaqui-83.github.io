@@ -1,0 +1,65 @@
+{
+  "package_sha256": "6af88607e054d0ba0c9804b76f10948f1544b6c0437b2861770a403463292e49",
+  "models": [
+    {
+      "filename": "Scala_ventaglio_2D.dxf",
+      "sha256": "40b28eb647137d9ecd0df8a9d1f38663d8cdf3827392d70bb38cf815b4dac9f0",
+      "dimensions": 5,
+      "all_styles_DIMSE1_DIMSE2": 1,
+      "audited_without_errors_or_repairs": true,
+      "native_AutoCAD_test": false
+    },
+    {
+      "filename": "Scala_ventaglio_3D.dxf",
+      "sha256": "eeff59ff9cd9d9ab47f8ac983e4944ef1086ba629f8f072d2e7dcb1c64c452bd",
+      "dimensions": 0,
+      "all_styles_DIMSE1_DIMSE2": 1,
+      "audited_without_errors_or_repairs": true,
+      "native_AutoCAD_test": false
+    },
+    {
+      "filename": "Scala_due_rampe_2D.dxf",
+      "sha256": "15d19c597278d99e84ac95c147b478c95e07cb7a932c55419d02da090f34d646",
+      "dimensions": 14,
+      "all_styles_DIMSE1_DIMSE2": 1,
+      "audited_without_errors_or_repairs": true,
+      "native_AutoCAD_test": false
+    }
+  ],
+  "renders": [
+    {
+      "name": "rovere-vetro",
+      "native": [
+        1402,
+        1122
+      ],
+      "enlarged": [
+        7680,
+        6146
+      ],
+      "method": "Lanczos enlargement, no new native detail claimed",
+      "native_sha256": "6398d3aa30e4301ea5feedbb3188bfa185664b813fd3802b4a88f80cdcdb73b4",
+      "public_preview": "/assets/portfolio/scale/render-rovere-vetro.webp",
+      "public_large": "/assets/portfolio/scale/render-rovere-vetro-7680.webp",
+      "large_bytes": 1824102
+    },
+    {
+      "name": "travertino-metallo-nero",
+      "native": [
+        1402,
+        1122
+      ],
+      "enlarged": [
+        7680,
+        6146
+      ],
+      "method": "Lanczos enlargement, no new native detail claimed",
+      "native_sha256": "11c91e53efc54535642a377f6a365592bb33919989dc86e7294a1d616242d102",
+      "public_preview": "/assets/portfolio/scale/render-travertino-metallo-nero.webp",
+      "public_large": "/assets/portfolio/scale/render-travertino-metallo-nero-7680.webp",
+      "large_bytes": 1169820
+    }
+  ],
+  "portfolio": "online only; no PDFs or CAD downloads",
+  "arrival_revision": "Original illustrative landing composition retained on explicit user request; no transverse closing rail across upper exit; lateral handrails preserved."
+}

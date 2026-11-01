@@ -244,3 +244,16 @@ L’autore conferma questa impostazione come riferimento per ogni futuro inserim
 La pagina autonoma `/recensioni/` viene eliminata su richiesta dell’autore. Le recensioni dei servizi CAD/BIM e degli altri elaborati restano in Home; quelle delle lezioni e ripetizioni restano in `/lezioni-autocad/`. Preservare tutte le testimonianze autentiche, ordinamento, caroselli, moduli sempre visibili, consenso e moderazione prima della pubblicazione. Non unire le sorgenti API `cad-services` e `autocad-lessons`.
 
 Entrambe le pagine offrono «Condividi link recensione», che copia il rispettivo URL canonico con `#lascia-recensione`, senza parametri di visita o dati personali. Se gli appunti non sono disponibili, mostrare un campo selezionabile con il collegamento e un messaggio corretto. La copia non invia recensioni e non registra lead. Menu e footer passano a sette destinazioni; sitemap e richiami puntano alle due raccolte pertinenti. Il pulsante YouTube usa lo stesso fondo e bordo del pulsante Facebook, conservando il logo rosso. Nessuna modifica al portfolio.
+
+
+## 2026-11-01 — Scale didattiche e standard di quotatura
+
+Portfolio esclusivamente online: la conferma più recente dell’autore esclude qualsiasi PDF, anche per le due nuove scale. I PDF ricevuti servono soltanto come fonti private; nessun nuovo PDF generale o dedicato, download CAD o archivio tecnico pubblico.
+
+La terza categoria si chiama esattamente «Render e planimetrie commerciali». Le due schede «Scala a due rampe» e «Scala con gradini a ventaglio» appartengono alla categoria finale delle esercitazioni con gli studenti. Non pubblicare fotografie degli schizzi originari né inventare nomi, istituti, date o risultati didattici. Le viste 3D wireframe e concettuale della scala a ventaglio mantengono la stessa camera e dimensione; le assunzioni geometriche restano esplicite e non costituiscono un progetto esecutivo.
+
+In TUTTE le esercitazioni presenti e future, le quote devono essere completamente prive di entrambe le linee di estensione. Restano linea di quota, valore e trattini obliqui architettonici. Impostare DIMSE1=1 e DIMSE2=1 nei CAD e in tutti gli stili, senza modificare misure o geometrie; aggiornare tutte le esportazioni pertinenti. Se il CAD sorgente non è disponibile, correggere soltanto le fonti vettoriali realmente disponibili e dichiararlo nel rapporto di lavorazione.
+
+Lo studio «Scala a ventaglio: due interpretazioni materiche» è nella terza categoria ed è collegato all’esercitazione. Distinguere esplicitamente visualizzazioni illustrative da opere realizzate e progetti verificati; mantenere separata la copia per visualizzazione dal modello didattico originale. Le risoluzioni native e gli eventuali ingrandimenti devono essere dichiarati correttamente. Conservare la grafica approvata, le cinque copertine e i contenuti precedenti salvo gli adattamenti esplicitamente richiesti.
+
+Rifinitura finale dei render: mantenere la composizione illustrativa con i pianerottoli originari, senza aggiungere un piano superiore esteso. Eliminare la chiusura trasversale davanti allo sbocco; conservare i corrimano laterali lungo rampe e pianerottoli. La nuova indicazione esplicita sostituisce la precedente richiesta di proseguire il piano superiore oltre l’inquadratura.
