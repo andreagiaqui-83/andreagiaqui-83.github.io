@@ -17,7 +17,11 @@ test('Shared footer, clean captions and working cookie controls remain synchroni
  for(const [file,d] of docs){assert.equal(d.querySelectorAll('footer').length,1,file);assert.equal(d.querySelector('footer').outerHTML,canonical,file);
  assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,8);
  assert.ok(d.querySelector('script[src*="assets/measurement.js"]'),file+' cookie controls');
- for(const el of d.querySelectorAll('figcaption,.visual-note'))assert.doesNotMatch(el.textContent,/illustrativ|intelligenza artificiale|creat[aoe].*\bIA\b/i,file);
+ for(const el of d.querySelectorAll('figcaption,.visual-note')){
+  // Andrea explicitly requests illustrative-render labels for this published case.
+  const energyCase=file==='portfolio/index.html'&&el.closest('#riqualificazione-energetica');
+  assert.doesNotMatch(el.textContent,energyCase?/intelligenza artificiale|creat[aoe].*\bIA\b/i:/illustrativ|intelligenza artificiale|creat[aoe].*\bIA\b/i,file);
+ }
  }
  cp.execFileSync(process.execPath,['scripts/sync-site-header.cjs','--check']);cp.execFileSync(process.execPath,['scripts/sync-page-navigation.cjs','--check']);cp.execFileSync(process.execPath,['scripts/sync-site-footer.cjs','--check']);
 });

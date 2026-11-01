@@ -200,3 +200,10 @@ La categoria finale del portfolio web e PDF è «Esercitazioni con gli studenti�
 ## 2026-11-01 — Canale YouTube
 
 Il canale confermato direttamente da Andrea è `https://www.youtube.com/@DisegnatoreAutoCADRevitonline`. Nel footer comune, dopo WhatsApp e Facebook, mostrare «Iscriviti al mio canale YouTube» con icona riconoscibile; il riferimento compare anche nella scheda recapiti della pagina Contatti. Link statici, nuova scheda con `noopener noreferrer`, nessun widget o script YouTube. Pulsanti affiancati quando lo spazio lo consente e impilati su smartphone. Preservare contatti, consenso e navigazione.
+
+
+## 2026-11-01 — Portfolio di riqualificazione energetica
+
+Il nuovo lavoro si trova in `/portfolio/#riqualificazione-energetica`, all’interno della sezione Dai documenti al CAD e al BIM. Pubblicare esclusivamente il PDF pubblico anonimizzato di sette pagine e immagini ricavate da esso. Il PDF dedicato usa `downloads/portfolio/Portfolio_Riqualificazione_Energetica.pdf`; è ottimizzato senza perdita dalla versione 3 approvata, con flussi decodificati invariati e confronto visivo identico su tutte le pagine; il PDF generale del portfolio e i lavori esistenti restano invariati. Niente originali catastali, elenco immobili, file CAD/BIM, indirizzi, località, nominativi, riferimenti catastali o codici della commessa, anche in nomi file e metadati.
+
+Render di progetto come immagine principale del caso; distinguere chiaramente render illustrativi e fotografie reali. Questa istruzione esplicita prevale sulle precedenti indicazioni generiche sulle didascalie per questo lavoro. Contributo di Andrea: elaborazione CAD e modellazione, senza attribuire calcoli energetici o certificazioni. Elenco: otto piante (PT, P1-P6 e copertura), quattro prospetti, quattro abachi dei serramenti, inquadramento territoriale, stato di fatto e interventi. Cappotto, intradossi e copertura: tutti da 20 cm. La copertura resta nell’elenco, ma non ha pagina autonoma nel PDF. Preservare galleria ingrandibile, ultima categoria didattica, footer YouTube, consenso e moduli.
