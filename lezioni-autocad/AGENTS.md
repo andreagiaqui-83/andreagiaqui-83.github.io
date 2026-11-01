@@ -48,3 +48,6 @@ Le indicazioni storiche sopra sul breadcrumb Home sono superate: nessun pulsante
 
 ## Navigazione globale — 15 ottobre 2026
 La richiesta di Andrea di riunire i plugin prevale sul precedente conteggio: otto destinazioni dirette, con l’unica voce «Plugin AG CAD Tools». Contenuto, prezzi, moduli e misurazione delle lezioni invariati.
+
+## Direttiva prevalente — 1 novembre 2026
+La pagina Recensioni autonoma è ritirata: navigazione globale con sette destinazioni. Questa landing conserva soltanto le recensioni delle lezioni/ripetizioni e il modulo sempre visibile, con ancora stabile `#lascia-recensione` e pulsante per copiarne il link canonico. Le recensioni dei servizi sono nella Home. Moderazione, privacy e sorgenti API restano invariate.

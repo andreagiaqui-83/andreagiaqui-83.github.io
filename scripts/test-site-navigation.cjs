@@ -5,7 +5,7 @@ const docs=new Map(entries.map(e=>[e.file,new JSDOM(fs.readFileSync(e.file,'utf8
 function scan(dir='.') {return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{const p=path.join(dir,e.name);if(e.isDirectory())return ['node_modules','.git','.github','docs','partials'].includes(e.name)?[]:scan(p);return e.name.endsWith('.html')&&!/^google[a-f0-9]+\.html$/.test(e.name)?[p.replace(/^\.\//,'')]:[];});}
 test('Every HTML page is registered and uses one complete static navigation without redundant return buttons',()=>{
  assert.deepEqual([...entries.map(e=>e.file)].sort(),scan().sort());assert.equal(new Set(entries.map(e=>e.file)).size,entries.length);
- const expected=['Servizi','Preventivo online','Disegnatore online','Lezioni AutoCAD','Plugin AG CAD Tools','Portfolio','Recensioni','Contatti'];
+ const expected=['Servizi','Preventivo online','Disegnatore online','Lezioni AutoCAD','Plugin AG CAD Tools','Portfolio','Contatti'];
  for(const e of entries){const d=docs.get(e.file);assert.equal(d.querySelectorAll('h1').length,1,e.file);const ids=[...d.querySelectorAll('[id]')].map(n=>n.id);assert.equal(ids.length,new Set(ids).size,e.file+' duplicate IDs');
  assert.equal(d.querySelectorAll('.sg-header').length,1,e.file);assert.deepEqual([...d.querySelectorAll('.sg-nav a')].map(a=>a.textContent.trim()),expected,e.file);
  assert.equal(d.querySelectorAll('.page-return,.page-back-button,.breadcrumb,[data-home-link],.guide-back').length,0,e.file);
@@ -15,7 +15,7 @@ test('Every HTML page is registered and uses one complete static navigation with
 test('Shared footer, clean captions and working cookie controls remain synchronized',()=>{
  const canonical=new JSDOM(fs.readFileSync('partials/site-footer.html','utf8')).window.document.querySelector('footer').outerHTML;
  for(const [file,d] of docs){assert.equal(d.querySelectorAll('footer').length,1,file);assert.equal(d.querySelector('footer').outerHTML,canonical,file);
- assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,8);
+ assert.equal(d.querySelector('footer a[href*="linkedin"]'),null);assert.equal(d.querySelectorAll('footer .sf-nav a').length,7);
  assert.ok(d.querySelector('script[src*="assets/measurement.js"]'),file+' cookie controls');
  for(const el of d.querySelectorAll('figcaption,.visual-note')){
   // Andrea explicitly requests illustrative-render labels for this published case.

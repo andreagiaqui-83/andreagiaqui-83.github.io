@@ -237,3 +237,10 @@ I confronti laterali nord-ovest e sud-est del caso energetico sono estratti dall
 ## 2026-11-01 — Standard grafico permanente del portfolio
 
 L’autore conferma questa impostazione come riferimento per ogni futuro inserimento e revisione del portfolio: palette desaturata petrolio/salvia/sabbia, riquadro introduttivo con immagine principale, tre passaggi Materiali / Interpretazione / Restituzione e gallerie espandibili quando la sequenza di tavole è lunga. Conservare immagini ingrandibili, contorni leggibili su sfondo bianco senza spessori eccessivi e resa coerente su desktop e smartphone. Usare i casi energetico e storico come riferimento; non introdurre stili concorrenti. Copertina generale e quattro copertine di categoria restano approvate salvo nuova richiesta esplicita. Restano valide riservatezza, fedeltà geometrica, SEO e portfolio esclusivamente online.
+
+
+## 2026-11-01 — Recensioni nelle due landing
+
+La pagina autonoma `/recensioni/` viene eliminata su richiesta dell’autore. Le recensioni dei servizi CAD/BIM e degli altri elaborati restano in Home; quelle delle lezioni e ripetizioni restano in `/lezioni-autocad/`. Preservare tutte le testimonianze autentiche, ordinamento, caroselli, moduli sempre visibili, consenso e moderazione prima della pubblicazione. Non unire le sorgenti API `cad-services` e `autocad-lessons`.
+
+Entrambe le pagine offrono «Condividi link recensione», che copia il rispettivo URL canonico con `#lascia-recensione`, senza parametri di visita o dati personali. Se gli appunti non sono disponibili, mostrare un campo selezionabile con il collegamento e un messaggio corretto. La copia non invia recensioni e non registra lead. Menu e footer passano a sette destinazioni; sitemap e richiami puntano alle due raccolte pertinenti. Il pulsante YouTube usa lo stesso fondo e bordo del pulsante Facebook, conservando il logo rosso. Nessuna modifica al portfolio.

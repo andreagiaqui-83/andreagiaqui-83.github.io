@@ -64,10 +64,6 @@
     "kind": "landing"
   },
   {
-    "file": "recensioni/index.html",
-    "kind": "landing"
-  },
-  {
     "file": "downloads/ag-cad-tools/AG_CAD_Tools_Help.html",
     "kind": "guide"
   },
