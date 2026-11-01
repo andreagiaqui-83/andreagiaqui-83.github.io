@@ -19,7 +19,7 @@ test('Shared footer, clean captions and working cookie controls remain synchroni
  assert.ok(d.querySelector('script[src*="assets/measurement.js"]'),file+' cookie controls');
  for(const el of d.querySelectorAll('figcaption,.visual-note')){
   // Andrea explicitly requests illustrative-render labels for this published case.
-  const energyCase=file==='portfolio/index.html'&&el.closest('#riqualificazione-energetica');
+  const energyCase=file==='portfolio/index.html'&&el.closest('#riqualificazione-energetica,#sezioni-storiche');
   assert.doesNotMatch(el.textContent,energyCase?/intelligenza artificiale|creat[aoe].*\bIA\b/i:/illustrativ|intelligenza artificiale|creat[aoe].*\bIA\b/i,file);
  }
  }

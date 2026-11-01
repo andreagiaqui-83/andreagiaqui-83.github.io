@@ -170,34 +170,19 @@
     "dark": false
   },
   "casa-piano-terra": {
-    "width": 2552,
-    "height": 2564,
-    "dark": false,
-    "caption": "Restituzione CAD 2D: pianta del piano terra, quote e superfici"
+    "width": 3062,
+    "height": 3180,
+    "dark": false
   },
   "casa-piano-primo": {
-    "width": 2552,
-    "height": 2564,
-    "dark": false,
-    "caption": "Restituzione CAD 2D: pianta del piano primo, ambienti e serramenti"
+    "width": 3062,
+    "height": 3180,
+    "dark": false
   },
   "casa-copertura": {
-    "width": 2552,
-    "height": 2488,
-    "dark": false,
-    "caption": "Restituzione CAD 2D: pianta della copertura e tracce di sezione"
-  },
-  "casa-prospetti": {
-    "width": 2552,
-    "height": 1545,
-    "dark": false,
-    "caption": "Restituzione CAD 2D: i quattro prospetti architettonici"
-  },
-  "casa-sezioni": {
-    "width": 2552,
-    "height": 743,
-    "dark": false,
-    "caption": "Restituzione CAD 2D: sezioni A-A e B-B con livelli e altezze"
+    "width": 3062,
+    "height": 3180,
+    "dark": false
   },
   "energia-copertina": {
     "width": 1672,
@@ -205,5 +190,71 @@
     "dark": false,
     "caption": "Riqualificazione energetica: render dello stato di progetto",
     "path": "riqualificazione/render-stato-progetto.webp"
+  },
+  "storico-sezione-cd-render": {
+    "width": 1774,
+    "height": 887,
+    "dark": false,
+    "path": "sezioni-storiche/sezione-cd-render.webp"
+  },
+  "storico-sezione-cd-cad": {
+    "width": 2400,
+    "height": 1256,
+    "dark": false,
+    "path": "sezioni-storiche/sezione-cd-cad.webp"
+  },
+  "storico-sezione-cd-fonte": {
+    "width": 1548,
+    "height": 861,
+    "dark": false,
+    "path": "sezioni-storiche/sezione-cd-fonte.webp"
+  },
+  "storico-sezione-ab-fonte": {
+    "width": 1600,
+    "height": 970,
+    "dark": false,
+    "path": "sezioni-storiche/sezione-ab-fonte.webp"
+  },
+  "storico-sezione-ab-cad": {
+    "width": 2400,
+    "height": 1294,
+    "dark": false,
+    "path": "sezioni-storiche/sezione-ab-cad.webp"
+  },
+  "storico-sezione-ab-render": {
+    "width": 1774,
+    "height": 887,
+    "dark": false,
+    "path": "sezioni-storiche/sezione-ab-render.webp"
+  },
+  "casa-prospetto-sud": {
+    "width": 3062,
+    "height": 2284,
+    "dark": false
+  },
+  "casa-prospetto-nord": {
+    "width": 3062,
+    "height": 2284,
+    "dark": false
+  },
+  "casa-prospetto-ovest": {
+    "width": 3062,
+    "height": 2284,
+    "dark": false
+  },
+  "casa-prospetto-est": {
+    "width": 3062,
+    "height": 2284,
+    "dark": false
+  },
+  "casa-sezione-a": {
+    "width": 3062,
+    "height": 1972,
+    "dark": false
+  },
+  "casa-sezione-b": {
+    "width": 3062,
+    "height": 1981,
+    "dark": false
   }
 }

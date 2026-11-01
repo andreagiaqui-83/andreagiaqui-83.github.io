@@ -213,3 +213,17 @@ Render di progetto come immagine principale del caso; distinguere chiaramente re
 La nuova richiesta sostituisce il precedente congelamento dei PDF: copertina web e PDF generale con il render di progetto del condominio, mantenendo le planimetrie commerciali secondarie. Il caso della casa da tavola scansionata include ora piante PT/P1, copertura, quattro prospetti e due sezioni CAD 2D, ricavati dal pacchetto geometrico originale e coordinati con il modello esistente. Conservare le misure documentate; applicare metri, gerarchie di linea, quote blu, aperture arancioni, campiture grigie e tracce rosse. I file tecnici e le note di ricostruzione restano privati: sul sito soltanto figure di presentazione e PDF pubblico.
 
 Il portfolio generale passa a 30 pagine, con indice aggiornato. Nel caso energetico mostrare le due facciate principali con linee più marcate e un estratto anonimizzato dell’abaco serramenti; il PDF dedicato rimane di sette pagine, con pagina 4 aggiornata coerentemente. Questa autorizzazione consente l’estratto grafico ripulito dal CAD sorgente, senza pubblicare l’originale. Non alterare le geometrie dei prospetti e i valori dell’abaco. Preservare tutti gli altri contenuti, la categoria didattica finale, navigazione, consenso, moduli e installer.
+
+
+## 2026-11-01 — Direttiva prevalente: portfolio esclusivamente online
+
+Il portfolio e tutti i suoi casi studio sono consultabili esclusivamente su `/portfolio/`. Questa decisione sostituisce ogni precedente autorizzazione alla produzione o conservazione dei PDF del portfolio, generali o dedicati. Non generare più PDF di presentazione, non ripristinare i documenti ritirati e non inserirli in nuovi archivi. Rimuovere i download pubblici e i relativi pulsanti, richiami, metadati e procedure di generazione; conservare gallerie, ingrandimenti, fonti descritte e CTA al Preventivo. Le citazioni di PDF come materiale ricevuto o formato dei servizi rimangono pertinenti: questa regola non elimina documenti tecnici estranei al portfolio.
+
+Non riscrivere la cronologia Git durante la manutenzione ordinaria. La rimozione riguarda la distribuzione corrente e gli archivi accessibili individuati; eventuali copie storiche non eliminabili vanno dichiarate senza affermare una cancellazione completa. Preservare navigazione, consenso, moduli, tariffe, installer e guide dei plugin.
+
+
+## 2026-11-01 — Tavole dell’autore e sezioni storiche
+
+Nel caso casa `#cad-2d` usare esclusivamente le piante, i quattro prospetti e le due sezioni del DXF fornito direttamente da Andrea, sostituendo le precedenti restituzioni generate. Le geometrie, coordinate, misure e struttura del suo disegno restano invariate: gli adattamenti riguardano solo standard grafici, quote e leggibilità. Il CAD originale e quello adattato restano privati.
+
+Il caso `#sezioni-storiche`, nella categoria Dai documenti al CAD/BIM, presenta soltanto le sezioni A-B e C-D del pacchetto aggiornato: fotografie anonimizzate e tavole CAD dell’autore, con i due render interpretativi sviluppati dalle fotografie. Conservare la palette desaturata già presente negli asset, non alterare geometrie, non ripristinare il prospetto eliminato. Il render C-D è la copertina del caso; il render del condominio resta la copertina generale. Didascalie esplicite sui render sono richieste dall’autore. Anche questo caso è solo online: nessun PDF né download CAD.

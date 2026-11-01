@@ -5,7 +5,8 @@ const {chromium}=require('playwright');
 const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const base='https://andreagiaquinto.it';
 const releases=JSON.parse(fs.readFileSync('downloads/releases.json','utf8'));
-const files=['/downloads/releases.json','/downloads/portfolio/Andrea_Giaquinto_Portfolio.pdf',...releases.map(r=>r.file),...releases.map(r=>`/downloads/${r.project}/SHA256_AG_CAD_Tools_${r.version}.txt`)];
+const retiredPortfolioFiles=['/downloads/portfolio/Andrea_Giaquinto_Portfolio.pdf','/downloads/portfolio/Portfolio_Riqualificazione_Energetica.pdf'];
+const files=['/downloads/releases.json',...releases.map(r=>r.file),...releases.map(r=>`/downloads/${r.project}/SHA256_AG_CAD_Tools_${r.version}.txt`)];
 (async()=>{
  const browser=await chromium.launch();
  try{
@@ -30,6 +31,12 @@ const files=['/downloads/releases.json','/downloads/portfolio/Andrea_Giaquinto_P
    assert.equal(actual.bytes,expected.length,file+' size');
    assert.equal(actual.sha256,crypto.createHash('sha256').update(expected).digest('hex'),file+' SHA-256');
    console.log('PUBLIC FILE VERIFIED',file,actual.bytes,actual.sha256);
+  }
+  for(const file of retiredPortfolioFiles){
+   assert.equal(fs.existsSync(file.slice(1)),false,file+' must not remain in the published source');
+   const status=await page.evaluate(async file=>(await fetch(file,{cache:'no-store'})).status,file);
+   assert.ok([404,410].includes(status),file+' must be unavailable; HTTP '+status);
+   console.log('RETIRED PORTFOLIO FILE VERIFIED',file,status);
   }
  }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

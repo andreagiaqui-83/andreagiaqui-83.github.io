@@ -33,7 +33,8 @@ if([390,1440].includes(width)){await p.locator('#tariffe').screenshot({path:path
 await p.locator('#tariffe a[href="/disegnatore-online/#compenso-a-progetto"]').click();await p.waitForURL('**/disegnatore-online/#compenso-a-progetto');assert.ok(await p.locator('#projectPriceTitle').isVisible());
 await p.goto(base+'/recensioni/',{waitUntil:'networkidle'});assert.ok((await p.locator('#all-reviews .review-card').first().textContent()).includes('Vincenzo G.'));await p.locator('#reviewsNext').click();await p.waitForFunction(()=>document.querySelector('#reviewsPageCarousel').scrollLeft>0);await p.locator('#reviewsPrev').click();await p.waitForFunction(()=>document.querySelector('#reviewsPageCarousel').scrollLeft<2&&document.querySelector('#reviewsPrev').disabled);assert.ok(await p.locator('#reviewsPrev').isDisabled());await p.locator('#testimonianze').screenshot({path:path.join(proof,'reviews-carousel-'+width+'.png')});assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));console.log('EXPANSION PASS',width);await ctx.close();}
 const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:900}}),p=await nojs.newPage();await p.goto(base+'/portfolio/');assert.equal(await p.locator('.sg-nav a:visible').count(),8);
-// The general portfolio and individual case studies can each offer a PDF.
-const pdfLinks=p.locator('a[href$=".pdf"]');assert.ok(await pdfLinks.count()>0);
-for(const link of await pdfLinks.all())assert.ok(await link.isVisible());
+// Portfolio is online-only, including individual case studies; image galleries remain accessible without JavaScript.
+assert.equal(await p.locator('a[href$=".pdf"],a[href*="/downloads/portfolio/"],a[href$="/portfolio/#pdf"]').count(),0);
+assert.ok(await p.locator('main a[href*="/assets/portfolio/"]').count()>0);
+assert.ok(await p.locator('main a[href="/preventivo/"]').count()>0);
 await nojs.close();}finally{await browser?.close();server?.close();}})().catch(e=>{console.error(e);process.exitCode=1});
