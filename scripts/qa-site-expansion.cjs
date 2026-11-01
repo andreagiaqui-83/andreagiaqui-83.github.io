@@ -35,6 +35,8 @@ await p.goto(base+'/recensioni/',{waitUntil:'networkidle'});assert.ok((await p.l
 const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:900}}),p=await nojs.newPage();await p.goto(base+'/portfolio/');assert.equal(await p.locator('.sg-nav a:visible').count(),8);
 // Portfolio is online-only, including individual case studies; image galleries remain accessible without JavaScript.
 assert.equal(await p.locator('a[href$=".pdf"],a[href*="/downloads/portfolio/"],a[href$="/portfolio/#pdf"]').count(),0);
-assert.ok(await p.locator('main a[href*="/assets/portfolio/"]').count()>0);
-assert.ok(await p.locator('main a[href="/preventivo/"]').count()>0);
+assert.ok(await p.locator('main .ag-art img[src^="/assets/portfolio/"]').count()>0);
+assert.ok(await p.locator('main .ag-art img').first().isVisible());
+await p.locator('main .ag-art img').first().evaluate(image=>image.complete&&image.naturalWidth>0||new Promise((resolve,reject)=>{image.addEventListener('load',resolve,{once:true});image.addEventListener('error',reject,{once:true});}));
+assert.ok(await p.locator('main a[href$="/preventivo/"]').count()>0);
 await nojs.close();}finally{await browser?.close();server?.close();}})().catch(e=>{console.error(e);process.exitCode=1});
