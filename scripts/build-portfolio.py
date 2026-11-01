@@ -23,9 +23,9 @@ for name,file in [('Sans','DejaVuSans.ttf'),('Bold','DejaVuSans-Bold.ttf'),('Ser
 # Publish only the selected, anonymized project figures already used by the page.
 FIG={}
 for key,meta in json.loads((ROOT/'assets/portfolio/figures.json').read_text()).items():
- path=ROOT/'assets/portfolio'/(key+'.webp')
+ path=ROOT/'assets/portfolio'/meta.get('path',key+'.webp')
  im=Image.open(path).convert('RGB');pdf_asset=OUT/'qa'/(key+'.png')
- if key.startswith(('commerciale','render','scansione')):
+ if key.startswith(('commerciale','render','scansione','energia')):
   pdf_asset=OUT/'qa'/(key+'.jpg');im.save(pdf_asset,quality=93,optimize=True,subsampling=0)
  else:im.save(pdf_asset)
  FIG[key]={**meta,'path':path,'pdf_path':pdf_asset}
@@ -50,7 +50,7 @@ def para(txt,x,y,w,size=10,leading=None,color=MUTED,font='Sans',maxh=None):
  if maxh is not None:assert ah<=maxh,(PAGE,txt,ah,maxh)
  p.drawOn(c,x,H-y-ah);BOUNDS.append((PAGE,x,y,w,ah,txt));return ah
 def pic(key,x,y,w,h,border=False,wm=True,pad=0):
- figure_h=h-20 if wm and key.startswith('studio-') else h
+ figure_h=h-20 if wm and key.startswith(('studio-','casa-')) else h
  f=FIG[key];iw,ih=f['width'],f['height'];scale=min((w-2*pad)/iw,(figure_h-2*pad)/ih);dw,dh=iw*scale,ih*scale
  xx=x+(w-dw)/2;yy=y+(figure_h-dh)/2
  c.drawImage(ImageReader(str(f['pdf_path'])),xx,H-yy-dh,width=dw,height=dh,mask='auto')
@@ -97,7 +97,7 @@ text('Portfolio',M,121,48,'#ffffff','Serif');text('Dal materiale',M,192,24,'#fff
 para('Restituzione tecnica, DWG editabili, modellazione BIM/IFC e rappresentazione degli spazi.',M,284,255,11,17,'#cfdddf',maxh=75)
 line(M,379,276,379,'#4e6c77');text('PRECISIONE / LEGGIBILITÀ / METODO',M,397,7.4,'#b7d5d2','Bold')
 text('andreagiaquinto.it',M,463,13,'#ffffff','Bold')
-rect(326,34,480,297,'#ffffff');pic('render-esterno',338,45,456,274,wm=False)
+rect(326,34,480,297,'#ffffff');pic('energia-copertina',338,45,456,260,wm=False);text('Riqualificazione energetica / render dello stato di progetto',340,311,7,NAVY)
 for key,x,w in [('stato-comparativo',326,160),('nuvola-planimetria',494,148),('commerciale-ampio-3d',650,156)]:
  rect(x,343,w,161,'#ffffff' if key!='nuvola-planimetria' else '#050708');pic(key,x+8,351,w-16,144,wm=False)
 footer(False,True)
@@ -118,9 +118,9 @@ new('Percorsi e contenuti')
 header('SELEZIONE DI ELABORATI','Lavori e didattica, quattro percorsi.','Dalla restituzione professionale alle esercitazioni: leggere le geometrie, organizzare il disegno e comunicare con chiarezza.')
 for i,(letter,title,desc,key,pno) in enumerate([
  ('A','Dai documenti al CAD/BIM','DWG e schizzi, scansioni, viste renderizzate e modello IFC: tre percorsi di restituzione.','stato-progetto',4),
- ('B','Dalla nuvola al CAD','La sezione del rilievo e la planimetria ottenuta, con lettura e controllo delle geometrie.','nuvola-planimetria',14),
- ('C','Planimetrie commerciali','Due casi residenziali, rappresentati in pianta arredata e in vista tridimensionale.','commerciale-compatto-3d',17),
- ('D','Esercitazioni con gli studenti','Proiezioni, sezioni, elementi architettonici e rappresentazioni in pianta.','studio-base-profilo',20)]):
+ ('B','Dalla nuvola al CAD','La sezione del rilievo e la planimetria ottenuta, con lettura e controllo delle geometrie.','nuvola-planimetria',18),
+ ('C','Planimetrie commerciali','Due casi residenziali, rappresentati in pianta arredata e in vista tridimensionale.','commerciale-compatto-3d',21),
+ ('D','Esercitazioni con gli studenti','Proiezioni, sezioni, elementi architettonici e rappresentazioni in pianta.','studio-base-profilo',24)]):
  x=M+(i%2)*397;y=146+(i//2)*176
  pic(key,x,y,150,145,wm=False)
  label(letter+' / PORTFOLIO',x+164,y+3)
@@ -168,6 +168,27 @@ header('CASO 03 / TAVOLA PDF SCANSIONATA','Leggere l’edificio nel suo insieme.
 label('Prospetti e sezione',M,145);pic('scansione-prospetti',M,167,584,113)
 label('Piante e copertura',M,304);pic('scansione-piante',M,327,584,191)
 label('Sezioni',650,145);pic('scansione-sezioni',650,166,154,347);footer()
+
+
+new('Restituzione CAD 2D: piante dei livelli','A')
+header('CASO 03 / RESTITUZIONE CAD 2D','Dalla scansione alle piante quotate.','Geometrie, ambienti, aperture e superfici organizzati in tavole coordinate e modificabili.')
+label('Piano terra',M,145);pic('casa-piano-terra',M,167,370,355)
+label('Piano primo',435,145);pic('casa-piano-primo',435,167,370,355);footer()
+
+new('Restituzione CAD 2D: copertura','A')
+header('CASO 03 / RESTITUZIONE CAD 2D','La copertura, in relazione ai livelli.','Sagoma, falde e tracce delle sezioni mantengono leggibile il collegamento con le piante.')
+pic('casa-copertura',M,140,520,385)
+bullet('Gerarchie grafiche','Quote in metri, layer per tipologia, colori e spessori organizzati per distinguere geometrie e annotazioni.',595,190,207)
+bullet('Tavole coordinate','Cartigli, stili di testo e quota e layout di stampa in scala 1:100.',595,330,207);footer()
+
+new('Restituzione CAD 2D: prospetti','A')
+header('CASO 03 / RESTITUZIONE CAD 2D','Quattro facciate, una lettura coerente.','Aperture, terrazze, collegamenti esterni e copertura restituiti in proiezione ortogonale.')
+pic('casa-prospetti',M,142,W-2*M,377);footer()
+
+new('Restituzione CAD 2D: sezioni','A')
+header('CASO 03 / RESTITUZIONE CAD 2D','Le sezioni spiegano gli spazi.','Piani, altezze interne, solai e copertura sono messi in relazione nelle sezioni A-A e B-B.')
+pic('casa-sezioni',M,165,W-2*M,285)
+para('Le tracce A-A e B-B sono riportate nelle piante. Campiture e gerarchie di linea distinguono gli elementi sezionati da quelli in vista.',M,476,740,10,15,maxh=35);footer()
 
 new('Viste renderizzate e sezioni tridimensionali','A')
 header('CASO 03 / ELABORATI OTTENUTI','Volumi, facciate, relazioni.','Viste del modello e sezioni tridimensionali per comunicare l’organizzazione dell’edificio.')
@@ -258,7 +279,22 @@ c.linkURL('tel:+393337240544',(M,H-479,225,H-456),relative=0)
 c.linkURL('https://andreagiaquinto.it/preventivo/',(480,H-470,805,H-400),relative=0)
 footer(False,True)
 c.save()
-assert PAGE==26,PAGE
+# Remove ASCII85 wrappers without re-encoding any JPEG or changing decoded streams.
+# This keeps the larger portfolio downloadable without sacrificing line detail.
+import base64 as _base64
+raw=fitz.open(pdfpath)
+for xref in range(1,raw.xref_length()):
+ filt=raw.xref_get_key(xref,'Filter')[1]
+ if 'ASCII85Decode' not in filt:continue
+ if 'DCTDecode' in filt:
+  data=raw.xref_stream_raw(xref).strip()
+  if data.endswith(b'~>'):data=data[:-2]
+  jpeg=_base64.a85decode(data,adobe=False)
+  raw.update_stream(xref,jpeg,compress=False)
+  raw.xref_set_key(xref,'Filter','/DCTDecode')
+ else:raw.update_stream(xref,raw.xref_stream(xref),compress=True)
+optimized=pdfpath.with_suffix('.optimized.pdf');raw.save(optimized,garbage=4,deflate=True);raw.close();optimized.replace(pdfpath)
+assert PAGE==30,PAGE
 for p,x,y,w,h,t in BOUNDS:assert x>=0 and y>=0 and x+w<=W+1 and y+h<=H-20,(p,t)
 (OUT/'indice.json').write_text(json.dumps(CONTENTS,ensure_ascii=False,indent=2))
 (OUT/'figure.json').write_text(json.dumps({k:{'width':v['width'],'height':v['height'],'dark':v['dark']} for k,v in FIG.items()},indent=2))

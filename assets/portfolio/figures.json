@@ -168,5 +168,42 @@
     "width": 2049,
     "height": 707,
     "dark": false
+  },
+  "casa-piano-terra": {
+    "width": 2552,
+    "height": 2564,
+    "dark": false,
+    "caption": "Restituzione CAD 2D: pianta del piano terra, quote e superfici"
+  },
+  "casa-piano-primo": {
+    "width": 2552,
+    "height": 2564,
+    "dark": false,
+    "caption": "Restituzione CAD 2D: pianta del piano primo, ambienti e serramenti"
+  },
+  "casa-copertura": {
+    "width": 2552,
+    "height": 2488,
+    "dark": false,
+    "caption": "Restituzione CAD 2D: pianta della copertura e tracce di sezione"
+  },
+  "casa-prospetti": {
+    "width": 2552,
+    "height": 1545,
+    "dark": false,
+    "caption": "Restituzione CAD 2D: i quattro prospetti architettonici"
+  },
+  "casa-sezioni": {
+    "width": 2552,
+    "height": 743,
+    "dark": false,
+    "caption": "Restituzione CAD 2D: sezioni A-A e B-B con livelli e altezze"
+  },
+  "energia-copertina": {
+    "width": 1672,
+    "height": 940,
+    "dark": false,
+    "caption": "Riqualificazione energetica: render dello stato di progetto",
+    "path": "riqualificazione/render-stato-progetto.webp"
   }
 }
