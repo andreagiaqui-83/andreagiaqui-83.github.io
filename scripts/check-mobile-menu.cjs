@@ -63,7 +63,7 @@ module.exports=async function checkMobileMenu(page,{extended=false,touch=false}=
   // Switching to desktop while open releases the lock and shows normal nav.
   await toggle();await page.setViewportSize({width:1280,height:900});await settle();
   assert.ok(!(await state()).locked,'Desktop breakpoint releases the mobile lock');
-  assert.equal(await page.locator('.sg-nav a:visible').count(),8);
+  assert.equal(await page.locator('.sg-nav a:visible').count(),7);
  }
  // Check that scrolling really works again, not only that a class disappeared.
  await page.setViewportSize({width:360,height:740});

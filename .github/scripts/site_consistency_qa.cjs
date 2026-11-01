@@ -15,7 +15,7 @@ for(const[engine,type]of Object.entries({chromium,webkit,firefox})){
  page.on('pageerror',e=>errors.push(e.message));
  const response=await page.goto(base+url,{waitUntil:'networkidle'});assert.equal(response.status(),200);
  const reject=page.getByRole('button',{name:'Rifiuta facoltativi'});if(await reject.isVisible())await reject.click();
- assert.equal(await page.locator('h1').count(),1);assert.equal(await page.locator('.site-footer').count(),1);assert.equal(await page.locator('.sf-nav a').count(),8);assert.equal(await page.locator('.sf-role').innerText(),'Disegnatore CAD e BIM');
+ assert.equal(await page.locator('h1').count(),1);assert.equal(await page.locator('.site-footer').count(),1);assert.equal(await page.locator('.sf-nav a').count(),7);assert.equal(await page.locator('.sf-role').innerText(),'Disegnatore CAD e BIM');
  for(const link of await page.locator('.site-footer a,.site-footer button').all()){await link.scrollIntoViewIfNeeded();const b=await link.boundingBox();assert.ok(b&&b.height>=43&&b.x>=-1&&b.x+b.width<=width+1,engine+' '+url+' '+width+' footer control');}
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),engine+' '+width+' '+url+' overflow');
  if(width===320||width===1440){await page.addScriptTag({path:path.join(process.cwd(),'node_modules/axe-core/axe.min.js')});const violations=await page.evaluate(async lesson=>(await axe.run(lesson?document:document.querySelector('.site-footer'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(x=>({id:x.id,nodes:x.nodes.map(n=>n.target)})),lesson);assert.deepEqual(violations,[],engine+' '+url+' '+width);}

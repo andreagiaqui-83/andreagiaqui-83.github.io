@@ -1,14 +1,14 @@
 .review-share{margin:1.5rem 0;padding:1.25rem;border:1px solid #bbd8d6;border-radius:16px;background:#eef7f5;color:#163b45;min-width:0}
-.review-share .review-share-intro{margin:0 0 1rem;font-size:1rem;line-height:1.6}
+.review-share .review-share-intro{color:#163b45;margin:0 0 1rem;font-size:1rem;line-height:1.6}
 .review-share .review-share-button{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;min-height:48px;max-width:100%;padding:.8rem 1rem;border:1px solid #17666c;border-radius:10px;background:#17666c;color:#fff;font:inherit;font-weight:700;line-height:1.4;cursor:pointer;text-align:left}
 .review-share .review-share-button:hover{background:#104f55;border-color:#104f55}
 .review-share .review-share-button:focus-visible,.review-share input:focus-visible{outline:3px solid #337cba;outline-offset:4px}
 .review-share .review-share-button:disabled{opacity:.7;cursor:wait}
 .review-share .review-share-button svg{width:22px;height:22px;flex:0 0 22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.review-share .review-share-status{margin:.65rem 0 0;font-size:.95rem;line-height:1.5}
+.review-share .review-share-status{color:#163b45;margin:.65rem 0 0;font-size:.95rem;line-height:1.5}
 .review-share .review-share-status:empty{display:none}
 .review-share .review-share-fallback{margin-top:.75rem;min-width:0}
-.review-share .review-share-fallback label{display:block;margin-bottom:.4rem;font-weight:600}
+.review-share .review-share-fallback label{color:#163b45;display:block;margin-bottom:.4rem;font-weight:600}
 .review-share .review-share-fallback input{box-sizing:border-box;width:100%;min-width:0;max-width:100%;padding:.75rem;border:1px solid #7b9fa6;border-radius:8px;background:#fff;color:#163b45;font:inherit;font-size:16px}
 .review-share [hidden]{display:none!important}
 @media(max-width:480px){.review-share{padding:1rem}.review-share .review-share-button{width:100%}}
