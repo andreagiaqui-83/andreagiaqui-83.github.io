@@ -256,5 +256,15 @@
     "width": 3062,
     "height": 1981,
     "dark": false
+  },
+  "energia-prospetto-nord-ovest": {
+    "width": 3000,
+    "height": 1676,
+    "dark": false
+  },
+  "energia-prospetto-sud-est": {
+    "width": 3000,
+    "height": 1676,
+    "dark": false
   }
 }
