@@ -34,7 +34,7 @@ W,H=841.89,595.276;M=36
 pdfpath=PDF/'Andrea_Giaquinto_Portfolio.pdf'
 c=canvas.Canvas(str(pdfpath),pagesize=(W,H),pageCompression=1)
 c.setTitle('Andrea Giaquinto | Portfolio CAD e BIM | Selezione di lavori')
-c.setAuthor('Andrea Giaquinto');c.setSubject('Planimetrie commerciali, restituzione CAD, modelli IFC e nuvole di punti')
+c.setAuthor('Andrea Giaquinto');c.setSubject('Restituzione CAD, modelli IFC, nuvole di punti, planimetrie commerciali ed esercitazioni con gli studenti')
 PAGE=0;CONTENTS=[];BOUNDS=[]
 def rect(x,y,w,h,color,stroke=None,r=0):
  c.setFillColor(HexColor(color));c.setStrokeColor(HexColor(stroke or color))
@@ -50,8 +50,9 @@ def para(txt,x,y,w,size=10,leading=None,color=MUTED,font='Sans',maxh=None):
  if maxh is not None:assert ah<=maxh,(PAGE,txt,ah,maxh)
  p.drawOn(c,x,H-y-ah);BOUNDS.append((PAGE,x,y,w,ah,txt));return ah
 def pic(key,x,y,w,h,border=False,wm=True,pad=0):
- f=FIG[key];iw,ih=f['width'],f['height'];scale=min((w-2*pad)/iw,(h-2*pad)/ih);dw,dh=iw*scale,ih*scale
- xx=x+(w-dw)/2;yy=y+(h-dh)/2
+ figure_h=h-20 if wm and key.startswith('studio-') else h
+ f=FIG[key];iw,ih=f['width'],f['height'];scale=min((w-2*pad)/iw,(figure_h-2*pad)/ih);dw,dh=iw*scale,ih*scale
+ xx=x+(w-dw)/2;yy=y+(figure_h-dh)/2
  c.drawImage(ImageReader(str(f['pdf_path'])),xx,H-yy-dh,width=dw,height=dh,mask='auto')
  if border:line(x,y,x+w,y);line(x,y+h,x+w,y+h)
  if wm:
@@ -102,10 +103,10 @@ for key,x,w in [('stato-comparativo',326,160),('nuvola-planimetria',494,148),('c
 footer(False,True)
 
 new('Una selezione in continua evoluzione')
-header('INCARICHI REALI / SPECIFICHE DEL COMMITTENTE','Un portfolio che continua a crescere.')
-para('Qui trovi solo una parte dei lavori svolti per professionisti. Aggiornerò progressivamente il portfolio e il PDF con altri elaborati: ho molti progetti, appartenenti a diverse tipologie di lavorazione, ancora da presentare.',M,153,740,15,22,maxh=90)
+header('LAVORI PROFESSIONALI / ATTIVITÀ DIDATTICA','Un portfolio che continua a crescere.')
+para('Qui trovi una selezione dei lavori svolti per professionisti e, nella sezione finale, esercitazioni di disegno con gli studenti. Aggiornerò progressivamente il portfolio con altri elaborati: ho molti progetti, di diverse tipologie, ancora da presentare.',M,153,740,15,22,maxh=90)
 line(M,265,W-M,265)
-bullet('Richieste reali','Gli elaborati sono stati sviluppati su incarichi reali, secondo le richieste, i materiali e le specifiche dei professionisti committenti.',M,292,225)
+bullet('Due contesti distinti','Le sezioni A-C documentano incarichi reali, svolti secondo le specifiche dei professionisti. La sezione D raccoglie esercitazioni didattiche.',M,292,225)
 bullet('Standard personalizzabili','Non sono modelli standard da riprodurre. Geometrie, layer, stili, contenuti e impaginazione vengono adattati alle esigenze di ogni nuovo incarico.',305,292,225)
 bullet('Uso del portfolio','Immagini e tavole sono presentate per documentare il lavoro svolto. Le riproduzioni sono fuori scala e non sostituiscono gli elaborati originali.',574,292,225)
 rect(M,427,W-2*M,83,SOFT)
@@ -114,13 +115,18 @@ para('È vietata la copia, la riproduzione, la ripubblicazione su altri siti e l
 footer()
 
 new('Percorsi e contenuti')
-header('SELEZIONE DI ELABORATI','Tre percorsi, un metodo comune.','Leggere il materiale di partenza. Organizzare le informazioni. Restituire elaborati utili al lavoro tecnico e alla presentazione.')
+header('SELEZIONE DI ELABORATI','Lavori e didattica, quattro percorsi.','Dalla restituzione professionale alle esercitazioni: leggere le geometrie, organizzare il disegno e comunicare con chiarezza.')
 for i,(letter,title,desc,key,pno) in enumerate([
  ('A','Dai documenti al CAD/BIM','DWG e schizzi, scansioni, viste renderizzate e modello IFC: tre percorsi di restituzione.','stato-progetto',4),
  ('B','Dalla nuvola al CAD','La sezione del rilievo e la planimetria ottenuta, con lettura e controllo delle geometrie.','nuvola-planimetria',14),
- ('C','Planimetrie commerciali','Due casi residenziali, rappresentati in pianta arredata e in vista tridimensionale.','commerciale-compatto-3d',17)]):
- x=M+i*263;pic(key,x,145,245,188,wm=False);label(letter+' / '+title,x,351);para(desc,x,376,235,10,15,maxh=63)
- text(f'Da pagina {pno:02}',x,468,8.5,TEAL,'Bold');c.linkRect('',f'p{pno}',(x,H-495,x+245,H-144),relative=0,thickness=0)
+ ('C','Planimetrie commerciali','Due casi residenziali, rappresentati in pianta arredata e in vista tridimensionale.','commerciale-compatto-3d',17),
+ ('D','Esercitazioni con gli studenti','Proiezioni, sezioni, elementi architettonici e rappresentazioni in pianta.','studio-base-profilo',20)]):
+ x=M+(i%2)*397;y=146+(i//2)*176
+ pic(key,x,y,150,145,wm=False)
+ label(letter+' / PORTFOLIO',x+164,y+3)
+ para(title,x+164,y+24,202,12,16,NAVY,'Bold',maxh=36)
+ para(desc,x+164,y+65,202,9,13,maxh=58)
+ text(f'Da pagina {pno:02}',x+164,y+132,8.5,TEAL,'Bold');c.linkRect('',f'p{pno}',(x,H-y-153,x+370,H-y),relative=0,thickness=0)
 para('Riproduzioni di presentazione, fuori scala. Per misure e contenuti tecnici fanno fede gli elaborati originali.',M,507,730,7.2,10,maxh=12)
 footer()
 
@@ -201,6 +207,43 @@ for key,title,sub,view2,view3 in [
  label('Elaborato ottenuto / vista 3D',310,146);pic(view3,302,171,504,345)
  footer()
 
+divider('D','Esercitazioni|con gli studenti','Esempi sviluppati durante le lezioni: dal riconoscimento delle forme alla rappresentazione tecnica, con proiezioni, sezioni e dettagli.','studio-obelisco',['Geometria descrittiva','Elementi e modelli architettonici','Dalla vista 3D alla tavola 2D'])
+
+new('Base attica di Vignola','D')
+header('DIDATTICA / ELEMENTI ARCHITETTONICI','Base attica di Vignola','Pianta e profilo per leggere modanature, proporzioni e corrispondenze fra le viste.')
+label('Pianta',M,148);pic('studio-base-pianta',M,172,332,328)
+label('Profilo e modanature',400,148);pic('studio-base-profilo',395,172,410,328)
+footer(False)
+
+new('Sezioni di solidi','D')
+header('DIDATTICA / GEOMETRIA DESCRITTIVA','Un piano incontra un solido.','Proiezioni e ribaltamenti: dal taglio del solido alla vera forma della sezione.')
+label('Parallelepipedo retto',M,146);pic('studio-solidi-parallelepipedo',M,166,365,157)
+label('Piramide obliqua',440,146);pic('studio-solidi-piramide-obliqua',435,166,370,157)
+label('Piramide a base esagonale',M,345);pic('studio-solidi-piramide-esagonale',M,367,500,156)
+para('Tracce del piano, punti di intersezione e campiture rendono riconoscibile la relazione fra il volume e la sua sezione.',566,388,228,11,17,maxh=100)
+footer(False)
+
+new('Modello ispirato all’Ara Pacis','D')
+header('DIDATTICA / PIANTE, PROSPETTI E SEZIONI','Modello ispirato all’Ara Pacis','Un modello geometrico semplificato per mettere in relazione pianta, prospetto e piani di sezione.')
+label('Pianta e prospetto',M,148);pic('studio-ara-proiezioni',M,170,344,343)
+label('Sezione verticale',415,148);pic('studio-ara-sezione-verticale',415,169,390,164)
+label('Sezione orizzontale',415,352);pic('studio-ara-sezione-orizzontale',440,374,340,143)
+footer(False)
+
+new('Obelisco Flaminio: assonometria','D')
+header('DIDATTICA / RAPPRESENTAZIONE TRIDIMENSIONALE','Obelisco Flaminio','Assonometria didattica semplificata: fusto, coronamento e basamento a gradoni.')
+pic('studio-obelisco',M,141,510,380)
+bullet('Leggere il volume','Riconoscere gli elementi principali e il rapporto fra altezze, rastremazione e basamento.',590,200,208)
+bullet('Costruire la vista','Coordinare assi, spigoli visibili e nascosti, quote e richiami descrittivi.',590,338,208)
+footer(False)
+
+new('Dall’assonometria alla pianta e alla sezione','D')
+header('DIDATTICA / LETTURA E RESTITUZIONE','Dalla vista 3D alla tavola 2D.','Pianta sezionata, sezione longitudinale e abaco delle aperture: viste diverse dello stesso esercizio.')
+label('Pianta',M,148);pic('studio-pianta',M,170,340,343)
+label('Sezione e aperture',410,148);pic('studio-sezione-aperture',400,179,405,238)
+para('Muri, aperture, arredi e livelli vengono messi in relazione per passare dalla rappresentazione tridimensionale al disegno tecnico.',420,441,375,10,15,maxh=65)
+footer(False)
+
 new('Collaborazioni e contatti',dark=True)
 text('DAL TUO MATERIALE AL PROSSIMO ELABORATO',M,35,9,'#b9d8d4','Bold')
 text('Parliamo del tuo progetto.',M,91,35,'#ffffff','Serif')
@@ -215,7 +258,7 @@ c.linkURL('tel:+393337240544',(M,H-479,225,H-456),relative=0)
 c.linkURL('https://andreagiaquinto.it/preventivo/',(480,H-470,805,H-400),relative=0)
 footer(False,True)
 c.save()
-assert PAGE==20,PAGE
+assert PAGE==26,PAGE
 for p,x,y,w,h,t in BOUNDS:assert x>=0 and y>=0 and x+w<=W+1 and y+h<=H-20,(p,t)
 (OUT/'indice.json').write_text(json.dumps(CONTENTS,ensure_ascii=False,indent=2))
 (OUT/'figure.json').write_text(json.dumps({k:{'width':v['width'],'height':v['height'],'dark':v['dark']} for k,v in FIG.items()},indent=2))

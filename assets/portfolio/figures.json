@@ -113,5 +113,60 @@
     "width": 1770,
     "height": 1615,
     "dark": true
+  },
+  "studio-base-pianta": {
+    "width": 2049,
+    "height": 1463,
+    "dark": false
+  },
+  "studio-base-profilo": {
+    "width": 2049,
+    "height": 968,
+    "dark": false
+  },
+  "studio-solidi-parallelepipedo": {
+    "width": 2049,
+    "height": 1029,
+    "dark": false
+  },
+  "studio-solidi-piramide-obliqua": {
+    "width": 2049,
+    "height": 1029,
+    "dark": false
+  },
+  "studio-solidi-piramide-esagonale": {
+    "width": 2049,
+    "height": 1038,
+    "dark": false
+  },
+  "studio-ara-proiezioni": {
+    "width": 1425,
+    "height": 1468,
+    "dark": false
+  },
+  "studio-ara-sezione-verticale": {
+    "width": 1230,
+    "height": 806,
+    "dark": false
+  },
+  "studio-ara-sezione-orizzontale": {
+    "width": 958,
+    "height": 946,
+    "dark": false
+  },
+  "studio-obelisco": {
+    "width": 1544,
+    "height": 1481,
+    "dark": false
+  },
+  "studio-pianta": {
+    "width": 1468,
+    "height": 1360,
+    "dark": false
+  },
+  "studio-sezione-aperture": {
+    "width": 2049,
+    "height": 707,
+    "dark": false
   }
 }
