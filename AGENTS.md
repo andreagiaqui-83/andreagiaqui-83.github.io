@@ -257,3 +257,8 @@ In TUTTE le esercitazioni presenti e future, le quote devono essere completament
 Lo studio «Scala a ventaglio: due interpretazioni materiche» è nella terza categoria ed è collegato all’esercitazione. Distinguere esplicitamente visualizzazioni illustrative da opere realizzate e progetti verificati; mantenere separata la copia per visualizzazione dal modello didattico originale. Le risoluzioni native e gli eventuali ingrandimenti devono essere dichiarati correttamente. Conservare la grafica approvata, le cinque copertine e i contenuti precedenti salvo gli adattamenti esplicitamente richiesti.
 
 Rifinitura finale dei render: mantenere la composizione illustrativa con i pianerottoli originari, senza aggiungere un piano superiore esteso. Eliminare la chiusura trasversale davanti allo sbocco; conservare i corrimano laterali lungo rampe e pianerottoli. La nuova indicazione esplicita sostituisce la precedente richiesta di proseguire il piano superiore oltre l’inquadratura.
+
+
+## 2026-11-01 — Correzione delle pedate centrali
+
+Su correzione esplicita dell’autore, le otto pedate rettilinee della scala a ventaglio misurano **0,25 m**, non 0,15 m. Lo sviluppo centrale è **2,00 m** e l’ingombro complessivo **2,40 × 4,40 m**; larghezza rampa 1,20 m, 17 alzate da 0,18 m e quota finale 3,06 m restano invariati. Aggiornare la geometria sorgente, le proiezioni 2D, tutte le viste 3D, le anteprime e i due render; non limitarsi a cambiare il testo delle quote. I settori superiori e il pianerottolo traslano di 0,80 m. Quote reali senza entrambe le linee di estensione e trattini architettonici; portfolio solo online. Conservare sbocchi aperti e corrimano laterali nei render, senza traversi davanti all’uscita.
