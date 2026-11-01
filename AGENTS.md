@@ -195,3 +195,8 @@ Preservare gratuità evidente, novità disponibili distinte dal programma 2.4, M
 ## 2026-11-01 — Esercitazioni con gli studenti
 
 La categoria finale del portfolio web e PDF è «Esercitazioni con gli studenti», dopo le planimetrie commerciali. Questa richiesta prevale sul precedente ordine finale delle categorie. Distinguere le esercitazioni didattiche dagli incarichi professionali; cinque temi e undici viste tratte dai PDF forniti. Pubblicare soltanto le figure selezionate e ripulite: niente dati personali, aziendali o scolastici, cartigli identificativi, note di revisione o commenti sulle incongruenze. Titoli, quote e richiami descrittivi pertinenti possono restare. Non pubblicare i PDF originali né alterare le geometrie. PDF del portfolio a 26 pagine, URL stabile, contatti in chiusura. Conservare immagini ingrandibili, diritti, contenuti precedenti, gratuità e navigazione comune.
+
+
+## 2026-11-01 — Canale YouTube
+
+Il canale confermato direttamente da Andrea è `https://www.youtube.com/@DisegnatoreAutoCADRevitonline`. Nel footer comune, dopo WhatsApp e Facebook, mostrare «Iscriviti al mio canale YouTube» con icona riconoscibile; il riferimento compare anche nella scheda recapiti della pagina Contatti. Link statici, nuova scheda con `noopener noreferrer`, nessun widget o script YouTube. Pulsanti affiancati quando lo spazio lo consente e impilati su smartphone. Preservare contatti, consenso e navigazione.
