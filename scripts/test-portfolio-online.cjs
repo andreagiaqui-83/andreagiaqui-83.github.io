@@ -13,7 +13,7 @@ test('Portfolio is online only and publishes presentation images, never source C
  assert.equal(drawings.length,9);
  assert.equal(new Set(drawings.map(e=>e.src)).size,9);
  for(const el of [...drawings,...d.querySelectorAll('#sezioni-storiche img')]){
-  assert.ok(fs.existsSync(el.getAttribute('src').slice(1)),el.src);
+  assert.ok(fs.existsSync(new URL(el.getAttribute('src'),'https://andreagiaquinto.it').pathname.slice(1)),el.src);
   assert.ok(Number(el.getAttribute('width'))>=1500,el.src);
   assert.ok(el.closest('[data-zoom]'),el.src);
  }
