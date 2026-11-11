@@ -379,8 +379,11 @@ function addSiteWideSummary_(rows, generatedAt, date) {
     addReportRow_(rows, generatedAt, date, 'GA4 sito completo', 'Engagement rate', r[6], '');
     addReportRow_(rows, generatedAt, date, 'GA4 sito completo', 'Tempo medio engagement/sessione (s)', r[7], '');
   }
-  const downloads = rowsForDate_('GA4_Downloads', date).reduce((sum, r) => sum + Number(r[2] || 0), 0);
-  addReportRow_(rows, generatedAt, date, 'AG CAD Tools', 'Download installer · plugin_installer_download', downloads, 'Clic sul download misurati con consenso Analytics; non prova il completamento del trasferimento.');
+  const downloadRows = rowsForDate_('GA4_Downloads', date);
+  if (downloadRows.length) {
+    const downloads = downloadRows.reduce((sum, r) => sum + Number(r[2] || 0), 0);
+    addReportRow_(rows, generatedAt, date, 'AG CAD Tools', 'Download installer · plugin_installer_download', downloads, 'Clic sul download misurati con consenso Analytics; non prova il completamento del trasferimento.');
+  }
 }
 
 function collectSearchConsoleRolling_(days, cfg) {
