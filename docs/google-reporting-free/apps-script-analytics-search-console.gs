@@ -5,6 +5,7 @@ function onOpen() {
     .createMenu('Report Google gratuito')
     .addItem('Test connessioni', 'testConnections')
     .addItem('Esegui report ora', 'runDailyGoogleReporting')
+    .addItem('Inizializza report completo sito (30 giorni)', 'initializeSiteWideReporting')
     .addItem('Installa trigger giornaliero', 'installDailyTrigger')
     .addToUi();
 }
@@ -55,7 +56,9 @@ function runDailyGoogleReporting() {
   collectSiteMeasurementRolling_(3, cfg);
   collectGa4Daily_(reportDate, cfg);
   collectGa4Sources_(reportDate, cfg);
+  collectSiteWideReporting_(7, cfg);
   collectSearchConsoleRolling_(3, cfg);
+  try { collectSearchConsoleSiteWideRolling_(7, cfg); } catch (e) { console.warn('Search Console sito completo: ' + e); }
   buildDailyReport_(reportDate, cfg);
 
   setDashboardStatus_('Google Analytics 4', 'OK', 'Ultimo aggiornamento: ' + new Date());
@@ -166,7 +169,7 @@ function collectSiteMeasurementRolling_(days, cfg) {
 
 function collectSiteMeasurement_(date, cfg) {
   const names = ['form_view', 'form_start', 'form_submit_attempt', 'form_error',
-    'service_quote_success', 'generate_lead', 'contact_click', 'cta_click'];
+    'service_quote_success', 'generate_lead', 'contact_click', 'cta_click', 'plugin_installer_download'];
   const filter = {andGroup: {expressions: [
     {filter: {fieldName: 'eventName', inListFilter: {values: names, caseSensitive: true}}},
     {filter: {fieldName: 'hostName', inListFilter: {values: [cfg.SITE_DOMAIN, 'www.' + cfg.SITE_DOMAIN], caseSensitive: false}}}
@@ -218,6 +221,166 @@ function addSiteMeasurementSummary_(rows, generatedAt, date) {
   for (const event of ['form_view', 'form_start', 'form_submit_attempt', 'form_error']) {
     addReportRow_(rows, generatedAt, date, 'GA4 Preventivo', event, total(event, ['/preventivo/']), 'Interazione o tentativo, non contatto acquisito. ' + state[2]);
   }
+}
+
+
+function initializeSiteWideReporting() {
+  const cfg = getConfig_();
+  ensureSiteWideSheets_();
+  collectSiteWideReporting_(30, cfg);
+  collectSearchConsoleSiteWideRolling_(30, cfg);
+  SpreadsheetApp.getActive().toast('Report completo inizializzato: ultimi 30 giorni richiesti a GA4 e Search Console.', 'Report Google gratuito', 7);
+}
+
+function ensureSiteWideSheets_() {
+  ensureSiteSheet_('GA4_Site_Daily', ['Date', 'ActiveUsers', 'NewUsers', 'Sessions', 'Views', 'EngagedSessions', 'EngagementRate', 'AvgEngagementSec', 'KeyEvents']);
+  ensureSiteSheet_('GA4_Site_Pages', ['Date', 'PagePath', 'ActiveUsers', 'NewUsers', 'Sessions', 'Views', 'EngagedSessions', 'EngagementRate', 'AvgEngagementSec', 'KeyEvents']);
+  ensureSiteSheet_('GA4_Site_Sources', ['Date', 'Source', 'Medium', 'ChannelGroup', 'ActiveUsers', 'NewUsers', 'Sessions', 'Views', 'EngagedSessions', 'EngagementRate', 'AvgEngagementSec', 'KeyEvents']);
+  ensureSiteSheet_('GA4_Site_Devices', ['Date', 'DeviceCategory', 'OperatingSystem', 'Browser', 'Language', 'ActiveUsers', 'NewUsers', 'Sessions', 'Views', 'EngagedSessions', 'EngagementRate', 'AvgEngagementSec', 'KeyEvents']);
+  ensureSiteSheet_('GA4_Site_Geo', ['Date', 'Country', 'Region', 'City', 'ActiveUsers', 'NewUsers', 'Sessions', 'Views', 'EngagedSessions', 'EngagementRate', 'AvgEngagementSec']);
+  ensureSiteSheet_('GA4_Downloads', ['Date', 'Installer', 'Downloads']);
+  ensureSiteSheet_('GSC_All_Queries', ['Date', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']);
+  ensureSiteSheet_('GSC_All_Pages', ['Date', 'Page', 'Clicks', 'Impressions', 'CTR', 'Position']);
+}
+
+function collectSiteWideReporting_(days, cfg) {
+  ensureSiteWideSheets_();
+  const tz = cfg.TIMEZONE || 'Europe/Rome';
+  const startDate = dateOffset_(-days, tz);
+  const endDate = dateOffset_(-1, tz);
+  const dates = [];
+  for (let i = days; i >= 1; i--) dates.push(dateOffset_(-i, tz));
+  const jobs = [
+    ['GA4_Site_Daily', collectGa4SiteDailyRange_],
+    ['GA4_Site_Pages', collectGa4SitePagesRange_],
+    ['GA4_Site_Sources', collectGa4SiteSourcesRange_],
+    ['GA4_Site_Devices', collectGa4SiteDevicesRange_],
+    ['GA4_Site_Geo', collectGa4SiteGeoRange_],
+    ['GA4_Downloads', collectGa4DownloadsRange_]
+  ];
+  jobs.forEach(job => {
+    try { job[1](startDate, endDate, dates, cfg); }
+    catch (e) { console.warn(job[0] + ': ' + e); }
+  });
+}
+
+function siteHostFilter_(cfg) {
+  return {filter: {fieldName: 'hostName', inListFilter: {values: [cfg.SITE_DOMAIN, 'www.' + cfg.SITE_DOMAIN], caseSensitive: false}}};
+}
+
+function assertGa4Complete_(data, label) {
+  if (Number(data.rowCount || 0) > (data.rows || []).length) throw new Error(label + ': risposta GA4 incompleta; dati precedenti conservati.');
+}
+
+function ga4DateIso_(value) {
+  const s = String(value || '');
+  return /^\d{8}$/.test(s) ? s.slice(0, 4) + '-' + s.slice(4, 6) + '-' + s.slice(6, 8) : s;
+}
+
+function collectGa4SiteDailyRange_(startDate, endDate, dates, cfg) {
+  const metrics = ['activeUsers', 'newUsers', 'sessions', 'screenPageViews', 'engagedSessions', 'engagementRate', 'userEngagementDuration', 'keyEvents'];
+  const data = ga4Run_(['date'], metrics, startDate, endDate, siteHostFilter_(cfg), cfg);
+  assertGa4Complete_(data, 'GA4_Site_Daily');
+  const byDate = {};
+  (data.rows || []).forEach(r => {
+    const d = ga4DateIso_(r.dimensionValues[0].value);
+    const m = r.metricValues.map(v => Number(v.value || 0));
+    byDate[d] = [d, m[0], m[1], m[2], m[3], m[4], m[5], m[2] > 0 ? m[6] / m[2] : 0, m[7]];
+  });
+  replaceRowsForDates_('GA4_Site_Daily', dates, dates.map(d => byDate[d] || [d,0,0,0,0,0,0,0,0]));
+}
+
+function collectGa4SitePagesRange_(startDate, endDate, dates, cfg) {
+  const metrics = ['activeUsers', 'newUsers', 'sessions', 'screenPageViews', 'engagedSessions', 'engagementRate', 'userEngagementDuration', 'keyEvents'];
+  const data = ga4Run_(['date', 'pagePath'], metrics, startDate, endDate, siteHostFilter_(cfg), cfg);
+  assertGa4Complete_(data, 'GA4_Site_Pages');
+  const rows = (data.rows || []).map(r => {
+    const m = r.metricValues.map(v => Number(v.value || 0));
+    return [ga4DateIso_(r.dimensionValues[0].value), r.dimensionValues[1].value || '', m[0], m[1], m[2], m[3], m[4], m[5], m[2] > 0 ? m[6] / m[2] : 0, m[7]];
+  });
+  replaceRowsForDates_('GA4_Site_Pages', dates, rows);
+}
+
+function collectGa4SiteSourcesRange_(startDate, endDate, dates, cfg) {
+  const metrics = ['activeUsers', 'newUsers', 'sessions', 'screenPageViews', 'engagedSessions', 'engagementRate', 'userEngagementDuration', 'keyEvents'];
+  const dims = ['date', 'sessionSource', 'sessionMedium', 'sessionDefaultChannelGroup'];
+  const data = ga4Run_(dims, metrics, startDate, endDate, siteHostFilter_(cfg), cfg);
+  assertGa4Complete_(data, 'GA4_Site_Sources');
+  const rows = (data.rows || []).map(r => {
+    const m = r.metricValues.map(v => Number(v.value || 0));
+    return [ga4DateIso_(r.dimensionValues[0].value), r.dimensionValues[1].value || '', r.dimensionValues[2].value || '', r.dimensionValues[3].value || '', m[0], m[1], m[2], m[3], m[4], m[5], m[2] > 0 ? m[6] / m[2] : 0, m[7]];
+  });
+  replaceRowsForDates_('GA4_Site_Sources', dates, rows);
+}
+
+function collectGa4SiteDevicesRange_(startDate, endDate, dates, cfg) {
+  const metrics = ['activeUsers', 'newUsers', 'sessions', 'screenPageViews', 'engagedSessions', 'engagementRate', 'userEngagementDuration', 'keyEvents'];
+  const dims = ['date', 'deviceCategory', 'operatingSystem', 'browser', 'language'];
+  const data = ga4Run_(dims, metrics, startDate, endDate, siteHostFilter_(cfg), cfg);
+  assertGa4Complete_(data, 'GA4_Site_Devices');
+  const rows = (data.rows || []).map(r => {
+    const m = r.metricValues.map(v => Number(v.value || 0));
+    return [ga4DateIso_(r.dimensionValues[0].value), r.dimensionValues[1].value || '', r.dimensionValues[2].value || '', r.dimensionValues[3].value || '', r.dimensionValues[4].value || '', m[0], m[1], m[2], m[3], m[4], m[5], m[2] > 0 ? m[6] / m[2] : 0, m[7]];
+  });
+  replaceRowsForDates_('GA4_Site_Devices', dates, rows);
+}
+
+function collectGa4SiteGeoRange_(startDate, endDate, dates, cfg) {
+  const metrics = ['activeUsers', 'newUsers', 'sessions', 'screenPageViews', 'engagedSessions', 'engagementRate', 'userEngagementDuration'];
+  const dims = ['date', 'country', 'region', 'city'];
+  const data = ga4Run_(dims, metrics, startDate, endDate, siteHostFilter_(cfg), cfg);
+  assertGa4Complete_(data, 'GA4_Site_Geo');
+  const rows = (data.rows || []).map(r => {
+    const m = r.metricValues.map(v => Number(v.value || 0));
+    return [ga4DateIso_(r.dimensionValues[0].value), r.dimensionValues[1].value || '', r.dimensionValues[2].value || '', r.dimensionValues[3].value || '', m[0], m[1], m[2], m[3], m[4], m[5], m[2] > 0 ? m[6] / m[2] : 0];
+  });
+  replaceRowsForDates_('GA4_Site_Geo', dates, rows);
+}
+
+function collectGa4DownloadsRange_(startDate, endDate, dates, cfg) {
+  const filter = {andGroup: {expressions: [
+    {filter: {fieldName: 'eventName', stringFilter: {matchType: 'EXACT', value: 'plugin_installer_download', caseSensitive: true}}},
+    siteHostFilter_(cfg)
+  ]}};
+  const data = ga4Run_(['date'], ['eventCount'], startDate, endDate, filter, cfg);
+  assertGa4Complete_(data, 'GA4_Downloads');
+  const byDate = {};
+  (data.rows || []).forEach(r => {
+    const d = ga4DateIso_(r.dimensionValues[0].value);
+    byDate[d] = Number(r.metricValues[0].value || 0);
+  });
+  replaceRowsForDates_('GA4_Downloads', dates, dates.map(d => [d, 'AG CAD Tools', byDate[d] || 0]));
+}
+
+function collectSearchConsoleSiteWideRolling_(days, cfg) {
+  ensureSiteWideSheets_();
+  const tz = cfg.TIMEZONE || 'Europe/Rome';
+  const endDate = dateOffset_(-1, tz);
+  const startDate = dateOffset_(-days, tz);
+  const site = detectSearchConsoleSite_(cfg);
+  const queryData = gscQuery_(site, {startDate, endDate, dimensions: ['date', 'query'], rowLimit: 25000, dataState: 'all'});
+  const queryRows = (queryData.rows || []).map(r => [r.keys[0], r.keys[1], r.clicks || 0, r.impressions || 0, r.ctr || 0, r.position || 0]);
+  const pageData = gscQuery_(site, {startDate, endDate, dimensions: ['date', 'page'], rowLimit: 25000, dataState: 'all'});
+  const pageRows = (pageData.rows || []).map(r => [r.keys[0], r.keys[1], r.clicks || 0, r.impressions || 0, r.ctr || 0, r.position || 0]);
+  const dates = [];
+  for (let i = days; i >= 1; i--) dates.push(dateOffset_(-i, tz));
+  replaceRowsForDates_('GSC_All_Queries', dates, queryRows);
+  replaceRowsForDates_('GSC_All_Pages', dates, pageRows);
+}
+
+function addSiteWideSummary_(rows, generatedAt, date) {
+  const site = rowsForDate_('GA4_Site_Daily', date);
+  if (site.length) {
+    const r = site[0];
+    addReportRow_(rows, generatedAt, date, 'GA4 sito completo', 'Utenti attivi', r[1], '');
+    addReportRow_(rows, generatedAt, date, 'GA4 sito completo', 'Nuovi utenti', r[2], '');
+    addReportRow_(rows, generatedAt, date, 'GA4 sito completo', 'Sessioni', r[3], '');
+    addReportRow_(rows, generatedAt, date, 'GA4 sito completo', 'Visualizzazioni', r[4], '');
+    addReportRow_(rows, generatedAt, date, 'GA4 sito completo', 'Engagement rate', r[6], '');
+    addReportRow_(rows, generatedAt, date, 'GA4 sito completo', 'Tempo medio engagement/sessione (s)', r[7], '');
+  }
+  const downloads = rowsForDate_('GA4_Downloads', date).reduce((sum, r) => sum + Number(r[2] || 0), 0);
+  addReportRow_(rows, generatedAt, date, 'AG CAD Tools', 'Download installer · plugin_installer_download', downloads, 'Clic sul download misurati con consenso Analytics; non prova il completamento del trasferimento.');
 }
 
 function collectSearchConsoleRolling_(days, cfg) {
@@ -284,6 +447,7 @@ function buildDailyReport_(date, cfg) {
   }
 
   addSiteMeasurementSummary_(rows, generatedAt, date);
+  addSiteWideSummary_(rows, generatedAt, date);
 
   const gsc = rowsForDate_('GSC_Queries', date);
   if (gsc.length) {

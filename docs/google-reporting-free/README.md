@@ -1,6 +1,6 @@
 # Report Google gratuito — Andrea Giaquinto
 
-Questa soluzione elimina la dipendenza da plugin a pagamento/trial per il monitoraggio della landing `https://andreagiaquinto.it/lezioni-autocad/`.
+Questa soluzione elimina la dipendenza da plugin a pagamento/trial per il monitoraggio di `andreagiaquinto.it`: conserva i report storici della landing Lezioni AutoCAD e aggiunge report site-wide gratuiti da GA4 e Search Console.
 
 ## Costi
 
@@ -30,6 +30,14 @@ Contiene:
 - `GSC_Queries`
 - `GSC_Pages`
 - `Daily_Report`
+- `GA4_Site_Daily`
+- `GA4_Site_Pages`
+- `GA4_Site_Sources`
+- `GA4_Site_Devices`
+- `GA4_Site_Geo`
+- `GA4_Downloads`
+- `GSC_All_Queries`
+- `GSC_All_Pages`
 
 I parametri della campagna corrente sono già inseriti nel tab `Config`.
 
@@ -151,3 +159,22 @@ Il collector rilegge tre giorni, sostituisce soltanto le righe di quelle date e 
 Per completare: sostituire `Code.gs` nel progetto **già collegato al foglio**, salvare ed eseguire `runDailyGoogleReporting`. Il trigger esistente continuerà a richiamare la stessa funzione: non crearne un secondo. Controllare `GA4_Site_Status` e le nuove righe di `Daily_Report`. Prima della sostituzione conservare la versione attiva ed eventuali modifiche effettuate nell’editor non presenti nel repository. Nessuna modifica al manifest o ai permessi è prevista da questa estensione.
 
 Riferimento tecnico: [Google Analytics Data API, filtri e report](https://developers.google.com/analytics/devguides/reporting/data/v1/basics).
+
+
+## Estensione completa del sito — 11 novembre 2026
+
+Il sorgente Apps Script mantiene i tab storici e aggiunge una raccolta gratuita per l'intero dominio:
+
+- riepilogo GA4 giornaliero del sito;
+- pagine visitate;
+- sorgenti, medium e channel group;
+- dispositivi, sistema operativo, browser e lingua;
+- Paese, regione e città quando GA4 li rende disponibili;
+- query e pagine Search Console per tutto il dominio;
+- conteggio dei clic sull'installer AG CAD Tools tramite l'evento dedicato `plugin_installer_download`.
+
+La raccolta giornaliera rilegge gli ultimi 7 giorni per assorbire aggiornamenti tardivi. La funzione `initializeSiteWideReporting` effettua un backfill iniziale di 30 giorni con poche chiamate aggregate, senza servizi a pagamento.
+
+Il conteggio download misura il clic sull'installer quando l'utente ha accettato Analytics; non certifica che il trasferimento del file sia terminato e non identifica la persona.
+
+Per attivare questa versione nel progetto Apps Script già collegato al foglio: sostituire `Code.gs` con questo sorgente, salvare, eseguire una volta `testConnections`, poi `initializeSiteWideReporting`. Il trigger esistente continua a usare `runDailyGoogleReporting`; non crearne un duplicato.

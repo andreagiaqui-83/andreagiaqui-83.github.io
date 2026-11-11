@@ -45,3 +45,10 @@ test('Native Sheet dates are normalized without duplicate rows on repeated colle
  assert.equal(data.length,2);
  assert.equal(storage.rowsForDate_('GA4_Site_Status','2026-10-22').length,1);
 });
+
+test('Installer reporting uses a dedicated event and writes one zero-safe row per date',()=>{
+ const response={rowCount:1,rows:[{dimensionValues:[{value:'20261021'}],metricValues:[{value:'2'}]}]};
+ const {ctx,writes,calls}=setup(response);ctx.collectGa4DownloadsRange_('2026-10-21','2026-10-22',['2026-10-21','2026-10-22'],cfg);
+ const request=JSON.parse(JSON.stringify(calls[0].request));assert.match(JSON.stringify(request),/plugin_installer_download/);assert.ok(!JSON.stringify(request).includes('landingPage'));
+ assert.deepEqual(writes[0].rows,[['2026-10-21','AG CAD Tools',2],['2026-10-22','AG CAD Tools',0]]);
+});

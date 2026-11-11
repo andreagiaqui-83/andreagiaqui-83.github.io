@@ -48,3 +48,9 @@ test('Contact methods stay distinct secondary interactions and do not contain ad
  const {w}=fixture({stored:accepted});for(const href of ['mailto:private@example.invalid','tel:+390000000000','https://wa.me/390000000000']){const a=w.document.createElement('a');a.href=href;a.addEventListener('click',e=>e.preventDefault());w.document.body.append(a);a.click();}
  assert.deepEqual(Array.from(events(w).filter(x=>x[1]==='contact_click'),x=>x[2].contact_method),['email','phone','whatsapp']);assert.equal(count(w,'service_quote_success'),0);assert.equal(count(w,'generate_lead'),0);assert.ok(!JSON.stringify(events(w)).includes('private@example'));w.close();
 });
+
+test('AG CAD Tools installer click emits a dedicated consent-gated event without the file URL',()=>{
+ const {w}=fixture({stored:accepted,type:'plugin-ag-cad-tools',url:'https://andreagiaquinto.it/ag-cad-tools/'});
+ const a=w.document.createElement('a');a.setAttribute('href','/downloads/ag-cad-tools/AG_CAD_Tools_2.3_Setup.exe');a.addEventListener('click',e=>e.preventDefault());w.document.body.append(a);a.click();
+ const hit=events(w).find(x=>x[1]==='plugin_installer_download');assert.ok(hit);assert.ok(!JSON.stringify(hit).includes('AG_CAD_Tools_2.3_Setup.exe'));w.close();
+});
