@@ -96,7 +96,7 @@
     configure();
     document.dispatchEvent(new CustomEvent('ag:consentchange',{detail:{...choice}}));
   }
-  const allowedEvents = new Set(['page_view','cta_click','contact_click','form_view','form_start','form_complete','form_submit_attempt','form_error','generate_lead','service_quote_success','scroll_depth']);
+  const allowedEvents = new Set(['page_view','cta_click','contact_click','form_view','form_start','form_complete','form_submit_attempt','form_error','generate_lead','service_quote_success','plugin_installer_download','scroll_depth']);
   function track(name,values={}) {
     if (testSession || !allowedEvents.has(name)) return;
     if (name === 'service_quote_success' && !['services','preventivo'].includes(document.body.dataset.pageType)) return;
@@ -142,6 +142,8 @@
     const href=anchor.getAttribute('href')||'';
     const method=href.startsWith('tel:')?'phone':href.startsWith('mailto:')?'email':/^https:\/\/(wa\.me|api\.whatsapp\.com)\//.test(href)?'whatsapp':'';
     if(method)track('contact_click',{contact_method:method});
+    const downloadPath=href.split(/[?#]/)[0];
+    if(/(?:^|\/)downloads\/ag-cad-tools\/AG_CAD_Tools_[^/]+_Setup\.exe$/i.test(downloadPath)) track('plugin_installer_download',{});
   });
   const scrolls=new Set();let scheduled=false;
   addEventListener('scroll',()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;const max=document.documentElement.scrollHeight-innerHeight;if(max<=0)return;const depth=scrollY/max*100;for(const percent of [50,90])if(depth>=percent&&!scrolls.has(percent)&&choice.analytics){scrolls.add(percent);track('scroll_depth',{percent_scrolled:percent});}});},{passive:true});
