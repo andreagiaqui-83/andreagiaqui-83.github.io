@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'index.html'
+      - '.github/scripts/publication_http.py'
       - '.github/workflows/reviews-paged-verified.yml'
       - '.github/scripts/reviews_paged.py'
       - 'reviews-carousel.css'
@@ -11,6 +12,7 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - '.github/scripts/publication_http.py'
       - '.github/workflows/reviews-paged-verified.yml'
       - '.github/scripts/reviews_paged.py'
       - 'reviews-carousel.css'

@@ -10,6 +10,7 @@ on:
       - 'express-tools-italiano/**'
       - 'cloudflare-worker/**'
       - 'scripts/**'
+      - '.github/scripts/publication_http.py'
       - '.github/workflows/docfa-home-verified.yml'
   workflow_dispatch:
 permissions:
@@ -39,23 +40,7 @@ jobs:
         run: node scripts/qa-docfa-home.cjs local
       - name: Wait for matching public page builds
         if: github.ref == 'refs/heads/main'
-        run: |
-          python - <<'PY'
-          import pathlib,re,time,urllib.request
-          pages=['index.html','lezioni-autocad/index.html']
-          for attempt in range(20):
-              try:
-                  for file in pages:
-                      expected=re.search(r'data-build="([^"]+)"',pathlib.Path(file).read_text()).group(1)
-                      url='https://andreagiaquinto.it/'+file.replace('index.html','')
-                      html=urllib.request.urlopen(url+'?verification='+str(time.time()),timeout=20).read().decode()
-                      assert 'data-build="'+expected+'"' in html
-                  break
-              except Exception as error:
-                  print('Waiting for public build:',str(error),flush=True)
-                  if attempt==19: raise
-                  time.sleep(15)
-          PY
+        run: python3 .github/scripts/publication_http.py index.html lezioni-autocad/index.html
       - name: Verify public pages without real writes
         if: github.ref == 'refs/heads/main'
         run: node scripts/qa-docfa-home.cjs live

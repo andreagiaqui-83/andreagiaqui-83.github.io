@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/services-performance.yml'
       - 'index.html'
+      - '.github/scripts/publication_http.py'
       - 'assets/services/**'
   workflow_dispatch:
 permissions:
@@ -20,20 +21,8 @@ jobs:
           node-version: '22'
       - name: Wait for the exact homepage publication
         run: |
-          python - <<'PYWAIT'
-          import urllib.request, hashlib, time
-          from pathlib import Path
-          expected=hashlib.sha256(Path('index.html').read_bytes()).hexdigest()
-          for attempt in range(30):
-              with urllib.request.urlopen('https://andreagiaquinto.it/',timeout=25) as response:
-                  actual=hashlib.sha256(response.read()).hexdigest()
-              if actual==expected:
-                  print('Verified live HTML SHA-256 '+actual)
-                  break
-              time.sleep(10)
-          else:
-              raise SystemExit('Live homepage does not match the audited commit')
-          PYWAIT
+          python3 .github/scripts/test_publication_http.py
+          python3 .github/scripts/publication_http.py index.html
       - name: Measure public page, mobile and desktop
         env:
           CHROME_PATH: /usr/bin/google-chrome

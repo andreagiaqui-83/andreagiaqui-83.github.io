@@ -13,6 +13,7 @@ import time
 from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
+from publication_http import HEADERS, normalized_html
 
 BUILD = '20261004-r1'
 CSS = 'reviews-carousel.css'
@@ -174,12 +175,12 @@ def live():
     meta=json.loads(MANIFEST.read_text())
     for attempt in range(80):
         try:
-            root=requests.get('https://andreagiaquinto.it/',timeout=25,headers={'Cache-Control':'no-cache'})
+            root=requests.get('https://andreagiaquinto.it/',timeout=25,headers=HEADERS)
             root.raise_for_status()
             assert f'data-reviews-build="{BUILD}"' in root.text,'Waiting for public build'
             for file,expected in meta['files'].items():
-                r=requests.get(urljoin(root.url,file)+'?v='+BUILD,timeout=25);r.raise_for_status()
-                assert sha(r.content)==expected,file
+                r=requests.get(urljoin(root.url,file)+'?v='+BUILD,timeout=25,headers=HEADERS);r.raise_for_status()
+                assert sha(normalized_html(r.content) if file.endswith('.html') else r.content)==expected,file
             write('live-http.json',{'status':'PASS','build':BUILD,'url':root.url,'files':meta['files']})
             break
         except (requests.RequestException,AssertionError) as exc:

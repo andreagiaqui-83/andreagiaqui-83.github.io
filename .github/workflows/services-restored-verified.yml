@@ -4,6 +4,7 @@ on:
     branches: [main, 'optimize/services-*', 'release/site-*']
     paths:
       - 'index.html'
+      - '.github/scripts/publication_http.py'
       - 'assets/services/**'
       - 'preventivo/**'
       - 'assets/preventivo.js'

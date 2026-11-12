@@ -4,6 +4,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
+from publication_http import HEADERS, normalized_html
 from PIL import Image
 ROOT=Path.cwd(); OUT=Path(os.environ.get('RUNNER_TEMP','/tmp'))/'services-restored-proof';OUT.mkdir(parents=True,exist_ok=True)
 BASELINE='57df1aa2b030908a2bc2d9661f3f4ee3df5d97e1'
@@ -186,11 +187,11 @@ def local():
 def live():
  expected=sha(Path('index.html').read_bytes())
  for i in range(30):
-  r=requests.get('https://andreagiaquinto.it/',timeout=20)
-  if r.status_code==200 and sha(r.content)==expected:break
+  r=requests.get('https://andreagiaquinto.it/',timeout=20,headers=HEADERS)
+  if r.status_code==200 and sha(normalized_html(r.content))==expected:break
   print('Waiting for public deployment',i,flush=True);time.sleep(10)
  else:raise RuntimeError('Live hash does not match candidate')
- s=BeautifulSoup(r.content,'html.parser');assets=set()
+ s=BeautifulSoup(normalized_html(r.content),'html.parser');assets=set()
  for tag in s.select('[src],[href]'):
   u=tag.get('src') or tag.get('href')
   if u and not u.startswith(('#','tel:','mailto:')):
@@ -202,9 +203,9 @@ def live():
  assets.update(['https://andreagiaquinto.it/robots.txt','https://andreagiaquinto.it/sitemap.xml','https://andreagiaquinto.it/google935272c73b59739f.html'])
  proof=[]
  for u in sorted(assets):
-  response=requests.get(u,timeout=25);assert response.status_code==200,(u,response.status_code)
+  response=requests.get(u,timeout=25,headers=HEADERS);assert response.status_code==200,(u,response.status_code)
   local=ROOT/urlparse(u).path.lstrip('/');local=local/'index.html' if local.is_dir() else local
-  assert local.exists() and sha(local.read_bytes())==sha(response.content),(u,'hash mismatch')
+  assert local.exists() and sha(local.read_bytes())==sha(normalized_html(response.content) if local.suffix=='.html' else response.content),(u,'hash mismatch')
   if local.suffix in ['.avif','.webp','.jpg','.svg']:assert response.headers.get('Content-Type','').startswith('image/'),(u,'mime')
   proof.append({'url':u,'status':response.status_code,'bytes':len(response.content),'mime':response.headers.get('Content-Type'),'sha256':sha(response.content)})
  save('live-assets.json',proof)
