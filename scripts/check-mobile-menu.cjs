@@ -46,12 +46,16 @@ module.exports=async function checkMobileMenu(page,{extended=false,touch=false}=
   }
  }
  if(extended){
-  // Short landscape viewport: all eight destinations remain reachable by
+  // Short landscape viewport: all destinations remain reachable by
   // scrolling the panel, without scrolling the underlying page.
   await toggle();
   const opened=await state();
   assert.ok(opened.innerMax>0,'Landscape menu needs internal scrolling');
-  const services=page.locator('.sg-services > summary');await services.click();await settle();
+  // Match the real pointer path. Locator.click scrolls sticky descendants into
+  // view before clicking and can move the document even though the control is already visible.
+  const services=page.locator('.sg-services > summary');const sr=await services.boundingBox();
+  assert.ok(sr&&sr.y>=0&&sr.y+sr.height<=opened.viewport,'Services control is visible');
+  if(touch)await page.touchscreen.tap(sr.x+sr.width/2,sr.y+sr.height/2);else await page.mouse.click(sr.x+sr.width/2,sr.y+sr.height/2);await settle();
   const afterDisclosure=await state();assert.ok(Math.abs(afterDisclosure.y-opened.y)<=2,'Services disclosure changed page scroll: '+JSON.stringify({opened,afterDisclosure}));
   assert.equal(await page.locator('.sg-services[open] .sg-submenu a:visible').count(),5);
   await page.keyboard.press('Escape');await settle();assert.equal(await page.locator('.sg-services[open]').count(),0);
