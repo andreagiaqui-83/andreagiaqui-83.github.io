@@ -9,6 +9,8 @@ on:
       - 'assets/preventivo.*'
       - 'scripts/test-preventivo*.cjs'
       - 'scripts/qa-preventivo-flow.cjs'
+      - 'scripts/qa-edge-telemetry.cjs'
+      - 'scripts/test-edge-telemetry.cjs'
       - 'yqarch-italiano/**'
       - 'express-tools-italiano/**'
       - 'ag-cad-tools/**'

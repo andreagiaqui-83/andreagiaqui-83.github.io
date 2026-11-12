@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),mock=require('./qa-edge-telemetry.cjs');
 test('QA intercepts only the known Cloudflare beacon and never contact or unknown writes',async()=>{
   for(const [url,method,expected] of [
-    ['https://static.cloudflareinsights.com/beacon.min.js/vce701823','GET',true],
+    ['https://static.cloudflareinsights.com/beacon.min.js/vce701823','GET',false],
     ['https://andreagiaquinto.it/cdn-cgi/rum?','POST',true],
     ['https://andreagiaquinto.it/api/submit','POST',false],
     ['https://cad-bim-preventivi.andrea-giaqui.workers.dev/api/submit','POST',false],

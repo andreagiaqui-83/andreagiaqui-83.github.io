@@ -3,10 +3,11 @@
 'use strict';
 async function mockEdgeTelemetry(route) {
   const request = route.request(), url = new URL(request.url());
-  const script = request.method() === 'GET' && url.origin === 'https://static.cloudflareinsights.com' && /^\/beacon\.min\.js(?:\/[a-zA-Z0-9]+)?$/.test(url.pathname);
   const beacon = request.method() === 'POST' && url.origin === 'https://andreagiaquinto.it' && url.pathname === '/cdn-cgi/rum';
-  if (!script && !beacon) return false;
-  await route.fulfill(script ? {status:200, contentType:'application/javascript', body:''} : {status:204, body:''});
+  if (!beacon) return false;
+  // Load the original script unchanged so browser SRI checks still run. Mock
+  // only its outbound measurement, never the script or the page itself.
+  await route.fulfill({status:204, body:''});
   return true;
 }
 module.exports = mockEdgeTelemetry;
