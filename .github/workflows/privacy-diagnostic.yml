@@ -1,0 +1,33 @@
+name: Isolated privacy checkbox diagnostic
+on:
+  push:
+    branches: ['qa/privacy-checkbox-20261112']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --user 1001
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund playwright@1.58.2
+      - name: Public input, label, keyboard, consent, menu and reply; no submissions
+        env:
+          QA_ENGINE: ${{ matrix.engine }}
+        run: node .github/scripts/privacy-diagnostic.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: privacy-diagnostic-${{ matrix.engine }}
+          path: ${{ runner.temp }}/privacy-diagnostic/
+          retention-days: 30
