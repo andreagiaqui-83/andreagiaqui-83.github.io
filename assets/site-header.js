@@ -17,8 +17,8 @@
   nav.addEventListener('click',e=>{if(e.target.closest('a'))close();});
   document.addEventListener('keydown',e=>{
     if(e.key!=='Escape')return;
-    if(services?.open){closeServices();services.querySelector('summary').focus();}
-    else if(nav.classList.contains('sg-open')){close();button.focus();}
+    if(services?.open){closeServices();services.querySelector('summary').focus({preventScroll:true});}
+    else if(nav.classList.contains('sg-open')){close();button.focus({preventScroll:true});}
   });
   document.addEventListener('click',e=>{
     if(!header.contains(e.target))close();

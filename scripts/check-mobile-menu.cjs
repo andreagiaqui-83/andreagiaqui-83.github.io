@@ -52,14 +52,15 @@ module.exports=async function checkMobileMenu(page,{extended=false,touch=false}=
   const opened=await state();
   assert.ok(opened.innerMax>0,'Landscape menu needs internal scrolling');
   const services=page.locator('.sg-services > summary');await services.click();await settle();
+  const afterDisclosure=await state();assert.ok(Math.abs(afterDisclosure.y-opened.y)<=2,'Services disclosure changed page scroll: '+JSON.stringify({opened,afterDisclosure}));
   assert.equal(await page.locator('.sg-services[open] .sg-submenu a:visible').count(),5);
   await page.keyboard.press('Escape');await settle();assert.equal(await page.locator('.sg-services[open]').count(),0);
-  assert.ok((await state()).open,'Escape from Services must keep the main mobile menu open');
+  const afterEscape=await state();assert.ok(afterEscape.open,'Escape from Services must keep the main mobile menu open');assert.ok(Math.abs(afterEscape.y-opened.y)<=2,'Services Escape changed page scroll: '+JSON.stringify({opened,afterEscape}));
   const last=page.locator('.sg-nav a').last();
   await last.focus();await settle();
   const lastHit=await last.evaluate(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));});
   assert.ok(lastHit,'Last menu destination must be visible and clickable');
-  assert.ok(Math.abs((await state()).y-opened.y)<=2,'Moving through the menu must not move the page');
+  assert.ok(Math.abs((await state()).y-opened.y)<=2,'Moving through the menu must not move the page: '+JSON.stringify({opened,afterFocus:await state()}));
   await page.keyboard.press('Escape');await settle();
   // Outside interaction closes the panel.
   await page.setViewportSize({width:390,height:844});await settle();await toggle();
