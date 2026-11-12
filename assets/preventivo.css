@@ -33,3 +33,4 @@
 @media(max-width:620px){.quote-pricing-grid,.quote-price-conditions{grid-template-columns:1fr}.quote-price-card{padding:22px}.quote-choice-help{padding:16px}.quote-pricing{padding-bottom:48px}.quote-pricing .quote-btn{width:100%;font-size:14px}.quote-fiscal-note{grid-column:auto}}
 
 .quote-price-insight{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:12px;color:#0e6572;font-size:15px;font-weight:700;line-height:1.6;text-underline-offset:4px}.quote-price-insight span{flex-shrink:0}
+.quote-service-links{padding:16px 20px;margin:0 0 24px;background:#eef5f4;border:1px solid #cbdcdd;border-radius:12px;line-height:1.8;font-size:15px}.quote-service-links a{color:#0e6572;font-weight:700;text-underline-offset:3px}

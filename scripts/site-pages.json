@@ -78,5 +78,21 @@
   {
     "file": "cad-bim-job-mailer/privacy/index.html",
     "kind": "private"
+  },
+  {
+    "file": "pdf-in-dwg/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "pdf-in-revit-bim/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "nuvole-di-punti-cad-bim/index.html",
+    "kind": "landing"
+  },
+  {
+    "file": "render-planimetrie-commerciali/index.html",
+    "kind": "landing"
   }
 ]

@@ -30,7 +30,7 @@ async function axe(page,selectors){await page.addScriptTag({path:'node_modules/a
    assert.equal(await page.locator('.sg-header').count(),1);assert.equal(await page.locator('.breadcrumb .page-back-button').count(),0);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),engine+' '+width+' preventivo overflow');
    assert.equal(await page.locator('#contactNotes').isVisible(),true);assert.equal(await page.locator('#directFiles').isVisible(),true);
-   if(width<=430){const toggle=page.locator('.sg-toggle');assert.equal(await toggle.isVisible(),true);await toggle.click();assert.equal(await page.locator('.sg-nav').isVisible(),true);assert.equal(await page.locator('.sg-nav a').count(),7);assert.ok(await page.locator('.sg-nav').evaluate(e=>e.scrollHeight>=e.clientHeight));await toggle.click();}
+   if(width<=430){const toggle=page.locator('.sg-toggle');assert.equal(await toggle.isVisible(),true);await toggle.click();assert.equal(await page.locator('.sg-nav').isVisible(),true);assert.equal(await page.locator('.sg-nav a').count(),11);assert.ok(await page.locator('.sg-nav').evaluate(e=>e.scrollHeight>=e.clientHeight));await toggle.click();}
    if(engine==='chromium'&&[390,1440].includes(width)){await page.screenshot({animations:'disabled',path:path.join(out,stage+'-preventivo-docfa-'+width+'.png')});}
    if(engine==='chromium'&&width===390)await axe(page,['.quote-app']);
    assert.deepEqual(env.errors,[]);assert.deepEqual(env.google,[]);assert.equal(env.writes.length,0);report.push({engine,width,page:'preventivo-docfa',status:'PASS'});await env.ctx.close();

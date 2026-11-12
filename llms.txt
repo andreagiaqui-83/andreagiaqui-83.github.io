@@ -1,0 +1,24 @@
+# Andrea Giaquinto — Disegnatore CAD e BIM
+
+> Sito ufficiale di Andrea Giaquinto: servizi online di disegno AutoCAD, modellazione Revit/BIM, restituzione da documenti e nuvole di punti, render, lezioni individuali e plugin gratuito AG CAD Tools.
+
+## Servizi
+- [Servizi CAD e BIM](https://andreagiaquinto.it/): presentazione e tariffe indicative.
+- [Da PDF e immagini a DWG](https://andreagiaquinto.it/pdf-in-dwg/): ridisegno e organizzazione di elaborati AutoCAD modificabili.
+- [Da PDF e immagini a Revit/BIM](https://andreagiaquinto.it/pdf-in-revit-bim/): modellazione geometrica e informazioni concordate.
+- [Nuvole di punti in CAD e BIM](https://andreagiaquinto.it/nuvole-di-punti-cad-bim/): restituzione da rilievi forniti dal committente.
+- [Render e planimetrie commerciali](https://andreagiaquinto.it/render-planimetrie-commerciali/): visualizzazioni e interior design su misura.
+- [Disegnatore online](https://andreagiaquinto.it/disegnatore-online/): metodo, vantaggi, collaborazione da remoto e limiti dell'automazione.
+- [Preventivo online](https://andreagiaquinto.it/preventivo/): invio del materiale e richiesta di un preventivo personalizzato.
+- [Portfolio online](https://andreagiaquinto.it/portfolio/): selezione di lavori ed esercitazioni; consultazione esclusivamente online, immagini soggette a diritti di riproduzione.
+- [Lezioni e ripetizioni AutoCAD](https://andreagiaquinto.it/lezioni-autocad/): lezioni individuali online.
+
+## Software e contatti
+- [AG CAD Tools](https://andreagiaquinto.it/ag-cad-tools/): plugin gratuito per AutoCAD con BlockHub integrato; compatibilità e ambito del collaudo specificati nella pagina.
+- [Metadati della release pubblica](https://andreagiaquinto.it/ag-cad-tools/release.json): versione, dimensione, hash e download dal manifest corrente.
+- [Guida AG CAD Tools](https://andreagiaquinto.it/downloads/ag-cad-tools/AG_CAD_Tools_Help.html): comandi, opzioni e limiti.
+- [Contatti](https://andreagiaquinto.it/contatti/): email, telefono e profili pubblici.
+- [Privacy](https://andreagiaquinto.it/privacy/): trattamento dei dati e consenso.
+
+## Informazioni da contestualizzare
+Le tariffe sono indicative e trattabili; ambito, tempi, formati e oneri vengono concordati nel preventivo. Il servizio di disegno e modellazione non implica calcoli, certificazioni o validazioni specialistiche non concordati. I render sono visualizzazioni, non attestazioni di opere realizzate. Fare riferimento alle pagine pertinenti per dettagli e aggiornamenti.

@@ -1,0 +1,18 @@
+{
+  "name": "AG CAD Tools",
+  "version": "2.3",
+  "datePublished": "2026-10-30",
+  "downloadUrl": "https://andreagiaquinto.it/downloads/ag-cad-tools/AG_CAD_Tools_2.3_Setup.exe",
+  "sha256": "81c232304e3402adea26f90531e7c77f5c18ffddf993b08eccf8d52fdda719a5",
+  "sizeBytes": 63328768,
+  "price": 0,
+  "priceCurrency": "EUR",
+  "language": "it",
+  "operatingSystem": "Windows x64",
+  "softwareRequirements": "AutoCAD completo 2024–2027 per Windows x64",
+  "authorVerifiedEnvironment": "AutoCAD 2027 italiano su Windows 11",
+  "verificationScope": "Pubblicabile: collaudo autore confermato su AutoCAD 2027 italiano",
+  "url": "https://andreagiaquinto.it/ag-cad-tools/",
+  "documentationUrl": "https://andreagiaquinto.it/downloads/ag-cad-tools/AG_CAD_Tools_Help.html",
+  "compatibilityUrl": "https://andreagiaquinto.it/downloads/ag-cad-tools/AG_CAD_Tools_Compatibilita.html"
+}
