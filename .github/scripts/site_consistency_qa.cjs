@@ -1,3 +1,4 @@
+const mockEdgeTelemetry=require('../../scripts/qa-edge-telemetry.cjs');
 // Published-page regression: all form submissions and analytics requests are intercepted.
 const {chromium,webkit,firefox}=require('playwright'),fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const live=process.argv[2]==='live',base=live?'https://andreagiaquinto.it':'http://127.0.0.1:8768',out=path.join(process.env.RUNNER_TEMP||'/tmp','plugins-proof');fs.mkdirSync(out,{recursive:true});
@@ -11,7 +12,7 @@ for(const[engine,type]of Object.entries({chromium,webkit,firefox})){
  for(const url of pages){const lesson=url==='/lezioni-autocad/';const widths=lesson&&engine==='chromium'?[320,360,375,390,412,430,600,768,800,1024,1366,1440,1920]:[320,1440];
  for(const width of widths){const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await context.newPage(),errors=[],posts=[],google=[];let failReview=true;
  await page.addInitScript(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async value=>{window.__copied=value;}}}));
- await page.route('**/*',async route=>{const req=route.request(),u=req.url();if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u)){google.push(u);return route.fulfill({status:200,body:''});}if(u.includes('cad-bim-preventivi.andrea-giaqui.workers.dev')){if(req.method()==='POST'){posts.push(req.postDataJSON());return route.fulfill({status:failReview?503:200,json:{ok:!failReview}});}return route.fulfill({json:{ok:true,reviews:[],comments:[],nextCursor:null}});}if(!['GET','HEAD','OPTIONS'].includes(req.method()))throw new Error('Unexpected real write');await route.continue();});
+ await page.route('**/*',async route=>{if(await mockEdgeTelemetry(route))return;const req=route.request(),u=req.url();if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u)){google.push(u);return route.fulfill({status:200,body:''});}if(u.includes('cad-bim-preventivi.andrea-giaqui.workers.dev')){if(req.method()==='POST'){posts.push(req.postDataJSON());return route.fulfill({status:failReview?503:200,json:{ok:!failReview}});}return route.fulfill({json:{ok:true,reviews:[],comments:[],nextCursor:null}});}if(!['GET','HEAD','OPTIONS'].includes(req.method()))throw new Error('Unexpected real write');await route.continue();});
  page.on('pageerror',e=>errors.push(e.message));
  const response=await page.goto(base+url,{waitUntil:'networkidle'});assert.equal(response.status(),200);
  const reject=page.getByRole('button',{name:'Rifiuta facoltativi'});if(await reject.isVisible())await reject.click();

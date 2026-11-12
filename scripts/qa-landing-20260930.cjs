@@ -1,5 +1,6 @@
 // Browser verification. All form writes and analytics collection are intercepted.
 'use strict';
+const mockEdgeTelemetry=require('./qa-edge-telemetry.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const {chromium,firefox,webkit}=require('playwright');
 const entries=JSON.parse(fs.readFileSync('scripts/site-pages.json','utf8'));
@@ -17,7 +18,7 @@ const activeBrowsers=new Set();
   for(const entry of entries){const widths=entry.file==='index.html'?[320,360,390,430,768,1024,1440,1920]:[320,1440];
    for(const width of widths){
     const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await ctx.newPage(),errors=[],google=[],writes=[];page.on('pageerror',e=>errors.push(e.message));
-    await page.route('**/*',async route=>{const req=route.request(),u=req.url();if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u)){google.push(u);return route.fulfill({status:200,body:''});}if(u.includes('cad-bim-preventivi.andrea-giaqui.workers.dev')){if(req.method()!=='GET')writes.push(req.postData());return route.fulfill({json:{ok:true,reviews:[],comments:[]}});}assert.ok(['GET','HEAD','OPTIONS'].includes(req.method()),'Unexpected write '+u);return route.continue();});
+    await page.route('**/*',async route=>{if(await mockEdgeTelemetry(route))return;const req=route.request(),u=req.url();if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u)){google.push(u);return route.fulfill({status:200,body:''});}if(u.includes('cad-bim-preventivi.andrea-giaqui.workers.dev')){if(req.method()!=='GET')writes.push(req.postData());return route.fulfill({json:{ok:true,reviews:[],comments:[]}});}assert.ok(['GET','HEAD','OPTIONS'].includes(req.method()),'Unexpected write '+u);return route.continue();});
     const response=await page.goto(base+routeFor(entry.file),{waitUntil:'networkidle'});assert.ok(response.status()===200||(live&&entry.file==='404.html'&&response.status()===404));
     const reject=page.getByRole('button',{name:'Rifiuta facoltativi'});if(await reject.isVisible())await reject.click();
     const overflow=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,view:innerWidth}));assert.ok(overflow.scroll<=width+1,JSON.stringify({engine,file:entry.file,width,overflow}));assert.equal(await page.locator('footer a[href*="linkedin"]').count(),0);

@@ -1,5 +1,6 @@
 /* DOCFA, Preventivo online and global navigation. Public checks never send a real request. */
 'use strict';
+const mockEdgeTelemetry=require('./qa-edge-telemetry.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const {chromium,firefox,webkit}=require('playwright');
 const live=process.argv.includes('live'),base=live?'https://andreagiaquinto.it':'http://127.0.0.1:8891',stage=live?'live':'candidate';
@@ -11,7 +12,7 @@ let server,browser;const report=[];
 async function start(){if(live)return;server=http.createServer((req,res)=>{try{let pathname=decodeURIComponent(new URL(req.url,base).pathname);if(pathname.endsWith('/'))pathname+='index.html';const root=process.cwd(),file=path.resolve(root,'.'+pathname);if(!file.startsWith(root+path.sep))throw new Error('Invalid path');const bytes=fs.readFileSync(file);res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'});res.end(req.method==='HEAD'?undefined:bytes);}catch{res.writeHead(404);res.end();}});await new Promise(resolve=>server.listen(8891,'127.0.0.1',resolve));}
 async function envFor(width,js=true){
  const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce',javaScriptEnabled:js,serviceWorkers:'block'}),writes=[],errors=[],google=[];
- await ctx.route('**/*',async route=>{const r=route.request(),u=r.url();if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u)){google.push(u);return route.fulfill({body:''});}
+ await ctx.route('**/*',async route=>{if(await mockEdgeTelemetry(route))return;const r=route.request(),u=r.url();if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u)){google.push(u);return route.fulfill({body:''});}
  if(u.includes('cad-bim-preventivi.andrea-giaqui.workers.dev')){if(r.method()!=='GET')writes.push({url:u,method:r.method()});if(u.endsWith('/api/session'))return route.fulfill({json:{ok:true,sessionId:'11111111-1111-4111-8111-111111111111',token:'mock'}});if(u.includes('/api/upload/'))return route.fulfill({json:{ok:true}});if(u.endsWith('/api/submit'))return route.fulfill({json:{ok:true,requestId:'11111111-1111-4111-8111-111111111111',customerCopySent:true}});return route.fulfill({json:{ok:true,reviews:[],comments:[],nextCursor:null}});}
  assert.ok(['GET','HEAD','OPTIONS'].includes(r.method()),'Unexpected external write '+u);return route.continue();});
  ctx.on('page',p=>p.on('pageerror',e=>errors.push(e.message)));

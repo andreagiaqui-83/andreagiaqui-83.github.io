@@ -1,5 +1,6 @@
 // Whole-site read-only audit. All remote writes and Google tracking are intercepted.
 'use strict';
+const mockEdgeTelemetry=require('./qa-edge-telemetry.cjs');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {chromium,firefox,webkit}=require('playwright');
 const checkMobileMenu=require('./check-mobile-menu.cjs');
@@ -20,7 +21,8 @@ async function run(){
   try{for(const entry of entries){
    const ctx=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce',serviceWorkers:'block'}),page=await ctx.newPage();
    const errors=[],google=[];
-   await ctx.route('**/*',async route=>{const req=route.request(),u=req.url();
+   await ctx.route('**/*',async route=>{if(await mockEdgeTelemetry(route))return;
+    const req=route.request(),u=req.url();
     if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u)){google.push(u);return route.fulfill({status:200,body:''});}
     if(!['GET','HEAD','OPTIONS'].includes(req.method())){report.blockedWrites.push({url:u,method:req.method()});return route.abort();}
     if(u.includes('cad-bim-preventivi.andrea-giaqui.workers.dev'))return route.fulfill({json:{ok:true,reviews:[],comments:[],nextCursor:null}});
@@ -76,7 +78,8 @@ async function run(){
    if(engine!=='firefox'){
     const touchContext=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:3,reducedMotion:'reduce',serviceWorkers:'block'});
     await touchContext.route('**/*',async route=>{
-     const req=route.request(),u=req.url();
+     if(await mockEdgeTelemetry(route))return;
+    const req=route.request(),u=req.url();
      if(/google-analytics\.com|googletagmanager\.com|googleadservices\.com/.test(u))return route.fulfill({status:200,body:''});
      if(!['GET','HEAD','OPTIONS'].includes(req.method())){report.blockedWrites.push({url:u,method:req.method()});return route.abort();}
      if(u.includes('cad-bim-preventivi.andrea-giaqui.workers.dev'))return route.fulfill({json:{ok:true,reviews:[],comments:[],nextCursor:null}});
