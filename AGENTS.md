@@ -274,3 +274,7 @@ Disegnatore online include indice, approfondimento IA sempre visibile e quattro 
 - Nei contatti delle quattro landing servizio mantenere le CTA principali e due pulsanti secondari per Contatti e collaborazione da remoto; non duplicare email e telefono in una riga testuale sotto i pulsanti.
 - L’approfondimento IA di Disegnatore online resta integralmente visibile, evidenziato da un fondo caldo distinto.
 - L’esempio PDF in DWG utilizza la planimetria complessa del caso pubblico PDF e scansioni, con collegamento diretto a quel caso.
+
+### 13 novembre 2026 — immagini Revit/BIM e note nelle tavole
+- La hero PDF in Revit/BIM usa il render esterno della casa già presente nel portfolio, con proporzioni integrali 3:2 e varianti responsive.
+- Nelle immagini del portfolio eliminare le piccole note operative sotto titolo e scala, come unità/misure dedotte e riferimenti alla veranda prima della rimozione. Conservare titoli, scala, geometrie, quote e firma professionale. La planimetria `dwg-scansione.webp` è ripulita nell’asset condiviso: anteprima servizio, portfolio e ingrandimento utilizzano la stessa versione.

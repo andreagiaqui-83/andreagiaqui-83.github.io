@@ -8,7 +8,7 @@ test('Each service has distinct metadata, matching visible FAQs and valid contex
  for(const slug of slugs){const d=read(slug+'/index.html');titles.add(d.title);assert.equal(d.querySelector('link[rel=canonical]').href,'https://andreagiaquinto.it/'+slug+'/');const g=JSON.parse(d.querySelector('script[type="application/ld+json"]').textContent)['@graph'];assert.equal(g.find(n=>n['@type']==='Service').provider['@id'],'https://andreagiaquinto.it/#andrea');
  assert.deepEqual(g.find(n=>n['@type']==='FAQPage').mainEntity.map(q=>[q.name,q.acceptedAnswer.text]),[...d.querySelectorAll('#faq details')].map(n=>[n.querySelector('summary').textContent,n.querySelector('p').textContent]));
  for(const a of d.querySelectorAll('main a[href^="/"]')){const u=new URL(a.href,'https://andreagiaquinto.it');const file=u.pathname.slice(1)+(u.pathname.endsWith('/')?'index.html':'');assert.ok(fs.existsSync(file),slug+' '+a.href);if(u.hash)assert.ok(read(file).getElementById(u.hash.slice(1)),a.href);assert.ok(!u.search.includes('utm_'),'Internal links must not reset attribution');}
- for(const im of d.querySelectorAll('main img')){assert.ok(fs.existsSync(im.getAttribute('src').slice(1)));assert.ok(im.hasAttribute('width')&&im.hasAttribute('height')&&im.alt);}
+ for(const im of d.querySelectorAll('main img')){const imagePath=new URL(im.getAttribute('src'),'https://andreagiaquinto.it').pathname.slice(1);assert.ok(fs.existsSync(imagePath),slug+' '+imagePath);assert.ok(im.hasAttribute('width')&&im.hasAttribute('height')&&im.alt);}
  for(const dest of ['/preventivo/','/disegnatore-online/#metodo-di-lavoro','/contatti/','mailto:andrea.giaqui@gmail.com'])assert.ok(d.querySelector(`main a[href="${dest}"]`));
  }
  assert.equal(titles.size,4);

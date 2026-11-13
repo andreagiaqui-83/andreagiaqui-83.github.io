@@ -12,3 +12,6 @@
 .service-contact .service-contact-link:hover{background:#fff;border-color:#fff;color:#102b3a}
 .service-contact .service-contact-link span{flex:none;font-size:19px}
 @media(max-width:760px){.service-example-drawing img{max-height:none;padding:12px}.service-contact-paths .button{flex:1 1 240px;justify-content:space-between;text-align:left}}
+
+/* Preserve the full 3:2 portfolio render selected for the Revit/BIM hero. */
+.service-visual-house img{aspect-ratio:3/2}
