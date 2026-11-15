@@ -33,3 +33,10 @@ Su indicazione dell’autore, il simbolo vettoriale condiviso dalle immagini 01 
 ## Verifica live e cache — revisione 3
 
 La PR #38 ha pubblicato la geometria corretta nel commit d77165c. La verifica live ha rilevato che l'URL con query porte-r2, richiesto durante la propagazione del deploy, era rimasto in cache con l'SVG precedente (CF-Cache-Status HIT, max-age 14400). Il file senza query risultava invece byte-identico al candidato corretto (SHA-256 a1f41088cd328e204a85d8d4b1900c1be7b3c10d4b15fa09b7131da774f33a9f). Anteprima e ingrandimento passano a porte-r3 dopo il completamento del deploy dell'asset. Nessuna modifica alla geometria né alle impostazioni Cloudflare. Verificare sempre i byte dell'URL effettivamente usato dalla pagina, oltre al solo file base.
+
+
+## Telai inferiori e rimozione della linea tratteggiata — revisione 4
+
+Su nuova correzione dell’autore, le due ante inferiori sono distanziate dalle facce del divisorio e hanno telai espliciti, raccordati da brevi risvolti del muro esterno. L’innesto è unito al divisorio senza contorni interni sovrapposti; gli archi terminano sulle nuove posizioni delle ante. Il simbolo condiviso applica la correzione a entrambe le viste 01 e 02. Rimossa soltanto la linea rossa tratteggiata diagonale che collegava il richiamo 1 al dettaglio dello spessore; rimangono i riquadri e i quattro riferimenti numerati.
+
+Anteprima e ingrandimento usano la stessa query `20261115-telai-r4`. Non richiedere il nuovo URL pubblico prima del completamento del deploy Pages, per evitare di memorizzare una vecchia copia nella cache. Nessuna modifica alle impostazioni CDN. `sitemap.xml` resta byte-identico; il manifest aggiorna soltanto l’hash semantico della pagina, mantenendo la data.

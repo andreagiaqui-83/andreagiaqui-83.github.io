@@ -5,13 +5,17 @@
     <pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#e8eeeb"/><path d="M0 0V9" stroke="#9baea7" stroke-width="2"/></pattern>
     <g id="plan" fill="url(#hatch)" stroke="#29444d" stroke-width="2">
       <!-- United wall footprint: no partition outlines inside external walls or T-junctions. -->
-      <path d="M178 134L178 11L349 11L349 178L178 178L178 170L172 170L172 178L110 178L110 184L172 184L172 349L172 360L178 360L178 349L178 184L274 184L274 310L280 310L280 184L349 184L349 349L230 349L230 360L349 360L360 360L360 349L360 11L360 0L349 0L11 0L0 0L0 11L0 349L0 360L11 360L135 360L135 349L11 349L11 184L74 184L74 178L11 178L11 11L172 11L172 134Z"/>
+      <path d="M178 134L178 11L349 11L349 178L178 178L178 170L172 170L172 178L110 178L110 184L172 184L172 349L168 349L168 360L182 360L182 349L178 349L178 184L274 184L274 310L280 310L280 184L349 184L349 349L230 349L230 360L349 360L360 360L360 349L360 11L360 0L349 0L11 0L0 0L0 11L0 349L0 360L11 360L135 360L135 349L11 349L11 184L74 184L74 178L11 178L11 11L172 11L172 134Z"/>
       <g fill="#fff" stroke="#637d83" stroke-width="1.5">
         <path d="M55 0H108V11H55ZM246 0H302V11H246ZM0 64H11V117H0ZM349 70H360V123H349ZM52 349H105V360H52ZM258 349H315V360H258Z"/>
         <path d="M55 5.5H108M246 5.5H302M5.5 64V117M354.5 70V123M52 354.5H105M258 354.5H315"/>
       </g>
+      <!-- Lower door frames stand clear of the partition, on short external-wall returns. -->
+      <g fill="#fff" stroke="#627b7f" stroke-width="1.2">
+        <path d="M165 348H168V361H165ZM182 348H185V361H182Z"/>
+      </g>
       <g fill="none" stroke="#627b7f" stroke-width="1.5">
-        <path d="M172 134H136A36 36 0 0 0 172 170M74 178V142A36 36 0 0 1 110 178M172 349V312M135 349A37 37 0 0 1 172 312M178 349V297M230 349A52 52 0 0 0 178 297"/>
+        <path d="M172 134H136A36 36 0 0 0 172 170M74 178V142A36 36 0 0 1 110 178M165 349V319M135 349A30 30 0 0 1 165 319M185 349V304M230 349A45 45 0 0 0 185 304"/>
       </g>
       <g stroke="#778c91" stroke-width="1.4" fill="none"><path d="M280 184V310H349M280 202H349M280 220H349M280 238H349M280 256H349M280 274H349M280 292H349"/></g>
     </g>
@@ -42,7 +46,6 @@
       <use href="#dot" x="923" y="408"/><text x="923" y="414">3</text>
       <use href="#dot" x="750" y="581"/><text x="750" y="587">4</text>
     </g>
-    <path d="M852 280L812 672" stroke="#b77853" stroke-width="2" stroke-dasharray="6 7"/>
     <rect x="40" y="672" width="1120" height="246" rx="16" fill="#edf3f5" stroke="#c7d8de"/>
     <text x="68" y="713" font-size="24" font-weight="700">Il dettaglio: lo spessore del muro</text>
     <text x="68" y="745" font-size="18" fill="#506974">La quota attraversa le due facce, non misura la lunghezza della parete.</text>
