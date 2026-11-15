@@ -1,0 +1,38 @@
+/* Approfondimento PDF/DWG: componenti locali, nessuna dipendenza JavaScript. */
+.dwg-insight{background:#edf3f2;border-block:1px solid #d0dfdb;scroll-margin-top:100px}
+.dwg-insight .di-heading{max-width:850px;margin-bottom:30px}
+.dwg-insight .di-heading h2{max-width:750px;margin:12px 0 20px}
+.dwg-insight p{line-height:1.7;color:#465e69}
+.dwg-insight .di-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:30px;align-items:start}
+.dwg-insight figure{margin:0;min-width:0;border:1px solid #c7d9d5;border-radius:18px;overflow:hidden;background:#fff}
+.dwg-insight .di-visual-link{display:block;color:#126674;text-decoration:none}
+.dwg-insight .di-visual-link img{display:block;width:100%;height:auto}
+.dwg-insight .di-enlarge{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-top:1px solid #dce7e2;font-size:14px;font-weight:700;background:#f5f9f7;min-height:48px}
+.dwg-insight .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.dwg-insight .di-visual-link:hover .di-enlarge{background:#e0eee6}
+.dwg-insight figcaption{font-size:13px;line-height:1.6;color:#526771;padding:16px 20px}
+.dwg-insight .di-checks h3{font-size:24px;margin:0 0 16px}
+.dwg-insight details{margin:0 0 10px;background:white;border:1px solid #cbdcd7;border-radius:12px;padding:0 18px}
+.dwg-insight summary{cursor:pointer;padding:16px 0;line-height:1.5;font-weight:700;color:#173f49;min-height:52px}
+.dwg-insight details p{font-size:15px;margin:0 0 18px}
+.dwg-insight .di-checks>p{font-size:14px;margin:18px 0 0}
+.dwg-insight .di-human{padding:24px 28px;margin-top:28px;border-left:4px solid #a66a2c;border-radius:0 12px 12px 0;background:#f7eddd}
+.dwg-insight .di-human h3{font-size:23px;margin:0 0 12px}
+.dwg-insight .di-human p{margin:0}
+.dwg-insight .di-value{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:34px;padding:30px;margin-top:28px;background:white;border:1px solid #c7d9d5;border-radius:18px}
+.dwg-insight .di-value h3{font-size:24px;margin:10px 0 16px}
+.dwg-insight .di-value p{font-size:15px;margin:10px 0}
+.dwg-insight .di-value .di-formula{color:#174b43;font-size:clamp(22px,2.5vw,30px);font-weight:700;line-height:1.4;letter-spacing:-.025em}
+.dwg-insight .di-formula strong{display:inline-block;background:#e2f0e6;border-radius:8px;padding:4px 10px}
+.dwg-insight .di-value .eyebrow{font-size:11px;color:#30674e}
+.dwg-insight .di-value .micro{font-size:13px}
+.dwg-insight .di-delivery{border-left:1px solid #d0dfdb;padding-left:34px}
+.dwg-insight .di-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin-top:18px}
+.dwg-insight .di-actions .button{font-size:14px}
+.dwg-insight .di-actions .service-text-link{margin:0;font-size:14px;padding:10px 0}
+.work-method .wm-ai-example{margin-top:24px;border-top:1px solid #d9c4a5;padding-top:22px}
+.work-method .wm-ai-example p{max-width:840px;margin-bottom:16px}
+.work-method .wm-ai-example .button{white-space:normal;text-align:center;background:#87521f;border-color:#87521f}
+.work-method .wm-ai-example .button:hover{background:#633b16}
+@media(max-width:900px){.dwg-insight .di-layout{grid-template-columns:1fr;gap:26px}.dwg-insight figure{max-width:690px;width:100%;margin-inline:auto}.dwg-insight .di-value{gap:24px;padding:24px}.dwg-insight .di-delivery{padding-left:24px}}
+@media(max-width:600px){.dwg-insight .di-value{grid-template-columns:1fr;gap:20px;padding:22px}.dwg-insight .di-delivery{border-left:0;border-top:1px solid #d0dfdb;padding:20px 0 0}.dwg-insight .di-human{padding:22px}.dwg-insight .di-actions{align-items:stretch;flex-direction:column;gap:10px}.dwg-insight .di-actions .service-text-link{text-align:center}.dwg-insight .di-enlarge,.dwg-insight figcaption{padding:14px 16px}}

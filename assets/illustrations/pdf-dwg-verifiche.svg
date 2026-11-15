@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Da PDF a DWG: le verifiche dietro il disegno</title>
+  <desc id="desc">Due planimetrie schematiche apparentemente simili. Nella seconda sono segnalati spessori, gradini, aperture e retini da verificare. Il dettaglio in basso misura lo spessore del muro perpendicolarmente alle due facce: 0,30 metri nel riferimento e 0,3089 metri nell'esempio con anomalia. Disegni e anomalie simulati, non in scala.</desc>
+  <defs>
+    <pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#e8eeeb"/><path d="M0 0V9" stroke="#9baea7" stroke-width="2"/></pattern>
+    <g id="plan" fill="url(#hatch)" stroke="#29444d" stroke-width="2">
+      <path d="M0 0H360V360H230V349H349V11H11V349H135V360H0Z"/>
+      <path d="M0 178H137V184H0ZM172 0H178V134H172ZM172 170H178V270H172ZM172 309H178V360H172ZM178 178H360V184H178Z"/>
+      <path d="M274 184H280V310H274Z"/>
+      <g fill="#fff" stroke="#637d83" stroke-width="1.5">
+        <path d="M55 0H108V11H55ZM246 0H302V11H246ZM0 64H11V117H0ZM349 70H360V123H349ZM52 349H105V360H52ZM258 349H315V360H258Z"/>
+        <path d="M55 5.5H108M246 5.5H302M5.5 64V117M354.5 70V123M52 354.5H105M258 354.5H315"/>
+      </g>
+      <g fill="none" stroke="#627b7f" stroke-width="1.5">
+        <path d="M135 349V254A95 95 0 0 1 230 349M172 134H136A36 36 0 0 0 172 170M172 270H133A39 39 0 0 0 172 309M137 178V143A35 35 0 0 1 172 178"/>
+      </g>
+      <g stroke="#778c91" stroke-width="1.4" fill="none"><path d="M280 184V310H349M280 202H349M280 220H349M280 238H349M280 256H349M280 274H349M280 292H349"/></g>
+    </g>
+    <g id="dot"><circle r="19" fill="#a45230" stroke="#fff" stroke-width="3"/></g>
+    <g id="tick"><path d="M-6 6L6-6" stroke="currentColor" stroke-width="2.5"/></g>
+  </defs>
+  <rect width="1200" height="1000" rx="22" fill="#fff"/>
+  <g font-family="Arial,Helvetica,sans-serif" fill="#163b46">
+    <text x="48" y="57" font-size="18" font-weight="700" letter-spacing="2">PDF, IMMAGINI E SCANSIONI → DWG</text>
+    <text x="48" y="111" font-size="38" font-weight="700">A prima vista, sembrano uguali.</text>
+    <text x="48" y="149" font-size="22" fill="#506974">La differenza emerge quando controlli le geometrie.</text>
+    <rect x="40" y="183" width="540" height="465" rx="16" fill="#f0f6f3"/>
+    <rect x="620" y="183" width="540" height="465" rx="16" fill="#fbf3e9"/>
+    <text x="68" y="225" font-size="24" font-weight="700">01 · Documento di riferimento</text>
+    <text x="648" y="225" font-size="24" font-weight="700">02 · DWG da controllare</text>
+    <use href="#plan" x="130" y="260"/>
+    <use href="#plan" x="710" y="260"/>
+    <g stroke="#a45230" stroke-width="3" fill="none">
+      <rect x="851" y="253" width="65" height="27" rx="9"/>
+      <rect x="982" y="457" width="76" height="120" rx="9"/>
+      <rect x="835" y="384" width="63" height="61" rx="9"/>
+      <path d="M714 570L720 570M714 579L720 579M714 588L720 588M714 597L720 597"/>
+      <rect x="701" y="558" width="29" height="54" rx="8"/>
+    </g>
+    <g font-size="18" font-weight="700" fill="#fff" text-anchor="middle">
+      <use href="#dot" x="936" y="264"/><text x="936" y="270">1</text>
+      <use href="#dot" x="1077" y="485"/><text x="1077" y="491">2</text>
+      <use href="#dot" x="923" y="408"/><text x="923" y="414">3</text>
+      <use href="#dot" x="750" y="581"/><text x="750" y="587">4</text>
+    </g>
+    <path d="M852 280L812 672" stroke="#b77853" stroke-width="2" stroke-dasharray="6 7"/>
+    <rect x="40" y="672" width="1120" height="246" rx="16" fill="#edf3f5" stroke="#c7d8de"/>
+    <text x="68" y="713" font-size="24" font-weight="700">Il dettaglio: lo spessore del muro</text>
+    <text x="68" y="745" font-size="18" fill="#506974">La quota attraversa le due facce, non misura la lunghezza della parete.</text>
+    <g transform="translate(85 784)">
+      <path d="M0 0H245V55H0" fill="url(#hatch)" stroke="#29444d" stroke-width="2"/>
+      <path d="M220 0H280M220 55H280M265 0V55" fill="none" stroke="#126674" stroke-width="2"/>
+      <g color="#126674"><use href="#tick" x="265"/><use href="#tick" x="265" y="55"/></g>
+      <text x="292" y="35" font-size="30" font-weight="700" fill="#126674">0,30 m</text>
+      <text x="0" y="96" font-size="18" font-weight="700">MISURA DI RIFERIMENTO</text>
+    </g>
+    <g transform="translate(655 784)">
+      <path d="M0 0H245V56.63H0" fill="url(#hatch)" stroke="#29444d" stroke-width="2"/>
+      <path d="M220 0H280M220 56.63H280M265 0V56.63" fill="none" stroke="#a45230" stroke-width="2"/>
+      <g color="#a45230"><use href="#tick" x="265"/><use href="#tick" x="265" y="56.63"/></g>
+      <text x="292" y="35" font-size="30" font-weight="700" fill="#974b2b">0,3089 m</text>
+      <text x="0" y="96" font-size="18" font-weight="700">ANOMALIA SIMULATA</text>
+    </g>
+    <text x="48" y="963" font-size="19" fill="#526771">Esempio schematico, non in scala · Anomalie possibili, non inevitabili</text>
+  </g>
+</svg>
