@@ -6,7 +6,7 @@
 - [Servizi CAD e BIM](https://andreagiaquinto.it/): presentazione e tariffe indicative.
 - [Da PDF e immagini a DWG](https://andreagiaquinto.it/pdf-in-dwg/): ridisegno e organizzazione di elaborati AutoCAD modificabili.
 - [Da PDF e immagini a Revit/BIM](https://andreagiaquinto.it/pdf-in-revit-bim/): modellazione geometrica e informazioni concordate.
-- [Nuvole di punti in CAD e BIM](https://andreagiaquinto.it/nuvole-di-punti-cad-bim/): restituzione da rilievi forniti dal committente.
+- [Nuvole di punti in CAD e BIM](https://andreagiaquinto.it/nuvole-di-punti-cad-bim/): restituzione da rilievi forniti dal committente; approfondimento su scanner terrestre/SLAM, formati E57 e RCP/RCS, preparazione e controlli in AutoCAD e Revit.
 - [Render e planimetrie commerciali](https://andreagiaquinto.it/render-planimetrie-commerciali/): visualizzazioni e interior design su misura.
 - [Disegnatore online](https://andreagiaquinto.it/disegnatore-online/): metodo, vantaggi, collaborazione da remoto e limiti dell'automazione.
 - [Preventivo online](https://andreagiaquinto.it/preventivo/): invio del materiale e richiesta di un preventivo personalizzato.
