@@ -28,3 +28,8 @@ Controlli locali: 118 test passati, sincronizzazione header/footer e sitemap det
 ## Correzione geometrica dell’infografica — 15 novembre, revisione 2
 
 Su indicazione dell’autore, il simbolo vettoriale condiviso dalle immagini 01 e 02 ora unisce le pareti senza prolungare i contorni dei tramezzi nel muro esterno. La porta sulla parete orizzontale del vano superiore sinistro è spostata verso il centro del vano, separando gli archi di apertura. In basso sono rappresentate due porte distinte: quella sinistra apre verso destra e quella destra verso sinistra, ai due lati del divisorio centrale continuo. Eliminati il grande arco spurio e l’apertura sovrapposta sul divisorio. Finestre, scala, numeri, palette e dettaglio dello spessore rimangono invariati. Entrambe le viste riusano la stessa geometria, con URL versionato per anteprima e ingrandimento.
+
+
+## Verifica live e cache — revisione 3
+
+La PR #38 ha pubblicato la geometria corretta nel commit d77165c. La verifica live ha rilevato che l'URL con query porte-r2, richiesto durante la propagazione del deploy, era rimasto in cache con l'SVG precedente (CF-Cache-Status HIT, max-age 14400). Il file senza query risultava invece byte-identico al candidato corretto (SHA-256 a1f41088cd328e204a85d8d4b1900c1be7b3c10d4b15fa09b7131da774f33a9f). Anteprima e ingrandimento passano a porte-r3 dopo il completamento del deploy dell'asset. Nessuna modifica alla geometria né alle impostazioni Cloudflare. Verificare sempre i byte dell'URL effettivamente usato dalla pagina, oltre al solo file base.
