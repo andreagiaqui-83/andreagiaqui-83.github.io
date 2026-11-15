@@ -24,3 +24,7 @@ Il prompt più recente impone di non modificare `sitemap.xml`: il file e le sue 
 Baseline: main `adbfbdde0e42266e59c33ba554b96d9af98bd117`, due pagine pubbliche verificate identiche alle sorgenti prima della modifica. Rerun storico del workflow plugin ora verde; non è stato ritoccato il test privacy.
 
 Controlli locali: 118 test passati, sincronizzazione header/footer e sitemap deterministica conformi. Anteprima visuale e interazione dei disclosure, apertura SVG e collegamento contestuale verificati nel browser. Le verifiche complete del repository su Chromium, Firefox e WebKit e il confronto prestazioni vengono eseguiti sul candidato prima della promozione; la versione pubblica viene poi verificata dopo il deploy. Nessun invio reale.
+
+## Correzione geometrica dell’infografica — 15 novembre, revisione 2
+
+Su indicazione dell’autore, il simbolo vettoriale condiviso dalle immagini 01 e 02 ora unisce le pareti senza prolungare i contorni dei tramezzi nel muro esterno. La porta sulla parete orizzontale del vano superiore sinistro è spostata verso il centro del vano, separando gli archi di apertura. In basso sono rappresentate due porte distinte: quella sinistra apre verso destra e quella destra verso sinistra, ai due lati del divisorio centrale continuo. Eliminati il grande arco spurio e l’apertura sovrapposta sul divisorio. Finestre, scala, numeri, palette e dettaglio dello spessore rimangono invariati. Entrambe le viste riusano la stessa geometria, con URL versionato per anteprima e ingrandimento.
